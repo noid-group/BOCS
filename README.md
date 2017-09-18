@@ -1,6 +1,6 @@
 # BOCS
 
-__B__ottom-up __O__pen-source __C__oarse-graining __S__oftware (BOCS, pronounced 'box') is 
+**B**ottom-up **O**pen-source **C**oarse-graining **S**oftware (BOCS, pronounced 'box') is 
 software for  parameterizing  thermodynamically  accurate  and transferable bottom-up 
 coarse-grained (CG) force fields.  This software supports the calculation of force fields 
 using both force and structural information from a reference all-atom (AA) simulation.  
