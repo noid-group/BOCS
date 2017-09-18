@@ -1,0 +1,440 @@
+/**
+@file cgff.c 
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@brief MPI driver for the cgff calculation 
+*/
+
+//c library includes
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+//openmpi library includes
+#include "mpi.h"
+
+//local includes
+#include "safe_mem.h"
+#include "gmx-interface.h"
+#include "calc_grids.h"
+#include "read_parameters.h"
+#include "io_output.h"
+#include "calc_ref_potential.h"
+#include "pdb_loop.h"
+
+#define DEBUG_tpr              FALSE
+#define DEBUG_setup_CG_struct  FALSE
+
+#define DEBUG            FALSE
+#define DEBUG_NFRAMES    100
+
+
+int main(int argc, char *argv[])
+{
+    int i, j;
+    int N_coeff;
+    int N_pack;
+    int N_sites;
+    int n_frames;
+    int n_frames_local;
+    int np;
+    int local_rank;
+    double w_local;
+    tW_word tag;		/* Used to label output files */
+    tW_files files;		/* Collection of files                */
+    tW_system sys;		/* Contains stuff for total system    */
+    tW_system *sys_top;		/* Copy for single topology           *///JFR - 04.13.11: changed this to a pointer so I can choose not to make a sys cpy
+    tW_system *sys_top_global;	//JFR - 04.13.11: changed this to a pointer so I can choose not to make a sys cpy
+    tW_system sys_global;
+    tW_gmx_info info;		/* Flags for GROMACS.                 */
+    tW_CG_site *CG_struct;	/* Stuff for each CG site             */
+    tW_ref_potential ref_potential;
+
+    tW_word tpr_filename;	// JFR - added 04.06.12: for over-writing default TPR filenames
+    strcpy(tpr_filename, "");
+
+    /* GROMACS specific variables */
+    bool bGromacs = FALSE;	/* Logical variable re using GROMACS      */
+    bool bF = FALSE;		/* Logical variable re presence of forces */
+    //int   status;               /* Flag for reading trr file            */ // 4.0.7
+    t_trxstatus *status;	/* new trr status structure for 4.5.3 *///4.5.3
+    matrix box;			/* Box describing system cell; dummy.     */
+    t_trxframe fr;		/* GROMACS frame                          */
+    t_topology top;		/* GROMACS topology                       */
+    output_env_t oenv;		/* output variables, new for 4.5.3        *///4.5.3 addition
+
+    /* JFR - 07.16.12: variables for reference trajectory */
+    t_trxstatus *status_ref;
+    t_trxframe fr_ref;
+    output_env_t oenv_ref;
+    tW_gmx_info info_ref;
+
+    /* End GROMACS specific variables */
+
+    /* Initialize mpi processes. */
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &local_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &np);
+
+    /* JFR - 01.27.14: read params before initializing Gromacs stuff */
+    /* Allocate enough memory for a LARGE number of sites. */
+    /* I should change this to ecalloc after I find the number of sites. */
+    CG_struct =
+	(tW_CG_site *) emalloc(Max_Num_Sites_Prot * sizeof(tW_CG_site));
+
+    /* Open files. */
+    files.fp_par = fopen("par.txt", "r");
+    files.fp_log = fopen("log.txt", "w");
+
+    /* Read parameters. *//* JFR - 01.27.14: read params first */
+    read_par(&files, &sys, &ref_potential);
+    /* JFR - added 04.11.12:  Check to make sure that the number of structure files match the number of tpr files if explicitly specified */
+    if ((sys.TPR_var.flag_TPR == TRUE)
+	&& (files.N_struct != sys.TPR_var.N_TPR)) {
+	printf
+	    ("ERROR: The number of .tpr files specified in par.txt does not match the number of structure files.\n");
+	exit(EXIT_FAILURE);
+    }
+
+    /* Allocate memory for trr output info structure *///4.5.3
+    snew(oenv, 1);
+    snew(oenv_ref, 1);
+
+    /* set program name, command line, and default values for output options */// 4.5.3
+    output_env_init_default(oenv);
+    output_env_init_default(oenv_ref);
+
+    /* JFR - added 04.19.12: calculate memory estimate and exit if in TEST_INP mode */
+    if (sys.CalcMODE_var.CalcMODE == ITEST_INP) {
+	estimate_memory_usage(files, &sys);
+	exit(0);
+    }
+
+    /* Allocate memory for arrays. */
+    N_coeff = setup_tables(&sys);
+    N_pack = (N_coeff * N_coeff + N_coeff) / 2;	//JFR - 04.16.12: Number of elements in the matrix array in packed storage form
+
+    /* Write input summary to log file. */
+    summarize_input(files, sys, ref_potential);
+
+    /* JFR - 08.02.12: Turn on reference flag in the case that you are passing in a reference trr file */
+    if (sys.REF_var.flag_reftrr == TRUE) {
+	sys.flag_ref_potential = TRUE;
+    }
+
+    /* Make the global copy. */
+    if (local_rank == 0) {
+	setup_sys_copy(sys, &sys_global);
+    }
+
+    if (strcmp(files.mode, GMX_MODE) == 0) {
+	/* Initialize flags for GROMACS. */
+	init_gmx_info(&info);
+	if (sys.REF_var.flag_reftrr == TRUE) {
+	    init_gmx_info(&info_ref);
+	}
+
+	/* Loop through CG structures. */
+	for (i = 0; i < files.N_struct; i++) {
+	    /* JFR - 07.16.12: For more efficient I/O (e.g., for large trajectories), let each processor deal with a seperate file */
+	    if ((sys.REF_var.flag_splitfiles == TRUE)
+		&& (i % np != local_rank)) {
+		continue;
+	    }
+
+	    /* Get the ith topology information. */
+	    bGromacs = FALSE;
+	    //bGromacs = get_top( files.structures[i], &top, box );
+	    /* JFR - added 04.06.12:  Pass variables to over-write default TPR filenames */
+	    if (sys.TPR_var.flag_TPR == TRUE) {
+		strcpy(tpr_filename, sys.TPR_var.TPR_files[i]);
+	    }
+	    bGromacs =
+		get_top(files.structures[i], &top, box,
+			sys.TPR_var.flag_TPR, tpr_filename);
+
+	    /* Is tpr read correctly? */
+	    if (DEBUG_tpr) {
+		print_tpr_file(files.fp_log, top);
+		return 0;
+	    }
+
+	    /* GROMACS structures? */
+	    if (bGromacs) {
+
+		/* Set up a copy of sys for current topology. */
+		/* JFR - added 04.13.12: Only make a copy if there is more than one structure file and the user does not say no */
+		/* JFR - added 07.16.12: Also, you still don't need a copy if the MPI processes are being split by file instead of processors  */
+		if ((files.N_struct > 1)
+		    && (sys.MEM_var.flag_mult_top == TRUE)
+		    && (sys.REF_var.flag_splitfiles == FALSE)) {
+		    sys_top = (tW_system *) emalloc(sizeof(tW_system));
+		    setup_sys_copy(sys, sys_top);
+
+		    if (local_rank == 0) {
+			sys_top_global =
+			    (tW_system *) emalloc(sizeof(tW_system));
+			setup_sys_copy(sys, sys_top_global);
+		    }
+		} else {
+		    sys_top = &(sys);
+		    //if ( local_rank == 0 ) { sys_top_global = &( sys_global ); } /* sys_top_global is no longer used in this case */
+		}
+
+		/* Setup the CG structure. */
+		N_sites =
+		    setup_CG_struct(sys_top, top, CG_struct,
+				    sys_top->Bonded_Inter_Types);
+
+		if (DEBUG_setup_CG_struct) {
+		    print_CG_struct(files.fp_log, N_sites, CG_struct, sys);
+		    print_Bond_Types(files.fp_log, *sys_top);
+		    return 0;
+		}
+
+		if (sys.CalcMODE_var.CalcMODE != ISECOND_HALF) {	/* JFR - added 04.06.12: If in SECOND_HALF MODE, skip the trr loop */
+
+		    /* Open trr file for current topology. */
+		    //open_trr_file( files.structures[i], &status, &info, &fr ); // 4.0.7
+		    open_trr_file(files.structures[i], oenv, &status, &info, &fr);	// 4.5.3
+		    if (sys.REF_var.flag_reftrr == TRUE) {
+			open_trr_file(sys.REF_var.reftrr_fnm[i], oenv_ref,
+				      &status_ref, &info_ref, &fr_ref);
+		    }
+
+		    /* Copy trr information to CG_struct. */
+		    bF = copy_trr_2_CGstruct(fr, CG_struct);
+		    if (sys.REF_var.flag_reftrr == TRUE) {
+			copy_trr_2_CGstruct_ref(fr_ref, CG_struct);
+		    }
+
+		    /* Set frame counter to zero for each topology. */
+		    n_frames = 0;
+		    n_frames_local = 0;
+
+		    /* Loop over all frames */
+		    do {
+
+			if (DEBUG && (n_frames >= DEBUG_NFRAMES)) {
+			    fprintf(files.fp_log,
+				    "Exiting loop at n_frames: %d.\n",
+				    n_frames);
+			    break;
+			}
+
+			n_frames++;
+			sys_global.REG_var.Nframes++;
+
+			/* JFR - 07.16.12: If the splitfiles option is off, split the frames between processes, opening one file at a time */
+			if ((sys.REF_var.flag_splitfiles == TRUE)
+			    || (n_frames % np == local_rank)) {
+
+			    n_frames_local++;
+
+			    if ((sys.flag_ref_potential == TRUE)
+				&& (sys.REF_var.flag_reftrr == FALSE)) {
+				get_ref_forces(files.fp_log, N_sites,
+					       CG_struct, info, top,
+					       ref_potential);
+			    }
+//              calc_grids( files.fp_log, info, N_sites, CG_struct, &sys_top );
+			    calc_grids2(files.fp_log, info, N_sites,
+					CG_struct, sys_top);
+			}
+
+			if (sys.REF_var.flag_reftrr == TRUE) {
+			    read_trr_2_CGstruct_ref(oenv_ref, status_ref,
+						    &info_ref, &fr_ref,
+						    CG_struct);
+			}
+			//} while ( read_trr_2_CGstruct(status,&info,&fr,CG_struct) ); // 4.0.7
+		    }
+		    while (read_trr_2_CGstruct(oenv, status, &info, &fr, CG_struct));	// 4.5.3
+		    //close_trj(status); /* JFR - 01.27.14: Close the trr file for mult top!! */
+		    fprintf(files.fp_log, "Read %d frames for %s.\n\n",
+			    n_frames, files.structures[i]);
+
+		    /* Normalize arrays for ith topology. */
+		    normalize_arrays_top(top.atoms.nr, n_frames_local,
+					 sys_top);
+
+		    /* Evaluate w_local. */
+		    w_local =
+			((double) n_frames_local) / ((double) n_frames);
+
+		    /* Weight the sums from each local proc */
+		    weight_local_top(sys_top, w_local, N_coeff);
+
+		    /* Print results for current topology if more than one topology and the user does not say no. */
+		    if ((files.N_struct > 1)
+			&& (sys.MEM_var.flag_mult_top == TRUE)) {
+			if (sys.REF_var.flag_splitfiles == FALSE) {	/* JFR - 07.16.12: This is the original way using sys_top_global */
+			    /* Combine arrays for current top into sys_top_global on root */
+			    MPI_Reduce(sys_top->b, sys_top_global->b,
+				       N_coeff, MPI_DOUBLE, MPI_SUM, 0,
+				       MPI_COMM_WORLD);
+			    MPI_Reduce(sys_top->b_ref,
+				       sys_top_global->b_ref, N_coeff,
+				       MPI_DOUBLE, MPI_SUM, 0,
+				       MPI_COMM_WORLD);
+			    MPI_Reduce(sys_top->g, sys_top_global->g,
+				       N_coeff, MPI_DOUBLE, MPI_SUM, 0,
+				       MPI_COMM_WORLD);
+			    MPI_Reduce(sys_top->L, sys_top_global->L,
+				       N_coeff, MPI_DOUBLE, MPI_SUM, 0,
+				       MPI_COMM_WORLD);
+			    MPI_Reduce(sys_top->g_cnt,
+				       sys_top_global->g_cnt, N_coeff,
+				       MPI_DOUBLE, MPI_SUM, 0,
+				       MPI_COMM_WORLD);
+			    MPI_Reduce(sys_top->M, sys_top_global->M,
+				       N_pack, MPI_DOUBLE, MPI_SUM, 0,
+				       MPI_COMM_WORLD);
+			    MPI_Reduce(sys_top->M2, sys_top_global->M2,
+				       N_pack, MPI_DOUBLE, MPI_SUM, 0,
+				       MPI_COMM_WORLD);
+			    if (sys_top->M_cnt != NULL) {
+				MPI_Reduce(sys_top->M_cnt,
+					   sys_top_global->M_cnt, N_pack,
+					   MPI_DOUBLE, MPI_SUM, 0,
+					   MPI_COMM_WORLD);
+			    }
+			    /* JFR - 06.16.12: Chi2 */
+			    MPI_Reduce(&sys_top->Chi2,
+				       &sys_top_global->Chi2, 1,
+				       MPI_DOUBLE, MPI_SUM, 0,
+				       MPI_COMM_WORLD);
+			    /* JFR - 01.31.13: d2b, d2M */
+			    //if ( strcmp( sys_top->PC_var.LPC, "bvar" ) == 0 )
+			    //{
+			    MPI_Reduce(sys_top->d2b, sys_top_global->d2b,
+				       N_coeff, MPI_DOUBLE, MPI_SUM, 0,
+				       MPI_COMM_WORLD);
+			    //}
+			    //if ( strcmp( sys_top->PC_var.RPC, "MTvar" ) == 0 )
+			    //{
+			    MPI_Reduce(sys_top->d2M, sys_top_global->d2M,
+				       N_pack, MPI_DOUBLE, MPI_SUM, 0,
+				       MPI_COMM_WORLD);
+			    //}
+
+			    if (local_rank == 0) {
+				get_top_tag(files.structures[i], tag);
+				get_results(files.fp_log, sys_top_global,
+					    info.b_Forces_N, tag);
+				print_output(info.b_Forces_N, *sys_top_global, tag);	//JFR - changed sys_top to sys_top_global
+			    }
+			} else {	/* The entire topolgy is in sys_top, just print bref for this topology */
+
+			    if (sys.REF_var.flag_calcbref == TRUE) {
+				get_top_tag(files.structures[i], tag);
+				print_bref(sys_top->N_coeff,
+					   sys_top->b_ref, tag);
+			    }
+			}
+		    }
+
+		    /* End print results for multiple topologies */
+		    /* Weight the arrays by the topology weighting */
+		    weight_local_top(sys_top, files.p_struct[i], N_coeff);
+
+		    /* Combine weighted arrays for current top straight into sys_global on root */
+		    MPI_Reduce(sys_top->b, sys_global.b, N_coeff,
+			       MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+		    MPI_Reduce(sys_top->b_ref, sys_global.b_ref, N_coeff,
+			       MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+		    MPI_Reduce(sys_top->g, sys_global.g, N_coeff,
+			       MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+		    MPI_Reduce(sys_top->L, sys_global.L, N_coeff,
+			       MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+		    MPI_Reduce(sys_top->g_cnt, sys_global.g_cnt, N_coeff,
+			       MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+		    MPI_Reduce(sys_top->M, sys_global.M, N_pack,
+			       MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+		    MPI_Reduce(sys_top->M2, sys_global.M2, N_pack,
+			       MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+		    if (sys_top->M_cnt != NULL) {
+			MPI_Reduce(sys_top->M_cnt, sys_global.M_cnt,
+				   N_pack, MPI_DOUBLE, MPI_SUM, 0,
+				   MPI_COMM_WORLD);
+		    }
+		    /* JFR - 06.16.12: Chi2 */
+		    MPI_Reduce(&sys_top->Chi2, &sys_global.Chi2, 1,
+			       MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+		    /* JFR - 01.31.13: d2b, d2M */
+		    //if ( strcmp( sys_top->PC_var.LPC, "bvar" ) == 0 )
+		    //{
+		    MPI_Reduce(sys_top->d2b, sys_global.d2b, N_coeff,
+			       MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+		    //}
+		    //if ( strcmp( sys_top->PC_var.RPC, "MTvar" ) == 0 )
+		    //{
+		    MPI_Reduce(sys_top->d2M, sys_global.d2M, N_pack,
+			       MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+		    //}
+
+		    /* Free sys_top, it has been trimmed */
+		    if ((files.N_struct > 1)
+			&& (sys.MEM_var.flag_mult_top == TRUE)
+			&& (sys.REF_var.flag_splitfiles == FALSE)) {
+			free_sys_copy(sys_top);
+			if (local_rank == 0) {
+			    free_sys_copy(sys_top_global);
+			}
+		    }
+
+		} /* End if CalcMODE != SECOND_HALF */
+		else {
+		    printf
+			("CalcMODE = %s, skipping loop over .trr files \n",
+			 SECOND_HALF);
+		}
+
+	    } /* End if ( bGromacs ). */
+	    else {
+		printf("ERROR: Trouble reading GROMACS topology.\n");
+		exit(EXIT_FAILURE);
+	    }
+
+	    /* Reset flags for next topology. */
+	    reset_gmx_info(&info);
+//      close_trj(status);
+	    if (sys.REF_var.flag_reftrr == TRUE) {
+		reset_gmx_info(&info_ref);	/*close_trj(status_ref); */
+	    }
+
+	}			/* End the loop over topologies. */
+    } /* End GROMACS LOOP. */
+    else {
+	printf("PDB mode only available in serial \n");
+	exit(0);
+    }
+
+    /* Get final results */
+    if (local_rank == 0) {
+	if (sys.REF_var.flag_calcbref == FALSE) {	/* JFR - 07.16.12: do the normal stuff */
+	    /* Get final results */
+	    if (sys.CalcMODE_var.CalcMODE == ISECOND_HALF) {	/* JFR - added 04.06.12: If in SECOND_HALF MODE, read in save state */
+		read_save_state(files.fp_log, &sys_global);	/* JFR - added 04.06.12: If in SECOND_HALF MODE, read in the save state */
+	    }
+//      else
+//      {
+	    if (sys_global.MT_var.flag_print == TRUE) {
+		print_M_matrix2(&sys_global);
+	    }			// JFR - added 04.06.12: check if the user wants to print the matrix
+//      }
+//      if ( sys_global.M_cnt != NULL ) { free(sys_global.M_cnt); } /* JFR - 01.31.13:  Don't worry about memory for the time being */
+	    get_results(files.fp_log, &sys_global, info.b_Forces_N,
+			"total");
+	    print_output(info.b_Forces_N, sys_global, "total");
+	} else {		/* JFR - 07.13.12: The triple loop was skipped, so just print out a file with bref */
+
+	    print_bref(sys_global.N_coeff, sys_global.b_ref, "total");
+	}
+    }
+
+    printf("\nGoodbye from proc. %d.\n", local_rank);
+
+    MPI_Finalize();
+
+    return 0;
+}

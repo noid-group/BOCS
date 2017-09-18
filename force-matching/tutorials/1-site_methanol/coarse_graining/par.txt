@@ -1,0 +1,33 @@
+!# input file
+
+[Mode] GROMACS
+
+[Temperature]  270.0
+
+[Structures]    1
+inp.txt
+[End Structures]
+
+
+[Site_Types]    1
+MEO
+[End Site_Types]
+
+[Inter_Types]  1 
+!inter_name          inter_type          basis       dr         R_min      R_max  n_smooth
+ MEOMEO                Pair_Interaction  Bspline      0.02      0.000      1.800  4  0
+[End Inter_Types]
+
+
+[Pair_Interaction] 1
+! inter_name   type1  type2           
+  MEOMEO        MEO    MEO                
+[End Pair_Interaction]
+
+
+[TPR] 1
+cg_methanol.tpr
+[End TPR]
+
+
+

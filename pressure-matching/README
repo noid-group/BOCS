@@ -1,0 +1,20 @@
+Pressure Matching Toolkit
+
+#Nick Dunn 10/13/16
+
+This is the (currently untitled) Noid Group pressure matching toolkit. 
+In order to build this on the lionx clusters, follow these steps:
+
+
+$ mkdir build
+
+$ cd build
+
+$ cmake .. -G "Unix Makefiles" -DCMAKE_C_COMPILER=gcc -DCMAKE_INSTALL_PREFIX=build
+
+$ make
+
+
+And the executables you want should be located in build/bin.  I'm working to make this
+more general (enable non-mpi builds, build in different environments).  For now, this
+is a significant improvement over the previous makefiles.

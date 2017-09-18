@@ -1,0 +1,10 @@
+#include "ffoplsaa.itp"
+#include "methanol_oplsaa.itp"
+
+
+[ system ]
+METHANOL
+
+[ molecules ]
+MeO	968
+

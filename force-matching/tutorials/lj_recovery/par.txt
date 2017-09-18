@@ -1,0 +1,36 @@
+!# input file
+
+[Mode] GROMACS
+
+[Temperature]  270
+
+[Structures]    1
+inp.txt
+[End Structures]
+
+[Site_Types]    1
+LJ
+[End Site_Types]
+
+[Inter_Types]  1
+!inter_name  inter_type        basis     dr         R_min      R_max  n_smooth
+! 1
+ LJLJ        Pair_Interaction    linear   0.010      0.2     1.90   0
+[End Inter_Types]
+
+[Pair_Interaction] 1
+! inter_name   type1  type2           
+ LJLJ          LJ    LJ                                                
+[End Pair_Interaction]
+
+[TPR] 1
+LJ.tpr
+[End TPR]
+
+[TRIM]
+0.02
+[End TRIM]
+
+
+
+

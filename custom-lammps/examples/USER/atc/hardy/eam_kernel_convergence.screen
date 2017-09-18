@@ -1,0 +1,2768 @@
+LAMMPS (12 Jan 2013)
+log         eam_kernel_convergence.log
+units       metal
+dimension   3
+boundary    p p p
+atom_style  atomic
+atom_modify sort 0 1
+
+# create system
+variable a equal 4.08
+lattice		fcc $a
+lattice		fcc 4.0800000000000000711
+Lattice spacing in x,y,z = 4.08 4.08 4.08
+region    SYSTEM    block -6 6 -6 6 -6 6
+create_box  1 SYSTEM
+Created orthogonal box = (-24.48 -24.48 -24.48) to (24.48 24.48 24.48)
+  1 by 1 by 1 MPI processor grid
+create_atoms  1 region SYSTEM
+Created 6912 atoms
+mass    1 196.97
+group    internal region SYSTEM
+6912 atoms in group internal
+
+# n-th shell at sqrt(n/2) * a for FCC
+# distances 1:2.9   2:4.1  3:5.1   4:5.8   5:6.5
+# counts    1:12:12 2:6:18 3:24:42 4:12:54 5:24:78
+#pair_style  lj/cut/smooth 5.456108274435118
+#pair_coeff  * * 0.7242785984051078 2.598146797350056
+pair_style  eam
+pair_coeff    * * ../../../../potentials/Au_u3.eam
+
+
+# specify neighbor/re-neighboring parameters
+neighbor  0.3 bin
+neigh_modify  delay 1000000
+
+thermo    10
+thermo_style	custom step ke pe pxx pyy pzz pxy
+
+timestep  0.0
+reset_timestep  0
+
+velocity	all set 0.0 0.0 0.0 sum no units box
+
+fix         ATC internal atc hardy
+Constructing ATC transfer (hardy)
+atomPE compute created with ID: 3
+fix_modify  ATC fem create mesh 1 1 1 SYSTEM p p p
+ ATC:: created FEM Mesh with 8 Global Nodes, 1 Unique Nodes, and 1 Elements
+#fix_modify  ATC fem create mesh 2 2 2 SYSTEM p p p
+#fix_modify  ATC fem create mesh 4 4 4 SYSTEM p p p
+fix_modify  ATC transfer fields none
+fix_modify  ATC transfer fields add density stress number_density
+fix_modify  ATC transfer set reference_potential_energy
+fix_modify  ATC transfer output        eam_kernel_convergenceFE 1 text tensor_components
+ ATC:: Warning : text output can create _LARGE_ files
+fix_modify  ATC transfer atomic_output eam_kernel_convergenceMD 1 tensor_components
+fix_modify  ATC transfer on_the_fly kernel on
+fix_modify  ATC transfer on_the_fly bond on
+
+# relative to a
+variable d equal 0.1
+variable n equal 60
+variable i loop $n
+variable i loop 60
+label loop_i
+  variable R equal $i*$d
+  variable R equal 1*$d
+  variable R equal 1*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 0.10000000000000000555*$a
+  variable Ra equal 0.10000000000000000555*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 0.40800000000000002931
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.45303 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+       0            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+ATC:: computing potential stress: .done
+       1            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.792487 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026895 (3.39375)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000197887 (0.0249704)
+Outpt time (%) = 0.00019002 (0.0239776)
+Other time (%) = 0.765204 (96.5573)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 2*$d
+  variable R equal 2*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 0.2000000000000000111*$a
+  variable Ra equal 0.2000000000000000111*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 0.81600000000000005862
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+       1            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+       2            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.415175 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026638 (6.4161)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000150919 (0.0363507)
+Outpt time (%) = 0.00018096 (0.0435864)
+Other time (%) = 0.388205 (93.504)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 3*$d
+  variable R equal 3*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 0.30000000000000004441*$a
+  variable Ra equal 0.30000000000000004441*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 1.224000000000000199
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+       2            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+       3            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.415644 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266631 (6.41488)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000150681 (0.0362523)
+Outpt time (%) = 0.00018096 (0.0435372)
+Other time (%) = 0.388649 (93.5053)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 4*$d
+  variable R equal 4*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 0.4000000000000000222*$a
+  variable Ra equal 0.4000000000000000222*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 1.6320000000000001172
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+       3            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+       4            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.414101 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026639 (6.43297)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152826 (0.0369056)
+Outpt time (%) = 0.000185966 (0.0449085)
+Other time (%) = 0.387123 (93.4852)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 5*$d
+  variable R equal 5*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 0.5*$a
+  variable Ra equal 0.5*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 2.0400000000000000355
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+       4            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+       5            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.412699 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026638 (6.45459)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000151634 (0.0367421)
+Outpt time (%) = 0.00018096 (0.0438479)
+Other time (%) = 0.385728 (93.4648)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 6*$d
+  variable R equal 6*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 0.60000000000000008882*$a
+  variable Ra equal 0.60000000000000008882*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 2.4480000000000003979
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+       5            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+       6            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.414185 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266511 (6.4346)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0367254)
+Outpt time (%) = 0.000188112 (0.0454174)
+Other time (%) = 0.387194 (93.4833)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 7*$d
+  variable R equal 7*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 0.70000000000000006661*$a
+  variable Ra equal 0.70000000000000006661*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 2.8560000000000003162
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+       6            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+       7            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.415117 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266759 (6.42613)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000150919 (0.0363558)
+Outpt time (%) = 0.00018096 (0.0435925)
+Other time (%) = 0.388109 (93.4939)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 8*$d
+  variable R equal 8*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 0.80000000000000004441*$a
+  variable Ra equal 0.80000000000000004441*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 3.2640000000000002345
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+       7            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+       8            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.421207 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026685 (6.33537)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000153065 (0.0363396)
+Outpt time (%) = 0.000180006 (0.0427358)
+Other time (%) = 0.394189 (93.5856)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 9*$d
+  variable R equal 9*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 0.9000000000000000222*$a
+  variable Ra equal 0.9000000000000000222*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 3.6720000000000001528
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+       8            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+       9            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.419127 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266428 (6.35674)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0362924)
+Outpt time (%) = 0.00018096 (0.0431754)
+Other time (%) = 0.392151 (93.5638)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 10*$d
+  variable R equal 10*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 1*$a
+  variable Ra equal 1*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 4.0800000000000000711
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+       9            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      10            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.420732 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266609 (6.33679)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0361539)
+Outpt time (%) = 0.000181198 (0.0430673)
+Other time (%) = 0.393738 (93.584)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 11*$d
+  variable R equal 11*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 1.1000000000000000888*$a
+  variable Ra equal 1.1000000000000000888*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 4.4880000000000004334
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      10            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      11            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.424354 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026649 (6.2799)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000164747 (0.0388231)
+Outpt time (%) = 0.000180006 (0.0424188)
+Other time (%) = 0.39736 (93.6389)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 12*$d
+  variable R equal 12*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 1.2000000000000001776*$a
+  variable Ra equal 1.2000000000000001776*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 4.8960000000000007958
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      11            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      12            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.427058 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026686 (6.24879)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0356184)
+Outpt time (%) = 0.000179052 (0.0419269)
+Other time (%) = 0.400041 (93.6737)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 13*$d
+  variable R equal 13*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 1.3000000000000000444*$a
+  variable Ra equal 1.3000000000000000444*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 5.30400000000000027
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      12            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      13            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.435981 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026649 (6.11242)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000151873 (0.0348347)
+Outpt time (%) = 0.000179052 (0.0410688)
+Other time (%) = 0.409001 (93.8117)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 14*$d
+  variable R equal 14*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 1.4000000000000001332*$a
+  variable Ra equal 1.4000000000000001332*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 5.7120000000000006324
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      13            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      14            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.4356 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026623 (6.1118)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000167131 (0.0383681)
+Outpt time (%) = 0.000179052 (0.0411048)
+Other time (%) = 0.408631 (93.8087)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 15*$d
+  variable R equal 15*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 1.5*$a
+  variable Ra equal 1.5*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 6.1200000000000001066
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      14            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      15            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.437444 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266461 (6.09133)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000158072 (0.0361353)
+Outpt time (%) = 0.000178814 (0.040877)
+Other time (%) = 0.410461 (93.8317)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 16*$d
+  variable R equal 16*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 1.6000000000000000888*$a
+  variable Ra equal 1.6000000000000000888*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 6.528000000000000469
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      15            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      16            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.447661 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0267229 (5.96945)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0339791)
+Outpt time (%) = 0.000180006 (0.0402103)
+Other time (%) = 0.420606 (93.9564)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 17*$d
+  variable R equal 17*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 1.7000000000000001776*$a
+  variable Ra equal 1.7000000000000001776*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 6.9360000000000008313
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      16            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      17            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.447114 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026649 (5.96022)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0340206)
+Outpt time (%) = 0.000179052 (0.0400462)
+Other time (%) = 0.420134 (93.9657)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 18*$d
+  variable R equal 18*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 1.8000000000000000444*$a
+  variable Ra equal 1.8000000000000000444*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 7.3440000000000003055
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      17            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      18            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.452778 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266571 (5.88745)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000150919 (0.0333318)
+Outpt time (%) = 0.000179052 (0.0395453)
+Other time (%) = 0.425791 (94.0397)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 19*$d
+  variable R equal 19*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 1.9000000000000001332*$a
+  variable Ra equal 1.9000000000000001332*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 7.7520000000000006679
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      18            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      19            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.469546 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266399 (5.67355)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000151873 (0.0323446)
+Outpt time (%) = 0.000180006 (0.0383362)
+Other time (%) = 0.442574 (94.2558)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 20*$d
+  variable R equal 20*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 2*$a
+  variable Ra equal 2*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 8.1600000000000001421
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      19            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      20            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.469246 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026655 (5.68038)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.032416)
+Outpt time (%) = 0.000179052 (0.0381574)
+Other time (%) = 0.44226 (94.249)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 21*$d
+  variable R equal 21*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 2.1000000000000000888*$a
+  variable Ra equal 2.1000000000000000888*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 8.5680000000000013927
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      20            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      21            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.473302 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026655 (5.6317)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000151157 (0.0319368)
+Outpt time (%) = 0.000180006 (0.0380319)
+Other time (%) = 0.446316 (94.2983)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 22*$d
+  variable R equal 22*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 2.2000000000000001776*$a
+  variable Ra equal 2.2000000000000001776*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 8.9760000000000008669
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      21            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      22            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.484476 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266452 (5.4998)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.031397)
+Outpt time (%) = 0.000180006 (0.0371548)
+Other time (%) = 0.457499 (94.4317)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 23*$d
+  variable R equal 23*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 2.3000000000000002665*$a
+  variable Ra equal 2.3000000000000002665*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 9.3840000000000021174
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      22            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      23            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.491662 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266612 (5.42266)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000150919 (0.0306957)
+Outpt time (%) = 0.00018692 (0.038018)
+Other time (%) = 0.464663 (94.5086)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 24*$d
+  variable R equal 24*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 2.4000000000000003553*$a
+  variable Ra equal 2.4000000000000003553*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 9.7920000000000015916
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      23            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      24            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.502151 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026655 (5.30816)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000150919 (0.0300545)
+Outpt time (%) = 0.000180006 (0.035847)
+Other time (%) = 0.475165 (94.6259)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 25*$d
+  variable R equal 25*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 2.5*$a
+  variable Ra equal 2.5*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 10.199999999999999289
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      24            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      25            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.512156 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026499 (5.17402)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0297001)
+Outpt time (%) = 0.00017786 (0.0347278)
+Other time (%) = 0.485327 (94.7616)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 26*$d
+  variable R equal 26*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 2.6000000000000000888*$a
+  variable Ra equal 2.6000000000000000888*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 10.60800000000000054
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      25            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      26            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.533657 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266299 (4.99008)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000158072 (0.0296204)
+Outpt time (%) = 0.000178814 (0.0335073)
+Other time (%) = 0.50669 (94.9468)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 27*$d
+  variable R equal 27*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 2.7000000000000001776*$a
+  variable Ra equal 2.7000000000000001776*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 11.016000000000001791
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      26            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      27            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.531399 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266781 (5.02035)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000151873 (0.0285798)
+Outpt time (%) = 0.000178099 (0.0335151)
+Other time (%) = 0.504391 (94.9176)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 28*$d
+  variable R equal 28*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 2.8000000000000002665*$a
+  variable Ra equal 2.8000000000000002665*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 11.424000000000001265
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      27            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      28            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.551485 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026638 (4.83024)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0275821)
+Outpt time (%) = 0.00018096 (0.0328132)
+Other time (%) = 0.524514 (95.1094)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 29*$d
+  variable R equal 29*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 2.9000000000000003553*$a
+  variable Ra equal 2.9000000000000003553*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 11.832000000000002515
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      28            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      29            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.558076 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266459 (4.7746)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152826 (0.0273845)
+Outpt time (%) = 0.000179052 (0.0320839)
+Other time (%) = 0.531098 (95.1659)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 30*$d
+  variable R equal 30*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 3*$a
+  variable Ra equal 3*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 12.240000000000000213
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      29            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      30            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.576373 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026655 (4.6246)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000153065 (0.0265565)
+Outpt time (%) = 0.000180006 (0.0312308)
+Other time (%) = 0.549385 (95.3176)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 31*$d
+  variable R equal 31*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 3.1000000000000000888*$a
+  variable Ra equal 3.1000000000000000888*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 12.648000000000001464
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      30            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      31            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.608049 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026648 (4.38255)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000158072 (0.0259965)
+Outpt time (%) = 0.00018692 (0.030741)
+Other time (%) = 0.581056 (95.5607)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 32*$d
+  variable R equal 32*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 3.2000000000000001776*$a
+  variable Ra equal 3.2000000000000001776*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 13.056000000000000938
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      31            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      32            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.618226 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266511 (4.31091)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000153065 (0.0247587)
+Outpt time (%) = 0.00017786 (0.0287695)
+Other time (%) = 0.591244 (95.6356)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 33*$d
+  variable R equal 33*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 3.3000000000000002665*$a
+  variable Ra equal 3.3000000000000002665*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 13.464000000000002188
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      32            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      33            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.632357 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266988 (4.22211)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000153065 (0.0242054)
+Outpt time (%) = 0.00018096 (0.0286167)
+Other time (%) = 0.605324 (95.7251)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 34*$d
+  variable R equal 34*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 3.4000000000000003553*$a
+  variable Ra equal 3.4000000000000003553*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 13.872000000000001663
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      33            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      34            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.657665 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266671 (4.05482)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000153065 (0.023274)
+Outpt time (%) = 0.00018692 (0.0284218)
+Other time (%) = 0.630658 (95.8935)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 35*$d
+  variable R equal 35*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 3.5*$a
+  variable Ra equal 3.5*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 14.280000000000001137
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      34            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      35            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.658028 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266662 (4.05244)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0231162)
+Outpt time (%) = 0.000179052 (0.0272105)
+Other time (%) = 0.631031 (95.8972)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 36*$d
+  variable R equal 36*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 3.6000000000000000888*$a
+  variable Ra equal 3.6000000000000000888*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 14.688000000000000611
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      35            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      36            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.687164 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026665 (3.88044)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000158072 (0.0230035)
+Outpt time (%) = 0.000185013 (0.0269241)
+Other time (%) = 0.660156 (96.0696)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 37*$d
+  variable R equal 37*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 3.7000000000000001776*$a
+  variable Ra equal 3.7000000000000001776*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 15.096000000000001862
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      36            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      37            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.719914 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026644 (3.701)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000151873 (0.0210959)
+Outpt time (%) = 0.00018096 (0.0251363)
+Other time (%) = 0.692937 (96.2528)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 38*$d
+  variable R equal 38*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 3.8000000000000002665*$a
+  variable Ra equal 3.8000000000000002665*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 15.504000000000001336
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      37            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      38            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.736854 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266581 (3.61782)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0206433)
+Outpt time (%) = 0.000179052 (0.0242996)
+Other time (%) = 0.709865 (96.3372)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 39*$d
+  variable R equal 39*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 3.9000000000000003553*$a
+  variable Ra equal 3.9000000000000003553*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 15.912000000000002586
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      38            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      39            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.745193 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026649 (3.57612)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0204123)
+Outpt time (%) = 0.000178099 (0.0238997)
+Other time (%) = 0.718214 (96.3796)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 40*$d
+  variable R equal 40*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 4*$a
+  variable Ra equal 4*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 16.320000000000000284
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      39            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      40            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.775498 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026664 (3.43831)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0196146)
+Outpt time (%) = 0.000178099 (0.0229657)
+Other time (%) = 0.748504 (96.5191)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 41*$d
+  variable R equal 41*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 4.1000000000000005329*$a
+  variable Ra equal 4.1000000000000005329*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 16.728000000000001535
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      40            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      41            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.808638 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266709 (3.29825)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0188108)
+Outpt time (%) = 0.000185966 (0.0229975)
+Other time (%) = 0.781629 (96.6599)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 42*$d
+  variable R equal 42*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 4.2000000000000001776*$a
+  variable Ra equal 4.2000000000000001776*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 17.136000000000002785
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      41            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      42            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.83779 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0264981 (3.16285)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000151157 (0.0180424)
+Outpt time (%) = 0.000180006 (0.0214858)
+Other time (%) = 0.810961 (96.7976)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 43*$d
+  variable R equal 43*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 4.2999999999999998224*$a
+  variable Ra equal 4.2999999999999998224*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 17.544000000000000483
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      42            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      43            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.852486 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266502 (3.12617)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152826 (0.0179271)
+Outpt time (%) = 0.000180006 (0.0211154)
+Other time (%) = 0.825503 (96.8348)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 44*$d
+  variable R equal 44*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 4.4000000000000003553*$a
+  variable Ra equal 4.4000000000000003553*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 17.952000000000001734
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      43            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      44            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.897979 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026685 (2.97167)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000153065 (0.0170455)
+Outpt time (%) = 0.000185966 (0.0207094)
+Other time (%) = 0.870955 (96.9906)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 45*$d
+  variable R equal 45*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 4.5*$a
+  variable Ra equal 4.5*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 18.359999999999999432
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      44            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      45            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.920067 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266621 (2.89784)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0165326)
+Outpt time (%) = 0.00018096 (0.0196681)
+Other time (%) = 0.893072 (97.066)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 46*$d
+  variable R equal 46*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 4.6000000000000005329*$a
+  variable Ra equal 4.6000000000000005329*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 18.768000000000004235
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      45            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      46            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.948939 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266368 (2.80701)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000156164 (0.0164567)
+Outpt time (%) = 0.000185966 (0.0195973)
+Other time (%) = 0.92196 (97.1569)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 47*$d
+  variable R equal 47*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 4.7000000000000001776*$a
+  variable Ra equal 4.7000000000000001776*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 19.176000000000001933
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      46            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      47            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 0.999157 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266631 (2.66856)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000150681 (0.0150808)
+Outpt time (%) = 0.000181913 (0.0182067)
+Other time (%) = 0.972161 (97.2982)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 48*$d
+  variable R equal 48*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 4.8000000000000007105*$a
+  variable Ra equal 4.8000000000000007105*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 19.584000000000003183
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      47            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      48            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.04 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.02665 (2.5625)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0146261)
+Outpt time (%) = 0.000180006 (0.0173083)
+Other time (%) = 1.01302 (97.4056)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 49*$d
+  variable R equal 49*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 4.9000000000000003553*$a
+  variable Ra equal 4.9000000000000003553*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 19.992000000000000881
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      48            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      49            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.07027 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266371 (2.48882)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000158072 (0.0147693)
+Outpt time (%) = 0.000179052 (0.0167296)
+Other time (%) = 1.0433 (97.4797)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 50*$d
+  variable R equal 50*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 5*$a
+  variable Ra equal 5*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 20.399999999999998579
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      49            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      50            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.11255 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.02666 (2.39629)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0136723)
+Outpt time (%) = 0.000186205 (0.0167368)
+Other time (%) = 1.08555 (97.5733)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 51*$d
+  variable R equal 51*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 5.1000000000000005329*$a
+  variable Ra equal 5.1000000000000005329*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 20.808000000000003382
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      50            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      51            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.14368 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266519 (2.33037)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0133002)
+Outpt time (%) = 0.000178099 (0.0155725)
+Other time (%) = 1.11669 (97.6408)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 52*$d
+  variable R equal 52*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 5.2000000000000001776*$a
+  variable Ra equal 5.2000000000000001776*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 21.21600000000000108
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      51            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      52            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.17359 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266399 (2.26996)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0129612)
+Outpt time (%) = 0.00018096 (0.0154194)
+Other time (%) = 1.14661 (97.7017)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 53*$d
+  variable R equal 53*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 5.3000000000000007105*$a
+  variable Ra equal 5.3000000000000007105*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 21.624000000000002331
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      52            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      53            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.22523 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026648 (2.17494)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000160933 (0.0131349)
+Outpt time (%) = 0.000180006 (0.0146916)
+Other time (%) = 1.19824 (97.7972)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 54*$d
+  variable R equal 54*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 5.4000000000000003553*$a
+  variable Ra equal 5.4000000000000003553*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 22.032000000000003581
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      53            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      54            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.27852 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266609 (2.08529)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0118974)
+Outpt time (%) = 0.00018096 (0.0141538)
+Other time (%) = 1.25153 (97.8887)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 55*$d
+  variable R equal 55*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 5.5*$a
+  variable Ra equal 5.5*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 22.440000000000001279
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      54            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      55            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.30572 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026638 (2.0401)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152111 (0.0116496)
+Outpt time (%) = 0.000178814 (0.0136946)
+Other time (%) = 1.27875 (97.9346)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 56*$d
+  variable R equal 56*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 5.6000000000000005329*$a
+  variable Ra equal 5.6000000000000005329*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 22.84800000000000253
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      55            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      56            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.33993 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266552 (1.9893)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000152826 (0.0114056)
+Outpt time (%) = 0.000180006 (0.013434)
+Other time (%) = 1.31294 (97.9859)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 57*$d
+  variable R equal 57*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 5.7000000000000001776*$a
+  variable Ra equal 5.7000000000000001776*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 23.256000000000000227
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      56            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      57            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.37967 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266459 (1.93133)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000150919 (0.0109388)
+Outpt time (%) = 0.000180006 (0.0130471)
+Other time (%) = 1.35269 (98.0447)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 58*$d
+  variable R equal 58*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 5.8000000000000007105*$a
+  variable Ra equal 5.8000000000000007105*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 23.664000000000005031
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      57            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      58            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.45956 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266299 (1.82452)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000151873 (0.0104054)
+Outpt time (%) = 0.000180006 (0.0123329)
+Other time (%) = 1.4326 (98.1527)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 59*$d
+  variable R equal 59*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 5.9000000000000003553*$a
+  variable Ra equal 5.9000000000000003553*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 24.072000000000002728
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      58            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      59            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.49204 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.0266409 (1.78553)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000156164 (0.0104665)
+Outpt time (%) = 0.000180006 (0.0120644)
+Other time (%) = 1.46507 (98.1919)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+  variable R equal $i*$d
+  variable R equal 60*$d
+  variable R equal 60*0.10000000000000000555
+  variable Ra equal $R*$a
+  variable Ra equal 6*$a
+  variable Ra equal 6*4.0800000000000000711
+  #fix_modify	ATC transfer kernel step ${Ra}
+  #fix_modify	ATC transfer kernel quartic_cylinder ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere ${Ra}
+  fix_modify	ATC transfer kernel quartic_sphere 24.480000000000000426
+  #fix_modify	ATC transfer kernel cell ${Ra}
+# initial (1)
+run 1
+Setting up run ...
+ ATC:: conversion factor for energy/vol -> stress 1.60218e+06
+ ATC:: cutoff radius 5.55
+Memory usage per processor = 9.91079 Mbytes
+Step KinEng PotEng Pxx Pyy Pzz Pxy 
+      59            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+ATC:: computing potential stress: .done
+      60            0    -27164.16    0.0224632    0.0224632    0.0224632 1.3034513e-12 
+Loop time of 1.53112 on 1 procs for 1 steps with 6912 atoms
+
+Pair  time (%) = 0.026649 (1.74049)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000151157 (0.00987232)
+Outpt time (%) = 0.000180006 (0.0117565)
+Other time (%) = 1.50414 (98.2379)
+
+Nlocal:    6912 ave 6912 max 6912 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5283 ave 5283 max 5283 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    186624 ave 186624 max 186624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  373248 ave 373248 max 373248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 373248
+Ave neighs/atom = 54
+Neighbor list builds = 0
+Dangerous builds = 0
+# increment (2)
+next i
+jump in.eam_kernel_convergence loop_i
+
