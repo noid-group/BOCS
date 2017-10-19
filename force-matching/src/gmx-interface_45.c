@@ -280,6 +280,7 @@ tW_gmx_topology* init_tW_gmx_topology()
 	top->b_tpr = FALSE;
 
 	top->get_natoms = get_natoms;
+	top->get_name = get_name;
 	top->get_resind = get_resind;
 	top->get_atomtype = get_atomtype;
 	top->get_nexcl = get_nexcl;
@@ -547,7 +548,7 @@ void get_site_info(tW_CG_site *CG_struct, tW_system *sys, tW_gmx_topology *top)
 	/* Does the site name from top match any site names read from par.txt? */
 	i_type = match_word(sys->N_Site_Types, CG_struct[i].name, sys->Site_Types);
 	if (i_type == -1) {
-	    printf("\nERROR: Unknown site type found in GROMACS topology: %s.\n", *( top->get_name(top)) );
+	    printf("\nERROR: Unknown site type found in GROMACS topology: %s.\n", top->get_name(top) );
 	    printf("i: %d  top_name: %s\n", i, CG_struct[i].name);
 	    exit(EXIT_FAILURE);
 	}
