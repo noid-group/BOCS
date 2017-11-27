@@ -19,7 +19,7 @@ set ( CMAKE_C_FLAGS_DEBUG "-g -O2" )
 #############################################################################################
 # Set path for MKL / LAPACK/BLAS libraries
 ##############################################################################################
-set ( MKLDIR ${MKLDIR} /opt/intel/compilers_and_libraries_2016.3.210/linux/mkl/lib/intel64 )
+set ( MKLDIR ${MKLDIR} /soft/intel/x86_64/2013/composer_xe_2013/composer_xe_2013.5.192/mkl/lib/intel64 )
 
 # Find the libraries we need
 find_library( MKLRT mkl_rt ${MKLDIR} )
@@ -33,7 +33,7 @@ find_library( PTHREAD pthread ${MKLDIR} )
 add_definitions( -DGMX_LIB_MPI -DGMX_DOUBLE )
 
 # Set path for gromacs 4.5.3 installation and relevant subdirectories
-set ( GMXDIR ${GMXDIR} /gpfs/group/wgn1/default/pkg/gromacs-4.5.3-dp/ )
+set ( GMXDIR ${GMXDIR} //soft/gromacs/4.6.3-ompi-double/ )
 set ( GMXLIB ${GMXLIB} ${GMXDIR}/lib )
 
 ##############################################################################################
@@ -107,9 +107,10 @@ else(GMX_LIBRARY AND GMX_MD_LIBRARY) # If we didn't find the previous libraries,
 endif(GMX_LIBRARY AND GMX_MD_LIBRARY)
 
 message( "Detected GMX Version: ${GMX_VERSION}" )
-if (    NOT "${GMX_VERSION}" STREQUAL "50" AND 
-	NOT "${GMX_VERSION}" STREQUAL "51" AND 
-	NOT "${GMX_VERSION}" STREQUAL "45"     )
+if (    NOT "${GMX_VERSION}" STREQUAL "45" AND 
+	NOT "${GMX_VERSION}" STREQUAL "46" AND 
+	NOT "${GMX_VERSION}" STREQUAL "50" AND 
+	NOT "${GMX_VERSION}" STREQUAL "51"     )
 	message(FATAL_ERROR, "Incompatible gromacs version detected. v4.5 and
 v5.x are the only currently supported versions.")
 endif()
