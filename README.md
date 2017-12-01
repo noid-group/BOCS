@@ -14,7 +14,7 @@ allows CG models to reproduce the density and compressibility of the reference A
 * OpenMPI >= 1.9.1
 * GROMACS (4.5.x, 4.6.x, 5.0.x, 5.1.x)
   * Tarball archives of some compatible releases are included in the /dependencies folder
-* LAPACK/MKL
+* A linear algebra library, such as LAPACK/BLAS or Intel MKL
 
 ## Building and Installation
 BOCS is a loosely coupled set of tools for working with coarse-grained models of molecular
