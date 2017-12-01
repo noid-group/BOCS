@@ -1,0 +1,38 @@
+; Run Control
+integrator          =  md
+tinit               =  0.0
+dt                  =  0.001	; 1.0 fs
+nsteps              =  10000	; 10.0 ps	
+nstcomm             =  1   	; no. steps between removing com motion
+comm-mode	    =  linear	; remove com translation
+pbc                 =  xyz      ; periodic boundary conditions
+
+; Output Control
+nstxout	            =  1000	; no. steps between printing coords to trr file
+nstvout             =  1000     ; no. steps between printing veloc  to trr file
+nstfout             =  1000     ; no. steps between printing forces to trr file
+nstlog              =  0     ; no. steps between printing energy to log file
+nstenergy           =  0     ; no. steps between printing energy to edr file
+nstxtcout           =  0        ; no. stpes between printing coords to xtc file
+energygrps          =  System   ; groups for writing energy file    
+
+; Neighbor searching
+nstlist             =  1	; update neighbor list every step
+ns_type             =  grid	; check neighbor list using grid
+rlist               =  0.9	; cutoff distance (nm) for short-range neighbor list
+
+; Electrostatics and VdW
+coulombtype         =  cutoff	; fast particle-mesh ewald electrostatics
+rcoulomb            =  0.9	; distance for the Coulomb cut-off
+vdwtype	            =  cutoff	; truncated LJ interactions
+rvdw		    =  0.9 	; distance for LJ cut-off
+DispCorr	    =  EnerPres ; correct energy and pressure for cutoff
+
+
+; Velocity generation
+gen_vel             =  yes              ; generate velocities with Max. dist.
+gen_temp            =  270.0             ; temp. for Max. dist.
+gen_seed            =  173529           ; for random number generator
+
+
+

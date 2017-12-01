@@ -1,0 +1,78 @@
+!# input file
+
+[Mode] GROMACS
+
+[Temperature]  298.0
+
+[Structures]    1
+inp.txt
+[End Structures]
+
+
+[Solution_Method]
+LU
+[End Solution_Method]
+
+
+
+[Site_Types]    4
+CT
+CM
+CF
+CB
+[End Site_Types]
+
+[Inter_Types]  14 
+!inter_name          inter_type        basis     dr         R_min      R_max  n_smooth
+ CTCT                Pair_Interaction  Bspline    0.02      0.000       1.400 4   0
+ CMCM                Pair_Interaction  Bspline    0.02      0.000       1.400 4   0
+ CTCM                Pair_Interaction  Bspline    0.02      0.000       1.400 4   0
+ CFCF                Pair_Interaction  Bspline    0.02      0.000       1.400 4   0
+ CBCB                Pair_Interaction  Bspline    0.02      0.000       1.400 4   0
+ CFCB                Pair_Interaction  Bspline    0.02      0.000       1.400 4   0
+ CTCF                Pair_Interaction  Bspline    0.02      0.000       1.400 4   0
+ CTCB                Pair_Interaction  Bspline    0.02      0.000       1.400 4   0
+ CMCF                Pair_Interaction  Bspline    0.02      0.000       1.400 4   0 
+ CMCB                Pair_Interaction  Bspline    0.02      0.000       1.400 4   0
+ Bond_CT-CM          BondStretch       linear    0.001     0.000       0.400   0
+ Bond_CF-CB          BondStretch       linear    0.001     0.000       0.400   0
+ Bond_CB-CB          BondStretch       linear    0.001     0.000       0.400   0
+ Angle_CT-CM-CT      Angle             linear    0.500      70.00       180.0   0
+[End Inter_Types]
+
+[Frame_Weighting]
+NPT
+[End Frame_Weighting]
+
+[Pair_Interaction] 10
+! inter_name   type1  type2           
+  CTCT           CT     CT                
+  CMCM           CM     CM               
+  CTCM           CT     CM                              
+  CFCF           CF     CF
+  CBCB           CB     CB
+  CFCB           CF     CB
+  CTCF           CT     CF
+  CTCB           CT     CB
+  CMCF           CM     CF
+  CMCB           CM     CB
+[End Pair_Interaction]
+
+[BondStretch]         3
+!inter_name    site1          site2                                       
+ Bond_CT-CM          CT             CM 
+ Bond_CF-CB          CF             CB
+ Bond_CB-CB          CB             CB                                                           
+[End BondStretch]
+
+[Angle]        1
+!site1     site2     site3     type 
+ Angle_CT-CM-CT    CT         CM        CT                                                    
+[End Angle]
+
+[TPR] 1
+cg2_3_HEP_TOL.tpr
+[End TPR]
+
+
+

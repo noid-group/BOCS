@@ -1,0 +1,5 @@
+! comment line
+[Struct_Files]   1
+cg2_3_HEP_TOL.trr  1.0
+[End Struct_Files]
+

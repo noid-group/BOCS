@@ -1,0 +1,69 @@
+
+; Run parameters
+integrator	= sd		; stochastic dynamics integrator
+nsteps		= 50000000	; 1 fs * 50000000 = 50000 ps = 50 ns
+dt		= 0.001		; 1 fs
+comm-mode       = linear        ; remove CoM motion
+
+; Output control
+nstxout		= 1000		; save coordinates every 1 ps
+nstvout		= 1000		; save velocities every 1 ps
+nstfout		= 1000		; save forces every 1 ps
+nstenergy	= 1000		; save energies every 1 ps
+nstlog		= 1000		; update log file every 1 ps
+
+; Bond parameters
+continuation	= no		; first dynamics run
+
+; Neighborsearching
+ns_type		= grid		; search neighboring grid cells
+nstlist		= 10		; 10 fs
+rlist		= 1.2		; short-range neighborlist cutoff (in nm)
+
+; Electrostatics
+coulombtype	= PME		; Particle Mesh Ewald for long-range electrostatics
+rcoulomb        = 1.2           ; electrostatics cutoff
+pme_order	= 6		; cubic interpolation
+fourierspacing	= 0.08		; grid spacing for FFT
+ewald_rtol      = 1e-06         ; reletive strength of direct potential at cutoff
+optimize_fft    = yes           ; optimize fourier transforms
+
+; VdW
+vdwtype         = cutoff        ; 
+DispCorr        = EnerPres      ; account for cut-off VdW scheme
+rvdw            = 1.2           ; Van der Waals cutoff
+
+; Temperature coupling
+tc-grps		= System   	; only one group here
+tau_t		= 0.5   	; time constant, in ps
+ref_t		= 303 		; reference temperature
+
+; Pressure coupling
+pcoupl          = Parrinello-Rahman	;
+pcoupltype      = isotropic	;
+compressibility = 4.5e-5	;
+tau_p           = 5		;
+ref_p           = 1.0		;
+
+
+; Periodic boundary conditions
+pbc		= xyz		; 3-D PBC
+
+; Velocity generation 
+gen_vel	        = yes  		; assign velocities from Maxwell distribution
+gen_temp	= 303		; temperature for Maxwell distribution
+gen_seed	= -1		; generate a random seed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
