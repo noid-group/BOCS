@@ -1,5 +1,0 @@
-! comment line
-[Struct_Files]   1
-cg1_1_HEP_TOL.trr  1.0
-[End Struct_Files]
-

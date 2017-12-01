@@ -1,9 +1,0 @@
-! comment line
-[Struct_Files]   5
-../1_4_heptol/cg.1_4_HEP_TOL.trr 0.2
-../2_3_heptol/cg.2_3_HEP_TOL.trr 0.2
-../1_1_heptol/cg.1_1_HEP_TOL.trr 0.2
-../3_2_heptol/cg.3_2_HEP_TOL.trr 0.2
-../4_1_heptol/cg.4_1_HEP_TOL.trr 0.2
-[End Struct_Files]
-
