@@ -9,7 +9,7 @@ ensemble of AA systems, and for determining and simulating with a pressure corre
 allows CG models to reproduce the density and compressibility of the reference AA model.
 
 ## Dependencies:
-* gcc/g++ >= 4.9.2
+* gcc/g++ >= 4.9.2 OR icc/icpc >= 13.1
 * CMake >= 3.0
 * OpenMPI >= 1.9.1
 * GROMACS (4.5.x, 4.6.x, 5.0.x, 5.1.x)
