@@ -23,4 +23,4 @@ are each compiled separately. Installation instructions can be found in the User
 the /docs folder. Briefly, custom-lammps uses the LAMMPS build system, and the force-matching and
 pressure-matching components both utilize CMake. The force-matching component relies on an existing
 GROMACS installation. You may compile your own compatible version of GROMACS, or one of those included in /dependencies.
-In either case, you should make sure that GROMACS is compiled in double-precision with OpenMPI features.
+In either case, you should make sure that GROMACS is compiled in double-precision with OpenMPI features. 
