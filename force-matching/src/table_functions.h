@@ -92,6 +92,8 @@ int edit_nb_force( Input *input, Arrays *arrays, Arrays *smarrays );
 
 int edit_bond_force( Input *input, Arrays *arrays, Arrays *smarrays );
 
+int edit_angle_force( Input *input, Arrays *arrays, Arrays *tmparrays );
+
 int smooth_forces( int n_pts, Input *input, Arrays *arrays );
 
 int smooth_forces_periodic( int n_pts, Input *input, Arrays *arrays );

@@ -31,4 +31,6 @@ void *emalloc(size_t size);
  * permit undefined behavior. */
 void *erealloc(void *old_ptr, size_t size);
 
+void efree(void *ptr);
+
 #endif

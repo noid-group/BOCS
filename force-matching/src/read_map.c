@@ -23,6 +23,7 @@
 //local includes
 #include "read_map.h"
 #include "safe_mem.h"
+#include "io_read.h"
 
 static const char ATOMTYPE[] = "atomtypes";
 static const char MOLTYPE[] = "moleculetype";
@@ -144,7 +145,7 @@ char *get_directive(char *line, char *directive, bool * have_directive,
     return directive;
 }
 
-tW_site_map *get_CG_map(FILE * map_top, int *N_sites)
+tW_site_map *OLD_get_CG_map(FILE * map_top, int *N_sites)
 {
     int h, i, j, k, l;		// generic indices
     int ATOM, SITE, N_MOL, TOTAL_ATOMS, *ATOMS, moltype;	// named indices for navigating input file
@@ -524,3 +525,227 @@ tW_site_map *get_CG_map(FILE * map_top, int *N_sites)
 
     return CG_map;
 }
+
+tW_site_map *get_CG_map(FILE * map_top, int *N_sites) // THIS IS THE NEW VERSION. MRD 1/9/2018
+{
+  tW_line inp_line;
+  int n_molecule_types = 0;
+
+  while (get_next_line(map_top,inp_line) != -1)
+  {
+    if (strstr(inp_line,"moleculetype") != NULL) { ++n_molecule_types; }
+  }
+  rewind(map_top);
+
+  char **molecule_names = (char **) ecalloc(n_molecule_types,sizeof(char *));
+  int *n_atoms_per_molecule = (int *) ecalloc(n_molecule_types,sizeof(int));
+  int *n_sites_per_molecule = (int *) ecalloc(n_molecule_types,sizeof(int));
+  int *n_molecules = (int *) ecalloc(n_molecule_types,sizeof(int));
+  char ***site_names = (char ***) ecalloc(n_molecule_types,sizeof(char **));
+  char ***mapping_types = (char ***) ecalloc(n_molecule_types,sizeof(char **));
+  int **n_atoms_per_site = (int **) ecalloc(n_molecule_types,sizeof(int *));
+  int **n_atom_in_molecule = (int **) ecalloc(n_molecule_types,sizeof(int *));
+  char ***atom_type = (char ***) ecalloc(n_molecule_types,sizeof(char **));
+  char ***atom_n_site_type = (char ***) ecalloc(n_molecule_types,sizeof(char **));
+  float **atom_weight = (float **) ecalloc(n_molecule_types,sizeof(float *));
+  float **site_weight = (float **) ecalloc(n_molecule_types,sizeof(float *));
+
+  int mol_type_idx = 0;
+  int i, j, k, l;
+  int test_sscanf;
+  char *p;
+  char *inp_word = (char *) ecalloc(50,sizeof(char));
+
+  for (i = 0; i < n_molecule_types; ++i)
+  {
+    molecule_names[i] = (char *) ecalloc(50,sizeof(char));
+  }
+
+  while (mol_type_idx < n_molecule_types)
+  {
+    l = mol_type_idx;
+    get_next_line(map_top,inp_line);
+    if (strstr(inp_line,"moleculetype") != NULL)
+    {
+      get_next_line(map_top,inp_line);
+      test_sscanf = sscanf(inp_line," %s %d ",(molecule_names[mol_type_idx]),&(n_atoms_per_molecule[mol_type_idx]));
+      if (test_sscanf != 2)
+      {
+        fprintf(stderr,"ERROR: expected to find name of moleculetype %d and number of atoms on line after directive [ moleculetype ]\n",mol_type_idx);
+        fprintf(stderr,"\tinp_line: %s",inp_line);
+        exit(1);
+      }
+
+      n_atom_in_molecule[mol_type_idx] = (int *) ecalloc(n_atoms_per_molecule[mol_type_idx],sizeof(int));
+      atom_type[mol_type_idx] = (char **) ecalloc(n_atoms_per_molecule[mol_type_idx],sizeof(char *));
+      atom_n_site_type[mol_type_idx] = (char **) ecalloc(n_atoms_per_molecule[mol_type_idx],sizeof(char *));
+      atom_weight[mol_type_idx] = (float *) ecalloc(n_atoms_per_molecule[mol_type_idx],sizeof(float));
+      site_weight[mol_type_idx] = (float *) ecalloc(n_sites_per_molecule[mol_type_idx],sizeof(float));
+      for (i = 0; i < n_atoms_per_molecule[mol_type_idx]; ++i)
+      {
+        atom_type[l][i] = (char *) ecalloc(50,sizeof(char));
+        atom_n_site_type[l][i] = (char *) ecalloc(50,sizeof(char));
+        site_weight[l][i] = 0.0;
+      }
+    }
+    else
+    {
+      fprintf(stderr,"ERROR: expected directive [ moleculetype ] for molecule type %d\n",mol_type_idx+1);
+      fprintf(stderr,"\tinp_line: %s",inp_line);
+      exit(1);
+    }
+
+    get_next_line(map_top,inp_line);
+    if (strstr(inp_line,"sitetypes") != NULL)
+    {
+      p = strstr(inp_line,"]");
+      ++p;
+      test_sscanf = sscanf(p," %d ", &(n_sites_per_molecule[mol_type_idx]));
+      if (test_sscanf != 1)
+      {
+        fprintf(stderr,"ERROR: expected to find number of sites in moleculetype %s on line with directive [ sitetypes ]\n",molecule_names[mol_type_idx]);
+        fprintf(stderr,"\tinp_line: %s",inp_line);
+        exit(1);
+      }
+      site_names[mol_type_idx] = (char **) ecalloc(n_sites_per_molecule[mol_type_idx],sizeof(char *));
+      mapping_types[mol_type_idx] = (char **) ecalloc(n_sites_per_molecule[mol_type_idx],sizeof(char *));
+      n_atoms_per_site[mol_type_idx] = (int *) ecalloc(n_sites_per_molecule[mol_type_idx],sizeof(int));
+      for (i = 0; i < n_sites_per_molecule[mol_type_idx]; ++i)
+      {
+        site_names[mol_type_idx][i] = (char *) ecalloc(50,sizeof(char));
+        mapping_types[mol_type_idx][i] = (char *) ecalloc(50,sizeof(char));
+        get_next_line(map_top,inp_line);
+        test_sscanf = sscanf(inp_line," %s %s %d ",(site_names[mol_type_idx][i]),(mapping_types[mol_type_idx][i]),&(n_atoms_per_site[mol_type_idx][i]));
+        if (test_sscanf != 3)
+        {
+          fprintf(stderr,"ERROR: expected site_name, mapping_type, and n_atoms_per_site on line %d after [ sitetypes ] directive!\n",i);
+          fprintf(stderr,"\tinp_line: %s",inp_line);
+          exit(1);
+        }
+      }
+    }
+    else
+    {
+      fprintf(stderr,"ERROR: expected to find directive [ sitetypes ] # after [ moleculetype ] directive!\n");
+      fprintf(stderr,"\tinp_line: %s",inp_line);
+      exit(1);
+    }
+
+    get_next_line(map_top,inp_line);
+    if (strstr(inp_line,"atomtypes") != NULL)
+    {
+      for (i = 0; i < n_atoms_per_molecule[mol_type_idx]; ++i)
+      {
+        get_next_line(map_top,inp_line);
+        test_sscanf = sscanf(inp_line," %d %s %s %f ",&(n_atom_in_molecule[mol_type_idx][i]),
+                                                      (atom_type[mol_type_idx][i]),
+                                                      (atom_n_site_type[mol_type_idx][i]),
+                                                      &(atom_weight[mol_type_idx][i]));
+        if (test_sscanf != 4)
+        {
+          fprintf(stderr,"ERROR: expected to find atom_number, atom_type, site_type, atom_weighting on line %d after directive [ atomtypes ]\n",i);
+          fprintf(stderr,"\tinp_line: %s",inp_line);
+          fprintf(stderr,"Make sure the number of lines following the [ atomtypes ] is equal to the number\n");
+          fprintf(stderr,"of atoms specified under the most recent [ moleculetype ] directive\n");
+          exit(1);
+        }
+        // increment site weights
+        for (j = 0; j < n_sites_per_molecule[mol_type_idx]; ++j)
+        {
+          if (strcmp(atom_n_site_type[mol_type_idx][i],site_names[mol_type_idx][j]) == 0)
+          {
+            site_weight[mol_type_idx][j] += atom_weight[mol_type_idx][i];
+          }
+        }
+      }
+    }
+    else
+    {
+      fprintf(stderr,"ERROR: expected to find directive [ atomtypes ] after [ sitetypes ] directive!\n");
+      fprintf(stderr,"\tinp_line: %s",inp_line);
+      fprintf(stderr,"Be sure the number of (non comment and non-blank) lines after [ sitetypes ]\n");
+      fprintf(stderr,"is equal to the number of site types specified on the line with directive [ sitetypes ]\n");
+      fprintf(stderr,"expected n_sitetypes: %d\n",n_sites_per_molecule[mol_type_idx]);
+      exit(1);
+    }
+    ++mol_type_idx;
+  }
+
+
+  get_next_line(map_top,inp_line);
+  if (strstr(inp_line,"molecules") == NULL)
+  {
+    fprintf(stderr,"ERROR: expected to find directive [ molecules ]\n");
+    fprintf(stderr,"\tinp_line: %s",inp_line);
+    exit(1);
+  }
+
+  for (mol_type_idx = 0; mol_type_idx < n_molecule_types; ++mol_type_idx)
+  {
+    get_next_line(map_top,inp_line);
+    test_sscanf = sscanf(inp_line," %s %d ",inp_word,&(n_molecules[mol_type_idx]));
+    if (test_sscanf != 2)
+    {
+      fprintf(stderr,"ERROR: expected to find molecule_type and n_molecules for molecule idx %d\n",mol_type_idx);
+      fprintf(stderr,"\tinp_line: %s",inp_line);
+      exit(1);
+    }
+  }
+  if (get_next_line(map_top,inp_line) != -1)
+  {
+    fprintf(stderr,"WARNING: expected to be out of lines for mapping topology file\n");
+    fprintf(stderr,"\tinstead, found inp_line: %s",inp_line);
+  }
+  fclose(map_top);
+  int n_CG_sites = 0;
+  for (i = 0; i < n_molecule_types; ++i) { n_CG_sites += n_molecules[i] * n_sites_per_molecule[i]; }
+
+  *N_sites = n_CG_sites;
+
+  tW_site_map *CG_map = (tW_site_map *) ecalloc(n_CG_sites,sizeof(tW_site_map));
+
+  int site_idx = 0;
+  int res_no = 0;
+  int abs_at_num = 0;
+  for (i = 0; i < n_molecule_types; ++i)
+  {
+    for (j = 0; j < n_molecules[i]; ++j)
+    {
+      int at_idx_in_mol = 0;
+      for (k = 0; k < n_sites_per_molecule[i]; ++k)
+      {
+        CG_map[site_idx].res_no = res_no;
+        CG_map[site_idx].n_atms = n_atoms_per_site[i][k];
+        CG_map[site_idx].i_atm = (int *) ecalloc(CG_map[site_idx].n_atms,sizeof(int));
+        CG_map[site_idx].c_Ii = (double *) ecalloc(CG_map[site_idx].n_atms,sizeof(double));
+        CG_map[site_idx].cg_name = (char *) ecalloc(50,sizeof(char));
+        CG_map[site_idx].mol_name = (char *) ecalloc(50,sizeof(char));
+
+        CG_map[site_idx].atm_name = (char **) ecalloc(CG_map[site_idx].n_atms,sizeof(char *));
+        for (l = 0; l < CG_map[site_idx].n_atms; ++l)
+        {
+          CG_map[site_idx].atm_name[l] = (char *) ecalloc(50,sizeof(char));
+        }
+
+        for (l = 0; l < n_atoms_per_site[i][k]; ++l)
+        {
+          CG_map[site_idx].c_Ii[l] = (double) ((double)atom_weight[i][at_idx_in_mol] / (double)site_weight[i][k]);
+          CG_map[site_idx].i_atm[l] = abs_at_num;
+          strcpy(CG_map[site_idx].atm_name[l],atom_type[i][at_idx_in_mol]);
+
+          ++at_idx_in_mol;
+          ++abs_at_num;
+        }
+
+        strcpy(CG_map[site_idx].cg_name,site_names[i][k]);
+        strcpy(CG_map[site_idx].mol_name,molecule_names[i]);
+        strcpy(CG_map[site_idx].map_type,mapping_types[i][k]);
+
+        ++site_idx;
+      }
+      ++res_no;
+    }
+  }
+  return CG_map;
+}
+

@@ -26,6 +26,7 @@
 #include "cgff_fn.h"
 #include "calc_grids.h"
 #include "read_parameters.h"
+#include "io_read.h"
 #include "io_output.h"
 #include "calc_ref_potential.h"
 
@@ -181,7 +182,8 @@ int main (int argc, char *argv[])
 
 	      if (DEBUG_setup_CG_struct)
 		{
-		  print_CG_struct (files.fp_log, N_sites, CG_struct, sys); 
+		  //print_CG_struct (files.fp_log, N_sites, CG_struct, sys); 
+		  // MRD 1.10.2018 There is no print_CG_struct function defined anywhere
 		  print_Bond_Types (files.fp_log, sys); //NJD 5-24-16 - changed from sys_top to sys
 		  return 0;
 		}

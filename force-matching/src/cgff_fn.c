@@ -21,6 +21,7 @@
 #include "gmx-interface.h"
 #include "cgff_fn.h"
 #include "safe_mem.h"
+#include "io_read.h"
 
 /*****************************************************************************************
 init_gmx_info(): Initializes flags to conditions so that b_Forces_1 can be set to TRUE

@@ -102,7 +102,7 @@ typedef double matrix[DIM][DIM];
 #define MAXWORDLEN 1000
 #define MAXLINELEN 5000
 
-#define COMMENTFLAG "*!"
+#define COMMENTFLAG "*!;"
 
 #define FLOAT_EPS 1.0e-8		//NJD-9.24.14 - originally 5e-8
 
