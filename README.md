@@ -18,8 +18,8 @@ allows CG models to reproduce the density and compressibility of the reference A
 
 ## Building and Installation
 BOCS is a loosely coupled set of tools for working with coarse-grained models of molecular
-systems that is compiled in three parts. The custom-lammps, force-matching, and pressure-matching
-components are compiled separately. Installation instructions can be found in the User Manual in
+systems. The three components of BOCS, custom-lammps, force-matching, and pressure-matching,
+are each compiled separately. Installation instructions can be found in the User Manual in
 the /docs folder. Briefly, custom-lammps uses the LAMMPS build system, and the force-matching and
 pressure-matching components both utilize CMake. The force-matching component relies on an existing
 GROMACS installation. You may compile your own compatible version of GROMACS, or one of those included in /dependencies.
