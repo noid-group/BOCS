@@ -160,6 +160,7 @@ typedef struct {
     int *n_atoms;
     int **indices;
     char ***atom_names;
+    char **atom_sites; // MRD 1.12.2018
     double *site_masses;
     double **weights;
     char **map_type;

@@ -8,7 +8,7 @@
 
 /**
 @file read_map.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
 @brief Functions related to reading in a map.top file 
 */
 
@@ -145,7 +145,16 @@ char *get_directive(char *line, char *directive, bool * have_directive,
     return directive;
 }
 
-tW_site_map *OLD_get_CG_map(FILE * map_top, int *N_sites)
+/*
+MRD 1.12.2018
+We have recently had a problem with the following function (get_CG_map). That problem has been patched by 
+moving an error check to a different block of code (look for the comments, I pointed it out). I also added
+a new error check to make sure all CG sites have the expected number of atoms listed under the [ atomtypes ]
+directive (although the regular checks should catch this issue for sites having too many atoms. Originally,
+it would catch if any site except the last site was atom deficient, but I removed this check in order to allow
+"interleaved" mappings (look for the comment explanation later)). 
+*/
+tW_site_map *get_CG_map(FILE * map_top, int *N_sites)
 {
     int h, i, j, k, l;		// generic indices
     int ATOM, SITE, N_MOL, TOTAL_ATOMS, *ATOMS, moltype;	// named indices for navigating input file
@@ -222,11 +231,14 @@ tW_site_map *OLD_get_CG_map(FILE * map_top, int *N_sites)
 	{
 		fprintf(stderr, "ERROR: Incorrect number of molecule types in your map.top file.\n");
 		exit(1);
-	} else if (SITE > map.molecule_types[moltype].n_sites)
+	} 
+
+/* MRD Moved this down a bit 1.12.2018
+        else if (SITE > map.molecule_types[moltype].n_sites)
 	{
 		fprintf(stderr, "ERROR: Found more site types than expected under [ sitetypes ] directory.\n");
 		exit(1);
-	}
+	}*/
 
 
 	if (line[i] != ';' && nbytes > i) {
@@ -292,11 +304,25 @@ tW_site_map *OLD_get_CG_map(FILE * map_top, int *N_sites)
 		    moltype++;
 		    map.molecule_types[moltype].molname = ecalloc(strlen(line) + 1, sizeof(char));
 		    sscanf(line, " %s %d ", map.molecule_types[moltype].molname, &map.molecule_types[moltype].total_atoms);
+// MRD 1.12.2018
+                    map.molecule_types[moltype].atom_sites = ecalloc(map.molecule_types[moltype].total_atoms,sizeof(char *));
+                    for (j = 0; j < map.molecule_types[moltype].total_atoms; ++j)
+                    {
+                        map.molecule_types[moltype].atom_sites[j] = ecalloc(20,sizeof(char));
+                    }
+
 		    SITE = 0;
 		    ATOM = 0;
 		    TOTAL_ATOMS = 0;
 
 		} else if (strcmp(directive, SITETYPE) == 0) {
+
+                    if (SITE >= map.molecule_types[moltype].n_sites) // MRD moved this here 1.12.2018
+                    {
+                        fprintf(stderr, "ERROR: Found more site types than expected under [ sitetypes ] directory.\n");
+                        exit(1);
+                    }
+
 		    n_site_chk++;
 		    // parse line to find how many atoms per site there are
 		    map.molecule_types[moltype].site_names[SITE] = ecalloc(strlen(line) + 1, sizeof(char));
@@ -306,6 +332,19 @@ tW_site_map *OLD_get_CG_map(FILE * map_top, int *N_sites)
 			   map.molecule_types[moltype].site_names[SITE],
 			   map.molecule_types[moltype].map_type[SITE],
 			   &map.molecule_types[moltype].n_atoms[SITE]);
+
+// MRD 1.12.2018    We generally don't consider models that have CG sites with no atoms mapped to them.
+//                  HOWEVER, IIRC, in the literature, people have coupled the "actual" cg sites with
+//                  virtual sites in order to try to fix the dynamics of the cg sites. SO, I will allow
+//                  CG sites with 0 atoms mapped to them, but I'm going to print a noisy warning message.
+                    if (map.molecule_types[moltype].n_atoms[SITE] == 0)
+                    {
+                        fprintf(stderr,"\n\nWARNING: You have included cg site type %s that has 0 atoms that map to it.\n",
+                                                                                map.molecule_types[moltype].site_names[SITE]);
+                        fprintf(stderr,"\t This is not part of the \"traditional\" MSCG method, but other CG methods have\n");
+                        fprintf(stderr,"\t since been developed that would use these sites. Note, all CG sites with 0 atoms\n");
+                        fprintf(stderr,"\t that map to them will have 0s for all components of the x, v, and f vectors\n\n\n");
+                    }
 
 		    map.molecule_types[moltype].indices[SITE] =
 			ecalloc(map.molecule_types[moltype].n_atoms[SITE],
@@ -352,6 +391,9 @@ tW_site_map *OLD_get_CG_map(FILE * map_top, int *N_sites)
 		    site_type = ecalloc(strlen(line) + 1, sizeof(char));
 		    sscanf(line, " %*d %*s %s %*d", site_type);
 
+// MRD 1.12.2018
+                    strcpy(map.molecule_types[moltype].atom_sites[ATOM],site_type);
+
 		    n_atm_chk += 1;
 
 		    not_found = true;
@@ -364,16 +406,25 @@ tW_site_map *OLD_get_CG_map(FILE * map_top, int *N_sites)
 
 			    ATOMS[j]++;
 
-			    // Did we find the right number of atoms for the previous site?
+			    // Did we find the right number of atoms for the previous site? 
+/* MRD 1.12.2018 I commented this out because this case will be handled by my new error check.
+ * However, this check does not allow for "interleaved" CG mappings, e.g.
+ * 
+ * [ atomtypes ]
+ * 1 C Site1 12.011
+ * 2 C Site2 12.011
+ * 3 C Site1 12.011
+ * ...
+ *
+ * wouldn't work because this error check assumes that if we've found Site2, then we all atoms that map to Site1 must
+ * have already been given.
 			    if (j>0 && map.molecule_types[moltype].n_atoms[j-1] != ATOMS[j-1])
 			    {
 		                    fprintf(stderr, "ERROR: Too few atoms for site %s in %s. Expected %d, but found %d.\n", 
 		               	        map.molecule_types[moltype].site_names[j-1], map.molecule_types[moltype].molname, 
 		               	        map.molecule_types[moltype].n_atoms[j-1], ATOMS[j-1]);
 		                   exit(1);
-
-
-			    }
+			    }*/
 
 			    // Are there too many atoms in this site?
 			    if (ATOMS[j] > map.molecule_types[moltype].n_atoms[j])
@@ -451,7 +502,29 @@ tW_site_map *OLD_get_CG_map(FILE * map_top, int *N_sites)
     }
 
 
-
+/* MRD 1.12.2018 New Error Checks */
+    for (i = 0; i < map.n_types; ++i)
+    {
+        for (j = 0; j < map.molecule_types[i].n_sites; ++j)
+        {
+            int n_atoms_for_site = 0;
+            for (k = 0; k < map.molecule_types[i].total_atoms; ++k)
+            {
+                if (strcmp(map.molecule_types[i].site_names[j],map.molecule_types[i].atom_sites[k]) == 0)
+                {
+                    ++n_atoms_for_site;
+                }
+            }
+            if (n_atoms_for_site != map.molecule_types[i].n_atoms[j])
+            {
+                fprintf(stderr,"ERROR:  Under the [ sitetypes ] directive, site type %s is said to have %d atoms map to it\n",
+                                        map.molecule_types[i].site_names[j],map.molecule_types[i].n_atoms[j]);
+                fprintf(stderr,"\tHowever, we found %d atoms under the [ atomtypes ] directive with site %s given\n",
+                                        n_atoms_for_site,map.molecule_types[i].site_names[j]);
+                exit(1);
+            }
+        }
+    }
 
 //    // check for common input errors - wrong # of sites or atoms in map.top
 //    for (j = 0; j < map.n_types; j++) {
@@ -526,7 +599,7 @@ tW_site_map *OLD_get_CG_map(FILE * map_top, int *N_sites)
     return CG_map;
 }
 
-tW_site_map *get_CG_map(FILE * map_top, int *N_sites) // THIS IS THE NEW VERSION. MRD 1/9/2018
+tW_site_map *NEW_get_CG_map(FILE * map_top, int *N_sites) // THIS IS THE NEW VERSION. MRD 1/9/2018
 {
   tW_line inp_line;
   int n_molecule_types = 0;
