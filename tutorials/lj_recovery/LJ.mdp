@@ -2,32 +2,44 @@
 integrator          =  md
 tinit               =  0.0
 dt                  =  0.001	; 1.0 fs
-nsteps              =  10000	; 10.0 ps	
+nsteps              =  2000000	; 2 ns	
 nstcomm             =  1   	; no. steps between removing com motion
 comm-mode	    =  linear	; remove com translation
 pbc                 =  xyz      ; periodic boundary conditions
 
 ; Output Control
-nstxout	            =  1000	; no. steps between printing coords to trr file
-nstvout             =  1000     ; no. steps between printing veloc  to trr file
-nstfout             =  1000     ; no. steps between printing forces to trr file
-nstlog              =  0     ; no. steps between printing energy to log file
-nstenergy           =  0     ; no. steps between printing energy to edr file
+nstxout	            =  500	; no. steps between printing coords to trr file
+nstvout             =  500     ; no. steps between printing veloc  to trr file
+nstfout             =  500     ; no. steps between printing forces to trr file
+nstlog              =  500     ; no. steps between printing energy to log file
+nstcalcenergy       =  1        ;
+nstenergy           =  500      ; no. steps between printing energy to edr file
 nstxtcout           =  0        ; no. stpes between printing coords to xtc file
 energygrps          =  System   ; groups for writing energy file    
 
 ; Neighbor searching
 nstlist             =  1	; update neighbor list every step
+nstcalclr           =  1 ;
 ns_type             =  grid	; check neighbor list using grid
-rlist               =  0.9	; cutoff distance (nm) for short-range neighbor list
+rlist               =  1.2	; cutoff distance (nm) for short-range neighbor list
 
 ; Electrostatics and VdW
 coulombtype         =  cutoff	; fast particle-mesh ewald electrostatics
-rcoulomb            =  0.9	; distance for the Coulomb cut-off
+rcoulomb            =  1.2	; distance for the Coulomb cut-off
 vdwtype	            =  cutoff	; truncated LJ interactions
-rvdw		    =  0.9 	; distance for LJ cut-off
+rvdw		    =  1.2 	; distance for LJ cut-off
 DispCorr	    =  EnerPres ; correct energy and pressure for cutoff
 
+tcoupl             =  nose-hoover      ; nose-hoover for correct ensemble
+tc_grps             =  system              ; groups to couple separtly to temp. bath
+tau_t               =  0.5              ; time constant for coupling
+ref_t               =  270.0             ; ref. temperature for coupling
+
+pcoupl = Parrinello-Rahman
+pcoupltype = isotropic
+tau_p = 5
+compressibility = 4.5e-5
+ref_p = 1.0
 
 ; Velocity generation
 gen_vel             =  yes              ; generate velocities with Max. dist.

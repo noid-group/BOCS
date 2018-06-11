@@ -1,5 +1,5 @@
 ! comment line
 [Struct_Files]   1
-LJ.gro  1.0
+LJ.trr  1.0
 [End Struct_Files]
 
