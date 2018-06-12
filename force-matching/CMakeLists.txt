@@ -17,6 +17,10 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 set ( CMAKE_C_FLAGS "-O2" )
 set ( CMAKE_C_FLAGS_DEBUG "-g" )
 
+# Uncomment this line to use MKL
+# set ( USE_MKL "ON" )
+# And then make sure the path set in line 29 corresponds to the location of your MKL library
+
 ##############################################################################################
 # Try to find specified linear algebra libraries 
 ##############################################################################################
@@ -71,7 +75,7 @@ endif (USE_MKL STREQUAL "ON")
 
 # Set the library combinations we need for compiling different executables
 set ( TLIBS ${TLIBS} m dl )
-set ( MLIBS ${MLIBS} ${GLIBS} ${LINALG_LIBS} )
+set ( MLIBS ${MLIBS} ${GLIBS} ${LINALG_LIBS} m dl )
 
 add_subdirectory( src )
 
