@@ -1,12 +1,5 @@
-CGFF ToolKit
-
-#Nick Dunn 9/24/14
-
-This is the (currently untitled) Noid Group CGFF toolkit. It includes the previously
-separate tools for mapping an atomistic trajectory, running the cgff calculation, and
-generating useful gromacs table files.  In order to build this on the lionx clusters,
-follow these steps:
-
+This is the BOCS force matching toolkit. 
+In order to build this, follow these steps:
 
 $ mkdir build
 
@@ -16,7 +9,4 @@ $ cmake .. -G "Unix Makefiles" -DCMAKE_C_COMPILER=mpicc -DCMAKE_INSTALL_PREFIX=b
 
 $ make
 
-
-And the executables you want should be located in build/bin.  I'm working to make this
-more general (enable non-mpi builds, build in different environments).  For now, this
-is a significant improvement over the previous makefiles.
+And the executables you want should be located in build/bin

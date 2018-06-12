@@ -1,11 +1,3 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file calc_grids.h 
 @author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
@@ -17,7 +9,8 @@
 
 #define Max_Num_Prot_Inter1 100
 
-#include "gmx-interface.h"
+//#include "gmx-interface.h"
+#include "gromacs_topology.h"
 
 /****************************************************************************************/
 /*Functions called outside of calc_grids-gmx.c*******************************************/

@@ -1,11 +1,3 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file tables.c 
 @authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
@@ -34,6 +26,25 @@ int main ( int argc, char *argv[] )
   Input input;
   Arrays arrays, smarrays, tmparrays;
   int smn_pts;
+
+  /* Check if user requested help */
+  for (i = 0; i < argc; ++i)
+  {
+    if (strcmp(argv[i],"-h") == 0)
+    {
+      fprintf(stderr,"$ tables <raw_forces.dat> <output_table.xvg> <int_type> <basis_set> <args>\n");
+      fprintf(stderr,"<basis_set> = delta, linear, or Bspline\n");
+      fprintf(stderr,"<int_type>     <args>\n");
+      fprintf(stderr,"----------     --------------\n");
+      fprintf(stderr,"nb             R_max\n");
+      fprintf(stderr,"bond           R_min R_max\n");
+      fprintf(stderr,"angle          extreme_slope\n");
+      fprintf(stderr,"dihedral       N/A\n");
+      fprintf(stderr,"intra          R_min R_max\n");
+      return 0;
+    }
+  }
+
 
   /* Check if input file exists, open input and output files*/
   if ( file_exists(argv[1]) )

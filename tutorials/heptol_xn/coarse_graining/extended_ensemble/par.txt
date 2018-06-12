@@ -64,11 +64,11 @@ NPT
 [End Angle]
 
 [TPR] 5
-../1_4_heptol/cg.1_4_HEP_TOL.tpr
-../2_3_heptol/cg.2_3_HEP_TOL.tpr
-../1_1_heptol/cg.1_1_HEP_TOL.tpr
-../3_2_heptol/cg.3_2_HEP_TOL.tpr
-../4_1_heptol/cg.4_1_HEP_TOL.tpr
+../1_4_heptol/cg.1_4_HEP_TOL.btp
+../2_3_heptol/cg.2_3_HEP_TOL.btp
+../1_1_heptol/cg.1_1_HEP_TOL.btp
+../3_2_heptol/cg.3_2_HEP_TOL.btp
+../4_1_heptol/cg.4_1_HEP_TOL.btp
 [End TPR]
 
 

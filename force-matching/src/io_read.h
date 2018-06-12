@@ -1,11 +1,3 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file io_read.h 
 @author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
@@ -26,7 +18,7 @@ int get_clean_line(FILE * fp_in, tW_line inp_line);
 
 int remove_comments(char *before, char *after);
 
-FILE *open_file(tW_word file_name, char mode);
+FILE *open_file(const tW_word file_name, char mode);
 
 int match_word_list(int n_words, tW_word list_1[], tW_word list_2[]);
 

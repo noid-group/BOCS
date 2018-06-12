@@ -10,7 +10,7 @@ inp.txt
 
 
 [Solution_Method]
-LU
+SVD
 [End Solution_Method]
 
 
@@ -71,7 +71,7 @@ NPT
 [End Angle]
 
 [TPR] 1
-cg3_2_HEP_TOL.tpr
+cg3_2_HEP_TOL.btp
 [End TPR]
 
 

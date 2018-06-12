@@ -1,14 +1,6 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file cgff.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
 @brief MPI driver for the cgff calculation 
 */
 
@@ -22,11 +14,11 @@
 
 //local includes
 #include "safe_mem.h"
-#include "gmx-interface.h"
+//#include "gmx-interface.h"
+#include "gromacs_topology.h"
 #include "cgff_fn.h"
 #include "calc_grids.h"
 #include "read_parameters.h"
-#include "io_read.h"
 #include "io_output.h"
 #include "calc_ref_potential.h"
 
@@ -82,6 +74,8 @@ int main (int argc, char *argv[])
   MPI_Comm_rank (MPI_COMM_WORLD, &local_rank);
   MPI_Comm_size (MPI_COMM_WORLD, &np);
 
+if (local_rank == 0) { copyright(); }
+
   /* Open files. */
   files.fp_par = fopen("par.txt", "r");
   files.fp_log = fopen("log.txt", "w");
@@ -92,7 +86,7 @@ int main (int argc, char *argv[])
   /* JFR - added 04.11.12:  Check to make sure that the number of structure files match the number of tpr files if explicitly specified */
   if ((sys.TPR_var.flag_TPR == TRUE) && (files.N_struct != sys.TPR_var.N_TPR))
     {
-      fprintf(stderr, "ERROR: The number of .tpr files specified in par.txt does not match the number of structure files.\n");
+      fprintf(stderr, "ERROR: The number of .btp files specified in par.txt does not match the number of structure files.\n");
       exit (EXIT_FAILURE);
     }
 
@@ -156,22 +150,31 @@ int main (int argc, char *argv[])
 
 	  /* Get the ith topology information. */
 	  /* JFR - added 04.06.12:  Pass variables to over-write default TPR filenames */
-	  if (sys.TPR_var.flag_TPR == TRUE)
+	  if (sys.TPR_var.flag_TPR == TRUE) { strcpy (tpr_filename, sys.TPR_var.TPR_files[i]); }
+	  else // MRD 11.06.2017
+	  { 
+	    strcpy(tpr_filename,files.structures[i]); // Put trr filename in topology filename
+	    char *file_ext = strstr(tpr_filename,".trr"); // Find the file extension
+	    if (file_ext == NULL) // Check to make sure file extension found
 	    {
-	      strcpy (tpr_filename, sys.TPR_var.TPR_files[i]);
+	      fprintf(stderr,"ERROR: Did not find file extension \".trr\" in trajectory filename: %s\n",files.structures[i]);
+	      return 1;
 	    }
-
-	  bGromacs = get_top(files.structures[i], top, sys.TPR_var.flag_TPR, tpr_filename);
+	    strcpy(file_ext,".btp"); // Replace .trr extension with .btp
+	  }	
+	  bGromacs = read_topology(top,tpr_filename); // MRD 11.06.2017
 
 	  // Allocate memory for the number of sites in this trajectory
 	  CG_struct = (tW_CG_site *) ecalloc (top->get_natoms(top), sizeof (tW_CG_site));
 
 	  /* Is tpr read correctly? */
-	  if (DEBUG_tpr)
-	    {
-	      print_tpr_file (files.fp_log, top);
-	      return 0;
-	    }
+	  if (1 == 0)
+	  {
+	    FILE *fp_tpr;
+	    fp_tpr = fopen("Print_tpr_file.txt","w");
+	    print_tpr_file (fp_tpr, top);
+	    fclose(fp_tpr);
+	  }	
 
 	  /* GROMACS structures? */
 	  if (bGromacs)
@@ -182,8 +185,7 @@ int main (int argc, char *argv[])
 
 	      if (DEBUG_setup_CG_struct)
 		{
-		  //print_CG_struct (files.fp_log, N_sites, CG_struct, sys); 
-		  // MRD 1.10.2018 There is no print_CG_struct function defined anywhere
+//		  print_CG_struct (files.fp_log, N_sites, CG_struct, sys); 
 		  print_Bond_Types (files.fp_log, sys); //NJD 5-24-16 - changed from sys_top to sys
 		  return 0;
 		}
@@ -193,15 +195,40 @@ int main (int argc, char *argv[])
 
 		  /* Open trr file for current topology. */
 		  //open_trr_file (files.structures[i], oenv, &status, &info, &fr);	// 4.5.3
-		  read_first_trxframe(fr, files.structures[i]);
+
+//		  read_first_trxframe(fr, files.structures[i]); MRD 11.09.17
+		  if (read_first_frame(fr, files.structures[i]) == -1)
+		  {
+		    fprintf(stderr,"There was an error reading file: %s\n",files.structures[i]);
+		    return 1;
+		  }
+		  else { read_next_frame(fr); }
+		  // Originally, read_first_trxframe read the header for the first frame, rewound
+		  // the file, and then got the box matrix and the xvf vectors for the first frame
+		  // In the new read_first_frame function, only the header of the first frame
+		  // gets read. To actually get the box matrix and the xvf vectors, you have to call
+		  // read_next_frame.
+
 		  if (sys.REF_var.flag_reftrr == TRUE)
 		    {
 		      //open_trr_file (sys.REF_var.reftrr_fnm[i], oenv_ref, &status_ref, &info_ref, &fr_ref);
-		      read_first_trxframe(fr_ref, sys.REF_var.reftrr_fnm[i]);
+//		      read_first_trxframe(fr_ref, sys.REF_var.reftrr_fnm[i]); MRD
+//		      if (read_first_trxframe(fr_ref,sys.REF_var.reftrr_fnm[i]) == -1)
+                      if (read_first_frame(fr_ref,sys.REF_var.reftrr_fnm[i]) == -1)
+		      {
+			fprintf(stderr,"There was an error reading file: %s\n",sys.REF_var.reftrr_fnm[i]);
+			return 1;
+		      }
+		      else { read_next_frame(fr_ref); }
 		    }
+
+		  // MRD
+		  fr->set_atom_labels(fr,top);
+		  // end MRD
 
 		  /* Copy trr information to CG_struct. */
 		  bF = copy_trr_2_CGstruct (fr, CG_struct);
+
 		  if (sys.REF_var.flag_reftrr == TRUE)
 		    {
 		      copy_trr_2_CGstruct_ref (fr_ref, CG_struct);
@@ -216,7 +243,6 @@ int main (int argc, char *argv[])
 	          {
 			sys.wt_norm = 0;
 		  }
-
 
 		  // set up iLists for all site types here
 
@@ -245,7 +271,6 @@ int main (int argc, char *argv[])
 			  {
 			      get_ref_forces (files.fp_log, N_sites, CG_struct, info, top, ref_potential);
 			  }
-
 			  calc_grids2 (files.fp_log, info, N_sites, CG_struct, &sys);
 			}
 

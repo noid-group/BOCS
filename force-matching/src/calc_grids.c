@@ -1,11 +1,3 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file calc_grids.c 
 @authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
@@ -1420,7 +1412,8 @@ int eval_bond_basis_vectors(FILE * fp, tW_CG_site * CG_struct,
     }
 
     /* Loop over all bond interactions found in the GROMACS topology. */
-    for (i = 0; i < i_site_ptr->nr_bonds; i++) {
+   for (i = 0; i < i_site_ptr->nr_bonds; i++) {
+//fprintf(stderr,"i_site_ptr->bond_type[i]: %d  Bonded_Inter_Types[i_site_ptr->bond_type[i]].name: %s\n",i_site_ptr->bond_type[i],Bonded_Inter_Types[i_site_ptr->bond_type[i]].name); // MRD
 	if (strcmp
 	    (B_BOND_STRETCH,
 	     Bonded_Inter_Types[i_site_ptr->bond_type[i]].name) == 0) {

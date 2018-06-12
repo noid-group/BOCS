@@ -1,7 +1,7 @@
 cmake_minimum_required( VERSION 3.0 )
 project( "BOCS-FM" )
 
-set ( BOCS_FM_VERSION_MAJOR 1 )
+set ( BOCS_FM_VERSION_MAJOR 2 )
 set ( BOCS_FM_VERSION_MINOR 0 )
 
 if( COMMAND cmake_policy )
@@ -38,7 +38,7 @@ if (USE_MKL STREQUAL "ON")
 
   set ( LINALG_LIBS ${LINALG_LIBS} ${MKLRT} ${PTHREAD} )
 
-else (USE_MKL STREQUEL "ON") 
+else (USE_MKL STREQUAL "ON") 
   if (NOT LAPACK_LIB)
     set ( LAPACK_LIB ${LAPACK_LIB} /usr/lib64 )
   endif (NOT LAPACK_LIB)
@@ -66,98 +66,6 @@ else (USE_MKL STREQUEL "ON")
 
 endif (USE_MKL STREQUAL "ON")
 
-
-##############################################################################################
-# Determine gromacs version we are compiling against
-##############################################################################################
-
-# Gromacs compilation definitions
-add_definitions( -DGMX_LIB_MPI -DGMX_DOUBLE )
-
-# Set path for gromacs 4.5.3 installation and relevant subdirectories
-if (NOT GMXDIR)
-  set ( GMXDIR ${GMXDIR} /usr/share/gromacs )
-endif (NOT GMXDIR)
-set ( GMXLIB ${GMXLIB} ${GMXDIR}/lib )
-
-##############################################################################################
-
-
-# Try first to find the gromacs 4.5 (double precision MPI) libraries
-find_library( GMX_LIBRARY gmx_mpi_d ${GMXLIB} REQUIRED NO_DEFAULT_PATH)
-find_library( GMX_MD_LIBRARY md_mpi_d ${GMXLIB} REQUIRED NO_DEFAULT_PATH)
-
-if (GMX_LIBRARY AND GMX_MD_LIBRARY)
-	set (GMXINC ${GMXINC} ${GMXDIR}/include/gromacs )
-
-	set( GLIBS  ${GMX_MD_LIBRARY} ${GMX_LIBRARY} m dl )
-
-	add_definitions( -DGMX_LIB_MPI -DGMX_DOUBLE )
-	message("Detected libgmx_mpi_d and libmd_mpi_d. Attempting compilation with Gromacs 4.5")
-
-	include_directories(${GMXINC})
-
-	# Run a small executable that uses a gromacs library function to print
-	# the version of the gromacs library
-	try_run(RUN_RESULT_VAR COMPILE_RESULT_VAR
-		${CMAKE_BINARY_DIR}/version_check ${CMAKE_CURRENT_SOURCE_DIR}/src/gmx_version.c
-		CMAKE_FLAGS -DINCLUDE_DIRECTORIES=${GMXINC}
-		COMPILE_DEFINITIONS -DGMX=4
-		LINK_LIBRARIES ${GLIBS}
-		RUN_OUTPUT_VARIABLE GMX_VERSION
-	)
-
-
-        message("GLIBS: ${GLIBS}")
-	message("GMXLIB: ${GMXLIB}")
-	message("GMXINC: ${GMXINC}")
-	message("GMX_LIBRARY: ${GMX_LIBRARY}")
-	message("GMX_MD_LIBRARY: ${GMX_MD_LIBRARY}")
-
-
-
-else(GMX_LIBRARY AND GMX_MD_LIBRARY) # If we didn't find the previous libraries, look for gromacs 5.x libraries.
-	set (GMXINC ${GMXINC} ${GMXDIR}/include )
-	set (GMXLIB ${GMXLIB} ${GMXDIR}/lib64 )
-
-	find_library( GMX_LIBRARY gromacs_mpi_d ${GMXLIB} REQUIRED NO_DEFAULT_PATH)
-
-	if(NOT GMX_LIBRARY)
-		message(FATAL_ERROR "Gromacs library not found. Check that you are attempting to compile against v4.5 or v5.x, which themselves were compiled in double precision with openMPI. We look for the default \"_mpi_d\" suffixes on the library names.")
-	endif()
-
-	set( GLIBS ${GMX_LIBRARY} m dl )
-
-	add_definitions( -DGMX_LIB_MPI -DGMX_DOUBLE )
-	message("Detected libgromacs_mpi_d. Attempting compilation with Gromacs 5.x")
-
-	include_directories(${GMXINC} ${GMXINC}/gromacs ${GMXINC}/gromacs/legacyheaders)
-
-	# Run a small executable that uses a gromacs library function to print
-	# the version of the gromacs library
-	try_run(RUN_RESULT_VAR COMPILE_RESULT_VAR
-		${CMAKE_BINARY_DIR}/version_check ${CMAKE_CURRENT_SOURCE_DIR}/src/gmx_version.c
-		CMAKE_FLAGS -DINCLUDE_DIRECTORIES=${GMXINC}/gromacs/legacyheaders
-		COMPILE_DEFINITIONS -DGMX=5
-		LINK_LIBRARIES ${GLIBS}
- 		COMPILE_OUTPUT_VARIABLE COMPILE 
-		RUN_OUTPUT_VARIABLE GMX_VERSION
-	)
-
-	message("${COMPILE}")
-
-endif(GMX_LIBRARY AND GMX_MD_LIBRARY)
-
-message( "Detected GMX Version: ${GMX_VERSION}" )
-if (    NOT "${GMX_VERSION}" STREQUAL "45" AND 
-	NOT "${GMX_VERSION}" STREQUAL "46" AND 
-	NOT "${GMX_VERSION}" STREQUAL "50" AND 
-	NOT "${GMX_VERSION}" STREQUAL "51"     )
-	message(FATAL_ERROR, "Incompatible gromacs version detected. v4.5 and
-v5.x are the only currently supported versions.")
-endif()
-
-add_definitions(-DGMX=${GMX_VERSION})
 
 ######################################################################################################################
 

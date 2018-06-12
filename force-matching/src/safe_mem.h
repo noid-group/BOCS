@@ -1,11 +1,3 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file safe_mem.h 
 @author Nicholas Dunn
@@ -31,6 +23,8 @@ void *emalloc(size_t size);
  * permit undefined behavior. */
 void *erealloc(void *old_ptr, size_t size);
 
+/*! This function replaces free in code, and checks
+ * if a pointer is NULL before trying to free it. */
 void efree(void *ptr);
 
 #endif

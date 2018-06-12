@@ -1,11 +1,3 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file cgff_fn.h 
 @authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
@@ -102,5 +94,9 @@ void store_pair_lists(tW_gmx_topology *top, tW_CG_site * CG_struct,
 		      int *bond_ctr);
 
 void print_Bond_Types(FILE * fp, tW_system sys);
+
+void dump_tW_system(char *fnm, tW_system * sys);
+
+void dump_tW_CG_struct(char *fnm, tW_CG_site * sites, int n_sites);
 
 #endif

@@ -1,11 +1,3 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file cgff_types.h 
 @author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
@@ -21,11 +13,11 @@
 #define bool int
 #endif
 
-#ifndef DIM
+//#ifndef DIM
 #define DIM 3
 typedef double dvec[DIM];
 typedef double matrix[DIM][DIM];
-#endif
+//#endif
 
 #ifndef FALSE
 #define FALSE   0
@@ -35,10 +27,10 @@ typedef double matrix[DIM][DIM];
 #endif
 
 #define KILO 		 (1e3)			/* Thousand	*/
-#if GMX != 51
+//#if GMX != 51
 #define BOLTZMANN	 (1.380658e-23)		/* (J/K)	*/
 #define AVOGADRO	 (6.0221367e23)		/* ()		*/
-#endif
+//#endif
 #define RGAS             (BOLTZMANN*AVOGADRO)   /* (J/(mol K))  */
 #define BOLTZ            (RGAS/KILO)    
 
@@ -138,7 +130,6 @@ typedef double matrix[DIM][DIM];
 typedef char tW_word[MAXWORDLEN];
 typedef char tW_line[MAXLINELEN];
 
-#define COMMENT_FLAG "#!@;"
 
 typedef struct {
     char *cg_name;		/* name of site  */

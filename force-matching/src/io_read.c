@@ -1,11 +1,3 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file io_read.c 
 @authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
@@ -19,7 +11,8 @@
 
 //local includes
 #include "cgff_types.h"
-#include "gmx-interface.h"
+//#include "gmx-interface.h"
+#include "gromacs_topology.h"
 #include "io_read.h"
 #include "safe_mem.h"
 
@@ -123,7 +116,7 @@ int remove_comments(char *before, char *after)
 open_file(): Opens a file named "file_name" with option "mode." Returns the pointer to
 the file. Prints error messages if file could not be opened and terminates execution.
 ****************************************************************************************/
-FILE *open_file(tW_word file_name, char mode)
+FILE *open_file(const tW_word file_name, char mode)
 {
     FILE *fp = NULL;
 

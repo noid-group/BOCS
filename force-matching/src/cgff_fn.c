@@ -1,11 +1,3 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file cgff_fn.c 
 @authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
@@ -18,7 +10,8 @@
 #include <string.h>
 
 #include "cgff_types.h"
-#include "gmx-interface.h"
+//#include "gmx-interface.h"
+#include "gromacs_topology.h"
 #include "cgff_fn.h"
 #include "safe_mem.h"
 #include "io_read.h"
@@ -1005,4 +998,201 @@ int determine_pair_type(int N_Bond_Int_Types,
 
     return -1;
 }
+
+// MRD dumping everything
+void dump_tW_system(char * fnm, tW_system * sys)
+{
+  FILE *fp;
+  fp = fopen(fnm,"w");
+  int i,j;
+  fprintf(fp,"N_Site_Types: %d\n\n",sys->N_Site_Types);
+if (sys->Site_Types)
+{
+  fprintf(fp,"Site_Types: ");
+  for (i = 0; i < sys->N_Site_Types; ++i) { fprintf(fp," %s ",sys->Site_Types[i]); }
+  fprintf(fp,"\n\n");
+}
+if (sys->Inter_Map)
+{
+  fprintf(fp,"Inter_Map: \n");
+  for (i = 0; i < sys->N_Site_Types; ++i)
+  {
+    for (j = 0; j < sys->Inter_Map_Len[i]; ++j)
+    {
+      fprintf(fp," %s ",sys->Inter_Map[i][j]);
+    }
+    fprintf(fp,"\n");
+  }
+  fprintf(fp,"\n");
+}
+
+if (sys->Inter_iMap)
+{ 
+  fprintf(fp,"Inter_iMap: \n");
+  for (i = 0; i < sys->N_Site_Types; ++i)
+  {
+    for (j = 0; j < sys->Inter_Map_Len[i]; ++j)
+    {
+      fprintf(fp," %d ",sys->Inter_iMap[i][j]);
+    }
+    fprintf(fp,"\n");
+  }
+  fprintf(fp,"\n");
+}
+
+if (sys->Inter_Map_Len)
+{
+  fprintf(fp,"Inter_Map_Len: ");
+  for (i = 0; i < sys->N_Site_Types; ++i) { fprintf(fp," %d ",sys->Inter_Map_Len[i]); }
+  fprintf(fp,"\n\n");
+}
+
+ 
+  fprintf(fp,"N_Inter_Types: %d\n\n",sys->N_Inter_Types);
+
+if (sys->Inter_Types)
+{
+  int i;
+  fprintf(fp,"idx        inter_name           inter_type       basis    i_basis     dr      R_min     R_max    N_pts   N_coeff   n_smooth     i0\n");
+  fprintf(fp,"---   --------------------   ----------------   -------   -------   ------   -------   -------   -----   -------   --------   ------\n");
+  for (i = 0; i < sys->N_Inter_Types; ++i)
+  {
+    fprintf(fp,"%3d   ",i);
+    fprintf(fp,"%20s   ",sys->Inter_Types[i].inter_name);
+    fprintf(fp,"%16s   ",sys->Inter_Types[i].inter_type);
+    fprintf(fp,"%7s   ",sys->Inter_Types[i].basis);
+    fprintf(fp,"%7d   ",sys->Inter_Types[i].i_basis);
+    fprintf(fp,"%6.4f   ",sys->Inter_Types[i].dr);
+    fprintf(fp,"%7.5f   ",sys->Inter_Types[i].R_min);
+    fprintf(fp,"%7.5f   ",sys->Inter_Types[i].R_max);
+    fprintf(fp,"%5d   ",sys->Inter_Types[i].N_pts);
+    fprintf(fp,"%7d   ",sys->Inter_Types[i].N_coeff);
+    fprintf(fp,"%8d   ",sys->Inter_Types[i].n_smooth);
+    fprintf(fp,"%6d\n",sys->Inter_Types[i].i_0);
+  }
+  fprintf(fp,"\n");
+}
+
+  fprintf(fp,"N_Inter2_Types: %d\n\n",sys->N_Inter2_Types);
+
+if (sys->Inter2_Type_List)
+{
+  fprintf(fp,"idx        inter_name         basis    name1   name2   N_inter   N_pts   N_coeff   i_basis    i_0      dr       R_0      R_max    n_smooth\n");
+  fprintf(fp,"---   --------------------   -------   -----   -----   -------   -----   -------   -------   -----   ------   -------   -------   --------\n");
+  for (i = 0; i < sys->N_Inter2_Types; ++i);
+  {
+    fprintf(fp,"%3d   ",i);
+    fprintf(fp,"%20s   ",sys->Inter2_Type_List[i].inter_name);
+    fprintf(fp,"%7s   ",sys->Inter2_Type_List[i].basis);
+    fprintf(fp,"%5s   ",sys->Inter2_Type_List[i].name1);
+    fprintf(fp,"%5s   ",sys->Inter2_Type_List[i].name2);
+    fprintf(fp,"%7d   ",sys->Inter2_Type_List[i].N_inter);
+    fprintf(fp,"%5d   ",sys->Inter2_Type_List[i].N_pts);
+    fprintf(fp,"%7d   ",sys->Inter2_Type_List[i].N_coeff);
+    fprintf(fp,"%5d   ",sys->Inter2_Type_List[i].i_basis);
+    fprintf(fp,"%5d   ",sys->Inter2_Type_List[i].i_0);
+    fprintf(fp,"%6.4f   ",sys->Inter2_Type_List[i].dr);
+    fprintf(fp,"%7.5f   ",sys->Inter2_Type_List[i].R_0);
+    fprintf(fp,"%7.5f   ",sys->Inter2_Type_List[i].R_max);
+    fprintf(fp,"%8d    \n",sys->Inter2_Type_List[i].n_smooth);
+  }
+  fprintf(fp,"\n");
+}
+
+
+  fprintf(fp,"N_Bond_Int_Types: %d\n\n",sys->N_Bond_Int_Types);
+
+if (sys->Bonded_Inter_Types)
+{
+  fprintf(fp,"idx          name               inter_name         basis    N_Int_Sites   site_i   site_j   site_k   site_l   i_basis   N_coeff    i_0      dr       R_0      R_max    N_pts   n_smooth   n_bonds_i...   N_instances\n");
+  fprintf(fp,"---   ------------------   --------------------   -------   -----------   ------   ------   ------   ------   -------   -------   -----   ------   -------   -------   -----   --------   ------------   -----------\n");
+
+  for (i = 0; i < sys->N_Bond_Int_Types; ++i)
+  { 
+    fprintf(fp,"%3d   ",i);
+    fprintf(fp,"%18s   ",sys->Bonded_Inter_Types[i].name);
+    fprintf(fp,"%20s   ",sys->Bonded_Inter_Types[i].inter_name);
+    fprintf(fp,"%7s   ",sys->Bonded_Inter_Types[i].basis);
+    fprintf(fp,"%11d   ",sys->Bonded_Inter_Types[i].N_Int_Sites);
+    if (sys->Bonded_Inter_Types[i].N_Int_Sites == 2)
+    {
+      fprintf(fp,"%6s   ",sys->Bonded_Inter_Types[i].Site_Types[0]);
+      fprintf(fp,"%6s   ",sys->Bonded_Inter_Types[i].Site_Types[1]);
+      fprintf(fp,"%6s   ","N/A");
+      fprintf(fp,"%6s   ","N/A");
+    }
+    else if (sys->Bonded_Inter_Types[i].N_Int_Sites == 3)
+    {
+      fprintf(fp,"%6s   ",sys->Bonded_Inter_Types[i].Site_Types[0]);
+      fprintf(fp,"%6s   ",sys->Bonded_Inter_Types[i].Site_Types[1]);
+      fprintf(fp,"%6s   ",sys->Bonded_Inter_Types[i].Site_Types[2]);
+      fprintf(fp,"%6s   ","N/A");
+    }
+    else if (sys->Bonded_Inter_Types[i].N_Int_Sites == 4)
+    {
+      fprintf(fp,"%6s   ",sys->Bonded_Inter_Types[i].Site_Types[0]);
+      fprintf(fp,"%6s   ",sys->Bonded_Inter_Types[i].Site_Types[1]);
+      fprintf(fp,"%6s   ",sys->Bonded_Inter_Types[i].Site_Types[2]);
+      fprintf(fp,"%6s   ",sys->Bonded_Inter_Types[i].Site_Types[3]);
+    }
+    else
+    {
+      fprintf(fp,"ERROR: Bonded_Inter_Types[%d].N_Int_Sites: %d\n",i,sys->Bonded_Inter_Types[i].N_Int_Sites);
+    }
+    fprintf(fp,"%7d   ",sys->Bonded_Inter_Types[i].i_basis);
+    fprintf(fp,"%7d   ",sys->Bonded_Inter_Types[i].N_coeff);
+    fprintf(fp,"%5d   ",sys->Bonded_Inter_Types[i].i_0);
+    fprintf(fp,"%6.4f   ",sys->Bonded_Inter_Types[i].dr);
+    fprintf(fp,"%7.5f   ",sys->Bonded_Inter_Types[i].R_0);
+    fprintf(fp,"%7.5f   ",sys->Bonded_Inter_Types[i].R_max);
+    fprintf(fp,"%5d   ",sys->Bonded_Inter_Types[i].N_pts);
+    fprintf(fp,"%8d   ",sys->Bonded_Inter_Types[i].n_smooth);
+    fprintf(fp,"%12d   ",sys->Bonded_Inter_Types[i].n_bonds_intramolec_pair_inter);
+    fprintf(fp,"%11d   \n",sys->Bonded_Inter_Types[i].N_instances);
+  }
+  fprintf(fp,"\n");
+}
+
+  fprintf(fp,"N_coeff: %d\n",sys->N_coeff);
+  fprintf(fp,"N_pack: %d\n",sys->N_pack);
+  fprintf(fp,"nrexcl: %d\n",sys->nrexcl);
+ 
+  fclose(fp);
+}
+
+void dump_tW_CG_struct(char *fnm, tW_CG_site * sites, int n_sites)
+{
+  FILE *fp;
+  int i;
+  fp = fopen(fnm,"w");
+  fprintf(fp," idx     name    i_type   i_res   nr_excl   nr_bonds   nr_bond_coeffs\n");
+  fprintf(fp,"-----   ------   ------   -----   -------   --------   --------------\n");
+  for (i = 0; i < n_sites; ++i)
+  {
+    fprintf(fp,"%5d   ",i);
+    fprintf(fp,"%6s   ",sites[i].name);
+    fprintf(fp,"%6d   ",sites[i].i_type);
+    fprintf(fp,"%5d   ",sites[i].i_res);
+    fprintf(fp,"%7d   ",sites[i].nr_excl);
+    fprintf(fp,"%8d   ",sites[i].nr_bonds);
+    fprintf(fp,"%14d   \n",sites[i].nr_bond_coeffs);
+    fprintf(fp,"\tr[0]: %g  %f   r[1]: %g  %f   r[2]: %g  %f   f[0]: %g  %f   f[1]: %g  %f   f[2]: %g  %f\n",sites[i].r[0],sites[i].r[0],sites[i].r[1],sites[i].r[1],sites[i].r[2],sites[i].r[2],sites[i].f[0],sites[i].f[0],sites[i].f[1],sites[i].f[1],sites[i].f[2],sites[i].f[2]);
+  }
+  fclose(fp);  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -1,11 +1,3 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file ref_potential.c 
 @authors Joseph Rudzinski, Nicholas Dunn
@@ -15,10 +7,12 @@
 //c libary includes
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 //local includes
 #include "safe_mem.h"
-#include "gmx-interface.h"
+//#include "gmx-interface.h"
+#include "gromacs_topology.h"
 #include "calc_grids.h"
 #include "wnoid_math.h"
 #include "calc_ref_potential.h"

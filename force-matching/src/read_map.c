@@ -209,6 +209,13 @@ tW_site_map *get_CG_map(FILE * map_top, int *N_sites)
     }
     rewind(map_top);
 
+    if (map.n_types == 0)
+    {
+      fprintf(stderr,"ERROR: map.n_types is 0!\n");
+      fprintf(stderr,"\tDid you include the [ moleculetype ] directive for each type of CG molecule?\n");
+      exit(1);
+    }
+
     map.n_molecules = ecalloc(map.n_types, sizeof(int));
     map.molecule_types = ecalloc(map.n_types, sizeof(mapping_type));
 
@@ -241,8 +248,10 @@ tW_site_map *get_CG_map(FILE * map_top, int *N_sites)
 	}*/
 
 
-	if (line[i] != ';' && nbytes > i) {
-	    if (line[i] == '[') {
+	if (line[i] != ';' && nbytes > i) 
+        {
+	    if (line[i] == '[') 
+            {
 		directive = get_directive(line, directive, &have_directive, i);
 
 		if (strcmp(directive, SITETYPE) == 0) {
@@ -275,7 +284,9 @@ tW_site_map *get_CG_map(FILE * map_top, int *N_sites)
 			       sizeof(char *));
 
 		}
-	    } else if (is_blank(line) && have_directive) {
+	    } 
+            else if (is_blank(line) && have_directive) 
+            {
 		if (strcmp(directive, SITETYPE) == 0 && SITE != map.molecule_types[moltype].n_sites )
 		{
 		    fprintf(stderr, "ERROR: Wrong # of site types for %s. Expected %d, but found %d.\n", 
@@ -292,7 +303,9 @@ tW_site_map *get_CG_map(FILE * map_top, int *N_sites)
 		free(directive);
 		have_directive = false;
 
-	    } else if (have_directive) {
+	    } 
+            else if (have_directive) 
+            {
 		if (strcmp(directive, MOLTYPE) == 0) {
 
 		    if (moltype >=0 && SITE > map.molecule_types[moltype].n_sites)
@@ -498,6 +511,12 @@ tW_site_map *get_CG_map(FILE * map_top, int *N_sites)
 		}
 
 	    }
+            else
+            {
+              fprintf(stderr,"ERROR: found line: %s",line);
+              fprintf(stderr,"\toutside of a directive. Directive lines should look like, e.g., \n[ moleculetypes ]\n");
+              exit(1);
+            }
 	}
     }
 

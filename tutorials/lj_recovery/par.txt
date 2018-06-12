@@ -21,7 +21,3 @@ LJ
 ! inter_name   type1  type2           
  LJLJ          LJ    LJ                                                
 [End Pair_Interaction]
-
-[Frame_Weighting]
-NPT
-[End Frame_Weighting]

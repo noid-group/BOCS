@@ -1,11 +1,3 @@
-/* ----------------------------------------------------------------------
- *    BOCS - Bottom-up Open-source Coarse-graining Software
- *    http://github.org/noid-group/bocs
- *    Dr. William Noid, wgn1@psu.edu
- *
- *    This software is distributed under the GNU General Public License v3.
- *    ------------------------------------------------------------------------- */
-
 /**
 @file transf_map.c 
 @authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
@@ -60,7 +52,7 @@ void print_gro_frame(FILE *out_gro, int N_sites, tW_site_map *CG_map, tW_gmx_trx
     for (site=0; site<N_sites; site++)
     {
 	fr->get_pos_of(fr, site, x);
-	fr->get_vel_of(fr, site, v);
+	if (fr->contents->bV) {fr->get_vel_of(fr, site, v); } // if MRD 12/14/2017
 
 	//res# resnm atmnm atom# posx posy posz velx vely velz
         //"%5d%-5s%5s%5d%8.3f%8.3f%8.3f%8.4f%8.4f%8.4f"
