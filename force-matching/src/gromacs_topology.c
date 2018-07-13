@@ -4041,7 +4041,7 @@ bool read_bocs_frame_dir_frame(tW_gmx_trxframe *fr, tW_line inp_line)
 bool read_bocs_frame_dir_natoms(tW_gmx_trxframe *fr, tW_line inp_line)
 {
   int test_sscanf, natoms;
-  test_sscanf = sscanf(inp_line,"[FRAME] %d ", &natoms);
+  test_sscanf = sscanf(inp_line,"[natoms] %d ", &natoms);
   if (test_sscanf != 1)
   {
     fprintf(stderr,"ERROR: expected [natoms] <#atoms> on line\n");
