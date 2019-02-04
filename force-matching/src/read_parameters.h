@@ -23,7 +23,7 @@
 #define KEY_EIGEN        "Eigen"	//JFR - 08.11.11
 #define KEY_SVD          "SVD"	//JFR - 04.06.12
 #define KEY_TPR          "TPR"	//JFR - 04.06.12
-#define KEY_TPR_EXCL     "TOP_EXCL"	//JFR - 06.27.12
+#define KEY_TPR_EXCL     "TPR_EXCL"	//JFR - 06.27.12
 #define KEY_MT           "Metric_Tensor"	//JFR - 04.06.12
 #define KEY_MFD          "Mean_Force_Decomposition"	//JFR - 04.06.12
 #define KEY_CalcMODE     "Calculation_Mode"	//JFR - 04.06.12
