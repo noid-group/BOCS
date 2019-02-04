@@ -2558,6 +2558,14 @@ int get_Bspline_basis_param(tW_line inp_line, double *dr, double *R_0,
     *N_pts = *N_coeff;
     *R_max = *R_0 + (*N_coeff - 1) * (*dr);
 
+    /* MRD 02.05.2019 added extra padding for Bspline NB */
+    if (strcmp(inter_type,NB_PAIR) == 0)
+    {
+        (*N_coeff) += 2 * (*kspline);
+        (*R_0) -= ((*dr) * (double)(*kspline));
+        (*R_max) += ((*dr) * (double)(*kspline));
+    }
+
     /* For dihedral types, make sure that R_0 and R_max are -180 and 180. */
     if (strcmp(inter_type, B_DIHEDRAL) == 0) {
 	if ((fabs(*R_0 + M_PI) > FLOAT_EPS) ||

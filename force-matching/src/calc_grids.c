@@ -3125,14 +3125,16 @@ double calc_Bspline_deriv(double dr, double R_0, int i_0, int N_pts,
 //{
 //Bp = (1.0 / ((R_0 + (i - j + k/2 + k)*dr) - r_ij))*( (1.0-((double)k))*Nik[k-1-j][k-1] + (2.0*((double)k)-1.0)*Nik[k-2-j][k-2] );
 //}
-    DP = 1.0 / (R_0 + (i - j + k / 2 + k) * dr - R);
+    /* MRD 02.05.2019 got rid of the k / 2
+    DP = 1.0 / (R_0 + (i - j + k / 2 + k) * dr - R); */
+    DP = 1.0 / (R_0 + (i - j + k) * dr - R);
     if (j == k - 1) {
 //Bp = DP*(1.0-((double)k))*Nik[k-1-j][k-1];
 	Bp = DP * (1.0 - ((double) k)) * Nik[k - 1 - j];
     } else {
 //Bp = DP*( (1.0-((double)k))*Nik[k-1-j][k-1] + ((double)k)*Nik[k-2-j][k-2] );
-	Bp = DP * ((1.0 - ((double) k)) * Nik[k - 1 - j] +
-		   ((double) k) * Npik[k - 2 - j]);
+	Bp = DP * ((1.0 - ((double) k)) * Nik[k - 1 - j] + ((double) k) * Npik[k - 1 - j]);
+		   /*((double) k) * Npik[k - 2 - j]); MRD 02.05.2019 changed the 2 to a 1*/
     }
 
     return Bp;
