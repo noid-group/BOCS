@@ -59,8 +59,8 @@ int main (int argc, char *argv[])
   bool bF = FALSE;		/* Logical variable re presence of forces */
 
   tW_gmx_trxframe *fr, *fr_ref;
-  fr = init_tW_gmx_trxframe();
-  fr_ref = init_tW_gmx_trxframe();
+  //fr = init_tW_gmx_trxframe();
+  //fr_ref = init_tW_gmx_trxframe();
 
   tW_gmx_topology *top;
   top = init_tW_gmx_topology();
@@ -196,6 +196,9 @@ if (local_rank == 0) { copyright(); }
 		  /* Open trr file for current topology. */
 		  //open_trr_file (files.structures[i], oenv, &status, &info, &fr);	// 4.5.3
 
+		  fr = init_tW_gmx_trxframe();
+                  fr_ref = init_tW_gmx_trxframe();
+		      
 //		  read_first_trxframe(fr, files.structures[i]); MRD 11.09.17
 		  if (read_first_frame(fr, files.structures[i]) == -1)
 		  {
@@ -442,6 +445,8 @@ if (local_rank == 0) { copyright(); }
 	    }
 
 	    free(CG_struct);
+	    efree(fr);
+	    efree(fr_ref);
 	}			/* End the loop over topologies. */
     }				/* End GROMACS LOOP. */
   else
