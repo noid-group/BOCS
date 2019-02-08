@@ -2561,6 +2561,7 @@ int get_Bspline_basis_param(tW_line inp_line, double *dr, double *R_0,
     /* MRD 02.05.2019 added extra padding for Bspline NB */
     if (strcmp(inter_type,NB_PAIR) == 0)
     {
+	(*N_pts) += 2 * (*kspline);
         (*N_coeff) += 2 * (*kspline);
         (*R_0) -= ((*dr) * (double)(*kspline));
         (*R_max) += ((*dr) * (double)(*kspline));
