@@ -667,14 +667,14 @@ setup_xdr(): sets up the XDR data structure for reading/writing trr files MRD 92
 *****************************************************************************************/
 void setup_xdr(tW_gmx_trxframe *self, const char *fnm, bool bRead)
 {
-  if (bRead)
+  if (bRead) // MRD 02.11.2019 got rid of  if (!self->fp) { } around the fopen statements
   {
-    if (!self->fp) { self->fp = fopen(fnm,"rb"); }
+    self->fp = fopen(fnm,"rb");
     self->xdrmode = XDR_DECODE; 
   }
   else
   {
-    if (!self->fp) { self->fp = fopen(fnm,"wb"); }
+    self->fp = fopen(fnm,"wb");
     self->xdrmode = XDR_ENCODE;
   }
 
