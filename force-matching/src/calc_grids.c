@@ -1,6 +1,6 @@
 /**
 @file calc_grids.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
 @brief Main driver of the cgff calculation 
 */
 
@@ -284,7 +284,9 @@ int get_results(FILE * fp_log, tW_system * sys, int forces, tW_word tag)
     int dummy, test_sscanf, i, j, k, l;
     tW_line inp_line;
     double bref;
-    double M2[sys->N_pack];
+/* MRD 02.13.2019 Only allocate memory for this later if needed */
+    double *M2; 
+	//double M2[sys->N_pack];
     int index;
 
     if (sys->CalcMODE_var.CalcMODE != ISECOND_HALF) {
@@ -319,6 +321,7 @@ int get_results(FILE * fp_log, tW_system * sys, int forces, tW_word tag)
 	}
     } else {
 	fp = fopen(sys->ITER_var.AAM2_fnm, "r");
+	M2 = (double *) ecalloc(sys->N_pack, sizeof(double));
 	for (i = 0; i < sys->N_pack; i++) {
 	    dummy = get_next_line(fp, inp_line);
 	    test_sscanf = sscanf(inp_line, "%lf", &M2[i]);
@@ -351,6 +354,7 @@ int get_results(FILE * fp_log, tW_system * sys, int forces, tW_word tag)
 	for (i = 0; i < sys->N_pack; i++) {
 	    sys->M[i] += sys->M2[i];
 	}
+	efree(M2);
     }
 
 
