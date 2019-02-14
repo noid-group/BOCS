@@ -1,8 +1,3 @@
-; Preprocessing
-title               =  MEO
-cpp                 =  /usr/bin/cpp
-include             = -I/gpfs/work/acl5146/pkg/gromacs-4.0.7/share/top/
-
 ; Run Control
 integrator          =  sd
 tinit               =  0.0
@@ -10,7 +5,6 @@ dt                  =  0.001    ; 1.0 fs
 nsteps              =  5000000  ; 5 ns
 nstcomm             =  1        ; no. steps between removing com motion
 comm-mode           =  linear   ; remove com translation
-
 
 ; Output Control
 nstxout             =  1000     ; no. steps between printing coords to trr file => 1ps
@@ -25,22 +19,21 @@ energygrp_table     =  MEO MEO
 ; Neighbor searching
 nstlist             =  1        ; update neighbor list every step
 ns_type             =  grid     ; check neighbor list using grid
-rlist               =  3.0      ; cutoff distance (nm) for short-range neighbor list
+rlist               =  1.5      ; cutoff distance (nm) for short-range neighbor list
+cutoff-scheme       =  group    ;
 
 ; Electrostatics and VdW
 coulombtype         =  user     ; fast particle-mesh ewald electrostatics
-rcoulomb            =  3.0      ; distance for the Coulomb cut-off
+rcoulomb            =  1.5      ; distance for the Coulomb cut-off
 vdwtype             =  user     ; truncated LJ interactions
-rvdw                =  3.0      ; distance for LJ cut-off
+rvdw                =  1.5      ; distance for LJ cut-off
 
 ; Temperature Coupling
 tc_grps             =  System           ; groups to couple separtly to temp. bath
 tau_t               =  0.5              ; time constant for coupling
-ref_t               =  298              ; ref. temperature for coupling
+ref_t               =  270              ; ref. temperature for coupling
 
 ; Velocity generation
 gen_vel             =  no              ; generate velocities with Max. dist.
-gen_temp            =  270              ; temp. for Max. dist.
-gen_seed            =  173529           ; for random number generator
 
 

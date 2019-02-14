@@ -750,7 +750,14 @@ int get_Zero_list(int *Zero_list, int *N_coeff, double *g_cnt,
 			}
 		    }
 		}
-		//if( (l<=sys->Inter_Types[j].kspline/2) || (l >= sys->Inter_Types[j].N_coeff-1-sys->Inter_Types[j].kspline/2 ) ) { end_flag = TRUE; }
+                if (strcmp(sys->Inter_Types[j].inter_type,NB_PAIR) == 0)
+                {
+		    if( (l <= sys->Inter_Types[j].kspline/2) || 
+                        (l >= sys->Inter_Types[j].N_coeff - 1 - sys->Inter_Types[j].kspline/2 ) ) 
+                    { 
+                        end_flag = TRUE; 
+                    }
+                }
 	    }
 
 	    /* update the trimming variables */

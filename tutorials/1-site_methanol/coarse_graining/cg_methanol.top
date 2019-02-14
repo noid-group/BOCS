@@ -6,10 +6,6 @@
 ;name       mass        charge   ptype       c6           c12
  MEO        92.14    0.000    A           0            1
 
-[ nonbond_params ]
-  ; i      j     func          c6           c12
-    MEO    MEO     1             0           1
-
 [ moleculetype ]
 ; name  nrexcl
 MEO     3
