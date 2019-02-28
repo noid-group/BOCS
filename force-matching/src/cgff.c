@@ -231,7 +231,8 @@ if (local_rank == 0) { copyright(); }
 
 		  /* Copy trr information to CG_struct. */
 		  bF = copy_trr_2_CGstruct (fr, CG_struct);
-
+                  update_info_trr(&info, fr);
+		      
 		  if (sys.REF_var.flag_reftrr == TRUE)
 		    {
 		      copy_trr_2_CGstruct_ref (fr_ref, CG_struct);
