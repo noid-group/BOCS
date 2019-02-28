@@ -2204,18 +2204,15 @@ void pop_contents(tW_gmx_topology * top)
   top->contents->atoms.atomtypeB = (char ***) ecalloc(n_atoms,sizeof(char **));
   for (i = 0; i < n_atoms; ++i)
   {
-    (top->contents->atoms.atomname[i]) = (char **) ecalloc(n_atoms,sizeof(char *));
-    (top->contents->atoms.atomtype[i]) = (char **) ecalloc(n_atoms,sizeof(char *));
-    (top->contents->atoms.atomtypeB[i]) = (char **) ecalloc(n_atoms,sizeof(char *));
+    (top->contents->atoms.atomname[i]) = (char **) ecalloc(1,sizeof(char *));
+    (top->contents->atoms.atomtype[i]) = (char **) ecalloc(1,sizeof(char *));
+    (top->contents->atoms.atomtypeB[i]) = (char **) ecalloc(1,sizeof(char *));
   }
   for (i = 0; i < n_atoms; ++i)
   {
-    for (j = 0; j < n_atoms; ++j)
-    {
-      top->contents->atoms.atomname[i][j] = (char *) ecalloc(10,sizeof(char));
-      top->contents->atoms.atomtype[i][j] = (char *) ecalloc(10,sizeof(char));
-      top->contents->atoms.atomtypeB[i][j] = (char *) ecalloc(10,sizeof(char));
-    }
+    top->contents->atoms.atomname[i][0] = (char *) ecalloc(10,sizeof(char));
+    top->contents->atoms.atomtype[i][0] = (char *) ecalloc(10,sizeof(char));
+    top->contents->atoms.atomtypeB[i][0] = (char *) ecalloc(10,sizeof(char));
   }
 
 //  top->contents->atoms.atomname = (char ***) ecalloc(1,sizeof(char **));
@@ -2318,7 +2315,7 @@ void pop_contents(tW_gmx_topology * top)
     {
       for (k = 0; k < my_mols[i].n_apm; ++k)
       {
-        top->contents->excls.index[at_idx] = top->contents->excls.index[at_idx-1] + my_mols[i].n_excls;
+        top->contents->excls.index[at_idx] = top->contents->excls.index[at_idx-1] + my_mols[i].n_epa[k];
         ++at_idx;
       }
     }
