@@ -403,6 +403,8 @@ if (local_rank == 0) { copyright(); }
 		    	// Print results for the current topology if the user requested we do so
 			if (sys.MEM_var.flag_mult_top == TRUE)
 			{
+                          if (local_rank == 0) /* MRD 03.06.2019 data collected on rank 0, all others will error */
+			  {
 			      get_top_tag (files.structures[i], tag);
 			      get_results (files.fp_log, &sys, info.b_Forces_N, tag); 
 			      print_output (info.b_Forces_N, sys, tag);
@@ -418,8 +420,7 @@ if (local_rank == 0) { copyright(); }
 	  		      //free_sys_copy(&sys); 
 	  		      //initialize_sys(&sys);
 			      setup_sys_copy(sys_global, &sys, TRUE); // reset all properties to initial values
-
-
+			  }
 			}
 
 		    }
