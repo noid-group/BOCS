@@ -3285,7 +3285,7 @@ int get_MT(FILE * fp_par, tW_line inp_line, int MT_flag, tW_system * sys)
 
     l_inp = get_next_line(fp_par, inp_line);
     check_inp_line("par.txt", KEY_MT, inp_line);
-    test_sscanf = sscanf(inp_line, "%s", tmp);	/* normalize the metric tensor by r^2 for nonbonded interactions */
+    test_sscanf = sscanf(inp_line, "%s", tmp);	/* print out the metric tensor blocks */
     if ((strcmp(tmp, "YES") == 0) || (strcmp(tmp, "Yes") == 0)
 	|| (strcmp(tmp, "yes") == 0)) {
 	sys->MT_var.flag_print = TRUE;

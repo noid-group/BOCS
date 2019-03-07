@@ -80,7 +80,13 @@ get_ndihs(): Returns the number of dihedrals listed in self
 *****************************************************************************************/
 int get_ndihs(tW_gmx_topology *self)
 {
- return self->contents->idef.il[F_RBDIHS].nr; 
+  /* MRD 03.05.2019 
+   * Manual says we support either all PDIHS or all TABDIHS, not a mix
+   */
+
+  if (self->contents->idef.il[F_PDIHS].nr > 0) { return self->contents->idef.il[F_PDIHS].nr; }
+  return self->contents->idef.il[F_TABDIHS].nr;
+// return self->contents->idef.il[F_RBDIHS].nr; 
 }
 
 /*****************************************************************************************
@@ -150,16 +156,18 @@ int *get_dih_list(tW_gmx_topology *self)
 {
   int i, nelements;
   int *dih_list;
-
+  int DIH_TYPE;
   nelements = self->get_ndihs(self);
 
   dih_list = ecalloc(nelements, sizeof(int));
 
+  if (self->contents->idef.il[F_PDIHS].nr > 0) { DIH_TYPE = F_PDIHS; }
+  else if (self->contents->idef.il[F_TABDIHS].nr > 0) { DIH_TYPE = F_TABDIHS; }
+
   for (i=0; i<nelements; i++)
   {
-    dih_list[i] = self->contents->idef.il[F_RBDIHS].iatoms[i];
+    dih_list[i] = self->contents->idef.il[DIH_TYPE].iatoms[i];
   }
-   
   return dih_list; 
 }
 
@@ -1905,6 +1913,12 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
 	exit(1); 
       }
       flags |= flag_pdihs;
+      if ((flags & flag_tabdihs) != 0)
+      {
+        fprintf(stderr,"ERROR: we found section \"Tab. Dih.\" already, and now have found section \"Proper Dih.\"\n");
+        fprintf(stderr,"you must have ALL dihedral angles in your topology one or the other \n");
+        exit(EXIT_FAILURE);
+      }
       get_next_line(fp,inp_line); // nr: X
       test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
       int n_pdih = inp_int / PDIH_DIV;
@@ -1931,7 +1945,13 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
     }
     else if (strstr(inp_line,"Ryckaert-Bell.") != NULL)
     {
-      if ((flags & flag_rbdihs) != 0) 
+/* MRD 03.05.2019
+ * According to the manual, we support either all proper dih. or all tabulated dih., but not both in same file
+ * So, if we find this, we gotta say NO */
+      fprintf(stderr,"ERROR: For force matching, you must use all Proper Dih XOR Tabulated Dih. in the topology file.\n");
+      fprintf(stderr,"Please change your Ryackert-Bell. Dihedrals to either of the other options\n");
+      exit(EXIT_FAILURE);
+/*      if ((flags & flag_rbdihs) != 0) 
       { 
 	fprintf(stderr,"ERROR: found section \"Ryckaert-Bell.:\" twice in moltype %s\n",mol->molname); 
 	exit(1); 
@@ -1959,7 +1979,7 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
         mol->rbdih_ijkl[i][3] = rbidxl;
       }
       get_next_line(fp,inp_line);
-      test_line(inp_line,"RBDIHS",FALSE,"Expected to be done finding RBDIHS");
+      test_line(inp_line,"RBDIHS",FALSE,"Expected to be done finding RBDIHS");*/
     }
     else if (strstr(inp_line,"Tab. Dih.") != NULL)
     {
@@ -1969,6 +1989,12 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
         exit(1);
       }
       flags |= flag_tabdihs;
+      if ((flags & flag_pdihs) != 0)
+      {
+        fprintf(stderr,"ERROR: we found section \"Proper Dih.\" previously, and are now in section \"Tab Dih.\" \n");
+        fprintf(stderr,"you must have ALL dihedral angles in your topology one or the other\n");
+        exit(EXIT_FAILURE);
+      }
       get_next_line(fp,inp_line); // nr: X
       test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
       int n_tabdih = inp_int / TABDIH_DIV;
@@ -3518,6 +3544,8 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
   top->contents->mols.nr = n_mt; 
   top->molecules = (tW_molecule *) ecalloc(n_mt, sizeof(tW_molecule));
   
+  int n_total_pdih = 0;
+  int n_total_tabdih = 0;
 
   for (i = 0; i < n_mt; ++i)
   {
@@ -3548,6 +3576,15 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
       fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__); 
       exit(1); 
     }
+
+    if (rbdih_nr > 0)
+    {
+      fprintf(stderr,"ERROR: we do not support RBDIH dihedral angles. please change all dihedrals to proper or tabulated\n");
+      exit(EXIT_FAILURE);
+    }
+
+    n_total_pdih += pdih_nr;
+    n_total_tabdih += tabdih_nr;
 
 /* Allocate memory or set values for all the elements of the tW_molecule data structure */
     strcpy(MM->molname,name);
@@ -3803,6 +3840,13 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
         MM->lj14_ij[j][1] = i2;
       }
     }
+  }
+
+  if ((n_total_pdih > 0) && (n_total_tabdih > 0))
+  {
+    fprintf(stderr,"ERROR: we found both proper dihedrals and tabulated dihedrals present!\n");
+    fprintf(stderr,"\t Please change all dihedrals to the same type\n");
+    exit(EXIT_FAILURE);
   }
 
 /*
