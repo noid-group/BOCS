@@ -191,7 +191,7 @@ if (local_rank == 0) { copyright(); }
 		}
 
 	      if (sys.CalcMODE_var.CalcMODE != ISECOND_HALF)
-		{		/* JFR - added 04.06.12: If in SECOND_HALF MODE, skip the trr loop */
+              {		/* JFR - added 04.06.12: If in SECOND_HALF MODE, skip the trr loop */
 
 		  /* Open trr file for current topology. */
 		  //open_trr_file (files.structures[i], oenv, &status, &info, &fr);	// 4.5.3
@@ -423,8 +423,11 @@ if (local_rank == 0) { copyright(); }
 			}
 
 		    }
-		 
-		}		/* End if CalcMODE != SECOND_HALF */
+	        free(CG_struct);
+                efree(fr);
+                efree(fr_ref);
+	 
+              }		/* End if CalcMODE != SECOND_HALF */
 	      else
 		{
 		  printf
@@ -444,10 +447,6 @@ if (local_rank == 0) { copyright(); }
 	    {
 	      reset_gmx_info (&info_ref);	/*close_trj(status_ref); */
 	    }
-
-	    free(CG_struct);
-	    efree(fr);
-	    efree(fr_ref);
 	}			/* End the loop over topologies. */
     }				/* End GROMACS LOOP. */
   else
