@@ -263,7 +263,7 @@ int main(int argc, char * argv[])
     }
     if (opt == eLMP)
     {
-      read_next_frame(fri);
+      read_next_frame(fri,TRUE);
       fclose(fro->fp);
       write_lammps_data(fri,top,fnmo);
       free(fri);
@@ -271,7 +271,7 @@ int main(int argc, char * argv[])
       return 0;   
     }
     fro->contents = fri->contents;
-    while (read_next_frame(fri))
+    while (read_next_frame(fri,TRUE))
     {
       copy_trxframe_info(fri,fro);  
       write_frame(fro);

@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 
     /* The first time we read data is a little special */
     read_first_frame(fr_in,input->get_filename(input,"-f"));
-    read_next_frame(fr_in);
+    read_next_frame(fr_in,TRUE);
 
     /* read CG mapping */
     CG_map = get_CG_map(fp_map, &N_sites);
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 	    map_config(N_sites, CG_map, fr_in, fr_out);	    	    
 	    write_frame(fr_out);
 	}   
-    } while (read_next_frame(fr_in) && (! bEND));
+    } while (read_next_frame(fr_in,TRUE) && (! bEND));
     fclose(fr_out->fp);
 
     return 0;

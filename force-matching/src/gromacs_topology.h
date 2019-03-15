@@ -1126,7 +1126,7 @@ void write_lammps_data(tW_gmx_trxframe *fr, tW_gmx_topology *top, tW_word fnm);
 ********************************************************************************/
 
 int read_first_frame(tW_gmx_trxframe *fr, const char *fnm);
-bool read_next_frame(tW_gmx_trxframe *fr);
+bool read_next_frame(tW_gmx_trxframe *fr, bool printCount );
 void open_write_trajectory(tW_gmx_trxframe *fr, char *fnm);
 void write_frame(tW_gmx_trxframe *fr);
 

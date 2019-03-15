@@ -84,8 +84,7 @@ int get_ndihs(tW_gmx_topology *self)
    * Manual says we support either all PDIHS or all TABDIHS, not a mix
    */
 
-  if (self->contents->idef.il[F_PDIHS].nr > 0) { return self->contents->idef.il[F_PDIHS].nr; }
-  return self->contents->idef.il[F_TABDIHS].nr;
+  return self->contents->idef.il[F_PDIHS].nr;
 // return self->contents->idef.il[F_RBDIHS].nr; 
 }
 
@@ -156,17 +155,13 @@ int *get_dih_list(tW_gmx_topology *self)
 {
   int i, nelements;
   int *dih_list;
-  int DIH_TYPE;
   nelements = self->get_ndihs(self);
 
   dih_list = ecalloc(nelements, sizeof(int));
 
-  if (self->contents->idef.il[F_PDIHS].nr > 0) { DIH_TYPE = F_PDIHS; }
-  else if (self->contents->idef.il[F_TABDIHS].nr > 0) { DIH_TYPE = F_TABDIHS; }
-
   for (i=0; i<nelements; i++)
   {
-    dih_list[i] = self->contents->idef.il[DIH_TYPE].iatoms[i];
+    dih_list[i] = self->contents->idef.il[F_PDIHS].iatoms[i];
   }
   return dih_list; 
 }
@@ -1116,7 +1111,7 @@ bool read_trr_2_CGstruct(tW_gmx_info * info, tW_gmx_trxframe *fr, tW_CG_site CG_
 {
   bool b_trr;
 
-  b_trr = read_next_frame(fr); // read_next_trxframe -> read_next_frame MRD 11.09.17
+  b_trr = read_next_frame(fr, FALSE); // read_next_trxframe -> read_next_frame MRD 11.09.17
 
   if (b_trr) 
   {
@@ -1134,7 +1129,7 @@ bool read_trr_2_CGstruct_ref(tW_gmx_info * info, tW_gmx_trxframe *fr, tW_CG_site
 {
   bool b_trr;
 
-  b_trr = read_next_frame(fr); // read_next_trxframe -> read_next_frame MRD 11.09.17
+  b_trr = read_next_frame(fr, FALSE); // read_next_trxframe -> read_next_frame MRD 11.09.17
 
   if (b_trr) 
   {
@@ -1248,7 +1243,7 @@ read_next_frame(): This function is a wrapper, like read_first_frame. It calls t
 	but read_first_frame was never called either, and accordingly no memory has been allocated
 	for xvf vectors. Returns true if everything went ok.
 */
-bool read_next_frame(tW_gmx_trxframe *fr)
+bool read_next_frame(tW_gmx_trxframe *fr, bool printCount)
 {
   if (fr->eFileType == -1)
   {
@@ -1256,6 +1251,10 @@ bool read_next_frame(tW_gmx_trxframe *fr)
     fprintf(stderr,"\tread_first_frame must have never been called\n");
     fprintf(stderr,"\tERROR: %s %d\n",__FILE__,__LINE__);
   }
+
+  ++(fr->counter);
+  if (printCount) { fprintf(stderr,"Reading frame %d\r",fr->counter); }
+
   switch (fr->eFileType)
   {
     case eDUMP:
@@ -1876,6 +1875,7 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
 	fprintf(stderr,"ERROR: found section \"Angle:\" twice in moltype %s\n",mol->molname); 
 	fprintf(stderr,"\tflags: %d   flag_angles: %d\n",flags,flag_angles);
 	fprintf(stderr," flags & flag_angles: %d\n",flags & flag_angles);
+        fprintf(stderr," Please make sure that you only have one angle type (either 1=angle or 8=tab angle) in your top file\n");
 	exit(1); 
       }
       flags |= flag_angles;
@@ -1903,22 +1903,23 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
       get_next_line(fp,inp_line);
       test_line(inp_line,"ANGLES",FALSE,"Expected to be done finding ANGLES");
     }
-    else if (strstr(inp_line,"Proper Dih.") != NULL)
+    else if (strstr(inp_line,"Dih.") != NULL) // MRD 03.14.2019 this should cover proper and tabulated dihedrals
     {
       if ((flags & flag_pdihs) != 0) 
       { 
-	fprintf(stderr,"ERROR: found section \"Proper Dih.\" twice in moltype %s\n",mol->molname); 
+	fprintf(stderr,"ERROR: found section \"Dih.\" twice in moltype %s\n",mol->molname); 
 	fprintf(stderr,"\tflags: %d   flag_pdihs: %d\n",flags,flag_pdihs);
 	fprintf(stderr," flags & flag_pdihs: %d\n",flags & flag_pdihs);
+        fprintf(stderr," Please make sure that you only have one dihedral type (either 1=pdih or 8=tabdih) in your top file\n");
 	exit(1); 
       }
       flags |= flag_pdihs;
-      if ((flags & flag_tabdihs) != 0)
-      {
-        fprintf(stderr,"ERROR: we found section \"Tab. Dih.\" already, and now have found section \"Proper Dih.\"\n");
-        fprintf(stderr,"you must have ALL dihedral angles in your topology one or the other \n");
-        exit(EXIT_FAILURE);
-      }
+//      if ((flags & flag_tabdihs) != 0)
+//      {
+//        fprintf(stderr,"ERROR: we found section \"Tab. Dih.\" already, and now have found section \"Proper Dih.\"\n");
+//        fprintf(stderr,"you must have ALL dihedral angles in your topology one or the other \n");
+//        exit(EXIT_FAILURE);
+//      }
       get_next_line(fp,inp_line); // nr: X
       test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
       int n_pdih = inp_int / PDIH_DIV;
@@ -1927,12 +1928,13 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
       mol->pdih_types = (int *) ecalloc(n_pdih,sizeof(int));
       mol->pdih_ijkl = (int **) ecalloc(n_pdih,sizeof(int *));
       int pdih_idx, pdih_type, pdi, pdj, pdk, pdl;
+      char dihtype[30];
       get_next_line(fp,inp_line); // iatoms:
       for (i = 0; i < n_pdih; ++i)
-      {
+      { 
 	get_next_line(fp,inp_line); // idx type=X (PDIHS) i j k l
-	test_line(inp_line,"PDIHS",TRUE,"Expected to find PDIHS");
-        test_sscanf = sscanf(inp_line," %d type=%d (PDIHS) %d %d %d %d ",&pdih_idx, &pdih_type, &pdi, &pdj, &pdk, &pdl);
+//	test_line(inp_line,"PDIHS",TRUE,"Expected to find PDIHS");
+        test_sscanf = sscanf(inp_line," %d type=%d (%s) %d %d %d %d ",&pdih_idx, &pdih_type, &(dihtype), &pdi, &pdj, &pdk, &pdl);
         mol->pdih_ijkl[i] = (int *) ecalloc(4,sizeof(int));
         mol->pdih_types[i] = pdih_type;
         mol->pdih_ijkl[i][0] = pdi;
@@ -1942,6 +1944,7 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
       }
       get_next_line(fp,inp_line);
       test_line(inp_line,"PDIHS",FALSE,"Expected to be done finding PDIHS");
+      test_line(inp_line,"TABDIHS",FALSE,"Expected to be done finding TABDIHS");
     }
     else if (strstr(inp_line,"Ryckaert-Bell.") != NULL)
     {
@@ -1981,7 +1984,7 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
       get_next_line(fp,inp_line);
       test_line(inp_line,"RBDIHS",FALSE,"Expected to be done finding RBDIHS");*/
     }
-    else if (strstr(inp_line,"Tab. Dih.") != NULL)
+/*    else if (strstr(inp_line,"Tab. Dih.") != NULL)
     {
       if ((flags & flag_tabdihs) != 0)
       {
@@ -2018,7 +2021,7 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
       }
       get_next_line(fp,inp_line);
       test_line(inp_line,"TABDIHS",FALSE,"Expected to be done finding TABDIHS");
-    }
+    }*/
     else if (strstr(inp_line,"LJ-14") != NULL)
     {
       if ((flags & flag_lj14) != 0) 
@@ -2977,8 +2980,8 @@ bool read_next_dump_frame(tW_gmx_trxframe *frame)
   int i;
   char prop;
 
-  ++(frame->counter);
-  fprintf(stderr,"Reading frame: %d\r",frame->counter);
+//  ++(frame->counter);
+//  fprintf(stderr,"Reading frame: %d\r",frame->counter);
 
   linp = get_next_line(frame->fp, inp_line); // cg.trr frame X:
   if (linp == -1)
@@ -3132,8 +3135,8 @@ bool read_next_gro_frame(tW_gmx_trxframe *fr)
   tW_word inp_word, moltype, attype;
   tW_line inp_line;
 
-  ++(fr->counter);
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
+//  ++(fr->counter);
+//  fprintf(stderr,"Reading frame: %d\r",fr->counter);
 
   if (get_next_line(fr->fp,inp_line) == -1) { fprintf(stderr,"Done after frame %d\n",fr->counter - 1); return FALSE; }
   fr->contents->step = fr->counter;
@@ -4333,7 +4336,7 @@ bool new_read_next_bocs_frame(tW_gmx_trxframe * fr)
   char *xvf_dir = (char *) ecalloc(6,sizeof(char));
   tW_line inp_line;
 
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
+//  fprintf(stderr,"Reading frame: %d\r",fr->counter);
   if (get_next_line(fr->fp,inp_line) == -1) { fprintf(stderr,"Done after frame %d\n",fr->counter - 1); return FALSE; }
   sprintf(xvf_dir,"[%c%c%c]",(fr->contents->bX ? 'x' : '_'),(fr->contents->bV ? 'v' : '_'),(fr->contents->bF ? 'f' : '_'));
   while (!bEND)
@@ -4418,7 +4421,7 @@ read_next_bocs_frame(): This is the old function for reading the next bocs frame
 bool read_next_bocs_frame(tW_gmx_trxframe * fr)
 {
 //  ++(fr->counter);
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
+//  fprintf(stderr,"Reading frame: %d\r",fr->counter);
   tW_line inp_line;
   tW_word inp_word;
   int frnr, natoms, test_sscanf;
@@ -4943,8 +4946,8 @@ if (!fr->fp) { fprintf(stderr,"ERROR: unable to open file: %s\n",trx_fnm); exit(
 bool tW_read_next_trj_frame(tW_gmx_trxframe *fr)
 {
   bool bOK;
-  ++(fr->counter);
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
+//  ++(fr->counter);
+//  fprintf(stderr,"Reading frame: %d\r",fr->counter);
   bOK = tW_do_read_trjheader(fr);
   bOK = bOK && tW_do_read_trjstuff(fr);
   if (!bOK) { fprintf(stderr,"Done after frame %d\n",fr->counter - 1); }
@@ -5389,8 +5392,8 @@ bool tW_read_first_trr_frame(tW_gmx_trxframe *fr, const char *trx_fnm)
 bool tW_read_next_trr_frame(tW_gmx_trxframe *fr)
 {
   bool bOK;
-  ++(fr->counter);
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
+//  ++(fr->counter);
+//  fprintf(stderr,"\rReading frame: %d\r",fr->counter);
   bOK = tW_do_read_trrheader(fr);
   bOK = bOK && tW_do_read_trrstuff(fr);
   if (!bOK) { fprintf(stderr,"Done after frame %d\n",fr->counter - 1); }
@@ -5495,8 +5498,8 @@ int read_first_lammps_frame(tW_gmx_trxframe *fr, const char *fnm)
 
 bool read_next_lammps_frame(tW_gmx_trxframe *fr)
 {
-  ++(fr->counter);
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
+//  ++(fr->counter);
+//  fprintf(stderr,"Reading frame: %d\r",fr->counter);
   tW_line inp_line;
 //  tW_word * word_list;
   int test_sscanf, time, n_atoms, n_words, at_idx, i, j;
