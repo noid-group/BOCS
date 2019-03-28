@@ -499,14 +499,25 @@ tW_site_map *get_CG_map(FILE * map_top, int *N_sites)
 		    // get final counts for molecule_types in the system
 		    molname = ecalloc(strlen(line) + 1, sizeof(char));
 		    sscanf(line, " %s %d ", molname, &N_MOL);
-
+                    bool mol_found = FALSE;
 		    for (j = 0; j < map.n_types; j++)	
 		    {
-			if (strcmp(molname, map.molecule_types[j].molname) == 0) {
+			if (strcmp(molname, map.molecule_types[j].molname) == 0) 
+                        {
 			    map.n_molecules[j] = N_MOL;
+                            mol_found = TRUE;
 			}
-
 		    }
+                    if (! mol_found) // MRD 03.28.2019
+                    {
+                       fprintf(stderr,"ERROR: found site type %s under directive [molecules]\n",molname);
+                       fprintf(stderr,"\tHowever, we only found the following %d types of molecules: \n",map.n_types);
+                       for (j = 0; j < map.n_types; ++j)
+                       {
+                           fprintf(stderr,"\t%s \n",map.molecule_types[j].molname);
+                       }
+                       exit(EXIT_FAILURE); 
+                    }
 		    free(molname);
 		}
 
