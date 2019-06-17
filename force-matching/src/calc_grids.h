@@ -70,7 +70,7 @@ int eval_bonds_M_b(tW_system * sys, int nr_bond_coeff, int D_b[],
 int get_iList(tW_word name, int N_Inter_Types, tW_type_inter2 InterList[],
 	      int *i1_list, tW_word * n1_list);
 
-void get_all_iList(tW_system *sys);
+void get_all_iList(tW_system *sys, bool bSpeak);
 
 bool skip_excl(int nr_excl, int *excl_list, int j);
 

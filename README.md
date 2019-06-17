@@ -20,4 +20,9 @@ systems. The components of BOCS, force-matching and pressure-matching, are each 
 Furthermore, to run pressure-matched models, you will need to utilize the USER-BOCS package that is
 distributed with the official LAMMPS distribution. Installation instructions can be found in the User 
 Manual in the /docs folder. Briefly, the force-matching and pressure-matching components both utilize 
-CMake. The force-matching component NO LONGER relies on an existing GROMACS installation. 
+CMake. The force-matching component NO LONGER relies on an existing GROMACS installation.
+
+## Important Change for BOCS3
+BOCS v3 implements a new (faster) algorithm for calculating the G matrix. However, the default behavior is
+still to use the original algorithm. To use the new algorithm, simply include [Skip_Triple_Loop] in your
+par.txt file. See the new manual for more information.

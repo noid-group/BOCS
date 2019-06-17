@@ -27,7 +27,7 @@
 
 #define DEBUG            FALSE
 #define DEBUG_NFRAMES    100
-
+#define DEBUG_PRINT_FRAME_COUNT     FALSE
 
 
 int main (int argc, char *argv[])
@@ -110,7 +110,7 @@ if (local_rank == 0) { copyright(); }
   N_pack = (N_coeff * N_coeff + N_coeff) / 2;        //JFR - 04.16.12: Number of elements in the matrix array in packed storage form
 
   /* Build interaction lists for each site type */
-  get_all_iList(&sys);
+  get_all_iList(&sys, (local_rank == 0));
 
   /* Write input summary to log file. */
   summarize_input (files, sys, ref_potential);
@@ -271,14 +271,12 @@ if (local_rank == 0) { copyright(); }
             if ((sys.REF_var.flag_splitfiles == TRUE)|| (n_frames % np == local_rank))
             {
               n_frames_local++;
-
               if ((sys.flag_ref_potential == TRUE) && (sys.REF_var.flag_reftrr == FALSE))
               {
                 get_ref_forces (files.fp_log, N_sites, CG_struct, info, top, ref_potential);
               }
               if (sys.SKIP_TRIPLE_LOOP) { calc_grids3(files.fp_log, info, N_sites, CG_struct, &sys); }
               else { calc_grids2 (files.fp_log, info, N_sites, CG_struct, &sys); }
-
             }
 
             if (sys.REF_var.flag_reftrr == TRUE)
@@ -418,7 +416,6 @@ if (local_rank == 0) { copyright(); }
           efree(CG_struct);
           efree(fr);
           efree(fr_ref);    
-
           /* Free memory if skipping triple loop */
           if (sys.SKIP_TRIPLE_LOOP)
           {

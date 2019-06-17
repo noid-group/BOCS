@@ -59,7 +59,7 @@ bool setup_box_dimensions(dvec box, double matrix[DIM][DIM])
 /*****************************************************************************************
 get_all_iList():
 *****************************************************************************************/
-void get_all_iList(tW_system *sys)
+void get_all_iList(tW_system *sys, bool bSpeak)
 {
 	int i, j;
 	int k;
@@ -72,7 +72,7 @@ void get_all_iList(tW_system *sys)
 
 	for (i=0; i<sys->N_Site_Types; i++)
 	{
-		fprintf(stderr, "Site type %s: ", sys->Site_Types[i]);
+		if (bSpeak) { fprintf(stderr, "Site type %s: ", sys->Site_Types[i]); }
 
 		N_i = 0;
 		for (j=0; j<sys->N_Inter2_Types; j++)
@@ -94,7 +94,7 @@ void get_all_iList(tW_system *sys)
 		k = 0;
 		for (j=0; j<sys->N_Inter2_Types; j++)
 		{
-			fprintf(stderr, "Checking %s-%s\n", sys->Inter2_Type_List[j].name1, sys->Inter2_Type_List[j].name2);
+			if (bSpeak) { fprintf(stderr, "Checking %s-%s\n", sys->Inter2_Type_List[j].name1, sys->Inter2_Type_List[j].name2); }
 			b_Match1 = strcmp(sys->Site_Types[i], sys->Inter2_Type_List[j].name1);
 			b_Match2 = strcmp(sys->Site_Types[i], sys->Inter2_Type_List[j].name2);
 
@@ -103,7 +103,7 @@ void get_all_iList(tW_system *sys)
 				strcpy(sys->Inter_Map[i][k], sys->Inter2_Type_List[j].name2);
 				sys->Inter_iMap[i][k] = j;
 
-				fprintf(stderr, "%s %d.%d ", sys->Inter_Map[i][k], j, k);
+				if (bSpeak) { fprintf(stderr, "%s %d.%d ", sys->Inter_Map[i][k], j, k); }
 
 				k++;
 			} else if (b_Match2 == 0 )
@@ -111,12 +111,12 @@ void get_all_iList(tW_system *sys)
 				strcpy(sys->Inter_Map[i][k], sys->Inter2_Type_List[j].name1);
 				sys->Inter_iMap[i][k] = j;
 
-				fprintf(stderr, "%s %d.%d ", sys->Inter_Map[i][k], j, k);
+				if (bSpeak) { fprintf(stderr, "%s %d.%d ", sys->Inter_Map[i][k], j, k); }
 
 				k++;
 			}
 		}
-		fprintf(stderr, "\n");
+		if (bSpeak) { fprintf(stderr, "\n"); }
 	}
 }
 
