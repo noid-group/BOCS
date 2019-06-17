@@ -2,16 +2,21 @@
 @file cgmap.c 
 @authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
 @brief Driver for the cgmap executable
+
+MRD 09/17/2018: 
+I modified the user input to match the analysis programs I wrote.
+There's less command line options required now.
+We infer what trajectory file types are desired for both the
+input and output files based on the file extensions (and manually add a .trr
+extension if none of the standard extensions are found).
+Note, this new version can't do -b -e -dt like the old version.
+If you only want a subset of the trajectory mapped, then trim down the atomistic
+.trr file itself. Or, map the entire atomistic trajectory, and then trim the cg one.
 **/
 
-/* This line is only for CVS version info */
-static char *SRCID_template_c = "$Id$";
-
-//c library includes
 #include <math.h>
 #include <string.h>
 
-//local includes
 #include "wnoid_math.h"
 #include "read_map.h"
 #include "transf_map.h"
@@ -25,56 +30,50 @@ int main(int argc, char *argv[])
 {
     copyright();
     int N_sites;
-
+    int i;
     FILE *fp_map, *single_gro;
 
     tW_site_map *CG_map;
 
     tW_gmx_topology *CG_top;
     tW_gmx_trxframe *fr_in, *fr_out;
-    tW_gmx_cgmap_input *input;
     CG_top = init_tW_gmx_topology();
+    tW_word top_fnm, fri_fnm, fro_fnm;
+
 
     fr_in = init_tW_gmx_trxframe();
     fr_out = init_tW_gmx_trxframe();
 
-    input = init_tW_gmx_cgmap_input(argc, argv);
 
+    int n_params = 5;
+    int n_arg_found;
+    t_pargs *params = (t_pargs *) ecalloc(n_params,sizeof(t_pargs));
 
-    if (file_exists( input->get_filename(input, "-p") )) {
-        fp_map = fopen(input->get_filename(input, "-p"), "r");  // for reading map file
-    } else {
-        printf("ERROR: map.top file '%s' not found.\n", input->get_filename(input, "-p"));
-        exit(1);
-    }
+    init_arg(&(params[0]),"-p",etSTRING,"mapping topology filename (req.)",TRUE);
+    init_arg(&(params[1]),"-f",etSTRING,"input AA trajectory filename (req.)",TRUE);
+    init_arg(&(params[2]),"-o",etSTRING,"output CG trajectory filename (opt.)",FALSE);
+    init_arg(&(params[3]),"-c",etSTRING,"output CG coordinate (.gro) file (opt.)",FALSE);
+    init_arg(&(params[4]),"-s",etSTRING,"input CG bocs topology file (opt.)",FALSE);
 
-// eFileType must be set so the correct functions are called from read_(first/next)_frame or write_frame
-    fr_in->eFileType = input->file_types[eAA].value;
-    if ( input->arg_is_set(input,"-o") ) { fr_out->eFileType = input->file_types[eCG].value; }
+    n_arg_found = get_command_line_args(argc, argv, n_params, params);
 
-    if (file_exists( input->get_filename(input, "-p") )) {
-	fp_map = fopen(input->get_filename(input, "-p"), "r");	// for reading map file
-    } else {
-	printf("ERROR: map.top file '%s' not found.\n", input->get_filename(input, "-p"));
-	exit(1);
-    }
-
-    if ( input->arg_is_set(input, "-s") )
+    if (print_arg_table(n_params,params,(n_arg_found > 0 ? FALSE : TRUE)))
     {
-        if ( file_exists( input->get_filename(input, "-s") ) )
-	{
-// eFileType must be set so the correct function is called from read_topology
-	    CG_top->eFileType = input->file_types[eCGTPR].value;
-	    CG_top->b_tpr = read_topology(CG_top,input->get_filename(input,"-s"));
-	} else {
-	    printf("ERROR: topology file '%s' not found.\n", input->get_filename(input, "-s") );
-	    exit(1);
-	} 
+      return 0;
     }
+
+    /* Check for mandatory args */
+    check_mand_args(params,n_params);
+
+
+    fp_map = open_file(params[0].value, 'r');
+
+    build_filename(fri_fnm, params[1].value, eTRAJ, ".trr");
+    if (params[2].bSet) { build_filename(fro_fnm, params[2].value, eTRAJ, ".trr"); }
 
     /* The first time we read data is a little special */
-    read_first_frame(fr_in,input->get_filename(input,"-f"));
-    read_next_frame(fr_in);
+    read_first_frame(fr_in, (const char *) fri_fnm);
+    read_next_frame(fr_in,TRUE);
 
     /* read CG mapping */
     CG_map = get_CG_map(fp_map, &N_sites);
@@ -86,47 +85,38 @@ int main(int argc, char *argv[])
     map_config(N_sites, CG_map, fr_in, fr_out);
 
     /* If the user asks for it, produce the first frame as a gro file */
-    if ( input->arg_is_set(input, "-c") )
+    if ( params[3].bSet )
     {
-        single_gro = fopen( input->get_filename(input, "-c"),  "w");
-	print_gro_frame(single_gro, N_sites, CG_map, fr_out); 
+        single_gro = open_file(params[3].value,'w');
+        print_gro_frame(single_gro, N_sites, CG_map, fr_out);
     }
 
-    /* If the user asks for it, map the trajectory to the specified file */
-
-    if (! input->arg_is_set(input,"-o"))
+    if (! params[2].bSet)
     {
-	fprintf(stderr,"no output file set with -o. nothing to do!\n");
-	return 0;
+        return 0;
     }
 
-    bool bB, bE, bDT;
+    open_write_trajectory(fr_out, (char *)fro_fnm);
+    rewind(fr_in->fp);
 
-    bB = input->arg_is_set(input,"-b");
-    bE = input->arg_is_set(input,"-e");
-    bDT = input->arg_is_set(input,"-dt");
-    bool bThisFrame, bEND = FALSE;
-
-    open_write_trajectory(fr_out, input->get_filename(input,"-o"));
-
-    do 
+    if (params[4].bSet) { CG_top->b_tpr = read_topology(CG_top,params[4].value); }
+    if ((fr_out->eFileType == eGRO) || (fr_out->eFileType == eLMPTRJ) || (fr_out->eFileType == eLMPDATA))
     {
-    /* map atomistic fr_in into cg fr_out */
-	bThisFrame = TRUE;
-	if (bB) { if (fr_in->contents->time < input->times[eBTIME].value) { bThisFrame = FALSE; }}
-	if (bDT) 
-	{ 
-	    float test = fr_in->contents->time / input->times[eDELTAT].value; 
-	    if ((int) test != test) { bThisFrame = FALSE;}
-	}
-	if (bE) { if (fr_in->contents->time > input->times[eETIME].value) { bThisFrame = FALSE; bEND = TRUE; }}
-	if (bThisFrame) 
-	{
-	    map_config(N_sites, CG_map, fr_in, fr_out);	    	    
-	    write_frame(fr_out);
-	}   
-    } while (read_next_frame(fr_in) && (! bEND));
+      if (! params[4].bSet)
+      {
+        fprintf(stderr,"ERROR: unable to map entire trajectory to .gro .lmp or .data file formats without a bocs topology file (provided with -s)\n");
+        return 1;
+      }
+    }
+
+
+    while (read_next_frame(fr_in,TRUE))
+    {
+        map_config(N_sites, CG_map, fr_in, fr_out);
+        write_frame(fr_out, CG_top);
+    } ;
     fclose(fr_out->fp);
-
+    fclose(fr_in->fp);
     return 0;
 }
+

@@ -430,6 +430,11 @@ void summarize_input(tW_files files, tW_system sys,
 	    fprintf(fp_log, "  (undeclared).");
 	}
     }
+
+    /* MRD 03.04.2019 */
+    if (sys.SKIP_TRIPLE_LOOP) { fprintf(fp_log,"  Evaluating the G matrix WITHOUT the triple loop\n"); }
+    else { fprintf(fp_log,"  Evaluating the G matrix the old way (using the triple loop)\n"); }
+
     fprintf(fp_log, "\n\n");
     print_line_stars(fp_log);
 
@@ -1249,6 +1254,10 @@ void setup_sys_copy(tW_system sys_orig, tW_system * sys_copy, int overwrite_arra
 
     /* JFR - 06.27.12: Chi2 */
     sys_copy->Chi2 = sys_orig.Chi2;
+
+    /* MRD 03.04.2019 */
+    sys_copy->SKIP_TRIPLE_LOOP = sys_orig.SKIP_TRIPLE_LOOP;
+    sys_copy->M_M2_proc = sys_orig.M_M2_proc;
 }
 
 /*****************************************************************************************
@@ -2124,6 +2133,11 @@ void initialize_sys(tW_system * sys)
     sys->M_wt = NULL;
     sys->M2_wt = NULL;
 
+    /* MRD 03.04.2019 */
+    sys->SKIP_TRIPLE_LOOP = FALSE;
+    sys->half_matrix = NULL;
+    sys->bm_half_mat = NULL;
+    sys->M_M2_proc = FALSE;
 
     sys->flag_ref_potential = FALSE;
 
@@ -5101,6 +5115,10 @@ void get_parameters(FILE * fp_par, tW_line inp_line, tW_system * sys,
 	flags->b_mode = read_mode(flags->b_mode, inp_line, files);
     }
 
+    /* [Skip_Triple_Loop] */
+    else if (strstr(inp_line, KEY_SKIPTL) != NULL) {
+        sys->SKIP_TRIPLE_LOOP = TRUE;
+    }
     /* Stop execution if line is not understood. */
     else {
 	printf

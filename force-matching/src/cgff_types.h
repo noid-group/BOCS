@@ -1,6 +1,6 @@
 /**
 @file cgff_types.h 
-@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
 @brief Defines properties and structures of the cgff and cgmap calculations
 */
 
@@ -8,6 +8,7 @@
 #define NOID_TYPES
 
 #include <stdio.h>
+#include <stdint.h>
 
 #ifndef bool
 #define bool int
@@ -129,6 +130,17 @@ typedef double matrix[DIM][DIM];
 
 typedef char tW_word[MAXWORDLEN];
 typedef char tW_line[MAXLINELEN];
+
+/* MRD 02.14.2019 bimask */
+typedef uint64_t bitMask;
+
+#define GET_N_SPOTS(x) ((int)((x)/64)+1)
+#define SETSPOT1(bm, x) (bm[(int)((x)/64)] |= (1ULL << ((x) % 64)))
+#define GETSPOT1(bm, x) ((bm[(int)((x)/64)] & (1ULL << ((x) % 64))) > 0)
+#define CLEARSPOT1(bm, x) (bm[(int)((x)/64)] &= ~(1ULL << ((x) % 64)))
+#define SETSPOT2(bm, n, x, y) (bm[(int)(((y)*(n)+(x))/64)] |= (1ULL << (((y)*(n)+(x)) % 64)))
+#define GETSPOT2(bm, n, x, y) ((bm[(int)(((y)*(n)+(x))/64)] & (1ULL << (((y)*(n)+(x)) % 64))) > 0)
+#define CLEARSPOT2(bm, n, x, y) (bm[(int)(((y)*(n)+(x))/64)] &= ~(1ULL << (((y)*(n)+(x)) % 64)))
 
 
 typedef struct {
@@ -428,6 +440,14 @@ typedef struct {
     double *phi;		// ff coefficients
     double *phi_forces;
     double *phi_struct;
+
+    /* MRD 02.14.2019 Eliminating the triple loop */
+    bool SKIP_TRIPLE_LOOP;
+    dvec *linear_half_matrix;
+    dvec **half_matrix; 
+    bitMask *bm_half_mat; 
+    bool M_M2_proc;
+
     // JFR - added 04.11.12: put the matrix in packed form
     double *M;			// correlation kernel
     double *M2;			// 2-body contribution to M

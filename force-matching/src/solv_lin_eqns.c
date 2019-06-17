@@ -68,6 +68,17 @@ int solv_lin_eqns(FILE * fp_log, tW_system * sys)
 	}
     }
 
+    FILE *fpGraw = fopen("save.G.dat","w");
+    for (i = 0; i < N; ++i)
+    {
+      for (j = 0; j < N; ++j)
+      {
+        fprintf(fpGraw,"%d %d %.15lf \n",i,j,MT[i+N*j]);
+      }
+    }
+    fclose(fpGraw);
+
+
     /*  Precondition the matrix */
     Precondition(N, MT, b, phi, norm_col, row_max,
 		 FALSE /* => don't restore */ ,
@@ -986,8 +997,8 @@ int SVD(FILE * fp_log, tW_system * sys)
     } else {
 	lwork = 5 * N * N;
     }
-    double work[lwork];
-    int iwork[8 * N];
+    double *work = (double *) ecalloc(lwork,sizeof(double)); // MRD 06.14.2019
+    int *iwork = (int *) ecalloc(8*N,sizeof(int)); // MRD 06.14.2019
     char jobz = 'A';		//A - compute and return U and V
 
     double *b = sys->b;		/* I need this for preconditioning now, I won't change it though */

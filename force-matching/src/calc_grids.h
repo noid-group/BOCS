@@ -22,6 +22,11 @@
 int calc_grids2(FILE * fp, tW_gmx_info info, int N_sites,
 		tW_CG_site * CG_struct, tW_system * sys);
 
+int calc_grids3(FILE *fp, tW_gmx_info info, int N_sites,
+		tW_CG_site * CG_struct, tW_system *sys);
+
+void process_G_matrix(tW_system *sys);
+
 int normalize_arrays_top(int N_sites, int N_frames, tW_system * sys_top);
 
 int update_N_instances_nb(tW_system sys_top_global,

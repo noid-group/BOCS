@@ -39,6 +39,7 @@
 #define KEY_RESCALE      "Rescale_Forces"	//JFR - 01.31.13
 #define KEY_CONSTRAIN    "Constrain_Dih"	//JFR - 01.31.13
 #define KEY_ITER         "Iterative_gYBG"	//JFR - 12.03.13
+#define KEY_SKIPTL       "Skip_Triple_Loop"     //MRD - 03.04.19
 
 /* File name for summarizing input. */
 #define SUM_INPUT_FNAME  "summarize_input.txt"

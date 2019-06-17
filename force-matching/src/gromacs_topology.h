@@ -54,6 +54,8 @@
      
 /* ~ End of GROMACS #definitions ~ */
 
+enum { epbcXYZ, epbcNONE, epbcXY, epbcSCREW, epbcNR };
+
 #define BOND_DIV 3
 #define ANGLE_DIV 4
 #define PDIH_DIV 5
@@ -101,11 +103,13 @@ typedef struct {
 #define TRJ "trj"
 #define TRR "trr"
 #define LMP "lmp"
+#define LMPDATA "data"
+#define LMPTRJ "lmp"
 
 #define TOP "top"
 #define TRAJ "traj"
 
-enum {eDUMP, eBOCS, eGRO, eTRJ, eTRR, eLMP};
+enum {eDUMP, eBOCS, eGRO, eTRJ, eTRR, eLMP, eLMPDATA, eLMPTRJ};
 enum {eTOP, eTRAJ};
 
 enum {eAA, eCG, eCGTPR, eMAP, eGRO1};
@@ -1116,8 +1120,8 @@ Force		kcal/(mol Ang)		kJ/(mol nm)		41.84
 int read_first_lammps_frame(tW_gmx_trxframe *fr, const char *trx_fnm);
 bool read_next_lammps_frame(tW_gmx_trxframe *fr);
 
-void write_lammps_data(tW_gmx_trxframe *fr, tW_gmx_topology *top, tW_word fnm);
-
+void write_lammps_data(tW_gmx_trxframe *fr, tW_gmx_topology *top);
+void write_lammps_frame(tW_gmx_trxframe *fr, tW_gmx_topology *top);
 
 /********************************************************************************
  these next functions are basically wrappers that call the appropriate function
@@ -1126,11 +1130,13 @@ void write_lammps_data(tW_gmx_trxframe *fr, tW_gmx_topology *top, tW_word fnm);
 ********************************************************************************/
 
 int read_first_frame(tW_gmx_trxframe *fr, const char *fnm);
-bool read_next_frame(tW_gmx_trxframe *fr);
+bool read_next_frame(tW_gmx_trxframe *fr, bool printCount );
 void open_write_trajectory(tW_gmx_trxframe *fr, char *fnm);
-void write_frame(tW_gmx_trxframe *fr);
+void write_frame(tW_gmx_trxframe *fr, tW_gmx_topology *top);
 
 bool read_topology(tW_gmx_topology *top, const char *fnm);
 
+int get_type(const char *a_type, tW_gmx_topology *top);
+void do_PBC(tW_gmx_trxframe *fr);
 
 #endif

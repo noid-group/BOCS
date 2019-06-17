@@ -80,7 +80,7 @@ get_ndihs(): Returns the number of dihedrals listed in self
 *****************************************************************************************/
 int get_ndihs(tW_gmx_topology *self)
 {
- return self->contents->idef.il[F_RBDIHS].nr; 
+ return self->contents->idef.il[F_PDIHS].nr; 
 }
 
 /*****************************************************************************************
@@ -150,16 +150,14 @@ int *get_dih_list(tW_gmx_topology *self)
 {
   int i, nelements;
   int *dih_list;
-
   nelements = self->get_ndihs(self);
 
   dih_list = ecalloc(nelements, sizeof(int));
 
   for (i=0; i<nelements; i++)
   {
-    dih_list[i] = self->contents->idef.il[F_RBDIHS].iatoms[i];
+    dih_list[i] = self->contents->idef.il[F_PDIHS].iatoms[i];
   }
-   
   return dih_list; 
 }
 
@@ -430,18 +428,18 @@ int print_tpr_file(FILE * fp_log, tW_gmx_topology *top)
   }
   fprintf(fp_log, "\n");
 
-  fprintf(fp_log, "  Printing F_RBDIHS interactions.\n");
-  fprintf(fp_log, "    top->contents->idef.il[F_RBDIHS].nr: %-4d\n",
-        top->contents->idef.il[F_RBDIHS].nr);
-  for (i = 0; i < top->contents->idef.il[F_RBDIHS].nr; i += 5) 
+  fprintf(fp_log, "  Printing F_PDIHS interactions.\n");
+  fprintf(fp_log, "    top->contents->idef.il[F_PDIHS].nr: %-4d\n",
+        top->contents->idef.il[F_PDIHS].nr);
+  for (i = 0; i < top->contents->idef.il[F_PDIHS].nr; i += 5) 
   {
     fprintf(fp_log,
-        "    top->contents->idef.il[F_RBDIHS].iatoms[%-4d]  inter_type: %-4d  atoms: %-4d %-4d %-4d %-4d\n",
-        i, top->contents->idef.il[F_RBDIHS].iatoms[i],
-        top->contents->idef.il[F_RBDIHS].iatoms[i + 1],
-        top->contents->idef.il[F_RBDIHS].iatoms[i + 2],
-        top->contents->idef.il[F_RBDIHS].iatoms[i + 3],
-        top->contents->idef.il[F_RBDIHS].iatoms[i + 4]);
+        "    top->contents->idef.il[F_PDIHS].iatoms[%-4d]  inter_type: %-4d  atoms: %-4d %-4d %-4d %-4d\n",
+        i, top->contents->idef.il[F_PDIHS].iatoms[i],
+        top->contents->idef.il[F_PDIHS].iatoms[i + 1],
+        top->contents->idef.il[F_PDIHS].iatoms[i + 2],
+        top->contents->idef.il[F_PDIHS].iatoms[i + 3],
+        top->contents->idef.il[F_PDIHS].iatoms[i + 4]);
   }
   fprintf(fp_log, "\n");
 
@@ -1108,7 +1106,7 @@ bool read_trr_2_CGstruct(tW_gmx_info * info, tW_gmx_trxframe *fr, tW_CG_site CG_
 {
   bool b_trr;
 
-  b_trr = read_next_frame(fr); // read_next_trxframe -> read_next_frame MRD 11.09.17
+  b_trr = read_next_frame(fr, FALSE); // read_next_trxframe -> read_next_frame MRD 11.09.17
 
   if (b_trr) 
   {
@@ -1126,7 +1124,7 @@ bool read_trr_2_CGstruct_ref(tW_gmx_info * info, tW_gmx_trxframe *fr, tW_CG_site
 {
   bool b_trr;
 
-  b_trr = read_next_frame(fr); // read_next_trxframe -> read_next_frame MRD 11.09.17
+  b_trr = read_next_frame(fr, FALSE); // read_next_trxframe -> read_next_frame MRD 11.09.17
 
   if (b_trr) 
   {
@@ -1240,7 +1238,7 @@ read_next_frame(): This function is a wrapper, like read_first_frame. It calls t
 	but read_first_frame was never called either, and accordingly no memory has been allocated
 	for xvf vectors. Returns true if everything went ok.
 */
-bool read_next_frame(tW_gmx_trxframe *fr)
+bool read_next_frame(tW_gmx_trxframe *fr, bool printCount)
 {
   if (fr->eFileType == -1)
   {
@@ -1248,6 +1246,10 @@ bool read_next_frame(tW_gmx_trxframe *fr)
     fprintf(stderr,"\tread_first_frame must have never been called\n");
     fprintf(stderr,"\tERROR: %s %d\n",__FILE__,__LINE__);
   }
+
+  ++(fr->counter);
+  if (printCount) { fprintf(stderr,"Reading frame %d\r",fr->counter); }
+
   switch (fr->eFileType)
   {
     case eDUMP:
@@ -1297,6 +1299,8 @@ void open_write_trajectory(tW_gmx_trxframe *fr, char *fnm)
     else if (strstr(fnm,".dump") != NULL) { fr->eFileType = eDUMP; }
     else if (strstr(fnm,".gro") != NULL) { fr->eFileType = eGRO; }
     else if (strstr(fnm,".btj") != NULL) { fr->eFileType = eBOCS; }
+    else if (strstr(fnm,".data") != NULL) { fr->eFileType = eLMPDATA; }
+    else if (strstr(fnm,".lmp") != NULL) { fr->eFileType = eLMPTRJ; }
     else
     {
       fr->eFileType = eBOCS;
@@ -1328,7 +1332,7 @@ write_frame(): This function calls the proper function to write the current info
 	in which case open_write_trajectory has not been called, and it calls it after
 	printing a noisy warning message.
 */
-void write_frame(tW_gmx_trxframe *fr)
+void write_frame(tW_gmx_trxframe *fr, tW_gmx_topology *top)
 {
   if (fr->eFileType == -1)
   {
@@ -1356,10 +1360,16 @@ void write_frame(tW_gmx_trxframe *fr)
     case eTRR:
       wrap_tW_write_trr_frame(fr);
       break;
+    case eLMPTRJ:
+      write_lammps_frame(fr, top);
+      break;
+    case eLMPDATA:
+      write_lammps_data(fr, top);
+      break;
     default:
       fprintf(stderr,"ERROR: unknown eFileType: %d\n",fr->eFileType);
-      fprintf(stderr,"\tSupported types: %d %s, %d %s, %d %s, %d %s, %d %s\n",
-			eDUMP,DUMP,eBOCS,BOCS,eGRO,GRO,eTRJ,TRJ,eTRR,TRR);
+      fprintf(stderr,"\tSupported types: %d %s, %d %s, %d %s, %d %s, %d %s, %d %s, %d %s\n",
+			eDUMP,DUMP,eBOCS,BOCS,eGRO,GRO,eTRJ,TRJ,eTRR,TRR,eLMPTRJ,LMPTRJ,eLMPDATA,LMPDATA);
       fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__);
       exit(1);
       break;
@@ -1895,13 +1905,14 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
       get_next_line(fp,inp_line);
       test_line(inp_line,"ANGLES",FALSE,"Expected to be done finding ANGLES");
     }
-    else if (strstr(inp_line,"Proper Dih.") != NULL)
+    else if (strstr(inp_line,"Dih.") != NULL)
     {
       if ((flags & flag_pdihs) != 0) 
       { 
-	fprintf(stderr,"ERROR: found section \"Proper Dih.\" twice in moltype %s\n",mol->molname); 
+	fprintf(stderr,"ERROR: found section \"Dih.\" twice in moltype %s\n",mol->molname); 
 	fprintf(stderr,"\tflags: %d   flag_pdihs: %d\n",flags,flag_pdihs);
 	fprintf(stderr," flags & flag_pdihs: %d\n",flags & flag_pdihs);
+        fprintf(stderr,"Make sure you only have one type of dihedral (either 1=pdih or 8=tabdih) in your topology file\n");
 	exit(1); 
       }
       flags |= flag_pdihs;
@@ -1931,6 +1942,9 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
     }
     else if (strstr(inp_line,"Ryckaert-Bell.") != NULL)
     {
+      fprintf(stderr,"ERROR: we do not support RB dihedral angles.\n");
+      fprintf(stderr,"\tPlease change all RB dihedrals to either proper or tabulated\n");
+      exit(1);
       if ((flags & flag_rbdihs) != 0) 
       { 
 	fprintf(stderr,"ERROR: found section \"Ryckaert-Bell.:\" twice in moltype %s\n",mol->molname); 
@@ -1961,7 +1975,7 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
       get_next_line(fp,inp_line);
       test_line(inp_line,"RBDIHS",FALSE,"Expected to be done finding RBDIHS");
     }
-    else if (strstr(inp_line,"Tab. Dih.") != NULL)
+/*    else if (strstr(inp_line,"Tab. Dih.") != NULL)
     {
       if ((flags & flag_tabdihs) != 0)
       {
@@ -1992,7 +2006,7 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
       }
       get_next_line(fp,inp_line);
       test_line(inp_line,"TABDIHS",FALSE,"Expected to be done finding TABDIHS");
-    }
+    }*/
     else if (strstr(inp_line,"LJ-14") != NULL)
     {
       if ((flags & flag_lj14) != 0) 
@@ -2204,18 +2218,15 @@ void pop_contents(tW_gmx_topology * top)
   top->contents->atoms.atomtypeB = (char ***) ecalloc(n_atoms,sizeof(char **));
   for (i = 0; i < n_atoms; ++i)
   {
-    (top->contents->atoms.atomname[i]) = (char **) ecalloc(n_atoms,sizeof(char *));
-    (top->contents->atoms.atomtype[i]) = (char **) ecalloc(n_atoms,sizeof(char *));
-    (top->contents->atoms.atomtypeB[i]) = (char **) ecalloc(n_atoms,sizeof(char *));
+    (top->contents->atoms.atomname[i]) = (char **) ecalloc(1,sizeof(char *));
+    (top->contents->atoms.atomtype[i]) = (char **) ecalloc(1,sizeof(char *));
+    (top->contents->atoms.atomtypeB[i]) = (char **) ecalloc(1,sizeof(char *));
   }
   for (i = 0; i < n_atoms; ++i)
   {
-    for (j = 0; j < n_atoms; ++j)
-    {
-      top->contents->atoms.atomname[i][j] = (char *) ecalloc(10,sizeof(char));
-      top->contents->atoms.atomtype[i][j] = (char *) ecalloc(10,sizeof(char));
-      top->contents->atoms.atomtypeB[i][j] = (char *) ecalloc(10,sizeof(char));
-    }
+    top->contents->atoms.atomname[i][0] = (char *) ecalloc(10,sizeof(char));
+    top->contents->atoms.atomtype[i][0] = (char *) ecalloc(10,sizeof(char));
+    top->contents->atoms.atomtypeB[i][0] = (char *) ecalloc(10,sizeof(char));
   }
 
 //  top->contents->atoms.atomname = (char ***) ecalloc(1,sizeof(char **));
@@ -2318,7 +2329,7 @@ void pop_contents(tW_gmx_topology * top)
     {
       for (k = 0; k < my_mols[i].n_apm; ++k)
       {
-        top->contents->excls.index[at_idx] = top->contents->excls.index[at_idx-1] + my_mols[i].n_excls;
+        top->contents->excls.index[at_idx] = top->contents->excls.index[at_idx-1] + my_mols[i].n_epa[k];
         ++at_idx;
       }
     }
@@ -2954,8 +2965,7 @@ bool read_next_dump_frame(tW_gmx_trxframe *frame)
   int i;
   char prop;
 
-  ++(frame->counter);
-  fprintf(stderr,"Reading frame: %d\r",frame->counter);
+//  fprintf(stderr,"Reading frame: %d\r",frame->counter);
 
   linp = get_next_line(frame->fp, inp_line); // cg.trr frame X:
   if (linp == -1)
@@ -3109,8 +3119,7 @@ bool read_next_gro_frame(tW_gmx_trxframe *fr)
   tW_word inp_word, moltype, attype;
   tW_line inp_line;
 
-  ++(fr->counter);
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
+//  fprintf(stderr,"Reading frame: %d\r",fr->counter);
 
   if (get_next_line(fr->fp,inp_line) == -1) { fprintf(stderr,"Done after frame %d\n",fr->counter - 1); return FALSE; }
   fr->contents->step = fr->counter;
@@ -4292,7 +4301,7 @@ bool new_read_next_bocs_frame(tW_gmx_trxframe * fr)
   char *xvf_dir = (char *) ecalloc(6,sizeof(char));
   tW_line inp_line;
 
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
+//  fprintf(stderr,"Reading frame: %d\r",fr->counter);
   if (get_next_line(fr->fp,inp_line) == -1) { fprintf(stderr,"Done after frame %d\n",fr->counter - 1); return FALSE; }
   sprintf(xvf_dir,"[%c%c%c]",(fr->contents->bX ? 'x' : '_'),(fr->contents->bV ? 'v' : '_'),(fr->contents->bF ? 'f' : '_'));
   while (!bEND)
@@ -4377,7 +4386,7 @@ read_next_bocs_frame(): This is the old function for reading the next bocs frame
 bool read_next_bocs_frame(tW_gmx_trxframe * fr)
 {
 //  ++(fr->counter);
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
+//  fprintf(stderr,"Reading frame: %d\r",fr->counter);
   tW_line inp_line;
   tW_word inp_word;
   int frnr, natoms, test_sscanf;
@@ -4902,8 +4911,6 @@ if (!fr->fp) { fprintf(stderr,"ERROR: unable to open file: %s\n",trx_fnm); exit(
 bool tW_read_next_trj_frame(tW_gmx_trxframe *fr)
 {
   bool bOK;
-  ++(fr->counter);
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
   bOK = tW_do_read_trjheader(fr);
   bOK = bOK && tW_do_read_trjstuff(fr);
   if (!bOK) { fprintf(stderr,"Done after frame %d\n",fr->counter - 1); }
@@ -5156,7 +5163,7 @@ static bool tW_do_read_xdr(tW_gmx_trxframe *fr, void *item, int nitem, int eio)
       else { cptr = (char *) item; }
       if (cptr) { res = xdr_string(fr->xdr, &cptr, slen); }
       else { res = 1; }
-//      if (!item) { /* sfree(cptr) */ }
+      if (!item) { efree(cptr) ; }
       break;
   } 
  
@@ -5348,8 +5355,6 @@ bool tW_read_first_trr_frame(tW_gmx_trxframe *fr, const char *trx_fnm)
 bool tW_read_next_trr_frame(tW_gmx_trxframe *fr)
 {
   bool bOK;
-  ++(fr->counter);
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
   bOK = tW_do_read_trrheader(fr);
   bOK = bOK && tW_do_read_trrstuff(fr);
   if (!bOK) { fprintf(stderr,"Done after frame %d\n",fr->counter - 1); }
@@ -5454,8 +5459,6 @@ int read_first_lammps_frame(tW_gmx_trxframe *fr, const char *fnm)
 
 bool read_next_lammps_frame(tW_gmx_trxframe *fr)
 {
-  ++(fr->counter);
-  fprintf(stderr,"Reading frame: %d\r",fr->counter);
   tW_line inp_line;
 //  tW_word * word_list;
   int test_sscanf, time, n_atoms, n_words, at_idx, i, j;
@@ -5531,16 +5534,64 @@ bool read_next_lammps_frame(tW_gmx_trxframe *fr)
 }
 
 /*
+ write_lammps_frame(): this function writes a frame in a generic lammps dump text format
+*/
+void write_lammps_frame(tW_gmx_trxframe *fr, tW_gmx_topology *top)
+{
+  int i;
+  fprintf(fr->fp,"ITEM: TIMESTEP\n%d\n",fr->counter);
+  fprintf(fr->fp,"ITEM: NUMBER OF ATOMS\n%d\n",fr->contents->natoms);
+  switch (fr->contents->ePBC)
+  {
+    case (epbcXYZ):
+      fprintf(fr->fp,"ITEM: BOX BOUNDS pp pp pp\n");
+      break;
+    case (epbcNONE):
+      fprintf(fr->fp,"ITEM: BOX BOUNDS ff ff ff\n");
+      break;
+    case (epbcXY):
+      fprintf(fr->fp,"ITEM: BOX BOUNDS pp pp ff\n");
+      break;
+    default:
+      fprintf(stderr,"ERROR: unsure of what ePBC: %d is\n",fr->contents->ePBC);
+      fprintf(stderr,"\tepbcXYZ: %d   epbcNONE: %d   epbcXY: %d   epbcSCREW: %d   epbcNR: %d\n",epbcXYZ,epbcNONE,epbcXY,epbcSCREW,epbcNR);
+      exit(1);
+  }
+  fprintf(fr->fp,"%g %g\n%g %g\n%g %g\n",0.0,(fr->contents->box[0][0] / X_LMP2GRO),
+                                       0.0,(fr->contents->box[1][1] / X_LMP2GRO),
+                                       0.0,(fr->contents->box[2][2] / X_LMP2GRO));
+  fprintf(fr->fp,"ITEM: ATOMS id type ");
+  if (fr->contents->bX) { fprintf(fr->fp,"x y z "); }
+  if (fr->contents->bV) { fprintf(fr->fp,"vx vy vz "); }
+  if (fr->contents->bF) { fprintf(fr->fp,"fx fy fz "); }
+  fprintf(fr->fp,"\n");
+
+  for (i = 0; i < fr->contents->natoms; ++i)
+  {
+    fprintf(fr->fp,"%d %d ",i+1,get_type(*(top->contents->atoms.atomtype[i]),top)+1);
+    if (fr->contents->bX) { fprintf(fr->fp,"%16.12f %16.12f %16.12f ",fr->contents->x[i][0] / X_LMP2GRO,
+                                   fr->contents->x[i][1] / X_LMP2GRO, fr->contents->x[i][2] / X_LMP2GRO); }
+    if (fr->contents->bV) { fprintf(fr->fp,"%g %g %g ",fr->contents->v[i][0] / V_LMP2GRO,
+                                    fr->contents->v[i][1] / V_LMP2GRO, fr->contents->v[i][2] / V_LMP2GRO); }
+    if (fr->contents->bF) { fprintf(fr->fp,"%16.12f %16.12f %16.12f ",fr->contents->f[i][0] / F_LMP2GRO,
+                                   fr->contents->f[i][1] / F_LMP2GRO, fr->contents->f[i][2] / F_LMP2GRO); }
+    fprintf(fr->fp,"\n");
+  }
+
+}
+
+
+/*
 write_lammps_data(): this function can write a lammps data file for reading in to
 	a lammps simulation to initialize the configuration.
 */
-void write_lammps_data(tW_gmx_trxframe *fr, tW_gmx_topology *top, tW_word fnm)
+void write_lammps_data(tW_gmx_trxframe *fr, tW_gmx_topology *top)
 {
   int molt_idx, mol_idx, at_idx, abs_at_idx, n_prev_mol = 0, n_prev_at = 0;
   int n_bonds = 0, n_angles = 0, n_dih = 0, n_imp = 0;
   int n_att = 0, n_bt = 0, n_at = 0, n_dt = 0;
   int i, j, k;
-  FILE *fp = open_file(fnm,'w');
+  FILE *fp = fr->fp;
   abs_at_idx = 0;
 
   fprintf(fp,"LAMMPS Description\n\n");
@@ -5710,4 +5761,36 @@ void write_lammps_data(tW_gmx_trxframe *fr, tW_gmx_topology *top, tW_word fnm)
   dump_molecule_info(top);
 }
 
+/*
+ get_type() finds the index for a_type as contained in the topology
+ */
+int get_type(const char *a_type, tW_gmx_topology *top)
+{
+  int i;
+  for (i = 0; i < top->n_atomtypes; ++i)
+  {
+    if (strcmp(a_type,top->atom_type_names[i]) == 0) { return i; }
+  }
+  fprintf(stderr,"ERROR: Atom type: %s not found in topology\n",a_type);
+  fprintf(stderr,"topology's atom types: \n");
+  for (i = 0; i < top->n_atomtypes; ++i)
+  {
+    fprintf(stderr,"  %s  \n",top->atom_type_names[i]);
+  }
+  exit(1);
+  return -1;
+}
+
+void do_PBC(tW_gmx_trxframe *fr)
+{
+  int i, j;
+  for (i = 0; i < fr->contents->natoms; ++i)
+  {
+    for (j = 0; j < DIM; ++j)
+    {
+      if (fr->contents->x[i][j] >= fr->contents->box[j][j]) { fr->contents->x[i][j] -= fr->contents->box[j][j]; }
+      else if (fr->contents->x[i][j] < 0.0) { fr->contents->x[i][j] += fr->contents->box[j][j]; }
+    }
+  }
+}
 

@@ -337,3 +337,161 @@ int match_word(int N_words, tW_word word, tW_word * word_list)
 
     return -1;
 }
+
+/******************************
+ *  Gromacs-esque command line argument parsing
+ *  *****************************/
+
+const char * get_arg_type(t_pargs par)
+{
+  switch (par.type)
+  {
+    case (etINT):
+      return "int";
+      break;
+    case (etREAL):
+      return "double";
+      break;
+    case (etSTRING):
+      return "string";
+      break;
+    case (etBOOL):
+      return "bool";
+      break; 
+    default: 
+      return "ERROR";
+      break;
+  }
+  return "ERROR";
+}
+
+void init_arg(t_pargs *param, const char * flag, int type, const char * desc, bool bMan)
+{
+  param->flag = (char *) ecalloc(10,sizeof(char));
+  strcpy(param->flag, flag);
+  param->type = type; 
+  param->desc = (char *) ecalloc(200, sizeof(char));
+  strcpy(param->desc, desc);
+  param->bSet = FALSE;
+  if (type != etBOOL) { strcpy(param->value,"Unspecified"); }
+  else { strcpy(param->value,"False"); }
+  param->bMandatory = bMan;
+}
+
+void init_arg_def(t_pargs *param, const char * flag, int type, const char *desc, const char * init_val)
+{
+  param->flag = (char *) ecalloc(10,sizeof(char));
+  strcpy(param->flag, flag);
+  param->desc = (char *) ecalloc(200, sizeof(char));
+  strcpy(param->desc, desc);
+  param->type = type;
+  param->bSet = FALSE;
+  strcpy(param->value,init_val);
+  param->bMandatory = FALSE;
+}
+
+int get_command_line_args(int argc, char * argv[], int n_args, t_pargs *params)
+{
+  int i, j;
+  int n_arg_found = 0;
+  for (i = 0; i < argc; ++i)
+  {
+    for (j = 0; j < n_args; ++j)
+    {
+      if (strcmp(argv[i],params[j].flag) == 0)
+      {
+        ++n_arg_found;
+        if (params[j].bSet)
+        { /* Duplicate arg error */
+          fprintf(stderr,"ERROR: you provided flag %s twice!\n",params[j].flag);
+          exit(3);
+        }
+        params[j].bSet = TRUE;
+        if (params[j].type != etBOOL)
+        {
+          if (i + 1 == argc)
+          {
+            fprintf(stderr,"ERROR: please provide a value after parameter flag: %s \n",params[j].flag);
+            exit(2);
+          }
+          ++i;
+          strcpy(params[j].value,argv[i]);
+        }
+        else { strcpy(params[j].value,"True"); }
+        j = n_args;
+      }
+    }
+    if (strcmp(argv[i],"-h") == 0) { n_arg_found = -9999; }
+  }
+  return n_arg_found;
+}
+
+bool print_arg_table(int n_args, t_pargs *params, bool HELP)
+{
+  int i;
+  fprintf(stdout,"%6s  %6s  %20s  %s\n","flag","type","value","description");
+  for (i = 0; i < n_args; ++i)
+  {
+    fprintf(stdout,"%6s  %6s  %20s  %s\n",params[i].flag,get_arg_type(params[i]),params[i].value,params[i].desc);
+  }
+  fprintf(stdout,"%6s  %6s  %20s  %s\n","-h","bool",(HELP ? "True" : "False"),"Display this table and quit");
+  return HELP;
+}
+
+void check_mand_args(t_pargs *params, int nPars)
+{
+  int i = 0;
+  bool bKill = FALSE;
+  for (i = 0; i < nPars; ++i)
+  {
+    if ((params[i].bMandatory) && (! params[i].bSet))
+    {
+      fprintf(stderr,"ERROR: you must provide command line flag %s\n",params[i].flag);
+      fprintf(stderr,"\t%s\n",params[i].desc);
+      bKill = TRUE;
+    }
+  }
+  if (bKill)
+  {
+    exit(EXIT_FAILURE);
+  }
+}
+
+void build_filename(tW_word fnm, tW_word ipt_name, int ft, const char *def_end)
+{
+  char *p;
+  strcpy(fnm,ipt_name);
+  if (ft == eTOP)
+  {
+    p = strstr(ipt_name,".btp");
+    if (p == NULL)
+    {
+      fprintf(stderr,"WARNING: only accepted topology filetype is .btp\n");
+      fprintf(stderr,"\tYou provided the topology name: %s \n",ipt_name);
+      fprintf(stderr,"\tWe will assume the topology file simply has .btp appended to the end\n");
+      strcat(fnm,".btp");
+    }
+  }
+  else if (ft == eTRAJ)
+  {
+    if (strstr(ipt_name,".trr")) { }
+    else if (strstr(ipt_name,".trj")) { }
+    else if (strstr(ipt_name,".btj")) { }
+    else if (strstr(ipt_name,".gro")) { }
+    else if (strstr(ipt_name,".lmp")) { }
+    else if (strstr(ipt_name,".dump")) { }
+    else if (strstr(ipt_name,".data")) { }
+    else
+    {
+      fprintf(stderr,"WARNING: did not find any recognized trajectory file extensions: .trr .trj .btj .gro .lmp .dump \n");
+      fprintf(stderr,"\tProvided trajectory name: %s \n",ipt_name);
+      fprintf(stderr,"\tWe will assume the the trajectory file simply has %s appended to the end and is of the appropriate type\n",def_end);
+      strcat(fnm,def_end);
+    }
+  }
+  else
+  {
+    /* Else it's a text file or something and don't modify it */
+  }
+}
+

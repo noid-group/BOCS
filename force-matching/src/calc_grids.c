@@ -752,8 +752,8 @@ int get_Zero_list(int *Zero_list, int *N_coeff, double *g_cnt,
 		}
                 if (strcmp(sys->Inter_Types[j].inter_type,NB_PAIR) == 0)
                 {
-		    if( (l <= sys->Inter_Types[j].kspline/2) || 
-                        (l >= sys->Inter_Types[j].N_coeff - 1 - sys->Inter_Types[j].kspline/2 ) ) 
+		    if( (l <= sys->Inter_Types[j].kspline) || 
+                        (l >= sys->Inter_Types[j].N_coeff - sys->Inter_Types[j].kspline ) ) // MRD 6.11.2019
                     { 
                         end_flag = TRUE; 
                     }
@@ -4524,6 +4524,294 @@ int calc_grids2(FILE * fp, tW_gmx_info info, int N_sites, tW_CG_site CG_struct[]
     }
 
     return 0;
+}
+
+/*****************************************************************************************
+calc_grids3(): Eliminating the 3 particle loop
+*****************************************************************************************/
+int calc_grids3(FILE *fp, tW_gmx_info info, int N_sites, tW_CG_site CG_struct[], tW_system *sys)
+{
+  int i, j, k, l;
+  int n_basis_ij, n_basis_ji, N_i1, N_j1;
+  int ij_index[MAX_BSPLINE_COEFF], ji_index[MAX_BSPLINE_COEFF];
+  int nr_i_bond_coeff, nr_j_bond_coeff;
+  int *iList1, *jList1;
+  int iSite, jSite;
+  int nb_idx;
+  double r_ij;
+  bool case1_flag, case2_flag, case3_flag;
+  bool b_F = info.b_Forces;
+  bool b_PBC = info.b_PBC;
+  bool GO;
+  dvec box;
+  tW_word *nList1_i, *nList1_j;
+  int D_b_i[MAX_NUM_BOND_COEFF], D_b_j[MAX_NUM_BOND_COEFF], D_b_inter_index[MAX_NUM_BOND_COEFF];
+  dvec calG_b_i[MAX_NUM_BOND_COEFF], calG_b_j[MAX_NUM_BOND_COEFF];
+  tW_type_inter2 *ij_inter;
+  dvec x_i, x_j, x_ij, x_ji, u_ij, u_ji;
+  dvec ij_basis[MAX_BSPLINE_COEFF], ji_basis[MAX_BSPLINE_COEFF];
+  
+  /* Stuff from other functions we called from calc_grids2 that we don't call any more but need to do */
+  int i1_bond_coeff, i2_bond_coeff, D_i1_bond, D_i2_bond, index;
+  double inner_prod;
+  
+//  dvec **half_matrix = (sys->half_matrix);
+  bitMask *bm_half_mat = (sys->bm_half_mat);
+  
+  /* Reset half matrix to 0 for this frame */
+  for (i = 0; i < N_sites * sys->N_coeff; ++i)
+  {
+    sys->linear_half_matrix[i][0] = 0.0;
+    sys->linear_half_matrix[i][1] = 0.0;
+    sys->linear_half_matrix[i][2] = 0.0;
+    //CLEARSPOT2(bm_half_mat,sys->N_coeff, i, j);
+  } 
+  /* Faster clear than each spot individually*/
+  for (i = 0; i < GET_N_SPOTS(N_sites * sys->N_coeff); ++i)
+  {
+    bm_half_mat[i] = 0ULL;
+  }
+
+  if (b_PBC) { if (!setup_box_dimensions(box, info.box)) { exit(EXIT_FAILURE); } }
+ 
+  for (i = 0; i < N_sites; ++i)
+  {
+    sys->Chi2 += dot_prod(CG_struct[i].f, CG_struct[i].f);
+    
+    nr_i_bond_coeff = eval_bond_basis_vectors(fp, CG_struct, sys->Bonded_Inter_Types,
+					        i, D_b_i, calG_b_i, TRUE, D_b_inter_index);
+
+    /* This is essentially the loop from eval_bonds_M_b except I don't increment M - 
+     * instead, I increment the half matrix */
+    for (i1_bond_coeff = 0; i1_bond_coeff < nr_i_bond_coeff; i1_bond_coeff++)
+    {
+      D_i1_bond = D_b_i[i1_bond_coeff];
+      if (b_F)
+      {
+        sys->b[D_i1_bond] += dot_prod(CG_struct[i].f, calG_b_i[i1_bond_coeff]);
+        sys->d2b[D_i1_bond] += dot_prod(CG_struct[i].f, calG_b_i[i1_bond_coeff]) *
+                               dot_prod(CG_struct[i].f, calG_b_i[i1_bond_coeff]);
+      }
+      if (sys->flag_ref_potential) { sys->b_ref[D_i1_bond] += dot_prod(CG_struct[i].ref_f, calG_b_i[i1_bond_coeff]); }
+      
+      vect_inc(sys->linear_half_matrix[i * sys->N_coeff + D_i1_bond],calG_b_i[i1_bond_coeff]); // Increment half matrix
+      SETSPOT2(bm_half_mat,sys->N_coeff, D_i1_bond, i); // Keep track of which basis functions are sampled by CG site i
+      for (i2_bond_coeff = 0; i2_bond_coeff <= i1_bond_coeff; ++i2_bond_coeff)
+      {
+        if (D_b_inter_index[i1_bond_coeff] == D_b_inter_index[i2_bond_coeff]) // Same interaction, increment M2
+        {
+          D_i2_bond = D_b_i[i2_bond_coeff];
+          inner_prod = dot_prod(calG_b_i[i1_bond_coeff], calG_b_i[i2_bond_coeff]);
+          index = index_Lpacked(D_i1_bond, D_i2_bond, sys->N_coeff);
+          sys->M2[index] += inner_prod; // Have to keep track of M2 by hand
+          sys->d2M[index] += inner_prod * inner_prod;
+        }
+      }
+    } /* End eval_bonds_M_b loop */
+
+    iSite = match_word(sys->N_Site_Types, CG_struct[i].name, sys->Site_Types);
+    N_i1 = sys->Inter_Map_Len[iSite];
+    iList1 = sys->Inter_iMap[iSite];
+    nList1_i = sys->Inter_Map[iSite];
+
+    for (j = 0; j < i; ++j)
+    {
+      if (skip_excl(CG_struct[i].nr_excl, CG_struct[i].excl_list, j)) { continue; }
+
+      jSite = match_word(sys->N_Site_Types, CG_struct[j].name, sys->Site_Types);
+      N_j1 = sys->Inter_Map_Len[jSite];
+      jList1 = sys->Inter_iMap[jSite];
+      nList1_j = sys->Inter_Map[jSite];
+
+      /* We no longer need to call nr_j_bond_coeff = eval_bond_basis_vectors(...) */
+
+      /* This is the ij_inter and the ji_inter. */
+      ij_inter = get_nb_pair_inter_ptr(&(CG_struct[j]), sys, N_i1, nList1_i, iList1);
+      if (ij_inter == NULL) { continue; }
+
+      /* Get pair info. for the ij and ji pair. */
+      copy_vector(CG_struct[i].r, x_i);
+      copy_vector(CG_struct[j].r, x_j);
+      get_nb_pair_info(&r_ij, x_i, x_j, x_ij, TRUE, box); // WALDO
+      get_nb_pair_info(&r_ij, x_j, x_i, x_ji, TRUE, box);
+     
+      GO = FALSE;
+
+      if (ij_inter->i_basis == DELTA_BASIS_INDEX)
+      {
+        n_basis_ij = n_basis_ji = 1;
+        if (check_inter_range(r_ij, ij_inter->R_0, ij_inter->R_max, ij_inter->dr) != 0) { continue; }
+        
+        ij_inter->N_inter += 2;
+        ij_index[0] = get_grid_index_for_delta_basis(r_ij, ij_inter->i_0, ij_inter->dr, ij_inter->R_0);
+        ji_index[0] = ij_index[0];
+        
+        scal_times_vect(1.0 / r_ij, x_ij, ij_basis[0]);
+        scal_times_vect(1.0 / r_ij, x_ji, ji_basis[0]);
+
+        eval_delta_basis_vectors(ij_inter, n_basis_ij, u_ij, ij_basis, r_ij, ij_index, sys, CG_struct[i], b_F);
+        eval_delta_basis_vectors(ij_inter, n_basis_ji, u_ji, ji_basis, r_ij, ji_index, sys, CG_struct[j], b_F);
+        GO = TRUE;
+      }
+      else if (ij_inter->i_basis == LINEAR_BASIS_INDEX)
+      {
+        n_basis_ij = n_basis_ji = 2;
+        if (check_linear_inter_range(r_ij, ij_inter->R_0, ij_inter->R_max, ij_inter->dr) != 0) { continue; }
+        
+        ij_inter->N_inter += 2;
+        
+        scal_times_vect(1.0 / r_ij, x_ij, u_ij);
+        scal_times_vect(1.0 / r_ij, x_ji, u_ji);
+        
+        eval_linear_basis_vectors(ij_inter, n_basis_ij, u_ij, ij_basis, r_ij, ij_index, sys, CG_struct[i], b_F, TRUE);
+        eval_linear_basis_vectors(ij_inter, n_basis_ji, u_ji, ji_basis, r_ij, ji_index, sys, CG_struct[j], b_F, TRUE);
+        GO = TRUE;
+      }
+      else if (ij_inter->i_basis == BSPLINE_BASIS_INDEX)
+      {
+        if (check_Bspline_inter_range(r_ij, ij_inter->R_0, ij_inter->R_max, ij_inter->dr) != 0) { continue; }
+
+        ij_inter->N_inter += 2;
+        
+        scal_times_vect(1.0 / r_ij, x_ij, u_ij);
+        scal_times_vect(1.0 / r_ij, x_ji, u_ji);
+
+        n_basis_ij = eval_Bspline_basis_vectors(ij_inter, u_ij, ij_basis, r_ij, ij_index, sys, CG_struct[i], b_F, TRUE);
+        n_basis_ji = eval_Bspline_basis_vectors(ij_inter, u_ji, ji_basis, r_ij, ji_index, sys, CG_struct[j], b_F, TRUE);
+
+        GO = TRUE;
+      }
+      else if (ij_inter->i_basis == POWER_INDEX)
+      {
+        if (r_ij <= ij_inter->R_max)
+        {
+          n_basis_ij = n_basis_ji = ij_inter->N_powers;
+          
+          scal_times_vect(1.0 / r_ij, x_ij, u_ij);
+          scal_times_vect(1.0 / r_ij, x_ji, u_ji);
+
+          eval_power_basis_vectors(ij_inter, u_ij, ij_basis, r_ij, ij_index, sys, CG_struct[i], b_F, TRUE);
+          eval_power_basis_vectors(ij_inter, u_ji, ji_basis, r_ij, ji_index, sys, CG_struct[j], b_F, TRUE);
+          GO = TRUE;
+        }
+        else { continue; }
+      }
+      else
+      {
+        fprintf(stderr,"ERROR: No other basis functions are implemented.\n");
+        fprintf(stderr,"       For nonbonded interaction, we checked delta, linear, Bspline, and power\n");
+        exit(EXIT_FAILURE);
+      }
+   
+      if (GO)
+      {   
+        /* Increment the half matrix */
+        for (nb_idx = 0; nb_idx < n_basis_ij; ++nb_idx)
+        {
+          vect_inc(sys->linear_half_matrix[i * sys->N_coeff + ij_index[nb_idx]],ij_basis[nb_idx]);
+          vect_inc(sys->linear_half_matrix[j * sys->N_coeff + ji_index[nb_idx]],ji_basis[nb_idx]);
+          SETSPOT2(bm_half_mat,sys->N_coeff,ij_index[nb_idx],i);
+          SETSPOT2(bm_half_mat,sys->N_coeff,ji_index[nb_idx],j);
+        }
+     
+        /* Increment M2 */
+        eval_M_nb_pair_inter(n_basis_ij, ij_index, ij_basis, n_basis_ij, ij_index, ij_basis, sys, TRUE);
+        eval_M_nb_pair_inter(n_basis_ji, ji_index, ji_basis, n_basis_ji, ji_index, ji_basis, sys, TRUE);
+      }
+    } // End loop over particle j
+   
+  }// End loop over particle i 
+
+  // Increment "G" which is being stored for now in M
+  for (i = 0; i < N_sites; ++i)
+  {
+    for (j = 0; j < sys->N_coeff; ++j)
+    {
+      if (GETSPOT2(bm_half_mat,sys->N_coeff,j,i)) // Make sure we're not processing a bunch of 0s
+      {
+        for (k = j; k < sys->N_coeff; ++k)
+        {
+          if (GETSPOT2(bm_half_mat,sys->N_coeff,k,i))
+          {
+            int idx = index_Lpacked(j,k,sys->N_coeff);
+            sys->M[idx] += dot_prod(sys->linear_half_matrix[i * sys->N_coeff + j],sys->linear_half_matrix[i * sys->N_coeff + k]);
+          }
+        }
+      }
+    }
+  }
+
+ /* NJD 
+  * To reweight in a framewise manner, we should do the following here: 
+  * 1) determine the weight of the frame by whatever mechanism
+  * 2) to the arrays G_wt, b_wt, etc., we add G*scale, b*scale,
+  * 3) clear the current G, b, etc. so they can be freshly calculated and weighted next frame
+  * Note that this only applies to the force calculation in its simplest form - no reference
+  * forces or structure calculations have yet been implemented in this manner.
+  * */
+
+    if (sys->FRAMEWEIGHT_var.flag_FRAMEWEIGHT == TRUE ) {
+        double wt_factor = 1.0;
+
+        if ( strcmp(sys->FRAMEWEIGHT_var.FRAMEWEIGHT, "NPT") == 0 )
+        {
+                wt_factor = box[0]*box[0];
+        }
+
+        sys->wt_norm += wt_factor;
+
+        for (i=0; i<sys->N_coeff; i++)
+        {
+                sys->b_wt[i] += sys->b[i] * wt_factor;
+                sys->b[i] = 0;
+        }
+
+        for (i=0; i<sys->N_pack; i++)
+        {
+                sys->M_wt[i] += sys->M[i] * wt_factor;
+                sys->M2_wt[i] += sys->M2[i] * wt_factor;
+
+                sys->M[i] = 0;
+                sys->M2[i] = 0;
+        }
+
+    }
+
+    return 0;
+}
+
+/*
+ * In eliminating the triple loop, we now have to make two changes to M
+ * to get it to be what it would be has we done the old way 
+ */
+void process_G_matrix(tW_system *sys)
+{
+  if ((! sys->M_M2_proc) && (sys->SKIP_TRIPLE_LOOP))
+  {
+    int register i;
+/* 1) M2 is M2, but M is the entire G matrix. We have to subtract out M2 from M */
+    for (i = 0; i < sys->N_pack; ++i) { sys->M[i] -= sys->M2[i]; }
+    int register start;
+    int register idx;
+    int register j;
+    int register N_coeff = sys->N_coeff;
+/*
+ * 2) M double counts the diagonal elements of the matrix for bonded interactions
+ *    Note, only the contributions to M and not to M2 are double counted, so we 
+ *    have to subtract M2 out FIRST, and then do this SECOND
+ */
+    for (i = 0; i < sys->N_Bond_Int_Types; ++i)
+    {
+      start = sys->Bonded_Inter_Types[i].i_0;
+      for (j = 0; j < sys->Bonded_Inter_Types[i].N_coeff ; ++j)
+      {
+        idx = index_Lpacked(start+j,start+j,N_coeff);
+        sys->M[idx] /= 2.0;
+      }
+    }
+    
+    sys->M_M2_proc = TRUE;
+  }
 }
 
 
