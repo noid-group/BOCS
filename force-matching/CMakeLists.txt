@@ -14,11 +14,11 @@ set ( CMAKE_BUILD_TYPE Release )
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 
 # Set compiler flags
-set ( CMAKE_C_FLAGS "-O2" )
+set ( CMAKE_C_FLAGS "-O2 -g" )
 set ( CMAKE_C_FLAGS_DEBUG "-g" )
 
 # Uncomment this line to use MKL
-# set ( USE_MKL "ON" )
+set ( USE_MKL "ON" )
 # And then make sure the path set in line 29 corresponds to the location of your MKL library
 
 ##############################################################################################
@@ -26,7 +26,7 @@ set ( CMAKE_C_FLAGS_DEBUG "-g" )
 ##############################################################################################
 if (USE_MKL STREQUAL "ON")
   if (NOT MKL_LIB)
-    set ( MKL_LIB ${MKL_LIB} /opt/intel/parallel_studio_xe_2013.5.192/compilers_and_libraries_2013/linux/mkl/lib/intel64 )
+    set ( MKL_LIB ${MKL_LIB} /opt/intel/compilers_and_libraries_2016.3.210/linux/mkl/lib/intel64 )
   endif(NOT MKL_LIB)
 
   find_library( MKLRT mkl_rt ${MKL_LIB} )
