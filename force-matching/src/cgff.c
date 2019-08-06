@@ -221,6 +221,17 @@ if (local_rank == 0) { copyright(); }
           fr->set_atom_labels(fr,top);
           // end MRD
 
+          // MRD 08.06.2019
+          // If you pass in a trajectory that has a different number of atoms from the topology,
+          // you're gonna segfault in copy_trr_2_CGstruct.
+          // So, let's check to make sure the two numbers of atoms agree
+          if (fr->contents->natoms != top->contents->atoms.nr)
+          {
+            fprintf(stderr,"ERROR:\tyour trajectory file contains info for %d atoms\n",fr->contents->natoms);
+            fprintf(stderr,"\tbut your topology file specified %d atoms\n",top->contents->atoms.nr);
+            return 23;
+          }
+
           /* Copy trr information to CG_struct. */
           bF = copy_trr_2_CGstruct (fr, CG_struct);
           update_info_trr(&info, fr);
