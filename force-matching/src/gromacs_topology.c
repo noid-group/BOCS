@@ -1937,7 +1937,7 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
       { 
 	get_next_line(fp,inp_line); // idx type=X (PDIHS) i j k l
 //	test_line(inp_line,"PDIHS",TRUE,"Expected to find PDIHS");
-        test_sscanf = sscanf(inp_line," %d type=%d (%s) %d %d %d %d ",&pdih_idx, &pdih_type, &(dihtype), &pdi, &pdj, &pdk, &pdl);
+        test_sscanf = sscanf(inp_line," %d type=%d %s %d %d %d %d ",&pdih_idx, &pdih_type, &(dihtype), &pdi, &pdj, &pdk, &pdl);
         mol->pdih_ijkl[i] = (int *) ecalloc(4,sizeof(int));
         mol->pdih_types[i] = pdih_type;
         mol->pdih_ijkl[i][0] = pdi;
