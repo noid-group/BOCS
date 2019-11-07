@@ -58,10 +58,8 @@ enum { epbcXYZ, epbcNONE, epbcXY, epbcSCREW, epbcNR };
 
 #define BOND_DIV 3
 #define ANGLE_DIV 4
-#define PDIH_DIV 5
-#define RBDIH_DIV 5
-#define TABDIH_DIV 5
-#define LJ14_DIV 3
+#define DIH_DIV 5
+#define IMNB_DIV 3
 
 // structs relocated from gmx-interface.h
 
@@ -344,32 +342,32 @@ typedef struct tW_molecule{
   int bond_nr;		// the value given in Bond: nr: X
   int n_bonds;		// number of bonds
   int *bond_types;	// types of bonds (dim n_bonds)
+  int *bond_type_top_cat;
   int **bond_ij;	// array of atoms i and j for bonds (dim n_bonds x 2)
 
   int angle_nr;		// the value given in Angle: nr: X
   int n_angles;		// number of angles
   int *angle_types;	// types of angles (dim n_angles)
+  int *angle_type_top_cat;
   int **angle_ijk;	// array of atoms i j and k for angles (dim n_angles x 3)
   
-  int pdih_nr;		// the value given in Proper Dih.: nr: X
-  int n_pdihs;		// number of proper dihedrals
-  int *pdih_types;	// types of proper dihedrals (dim n_pdihs)
-  int **pdih_ijkl;	// array of atoms i j k and l for pdihs (dim n_pdihs x 4)
+  int dih_nr;
+  int n_dihs;
+  int *dih_types;
+  int *dih_type_top_cat;
+  int **dih_ijkl;
 
-  int rbdih_nr;		// the value given in RBdih: nr: X
-  int n_rbdihs;		// number of rbdihs
-  int *rbdih_types;	// types of rbdihs (dim n_rbdihs)
-  int **rbdih_ijkl;	// array of atoms i j k and l for rbdihs (dim n_rbdihs x 4)
+  int imnb_nr;
+  int n_imnbs;
+  int *imnb_types;
+  int *imnb_type_top_cat;
+  int **imnb_ij;
 
-  int tabdih_nr;	// the value given in Tab. Dih.: nr: X
-  int n_tabdihs;	// number of tabulated dihedrals
-  int *tabdih_types;	// types of tabulated dihedrals (dim n_tbdihs)
-  int **tabdih_ijkl;	// array of atoms i j k and l for tab dihs (dim n_tbdihs x 4)
+  int *n_other;
+  int *other_nr;
+  int **other_types;
+  int ***other_ijklmn;
 
-  int lj14_nr;		// the value given in Lj14: nr: X
-  int n_lj14s;		// number of lj14s
-  int *lj14_types;	// types of lj14s (dim n_lj14s)
-  int **lj14_ij;	// array of atoms i and j for lj14s (dim n_lj14s x 2)
 
 } tW_molecule;
 

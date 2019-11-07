@@ -26,3 +26,9 @@ CMake. The force-matching component NO LONGER relies on an existing GROMACS inst
 BOCS v3 implements a new (faster) algorithm for calculating the G matrix. However, the default behavior is
 still to use the original algorithm. To use the new algorithm, simply include [Skip_Triple_Loop] in your
 par.txt file. See the new manual for more information.
+
+## BOCS v4 
+BOCS v4 slightly modified the format of .btp files. Any .btp file created with an earlier version of BOCS
+will cause errors with the newer BOCS format. If you try to use an old .btp file with a newer version of
+BOCS, BOCS will print a message saying that you need to re-translate the dumped .tpr file with the new
+version of BOCS. 

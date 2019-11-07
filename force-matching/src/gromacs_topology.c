@@ -1682,7 +1682,7 @@ the moltype info
 void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
 {
   tW_line inp_line;
-  int i, j, test_sscanf, inp_int, let_idx;
+  int i, j, k, test_sscanf, inp_int, let_idx;
 
   // stuff in first atom(X) group
   int atidx, type, typeB, resind, atnumber;
@@ -1697,10 +1697,18 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
   get_next_line(fp,inp_line); // "atoms:"
   get_next_line(fp,inp_line); // "atom (apm):"
   test_sscanf = sscanf(inp_line," atom (%d) ",&inp_int);
-  if (inp_int != mol->n_apm)
-  {
-    fprintf(stderr,"WARNING: moltype contains %d atoms, but molblock indicated it has %d atoms\n",inp_int,mol->n_apm);
-  }
+  mol->n_apm = inp_int;
+
+// MRD 11.05.2019 now we finally have n_apm, allocate memory for stuff
+  mol->type_ids = (int *) ecalloc(mol->n_apm,sizeof(int));
+  mol->atom_names = (tW_word *) ecalloc(mol->n_apm,sizeof(tW_word));
+  mol->atom_types = (tW_word *) ecalloc(mol->n_apm,sizeof(tW_word));
+  mol->atom_Btypes = (tW_word *) ecalloc(mol->n_apm,sizeof(tW_word));
+  mol->m = (double *) ecalloc(mol->n_apm,sizeof(double));
+  mol->q = (double *) ecalloc(mol->n_apm,sizeof(double));
+  mol->residx = (int *) ecalloc(mol->n_apm,sizeof(int));
+
+
   for (i = 0; i < mol->n_apm; ++i)
   {
     get_next_line(fp,inp_line);
@@ -1762,6 +1770,7 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
 
   get_next_line(fp,inp_line); // "residue (nres)"
   test_sscanf = sscanf(inp_line," residue (%d): ",&inp_int);
+  mol->resname = (tW_word *) ecalloc(inp_int,sizeof(tW_word));
   mol->n_res = inp_int;
   for (i = 0; i < mol->n_res; ++i)
   {
@@ -1833,234 +1842,265 @@ void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
       }
     }
   } 
+
+// This is ugly...
+  int nBondTypes = 10, nAngleTypes = 9, nDihedralTypes = 9, nIMNBTypes = 4, nOtherTypes = 59;
+  const tW_word BondTypes[] = {"Bond:","G96Bond:","Morse:","Cubic Bonds:","Connect Bonds:","Harmonic Pot.:","FENE Bonds:","Tab. Bonds:","Tab. Bonds NC:","Restraint Pot.:"};
+  const tW_word AngleTypes[] = {"Angle:","G96Angle:","Restricted Angles:","Lin. Angle:","Bond-Cross:","BA-Cross:","U-B:","Quartic Angles:","Tab. Angles:"};
+  const tW_word DihedralTypes[] = {"Proper Dih.:","Ryckaert-Bell.:","Restricted Dih.:","CBT Dih.:","Fourier Dih.:","Improper Dih.:","Improper Dih.:","Tab. Dih.:","CMAP Dih.:"};
+  const tW_word IMNBTypes[] = {"LJ-14:","Coulomb-14:","LJC-14 q:","LJC Pairs NB:"};
+  const tW_word OtherTypes[] = {"GB 1-2 Pol. (unused):","GB 1-3 Pol. (unused):","GB 1-4 Pol. (unused):","GB Polarization (unused):","Nonpolar Sol. (unused):","LJ (SR):","Buck.ham (SR):","LJ (unused):","B.ham (unused):","Disper. corr.:","Coulomb (SR):","Coul (unused):","RF excl.:","Coul. recip.:","LJ recip.:","DPD:","Polarization:","Water Pol.:","Thole Pol.:","Anharm. Pol.:","Position Rest.:","Flat-bottom posres:","Dis. Rest.:","D.R.Viol. (nm):","Orient. Rest.:","Ori. R. RMSD:","Angle Rest.:","Angle Rest. Z:","Dih. Rest.:","Dih. Rest. Viol.:","Constraint:","Constr. No Conn.:","Settle:","Virtual site 2:","Virtual site 3:","Virtual site 3fd:","Virtual site 3fad:","Virtual site 3out:","Virtual site 4fd:","Virtual site 4fdn:","Virtual site N:","COM Pull En.:","Quantum En.:","Potential:","Kinetic En.:","Total Energy:","Conserved En.:","Temperature:","Vir. Temp. (not used):","Pres. DC:","Pressure:","dH/dl constr.:","dVremain/dl:","dEkin/dl:","dVcoul/dl:","dVvdw/dl:","dVbonded/dl:","dVrestraint/dl:","dVtemperature/dl:"};
+
+  // initialize stuff to 0
+  mol->bond_nr = mol->n_bonds = mol->angle_nr = mol->n_angles = mol->dih_nr = mol->n_dihs = mol->imnb_nr = mol->n_imnbs = 0;
+  mol->n_other = (int *) ecalloc(nOtherTypes,sizeof(int));
+  mol->other_nr = (int *) ecalloc(nOtherTypes,sizeof(int));
+  mol->other_types = (int **) ecalloc(nOtherTypes,sizeof(int *));
+  mol->other_ijklmn = (int ***) ecalloc(nOtherTypes,sizeof(int **));
+
+
   get_next_line(fp,inp_line);
-  unsigned short flags = 0, flag_bonds = (1 << 0), flag_angles = (1 << 1), flag_pdihs = (1 << 2), flag_rbdihs = (1 << 3), flag_tabdihs = (1 << 4), flag_lj14 = (1 << 5), old_flags = (1 << 6);
+
   int ret_flag = 1;
+  bool bFound = FALSE;
+  int BIDX = 0, AIDX = 0, DIDX = 0, IMNBIDX = 0;
   while (ret_flag == 1)
   {
-    if (strstr(inp_line,"moltype") != NULL) { strcpy(*(ret_inp_line),inp_line); return; ret_flag = 0; }
-    else if (strstr(inp_line,"grp") != NULL) { strcpy(*(ret_inp_line),inp_line); return; ret_flag = 0; }
-    else if (strstr(inp_line,"Bond") != NULL) // This should be able to handle regular bonds and tabulated bonds (types 1 and 8), but not both in the same file.
+    bFound = FALSE;
+    if (strstr(inp_line,"moltype") != NULL) { strcpy((*ret_inp_line),inp_line); return ; }
+    else if (strstr(inp_line,"grp") != NULL) { strcpy((*ret_inp_line),inp_line); return ;}
+    else
     {
-      if ((flags & flag_bonds) != 0) 
-      { 
-	fprintf(stderr,"ERROR: found section \"Bond:\" twice in moltype %s\n",mol->molname); 
-	exit(1); 
-      }
-      flags |= flag_bonds;
-      get_next_line(fp,inp_line); // nr: X   
-      test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
-      int n_bonds = inp_int / BOND_DIV;
-      mol->bond_nr = inp_int;
-      mol->n_bonds = n_bonds;
-      mol->bond_types = (int *) ecalloc(n_bonds, sizeof(int));
-      mol->bond_ij = (int **) ecalloc(n_bonds,sizeof(int *));
-      int bidx, btype, bidxi, bidxj;
-      tW_word inp_word;
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_bonds; ++i)
+      for (i = 0; i < nBondTypes; ++i)
       {
-        get_next_line(fp,inp_line); // idx type=X (BONDS) i j
-	test_line(inp_line,"BONDS",TRUE,"Expected to find BONDS");
-        test_sscanf = sscanf(inp_line, " %d type=%d %s %d %d ",&bidx, &btype, &inp_word, &bidxi, &bidxj);
-        mol->bond_ij[i] = (int *) ecalloc(2,sizeof(int));
-	mol->bond_types[i] = btype;
-	mol->bond_ij[i][0] = bidxi;
-	mol->bond_ij[i][1] = bidxj;
-      }      
+        if ((strstr(inp_line,BondTypes[i]) != NULL) && (! bFound))
+        {
+          get_next_line(fp,inp_line);// nr: X
+          test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
+          if (inp_int > 0)
+          {
+            get_next_line(fp,inp_line); // iatoms:
+            mol->bond_nr += inp_int;
+            int prev_n_bonds = mol->n_bonds;
+            mol->n_bonds += inp_int/BOND_DIV;
+            int n_new_bonds = inp_int/BOND_DIV;
+            mol->bond_types = (int *) erealloc(mol->bond_types, mol->n_bonds * sizeof(int));
+            mol->bond_type_top_cat = (int *) erealloc(mol->bond_type_top_cat, mol->n_bonds * sizeof(int));
+            mol->bond_ij = (int **) erealloc(mol->bond_ij, mol->n_bonds * sizeof(int *));
+            for (j = prev_n_bonds; j < mol->n_bonds; ++j) { mol->bond_ij[j] = (int *) ecalloc(2,sizeof(int)); }
+            for (j = 0; j < n_new_bonds; ++j)
+            {
+              get_next_line(fp,inp_line);
+
+              elim_char(inp_line,'\n');
+              int n_words = get_word_count_delim(inp_line," ");
+              tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
+              get_words_delim(inp_line," ",word_list);
+
+              test_sscanf = sscanf(word_list[1],"type=%d",&inp_int);
+              mol->bond_types[BIDX] = inp_int;
+              mol->bond_type_top_cat[BIDX] = i;
+              mol->bond_ij[BIDX][0] = atoi(word_list[3]);
+              mol->bond_ij[BIDX][1] = atoi(word_list[4]);
+              ++BIDX;
+              efree(word_list);
+            } 
+          }
+          bFound = TRUE;
+          i = nBondTypes;
+        }
+      }
+      if (! bFound)
+      {
+        for (i = 0; i < nAngleTypes; ++i)
+        {
+          if ((strstr(inp_line,AngleTypes[i]) != NULL) && (! bFound))
+          {
+            get_next_line(fp,inp_line);// nr: X
+            test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
+            if (inp_int > 0)
+            {
+              get_next_line(fp,inp_line); // iatoms:
+              mol->angle_nr += inp_int;
+              int prev_n_angles = mol->n_angles;
+              mol->n_angles += inp_int/ANGLE_DIV;
+              int n_new_angles = inp_int/ANGLE_DIV;
+              mol->angle_types = (int *) erealloc(mol->angle_types, mol->n_angles * sizeof(int));
+              mol->angle_type_top_cat = (int *) erealloc(mol->angle_type_top_cat, mol->n_angles * sizeof(int));
+              mol->angle_ijk = (int **) erealloc(mol->angle_ijk, mol->n_angles * sizeof(int *));
+              for (j = prev_n_angles; j < mol->n_angles; ++j) { mol->angle_ijk[j] = (int *) ecalloc(3,sizeof(int)); }
+              for (j = 0; j < n_new_angles; ++j)
+              {
+                get_next_line(fp,inp_line);
+
+                elim_char(inp_line,'\n');
+                int n_words = get_word_count_delim(inp_line," ");
+                tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
+                get_words_delim(inp_line," ",word_list);
+                
+                test_sscanf = sscanf(word_list[1],"type=%d",&inp_int);
+                mol->angle_types[AIDX] = inp_int;
+                mol->angle_type_top_cat[AIDX] = i;
+                mol->angle_ijk[AIDX][0] = atoi(word_list[3]);
+                mol->angle_ijk[AIDX][1] = atoi(word_list[4]);
+                mol->angle_ijk[AIDX][2] = atoi(word_list[5]);
+                ++AIDX;
+                efree(word_list);
+              }
+            }
+            bFound = TRUE;
+            i = nAngleTypes;
+          }
+        }
+      }
+      if (! bFound)
+      {
+        for (i = 0; i < nDihedralTypes; ++i)
+        {
+          if ((strstr(inp_line,DihedralTypes[i]) != NULL) && (! bFound))
+          {
+            get_next_line(fp,inp_line);// nr: X
+            test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
+            if (inp_int > 0)
+            {
+              get_next_line(fp,inp_line); // iatoms:
+              mol->dih_nr += inp_int;
+              int prev_n_dihs = mol->n_dihs;
+              mol->n_dihs += inp_int/DIH_DIV;
+              int n_new_dihs = inp_int/DIH_DIV;
+              mol->dih_types = (int *) erealloc(mol->dih_types, mol->n_dihs * sizeof(int));
+              mol->dih_type_top_cat = (int *) erealloc(mol->dih_type_top_cat, mol->n_dihs * sizeof(int));
+              mol->dih_ijkl = (int **) erealloc(mol->dih_ijkl, mol->n_dihs * sizeof(int *));
+              for (j = prev_n_dihs; j < mol->n_dihs; ++j) { mol->dih_ijkl[j] = (int *) ecalloc(4,sizeof(int)); }
+              for (j = 0; j < n_new_dihs; ++j)
+              {
+                get_next_line(fp,inp_line);
+
+                elim_char(inp_line,'\n');
+                int n_words = get_word_count_delim(inp_line," ");
+                tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
+                get_words_delim(inp_line," ",word_list);
+
+                test_sscanf = sscanf(word_list[1],"type=%d",&inp_int);
+                mol->dih_types[DIDX] = inp_int;
+                mol->dih_type_top_cat[DIDX] = i;
+                mol->dih_ijkl[DIDX][0] = atoi(word_list[3]);
+                mol->dih_ijkl[DIDX][1] = atoi(word_list[4]);
+                mol->dih_ijkl[DIDX][2] = atoi(word_list[5]);
+                mol->dih_ijkl[DIDX][3] = atoi(word_list[6]);
+                ++DIDX;
+                efree(word_list);
+              }
+            }
+            bFound = TRUE;
+            i = nDihedralTypes;
+          }
+        }
+      }
+      if (! bFound)
+      {
+        for (i = 0; i < nIMNBTypes; ++i)
+        {
+          if ((strstr(inp_line,IMNBTypes[i]) != NULL) && (! bFound))
+          {
+            get_next_line(fp,inp_line);// nr: X
+            test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
+            if (inp_int > 0)
+            {
+              get_next_line(fp,inp_line); // iatoms:
+              mol->imnb_nr += inp_int;
+              int prev_n_imnbs = mol->n_imnbs;
+              mol->n_imnbs += inp_int / IMNB_DIV;
+              int n_new_imnbs = inp_int / IMNB_DIV;
+              mol->imnb_types = (int *) erealloc(mol->imnb_types, mol->n_imnbs * sizeof(int));
+              mol->imnb_type_top_cat = (int *) erealloc(mol->imnb_type_top_cat, mol->n_imnbs * sizeof(int));
+              mol->imnb_ij = (int **) erealloc(mol->imnb_ij, mol->n_imnbs * sizeof(int *));
+              for (j = prev_n_imnbs; j < mol->n_imnbs; ++j) { mol->imnb_ij[j] = (int *) ecalloc(2,sizeof(int)); }
+              for (j = 0; j < n_new_imnbs; ++j)
+              {
+                get_next_line(fp,inp_line);
+                elim_char(inp_line,'\n');
+                int n_words = get_word_count_delim(inp_line," ");
+                tW_word * word_list = (tW_word *) ecalloc(n_words, sizeof(tW_word));
+                get_words_delim(inp_line," ",word_list);
+                
+                test_sscanf = sscanf(word_list[1],"type=%d",&inp_int);
+                mol->imnb_types[IMNBIDX] = inp_int;
+                mol->imnb_type_top_cat[IMNBIDX] = i;
+                mol->imnb_ij[IMNBIDX][0] = atoi(word_list[3]);
+                mol->imnb_ij[IMNBIDX][1] = atoi(word_list[4]);
+                ++IMNBIDX;
+                efree(word_list);
+              }
+            }
+            bFound = TRUE;
+            i = nIMNBTypes;
+          }
+        }
+      }
+      if (! bFound)
+      {
+        for (i = 0; i < nOtherTypes; ++i)
+        {
+          if ((strstr(inp_line,OtherTypes[i]) != NULL) && (! bFound))
+          {
+            get_next_line(fp,inp_line);// nr: X
+            test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
+            mol->other_nr[i] = inp_int;
+            if (mol->other_nr[i] > 0)
+            {           
+              fprintf(stderr,"WARNING: nonzero number of interactions of type %s found\n",OtherTypes[i]);
+              fprintf(stderr,"These types of interactions do not correspond to BondStretch, Angle, Dihedral, nor IntraMolec_NB_Pair types\n");
+              fprintf(stderr,"Accordingly, they will not be used nor transferred to the .btp file\n");
+              get_next_line(fp,inp_line); // iatoms:
+              get_next_line(fp,inp_line); 
+              // split this line up into words. is the number of words minus 2
+              // X type=XX (XXXX) I J K ...
+              elim_char(inp_line,'\n');
+              int n_words = get_word_count_delim(inp_line," ");
+              tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
+              get_words_delim(inp_line," ",word_list);
+
+              mol->n_other[i] = mol->other_nr[i] / (n_words - 2);
+              mol->other_types[i] = (int *) ecalloc(mol->n_other[i], sizeof(int));
+              mol->other_ijklmn[i] = (int **) ecalloc(mol->n_other[i], sizeof(int *));
+              for (j = 0; j < mol->n_other[i]; ++j)
+              {
+                mol->other_ijklmn[i][j] = (int *) ecalloc(n_words-3,sizeof(int));
+              }
+              
+              test_sscanf = sscanf(word_list[1],"type=%d",&inp_int);
+              mol->other_types[i][0] = inp_int;
+              for (j = 3; j < n_words; ++j) { mol->other_ijklmn[i][0][j-3] = atoi(word_list[j]); }
+              efree(word_list);
+              for (j = 1; j < mol->n_other[i]; ++j)
+              {
+                get_next_line(fp,inp_line);
+
+                elim_char(inp_line,'\n');
+                int n_words2 = get_word_count_delim(inp_line," ");
+                tW_word * word_list2 = (tW_word *) ecalloc(n_words2,sizeof(tW_word));
+                get_words_delim(inp_line," ",word_list2);
+
+                mol->other_types[i][j] = inp_int;
+                for (k = 3; k < n_words; ++k) { mol->other_ijklmn[i][j][k-3] = atoi(word_list2[k]); }
+                efree(word_list2);
+              }       
+            }
+            bFound = TRUE;
+            i = nOtherTypes;
+          }
+        }
+      }
+
+      if ( ! bFound)
+      {
+        fprintf(stderr,"WARNING: unknown line: %s",inp_line);
+      }
       get_next_line(fp,inp_line);
-      test_line(inp_line,"BONDS",FALSE,"Expected to be done finding BONDS");
     }
-    else if (strstr(inp_line,"Angle") != NULL) // This should be able to handle regular angles and tabulated angles (types 1 and 8), but not both in the same file.
-    {
-      if ((flags & flag_angles) != 0) 
-      { 
-	fprintf(stderr,"ERROR: found section \"Angle:\" twice in moltype %s\n",mol->molname); 
-	fprintf(stderr,"\tflags: %d   flag_angles: %d\n",flags,flag_angles);
-	fprintf(stderr," flags & flag_angles: %d\n",flags & flag_angles);
-        fprintf(stderr," Please make sure that you only have one angle type (either 1=angle or 8=tab angle) in your top file\n");
-	exit(1); 
-      }
-      flags |= flag_angles;
-      get_next_line(fp,inp_line); // nr: X
-      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
-      int n_angles = inp_int / ANGLE_DIV;
-      mol->angle_nr = inp_int;
-      mol->n_angles = n_angles;
-      mol->angle_types = (int *) ecalloc(n_angles,sizeof(int));
-      mol->angle_ijk = (int **) ecalloc(n_angles,sizeof(int *));
-      int aidx, atype, aidxi, aidxj, aidxk;
-      tW_word inp_word;
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_angles; ++i)
-      {
-	get_next_line(fp,inp_line); // idx type=X (ANGLES) i j k
-	test_line(inp_line,"ANGLES",TRUE,"Expected to find ANGLES");
-        test_sscanf = sscanf(inp_line," %d type=%d %s %d %d %d ",&aidx, &atype, &inp_word, &aidxi, &aidxj, &aidxk);
-        mol->angle_ijk[i] = (int *) ecalloc(3,sizeof(int));
-	mol->angle_types[i] = atype;
-	mol->angle_ijk[i][0] = aidxi;
-        mol->angle_ijk[i][1] = aidxj;
-        mol->angle_ijk[i][2] = aidxk;
-      }
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"ANGLES",FALSE,"Expected to be done finding ANGLES");
-    }
-    else if (strstr(inp_line,"Dih.") != NULL)
-    {
-      if ((flags & flag_pdihs) != 0) 
-      { 
-	fprintf(stderr,"ERROR: found section \"Dih.\" twice in moltype %s\n",mol->molname); 
-	fprintf(stderr,"\tflags: %d   flag_pdihs: %d\n",flags,flag_pdihs);
-	fprintf(stderr," flags & flag_pdihs: %d\n",flags & flag_pdihs);
-        fprintf(stderr,"Make sure you only have one type of dihedral (either 1=pdih or 8=tabdih) in your topology file\n");
-	exit(1); 
-      }
-      flags |= flag_pdihs;
-//      if ((flags & flag_tabdihs) != 0)
-//      {
-//        fprintf(stderr,"ERROR: we found section \"Tab. Dih.\" already, and now have found section \"Proper Dih.\"\n");
-//        fprintf(stderr,"you must have ALL dihedral angles in your topology one or the other \n");
-//        exit(EXIT_FAILURE);
-//      }
-      get_next_line(fp,inp_line); // nr: X
-      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
-      int n_pdih = inp_int / PDIH_DIV;
-      mol->pdih_nr = inp_int;
-      mol->n_pdihs = n_pdih;
-      mol->pdih_types = (int *) ecalloc(n_pdih,sizeof(int));
-      mol->pdih_ijkl = (int **) ecalloc(n_pdih,sizeof(int *));
-      int pdih_idx, pdih_type, pdi, pdj, pdk, pdl;
-      char dihtype[30];
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_pdih; ++i)
-      { 
-	get_next_line(fp,inp_line); // idx type=X (PDIHS) i j k l
-//	test_line(inp_line,"PDIHS",TRUE,"Expected to find PDIHS");
-        test_sscanf = sscanf(inp_line," %d type=%d %s %d %d %d %d ",&pdih_idx, &pdih_type, &(dihtype), &pdi, &pdj, &pdk, &pdl);
-        mol->pdih_ijkl[i] = (int *) ecalloc(4,sizeof(int));
-        mol->pdih_types[i] = pdih_type;
-        mol->pdih_ijkl[i][0] = pdi;
-        mol->pdih_ijkl[i][1] = pdj;
-        mol->pdih_ijkl[i][2] = pdk;
-        mol->pdih_ijkl[i][3] = pdl;
-      }
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"PDIHS",FALSE,"Expected to be done finding PDIHS");
-      test_line(inp_line,"TABDIHS",FALSE,"Expected to be done finding TABDIHS");
-    }
-    else if (strstr(inp_line,"Ryckaert-Bell.") != NULL)
-    {
-      fprintf(stderr,"ERROR: we do not support RB dihedral angles.\n");
-      fprintf(stderr,"\tPlease change all RB dihedrals to either proper or tabulated\n");
-      exit(1);
-/*      if ((flags & flag_rbdihs) != 0) 
-      { 
-	fprintf(stderr,"ERROR: found section \"Ryckaert-Bell.:\" twice in moltype %s\n",mol->molname); 
-	exit(1); 
-      }
-      flags |= flag_rbdihs;
-      get_next_line(fp,inp_line); // nr: X
-      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
-      int n_rbdih = inp_int / RBDIH_DIV;
-      mol->rbdih_nr = inp_int;
-      mol->n_rbdihs = n_rbdih;
-      mol->rbdih_types = (int *) ecalloc(n_rbdih,sizeof(int));
-      mol->rbdih_ijkl = (int **) ecalloc(n_rbdih,sizeof(int *));
-      int rbidx, rbtype, rbidxi, rbidxj, rbidxk, rbidxl;
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_rbdih; ++i)
-      {
-        get_next_line(fp,inp_line); // idx type=X (RBDIHS) i j k l
-	test_line(inp_line,"RBDIHS",TRUE,"Expected to find RBDIHS");
-	test_sscanf = sscanf(inp_line," %d type=%d (RBDIHS) %d %d %d %d ",&rbidx, &rbtype, &rbidxi, &rbidxj, &rbidxk, &rbidxl);
-        mol->rbdih_ijkl[i] = (int *) ecalloc(4,sizeof(int));
-	mol->rbdih_types[i] = rbtype;
-	mol->rbdih_ijkl[i][0] = rbidxi;
-        mol->rbdih_ijkl[i][1] = rbidxj;
-        mol->rbdih_ijkl[i][2] = rbidxk;
-        mol->rbdih_ijkl[i][3] = rbidxl;
-      }
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"RBDIHS",FALSE,"Expected to be done finding RBDIHS");*/
-    }
-/*    else if (strstr(inp_line,"Tab. Dih.") != NULL)
-    {
-      if ((flags & flag_tabdihs) != 0)
-      {
-        fprintf(stderr,"ERROR: found section \"Tab. Dih.:\" twice in moltype %s\n",mol->molname);
-        exit(1);
-      }
-      flags |= flag_tabdihs;
-      if ((flags & flag_pdihs) != 0)
-      {
-        fprintf(stderr,"ERROR: we found section \"Proper Dih.\" previously, and are now in section \"Tab Dih.\" \n");
-        fprintf(stderr,"you must have ALL dihedral angles in your topology one or the other\n");
-        exit(EXIT_FAILURE);
-      }
-      get_next_line(fp,inp_line); // nr: X
-      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
-      int n_tabdih = inp_int / TABDIH_DIV;
-      mol->tabdih_nr = inp_int;
-      mol->n_tabdihs = n_tabdih;
-      mol->tabdih_types = (int *) ecalloc(n_tabdih,sizeof(int));
-      mol->tabdih_ijkl = (int **) ecalloc(n_tabdih,sizeof(int *));
-      int tabidx, tabtype, tabidxi, tabidxj, tabidxk, tabidxl;
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_tabdih; ++i)
-      {
-        get_next_line(fp,inp_line); // idx type=X (RBDIHS) i j k l
-        test_line(inp_line,"TABDIHS",TRUE,"Expected to find TABDIHS");
-        test_sscanf = sscanf(inp_line," %d type=%d (TABDIHS) %d %d %d %d ",&tabidx, &tabtype, &tabidxi, &tabidxj, &tabidxk, &tabidxl);
-        mol->tabdih_ijkl[i] = (int *) ecalloc(4,sizeof(int));
-        mol->tabdih_types[i] = tabtype;
-        mol->tabdih_ijkl[i][0] = tabidxi;
-        mol->tabdih_ijkl[i][1] = tabidxj;
-        mol->tabdih_ijkl[i][2] = tabidxk;
-        mol->tabdih_ijkl[i][3] = tabidxl;
-      }
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"TABDIHS",FALSE,"Expected to be done finding TABDIHS");
-    }*/
-    else if (strstr(inp_line,"LJ-14") != NULL)
-    {
-      if ((flags & flag_lj14) != 0) 
-      { 
-	fprintf(stderr,"ERROR: found section \"LJ-14:\" twice in moltype %s\n",mol->molname); 
-	exit(1); 
-      }
-      flags |= flag_lj14;
-      get_next_line(fp,inp_line); // nr: X
-      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
-      int n_lj14 = inp_int / LJ14_DIV;
-      mol->lj14_nr = inp_int;
-      mol->n_lj14s = n_lj14;
-      mol->lj14_types = (int *) ecalloc(n_lj14,sizeof(int));
-      mol->lj14_ij = (int **) ecalloc(n_lj14,sizeof(int *));
-      int lj14idx, lj14type, lj14idxi, lj14idxj;
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_lj14; ++i)
-      {
-	get_next_line(fp,inp_line); // idx type=X (LJ14) i j
-	test_line(inp_line,"LJ14",TRUE,"Expected to find LJ14");
-	test_sscanf = sscanf(inp_line, "%d type=%d (LJ14) %d %d ",&lj14idx,&lj14type,&lj14idxi,&lj14idxj);
-	mol->lj14_ij[i] = (int *) ecalloc(2,sizeof(int));
-	mol->lj14_types[i] = lj14type;
-	mol->lj14_ij[i][0] = lj14idxi;
-	mol->lj14_ij[i][1] = lj14idxj;
-      }
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"LJ14",FALSE,"Expected to be done finding LJ14");
-    }
-    else if (flags == old_flags)
-    {
-      fprintf(stderr,"ERROR: went around while loop once, flags never changed, and I didn't find moltype nor grp\n");
-      fprintf(stderr,"\tline: %s",inp_line);
-      get_next_line(fp,inp_line);
-      fprintf(stderr,"\t just got line: %s",inp_line);
-    }   
-    old_flags = flags;   
   }
+
 }
 
 /*****************************************************************************************
@@ -2139,65 +2179,23 @@ void dump_molecule_info(tW_gmx_topology *top)
       }
     }
 
-    if (my_mols[i].n_pdihs > 0)
+    if (my_mols[i].n_dihs > 0)
     {
-      fprintf(fp,"n_pdihs: %d\n",my_mols[i].n_pdihs);
+      fprintf(fp,"n_dihs: %d\n",my_mols[i].n_dihs);
       if (top->int_map)
       {
         fprintf(fp,"idx  type  at_i  at_j  at_k  at_l  LMP_ID\n");
-        for (j = 0; j < my_mols[i].n_pdihs; ++j)
+        for (j = 0; j < my_mols[i].n_dihs; ++j)
         {
-          fprintf(fp,"%3d  %4d  %4d  %4d  %4d  %4d  %6d\n",j,my_mols[i].pdih_types[j],my_mols[i].pdih_ijkl[j][0],my_mols[i].pdih_ijkl[j][1],my_mols[i].pdih_ijkl[j][2],my_mols[i].pdih_ijkl[j][3],top->int_map[my_mols[i].pdih_types[j]]);
+          fprintf(fp,"%3d  %4d  %4d  %4d  %4d  %4d  %6d\n",j,my_mols[i].dih_types[j],my_mols[i].dih_ijkl[j][0],my_mols[i].dih_ijkl[j][1],my_mols[i].dih_ijkl[j][2],my_mols[i].dih_ijkl[j][3],top->int_map[my_mols[i].dih_types[j]]);
         }
       }
       else
       {
         fprintf(fp,"idx  type  at_i  at_j  at_k  at_l\n");
-        for (j = 0; j < my_mols[i].n_pdihs; ++j)
+        for (j = 0; j < my_mols[i].n_dihs; ++j)
         {
-          fprintf(fp,"%3d  %4d  %4d  %4d  %4d  %4d\n",j,my_mols[i].pdih_types[j],my_mols[i].pdih_ijkl[j][0],my_mols[i].pdih_ijkl[j][1],my_mols[i].pdih_ijkl[j][2],my_mols[i].pdih_ijkl[j][3]);
-        }
-      }
-    }
-
-    if (my_mols[i].n_rbdihs > 0)
-    {
-      fprintf(fp,"n_rbdihs: %d\n",my_mols[i].n_rbdihs);
-      if (top->int_map)
-      {
-        fprintf(fp,"idx  type  at_i  at_j  at_k  at_l  LMP_ID\n");
-        for (j = 0; j < my_mols[i].n_rbdihs; ++j)
-        {
-          fprintf(fp,"%3d  %4d  %4d  %4d  %4d  %4d  %6d\n",j,my_mols[i].rbdih_types[j],my_mols[i].rbdih_ijkl[j][0],my_mols[i].rbdih_ijkl[j][1],my_mols[i].rbdih_ijkl[j][2],my_mols[i].rbdih_ijkl[j][3],top->int_map[my_mols[i].rbdih_types[j]]);
-        }
-      }
-      else
-      {
-        fprintf(fp,"idx  type  at_i  at_j  at_k  at_l\n");
-        for (j = 0; j < my_mols[i].n_rbdihs; ++j)
-        {
-          fprintf(fp,"%3d  %4d  %4d  %4d  %4d  %4d\n",j,my_mols[i].rbdih_types[j],my_mols[i].rbdih_ijkl[j][0],my_mols[i].rbdih_ijkl[j][1],my_mols[i].rbdih_ijkl[j][2],my_mols[i].rbdih_ijkl[j][3]);
-        }
-      }
-    }
-
-    if (my_mols[i].n_tabdihs > 0)
-    {
-      fprintf(fp,"n_tabdihs: %d\n",my_mols[i].n_tabdihs);
-      if (top->int_map)
-      {
-        fprintf(fp,"idx  type  at_i  at_j  at_k  at_l  LMP_ID\n");
-        for (j = 0; j < my_mols[i].n_tabdihs; ++j)
-        {
-          fprintf(fp,"%3d  %4d  %4d  %4d  %4d  %4d  %6d\n",j,my_mols[i].tabdih_types[j],my_mols[i].tabdih_ijkl[j][0],my_mols[i].tabdih_ijkl[j][1],my_mols[i].tabdih_ijkl[j][2],my_mols[i].tabdih_ijkl[j][3],top->int_map[my_mols[i].tabdih_types[j]]);
-        }
-      }
-      else
-      {
-        fprintf(fp,"idx  type  at_i  at_j  at_k  at_l\n");
-        for (j = 0; j < my_mols[i].n_tabdihs; ++j)
-        {
-          fprintf(fp,"%3d  %4d  %4d  %4d  %4d  %4d\n",j,my_mols[i].tabdih_types[j],my_mols[i].tabdih_ijkl[j][0],my_mols[i].tabdih_ijkl[j][1],my_mols[i].tabdih_ijkl[j][2],my_mols[i].tabdih_ijkl[j][3]);
+          fprintf(fp,"%3d  %4d  %4d  %4d  %4d  %4d\n",j,my_mols[i].dih_types[j],my_mols[i].dih_ijkl[j][0],my_mols[i].dih_ijkl[j][1],my_mols[i].dih_ijkl[j][2],my_mols[i].dih_ijkl[j][3]);
         }
       }
     }
@@ -2373,31 +2371,24 @@ void pop_contents(tW_gmx_topology * top)
 //  top->contents->idef.ntypes
 //  top->contents->idef.atnr
 
-  // top->contents->idef.il[{F_BONDS,F_ANGLES,F_RBDIHS,F_LJ14}]
   top->contents->idef.il[F_BONDS].nr = 0;
   top->contents->idef.il[F_ANGLES].nr = 0;
   top->contents->idef.il[F_PDIHS].nr = 0;
-  top->contents->idef.il[F_RBDIHS].nr = 0;
   top->contents->idef.il[F_LJ14].nr = 0;
-  top->contents->idef.il[F_TABDIHS].nr = 0; // MRD 11032017
   for (i = 0; i < n_moltypes; ++i)
   {
     top->contents->idef.il[F_BONDS].nr += my_mols[i].n_mols * my_mols[i].bond_nr;
     top->contents->idef.il[F_ANGLES].nr += my_mols[i].n_mols * my_mols[i].angle_nr;
-    top->contents->idef.il[F_PDIHS].nr += my_mols[i].n_mols * my_mols[i].pdih_nr;
-    top->contents->idef.il[F_RBDIHS].nr += my_mols[i].n_mols * my_mols[i].rbdih_nr;
-    top->contents->idef.il[F_LJ14].nr += my_mols[i].n_mols * my_mols[i].lj14_nr;
-    top->contents->idef.il[F_TABDIHS].nr += my_mols[i].n_mols * my_mols[i].tabdih_nr; // MRD 11032017
+    top->contents->idef.il[F_PDIHS].nr += my_mols[i].n_mols * my_mols[i].dih_nr;
+    top->contents->idef.il[F_LJ14].nr += my_mols[i].n_mols * my_mols[i].imnb_nr;
   } 
   top->contents->idef.il[F_BONDS].iatoms = (tW_t_iatom *) ecalloc(top->contents->idef.il[F_BONDS].nr,sizeof(tW_t_iatom));
   top->contents->idef.il[F_ANGLES].iatoms = (tW_t_iatom *) ecalloc(top->contents->idef.il[F_ANGLES].nr,sizeof(tW_t_iatom));
   top->contents->idef.il[F_PDIHS].iatoms = (tW_t_iatom *) ecalloc(top->contents->idef.il[F_PDIHS].nr,sizeof(tW_t_iatom));
-  top->contents->idef.il[F_RBDIHS].iatoms = (tW_t_iatom *) ecalloc(top->contents->idef.il[F_RBDIHS].nr,sizeof(tW_t_iatom));
   top->contents->idef.il[F_LJ14].iatoms = (tW_t_iatom *) ecalloc(top->contents->idef.il[F_LJ14].nr,sizeof(tW_t_iatom));
-  top->contents->idef.il[F_TABDIHS].iatoms = (tW_t_iatom *) ecalloc(top->contents->idef.il[F_TABDIHS].nr,sizeof(tW_t_iatom)); // MRD 11032017
 
   prev_moltypes = 0;
-  int b_idx = 0, a_idx = 0, pd_idx = 0, rb_idx = 0, tabdih_idx = 0, lj_idx = 0;
+  int b_idx = 0, a_idx = 0, pd_idx = 0, imnb_idx = 0;
   for (i = 0; i < n_moltypes; ++i)
   {
     for (j = 0; j < my_mols[i].n_mols; ++j)
@@ -2422,53 +2413,27 @@ void pop_contents(tW_gmx_topology * top)
         top->contents->idef.il[F_ANGLES].iatoms[a_idx] = my_mols[i].angle_ijk[k][2] + j * my_mols[i].n_apm + prev_moltypes;
         ++a_idx;
       }
-      for (k = 0; k < my_mols[i].n_pdihs; ++k)
+      for (k = 0; k < my_mols[i].n_dihs; ++k)
       {
-	top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].pdih_types[k];
+	top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].dih_types[k];
 	++pd_idx;
-	top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].pdih_ijkl[k][0] + j * my_mols[i].n_apm + prev_moltypes;
+	top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].dih_ijkl[k][0] + j * my_mols[i].n_apm + prev_moltypes;
 	++pd_idx;
-        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].pdih_ijkl[k][1] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].dih_ijkl[k][1] + j * my_mols[i].n_apm + prev_moltypes;
         ++pd_idx;
-        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].pdih_ijkl[k][2] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].dih_ijkl[k][2] + j * my_mols[i].n_apm + prev_moltypes;
         ++pd_idx;
-        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].pdih_ijkl[k][3] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].dih_ijkl[k][3] + j * my_mols[i].n_apm + prev_moltypes;
         ++pd_idx;
       }
-      for (k = 0; k < my_mols[i].n_rbdihs; ++k)
+      for (k = 0; k < my_mols[i].n_imnbs; ++k)
       {
-	top->contents->idef.il[F_RBDIHS].iatoms[rb_idx] = my_mols[i].rbdih_types[k];
-	++rb_idx;
-	top->contents->idef.il[F_RBDIHS].iatoms[rb_idx] = my_mols[i].rbdih_ijkl[k][0] + j * my_mols[i].n_apm + prev_moltypes;
-        ++rb_idx;
-        top->contents->idef.il[F_RBDIHS].iatoms[rb_idx] = my_mols[i].rbdih_ijkl[k][1] + j * my_mols[i].n_apm + prev_moltypes;
-        ++rb_idx;
-        top->contents->idef.il[F_RBDIHS].iatoms[rb_idx] = my_mols[i].rbdih_ijkl[k][2] + j * my_mols[i].n_apm + prev_moltypes;
-        ++rb_idx;
-        top->contents->idef.il[F_RBDIHS].iatoms[rb_idx] = my_mols[i].rbdih_ijkl[k][3] + j * my_mols[i].n_apm + prev_moltypes;
-        ++rb_idx;
-      }
-      for (k = 0; k < my_mols[i].n_tabdihs; ++k) // MRD 11032017
-      {
-	top->contents->idef.il[F_TABDIHS].iatoms[tabdih_idx] = my_mols[i].tabdih_types[k];
-	++tabdih_idx;
-        top->contents->idef.il[F_TABDIHS].iatoms[tabdih_idx] = my_mols[i].tabdih_ijkl[k][0] + j * my_mols[i].n_apm + prev_moltypes;
-        ++tabdih_idx;
-        top->contents->idef.il[F_TABDIHS].iatoms[tabdih_idx] = my_mols[i].tabdih_ijkl[k][1] + j * my_mols[i].n_apm + prev_moltypes;
-        ++tabdih_idx;
-        top->contents->idef.il[F_TABDIHS].iatoms[tabdih_idx] = my_mols[i].tabdih_ijkl[k][2] + j * my_mols[i].n_apm + prev_moltypes;
-        ++tabdih_idx;
-        top->contents->idef.il[F_TABDIHS].iatoms[tabdih_idx] = my_mols[i].tabdih_ijkl[k][3] + j * my_mols[i].n_apm + prev_moltypes;
-        ++tabdih_idx;
-      }  // MRD 11032017
-      for (k = 0; k < my_mols[i].n_lj14s; ++k)
-      {
-        top->contents->idef.il[F_LJ14].iatoms[lj_idx] = my_mols[i].lj14_types[k];
-	++lj_idx;
-        top->contents->idef.il[F_LJ14].iatoms[lj_idx] = my_mols[i].lj14_ij[k][0] + j * my_mols[i].n_apm + prev_moltypes;
-        ++lj_idx;
-        top->contents->idef.il[F_LJ14].iatoms[lj_idx] = my_mols[i].lj14_ij[k][1] + j * my_mols[i].n_apm + prev_moltypes;
-        ++lj_idx;
+        top->contents->idef.il[F_LJ14].iatoms[imnb_idx] = my_mols[i].imnb_types[k];
+        ++imnb_idx;
+        top->contents->idef.il[F_LJ14].iatoms[imnb_idx] = my_mols[i].imnb_ij[k][0] + j * my_mols[i].n_apm + prev_moltypes;
+        ++imnb_idx;
+        top->contents->idef.il[F_LJ14].iatoms[imnb_idx] = my_mols[i].imnb_ij[k][1] + j * my_mols[i].n_apm + prev_moltypes;
+        ++imnb_idx;
       }
     }
     prev_moltypes = my_mols[i].n_mols * my_mols[i].n_apm;
@@ -2501,8 +2466,8 @@ void find_line_in_file(FILE *fp, const char * target, char * ret_line)
       }
       else
       {
-	fprintf(stderr,"WARNING: Reached end of file and was unable to find target: %s\n",target);
-	fprintf(stderr,"\tRewinding file and trying again incase target was passed previously\n");
+//	fprintf(stderr,"WARNING: Reached end of file and was unable to find target: %s\n",target);
+//	fprintf(stderr,"\tRewinding file and trying again incase target was passed previously\n");
         rewind(fp);
 	rew_flag = TRUE;
       }
@@ -2527,34 +2492,60 @@ bool read_tpr_dump(tW_word fnm, tW_gmx_topology *top)
   int i, j, k, l, let_idx;
   float fudgeQQ;
   tW_word inp_word;
-  
+
+  tW_line *header_lines; // topology: thru ffparams:
+  int n_header_lines = 0;  
+
   // top->contents->name is the first line under topology:
 
   // skip to topology:
   while (strstr(inp_line,"topology:")==NULL) { get_next_line(fp,inp_line); }
+  
+  while (strstr(inp_line,"ffparams:")==NULL) { get_next_line(fp,inp_line); ++n_header_lines; }
+  --n_header_lines; // to exclude ffparams:
+  // got number of "header lines"
 
-  get_next_line(fp,inp_line);
-  if (strstr(inp_line,"name") == NULL) { find_line_in_file(fp,"name",ret_line); strcpy(inp_line,ret_line); }
-  test_sscanf = sscanf(inp_line," name=\"%s\" ",&inp_word);
-  if (test_sscanf != 1)         
-  { 
+  header_lines = (tW_line *) ecalloc(n_header_lines, sizeof(tW_line)); 
+
+  rewind(fp);
+  while(strstr(inp_line,"topology:")==NULL) { get_next_line(fp,inp_line); }
+  
+  for (i = 0; i < n_header_lines; ++i)
+  {
+    get_next_line(fp,header_lines[i]);
+  }
+  
+  int LINE_IDX = 0;
+  // First line is "always" (for now...) name="TOPOLOGY_NAME"
+  if (strstr(header_lines[LINE_IDX],"name=\"") == NULL)
+  {
+    fprintf(stderr,"ERROR: first line following \"topology:\" is no longer name=\n");
+    fprintf(stderr,"\tlikely this is due to a new version of GROMACS.\n");
+    fprintf(stderr,"\tplease open an issue on github to alert us.\n");
+    fprintf(stderr,"\tlet us know which version of gromacs you used to get this issue\n");
+    exit(1);
+  }
+  test_sscanf = sscanf(header_lines[LINE_IDX]," name=\"%s ",&inp_word);
+  if (test_sscanf != 1)
+  {
     fprintf(stderr,"ERROR: expected name to be first line after topology:\n");
     fprintf(stderr,"\tline: %s",inp_line);
-    exit(1);                    
-  } 
-
-  elim_char(inp_word,'"');  
-
-//  top->contents->name = (char **) calloc(1,sizeof(char *));
-//  top->contents->name[0] = (char *) calloc(50,sizeof(char));
-//  strcpy(*(top->contents->name),inp_word);
-
+    exit(1);  
+  }
+  elim_char(inp_word,'"');
   strcpy(top->contents->name,inp_word);
+  ++LINE_IDX;
 
-  get_next_line(fp,inp_line);
-  if (strstr(inp_line,"#atoms") == NULL) { find_line_in_file(fp,"#atoms",ret_line);  strcpy(inp_line,ret_line); }
-  test_sscanf = sscanf(inp_line," #atoms = %d ",&n_atoms);
-
+  // Second line is "always" #atoms = XXXXX
+  if (strstr(header_lines[LINE_IDX],"#atoms") == NULL)
+  {
+    fprintf(stderr,"ERROR: second line following \"topology:\" is no longer #atoms=\n");
+    fprintf(stderr,"\tlikely this is due to a new version of GROMACS.\n");
+    fprintf(stderr,"\tplease open an issue on github to alert us.\n");
+    fprintf(stderr,"\tlet us know which version of gromacs you used to get this issue\n");
+    exit(1);
+  }
+  test_sscanf = sscanf(header_lines[LINE_IDX]," #atoms = %d ",&n_atoms);
   if (test_sscanf != 1)
   {
     fprintf(stderr,"ERROR: expected #atoms to be second line after topology:\n");
@@ -2562,116 +2553,67 @@ bool read_tpr_dump(tW_word fnm, tW_gmx_topology *top)
     exit(1);
   }  
   top->contents->atoms.nr = n_atoms;
+  ++LINE_IDX;
 
-  get_next_line(fp,inp_line);
-  if (strstr(inp_line,"#molblock") != NULL)
-  { // GMX 5.1.4 dumps #molblock here!
-    test_sscanf = sscanf(inp_line," #molblock = %d ",&n_molblocks);
-    molblock_lines = (tW_line *) ecalloc(6*n_molblocks,sizeof(tW_line));
-    for (i = 0; i < n_molblocks; ++i)
+  if (strstr(header_lines[LINE_IDX],"#molblock") != NULL) // this is present in 5.1.4 and later, not in 4.5.3
+  {
+    test_sscanf = sscanf(header_lines[LINE_IDX]," #molblock = %d ",&n_molblocks);
+    if (test_sscanf != 1)
     {
-      for (j = 0; j < 6; ++j)
+      fprintf(stderr,"ERROR: unable to read n_molblocks from line: %s",header_lines[LINE_IDX]);
+      fprintf(stderr,"\tline should be:   #molblock          = X\n");
+      exit(1);
+    }
+  }
+  else // have to get number of molblocks another way. do it based on how many times we find molblock (X):
+  {
+    n_molblocks = 0;
+    for (i = LINE_IDX; i < n_header_lines; ++i)
+    {
+      if (strstr(header_lines[i],"molblock (") != NULL)
       {
-        get_next_line(fp,molblock_lines[6 * i + j]);
+        ++n_molblocks;
       }
     }
-    get_next_line(fp,inp_line); // Should be bIntermolecularInteractions
-    get_next_line(fp,inp_line); // Should be ffparams:
   }
-  else
-  {
-    molblock_lines = (tW_line *) ecalloc(6,sizeof(tW_line));
-    while (strstr(inp_line,"ffparams") == NULL)
-    {
-      ++n_molblocks;
-      molblock_lines = (tW_line *) erealloc((void *) molblock_lines,6*n_molblocks*sizeof(tW_line));
-      strcpy(molblock_lines[(n_molblocks-1) * 6],inp_line);
-      get_next_line(fp,molblock_lines[(n_molblocks-1)*6 + 1]);
-      get_next_line(fp,molblock_lines[(n_molblocks-1)*6 + 2]);
-      get_next_line(fp,molblock_lines[(n_molblocks-1)*6 + 3]);
-      get_next_line(fp,molblock_lines[(n_molblocks-1)*6 + 4]);
-      get_next_line(fp,molblock_lines[(n_molblocks-1)*6 + 5]);
-      get_next_line(fp,inp_line);
-    }
-  }
-  if (strstr(inp_line,"ffparams") == NULL) { find_line_in_file(fp,"ffparams",ret_line); strcpy(inp_line,ret_line);}
 
-  //Now that I have all the molblock info, I need to parse out what's contained in it
-  tW_word *mol_names;
-  int *n_molecules, *n_apm;
+  // Have n_molblocks now.
+  // next I need to get the moltype names and the number of molecules.
+  // I used to get #atoms_mol here as well, but as of 2019.4 (maybe a little earlier)
+  // they don't give that to us here any more.
+  // We'll have to find it a different way for 2019.4, and we might as well find it
+  // the new way for older versions as well.
+
 
   top->contents->atoms.nres = 0;
   n_atoms = 0;
 
   top->molecules = (tW_molecule *) ecalloc(n_molblocks, sizeof(tW_molecule));
-
-  tW_molecule *my_mols;
-  my_mols = top->molecules;
-
+  tW_molecule *my_mols = top->molecules;
   top->contents->mols.nr = n_molblocks;
-
-  mol_names = (tW_word *) ecalloc(n_molblocks,sizeof(tW_word));
-  n_molecules = (int *) ecalloc(n_molblocks,sizeof(int));
-  n_apm = (int *) ecalloc(n_molblocks,sizeof(int));
-  
+   
+// need to get 
+// my_mols[i].molname, my_mols[i].n_mols, 
+// used to get
+// my_mols[i].n_apm;
   for (i = 0; i < n_molblocks; ++i)
   {
-
-    test_sscanf = sscanf(molblock_lines[6 * i + 1]," moltype = %d \"%s\" ",&inp_int,&inp_word);
-    if (test_sscanf != 2) 
-    {
-      fprintf(stderr,"ERROR: unable to read expected 2 arguments from line\n");
-      fprintf(stderr,"\tmoltype#, name\n");
-      fprintf(stderr,"%s",molblock_lines[6*i+1]);
-      exit(1);
-    }
-    if (inp_int != i) { fprintf(stderr,"moltype: %d is listed in position: %d\n",inp_int,i); }
-
+    tW_word mbhead;
+    sprintf(mbhead,"molblock (%d):",i);
+    while (strstr(header_lines[LINE_IDX],mbhead) == NULL) { ++LINE_IDX; }
+    ++LINE_IDX;
+    test_sscanf = sscanf(header_lines[LINE_IDX]," moltype = %d \"%s",&inp_int, &inp_word);
     elim_char(inp_word,'"');
     strcpy(my_mols[i].molname,inp_word);
-
-    test_sscanf = sscanf(molblock_lines[6 * i + 2]," #molecules = %d ",&inp_int);
-    if (test_sscanf != 1) 
-    {
-      fprintf(stderr,"ERROR: unable to read expected 1 argument from line\n");
-      fprintf(stderr,"\t#molecules\n");
-      fprintf(stderr,"%s",molblock_lines[6*i+2]);
-      exit(1);
-    }
+    ++LINE_IDX;
+    test_sscanf = sscanf(header_lines[LINE_IDX]," #molecules = %d ",&inp_int);
     my_mols[i].n_mols = inp_int;
-
-    top->contents->atoms.nres += inp_int;
-
-    test_sscanf = sscanf(molblock_lines[6 * i + 3]," #atoms_mol = %d ",&inp_int);
-    if (test_sscanf != 1) 
-    {
-      fprintf(stderr,"ERROR: unable to read expected 1 argument from line\n");
-      fprintf(stderr,"\t#atoms_mol\n");
-      fprintf(stderr,"%s",molblock_lines[6*i+3]);
-      exit(1);
-    }
-    my_mols[i].n_apm = inp_int;
-
-    my_mols[i].type_ids = (int *) ecalloc(inp_int,sizeof(int));
-    my_mols[i].atom_names = (tW_word *) ecalloc(inp_int,sizeof(tW_word));
-    my_mols[i].atom_types = (tW_word *) ecalloc(inp_int,sizeof(tW_word));
-    my_mols[i].atom_Btypes = (tW_word *) ecalloc(inp_int,sizeof(tW_word));
-    my_mols[i].resname = (tW_word *) ecalloc(inp_int,sizeof(tW_word));
-    my_mols[i].m = (double *) ecalloc(inp_int,sizeof(double));
-    my_mols[i].q = (double *) ecalloc(inp_int,sizeof(double));
-    my_mols[i].residx = (int *) ecalloc(inp_int,sizeof(int));
-
-    n_atoms += my_mols[i].n_mols * my_mols[i].n_apm;
-  } 
-  if (n_atoms != top->contents->atoms.nr)
-  {
-    fprintf(stderr,"WARNING: topology is supposed to contain %d atoms\n",top->contents->atoms.nr);
-    for (i = 0; i < n_molblocks; ++i)
-    {
-      fprintf(stderr,"\ttype %d: %d mol x %d at_per_mol = %d\n",i,my_mols[i].n_mols,my_mols[i].n_apm,my_mols[i].n_mols * my_mols[i].n_apm);
-    }
-    fprintf(stderr,"Totals %d atoms from molblocks\n",n_atoms);
   }
+
+
+  // done with molblock stuff
+  get_next_line(fp,inp_line);
+  if (strstr(inp_line,"ffparams") == NULL) { find_line_in_file(fp,"ffparams",ret_line); strcpy(inp_line,ret_line);}
 
   get_next_line(fp,inp_line);//atnr
   if (strstr(inp_line,"atnr") == NULL) { find_line_in_file(fp,"atnr",ret_line); strcpy(inp_line,ret_line); }
@@ -2720,11 +2662,26 @@ bool read_tpr_dump(tW_word fnm, tW_gmx_topology *top)
     test_sscanf = sscanf(inp_line," name=\"%s\" ",&inp_word);
     elim_char(inp_word,'"');
     get_moltype_info(fp,&(my_mols[n_moltypes-1]),&inp_line);
+    
+    n_atoms += my_mols[n_moltypes-1].n_apm * my_mols[n_moltypes-1].n_mols;
   }
+
   if (n_moltypes != n_molblocks)
   {
     fprintf(stderr,"WARNING: n_moltypes = %d   but n_molblocks = %d (they should be equal)\n",n_moltypes, n_molblocks);
   }
+
+  if (n_atoms != top->contents->atoms.nr)
+  {
+    fprintf(stderr,"WARNING: topology is supposed to contain %d atoms\n",top->contents->atoms.nr);
+    for (i = 0; i < n_molblocks; ++i)
+    {
+      tW_molecule *mol = &(top->molecules[i]);
+      fprintf(stderr,"\ttype %d: %d mol x %d at_per_mol = %d\n",i,mol->n_mols,mol->n_apm,mol->n_mols * mol->n_apm);
+    }
+    fprintf(stderr,"Totals %d atoms from molblocks\n",n_atoms);
+  }
+
 
   fclose(fp);
 
@@ -3319,10 +3276,21 @@ void write_bocs_top(tW_word fnm, tW_gmx_topology *top)
   fprintf(fp,"%d %f\n\n",top->contents->idef.atnr,top->contents->idef.fudgeQQ);
   
   fprintf(fp,"[moltypes] %d\n",top->contents->mols.nr);
-  fprintf(fp,"!ind \tname\tn_mols\tn_apm\tn_res\tn_cgs\texcls_nr \texcls_nra \tbond_nr \tangle_nr \tpdih_nr \trbdih_nr \tabdih_nr \tlj14_nr\n");
+  fprintf(fp,"!ind \tname\tn_mols\tn_apm\tn_res\tn_cgs\texcls_nr \texcls_nra \tbond_nr \tangle_nr \tdih_nr   \timnb_nr\n");
   for (i = 0; i < top->contents->mols.nr; ++i)
   {
-    fprintf(fp,"%d \t%s\t%d\t%d\t%d\t%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",i,top->molecules[i].molname,top->molecules[i].n_mols,top->molecules[i].n_apm,top->molecules[i].n_res,top->molecules[i].n_cg,top->molecules[i].n_excls,top->molecules[i].n_exclsa,top->molecules[i].bond_nr,top->molecules[i].angle_nr,top->molecules[i].pdih_nr,top->molecules[i].rbdih_nr,top->molecules[i].tabdih_nr,top->molecules[i].lj14_nr);
+    fprintf(fp,"%d \t%s\t%d\t%d\t%d\t%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\n",i,
+		top->molecules[i].molname,
+		top->molecules[i].n_mols,
+		top->molecules[i].n_apm,
+		top->molecules[i].n_res,
+		top->molecules[i].n_cg,
+		top->molecules[i].n_excls,
+		top->molecules[i].n_exclsa,
+		top->molecules[i].bond_nr,
+		top->molecules[i].angle_nr,
+		top->molecules[i].dih_nr,
+                top->molecules[i].imnb_nr);
     if (top->molecules[i].n_res > 0)
     {
       fprintf(fp,"  [res]\n");
@@ -3355,38 +3323,21 @@ void write_bocs_top(tW_word fnm, tW_gmx_topology *top)
 	fprintf(fp,"  %4d  %4d  %3d  %3d  %3d\n",j,top->molecules[i].angle_types[j],top->molecules[i].angle_ijk[j][0],top->molecules[i].angle_ijk[j][1],top->molecules[i].angle_ijk[j][2]);
       }
     }
-    if (top->molecules[i].pdih_nr > 0)
+    if (top->molecules[i].dih_nr > 0)
     {
-      fprintf(fp,"  [pdih]\n  !%3s  %4s  %3s  %3s  %3s  %3s\n","idx","type","i","j","k","l");
-      for (j = 0; j < top->molecules[i].n_pdihs; ++j)
+      fprintf(fp,"  [dih]\n  !%3s  %4s  %3s  %3s  %3s  %3s\n","idx","type","i","j","k","l");
+      for (j = 0; j < top->molecules[i].n_dihs; ++j)
       {
-	fprintf(fp,"  %4d  %4d  %3d  %3d  %3d  %3d\n",j,top->molecules[i].pdih_types[j],top->molecules[i].pdih_ijkl[j][0],top->molecules[i].pdih_ijkl[j][1],top->molecules[i].pdih_ijkl[j][2],top->molecules[i].pdih_ijkl[j][3]);
+	fprintf(fp,"  %4d  %4d  %3d  %3d  %3d  %3d\n",j,top->molecules[i].dih_types[j],top->molecules[i].dih_ijkl[j][0],top->molecules[i].dih_ijkl[j][1],top->molecules[i].dih_ijkl[j][2],top->molecules[i].dih_ijkl[j][3]);
       }
     }
-    if (top->molecules[i].rbdih_nr > 0)
+    if (top->molecules[i].imnb_nr > 0)
     {
-      fprintf(fp,"  [rbdih]\n  !%3s  %4s  %3s  %3s  %3s  %3s\n","idx","type","i","j","k","l");
-      for (j = 0; j < top->molecules[i].n_rbdihs; ++j)
+      fprintf(fp,"  [imnb]\n  !%3s  %4s  %3s  %3s\n","idx","type","i","j");
+      for (j = 0; j < top->molecules[i].n_imnbs; ++j)
       {
-	fprintf(fp,"  %4d  %4d  %3d  %3d  %3d  %3d\n",j,top->molecules[i].rbdih_types[j],top->molecules[i].rbdih_ijkl[j][0],top->molecules[i].rbdih_ijkl[j][1],top->molecules[i].rbdih_ijkl[j][2],top->molecules[i].rbdih_ijkl[j][3]);
+        fprintf(fp,"  %4d  %4d  %3d  %3d\n",j,top->molecules[i].imnb_types[j],top->molecules[i].imnb_ij[j][0],top->molecules[i].imnb_ij[j][1]);
       }
-    }
-    if (top->molecules[i].tabdih_nr > 0)
-    {
-      fprintf(fp,"  [tabdih]\n  !%3s  %4s  %3s  %3s  %3s  %3s\n","idx","type","i","j","k","l");
-      for (j = 0; j < top->molecules[i].n_tabdihs; ++j)
-      {
-	fprintf(fp,"  %4d  %4d  %3d  %3d  %3d  %3d\n",j,top->molecules[i].tabdih_types[j],top->molecules[i].tabdih_ijkl[j][0],top->molecules[i].tabdih_ijkl[j][1],top->molecules[i].tabdih_ijkl[j][2],top->molecules[i].tabdih_ijkl[j][3]);
-      }
-    }
-    if (top->molecules[i].lj14_nr > 0)
-    {
-      fprintf(fp,"  [lj14]\n  !%3s  %4s  %3s  %3s\n","idx","type","i","j");
-      for (j = 0; j < top->molecules[i].n_lj14s; ++j)
-      {
-	fprintf(fp,"  %4d  %4d  %3d  %3d\n",j,top->molecules[i].lj14_types[j],top->molecules[i].lj14_ij[j][0],top->molecules[i].lj14_ij[j][1]);
-      }
-
     }
   }
 
@@ -3436,7 +3387,7 @@ read_bocs_top(): The function that reads a .btp file, and populates top accordin
 bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
 {
   int test_sscanf, i, j, k, inp_int, i1, i2, i3, i4;
-  int n_mt, ind, n_mol, n_apm, n_res, n_cgs, excls_nr, excls_nra, bond_nr, angle_nr, pdih_nr, rbdih_nr, tabdih_nr, lj14_nr, n_epa;
+  int n_mt, ind, n_mol, n_apm, n_res, n_cgs, excls_nr, excls_nra, bond_nr, angle_nr, dih_nr, imnb_nr, n_epa;
   float inp_flt1, inp_flt2;
   tW_word inp_word, name;
   tW_line inp_line;
@@ -3540,21 +3491,35 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
 
   top->contents->mols.nr = n_mt; 
   top->molecules = (tW_molecule *) ecalloc(n_mt, sizeof(tW_molecule));
-  
-  int n_total_pdih = 0;
-  int n_total_tabdih = 0;
 
+/* MRD 11.7.2019
+ * Due to the change around the 2019.4 new dump tpr format,
+ * We now lump all dihedrals together. we used to have pdih, rbdih, and tabdih separate.
+ * I'm going to check to see if we find 14 numbers, and if so, print a loud warning
+ * that the .btp file is likely OLD and that they should regenerate it.
+ */
+
+  
   for (i = 0; i < n_mt; ++i)
   {
     tW_molecule *MM;
     MM = &(top->molecules[i]);
     get_next_line(fp,inp_line);
     strcpy(name,"N/A");
-    ind = n_mol = n_apm = n_res = n_cgs = excls_nr = excls_nra = bond_nr = angle_nr = pdih_nr = rbdih_nr = tabdih_nr = lj14_nr = -1;
-    test_sscanf = sscanf(inp_line,"%d %s %d %d %d %d %d %d %d %d %d %d %d %d ",&ind,&name,&n_mol,&n_apm,&n_res,&n_cgs,&excls_nr,&excls_nra,&bond_nr,&angle_nr,&pdih_nr,&rbdih_nr,&tabdih_nr,&lj14_nr);
-    if (test_sscanf != 14) 
+    ind = n_mol = n_apm = n_res = n_cgs = excls_nr = excls_nra = bond_nr = angle_nr = dih_nr = imnb_nr= -1;
+    int testn1, testn2;
+    test_sscanf = sscanf(inp_line,"%d %s %d %d %d %d %d %d %d %d %d %d %d %d ",&ind,&name,&n_mol,&n_apm,&n_res,&n_cgs,&excls_nr,&excls_nra,&bond_nr,&angle_nr,&dih_nr,&imnb_nr,&testn1,&testn2);
+    if (test_sscanf == 14)
+    {
+      fprintf(stderr,"WARNING: We read 14 items from a moltypes line.\n");
+      fprintf(stderr,"\tStarting on Nov 7, 2019, the .btp format changed. We now lump all dihedrals together in one,\n");
+      fprintf(stderr,"\twhereas older .btp files will have separate numbers for pdih, rbdih, and tabdih.\n");
+      fprintf(stderr,"\tPlease re-translate the dumped .tpr file into a new .btp file.\n");
+      exit(EXIT_FAILURE);
+    }
+    if (test_sscanf != 12) 
     { 
-      fprintf(stderr,"ERROR: Found %s out of expected 14 moltype properties\n",test_sscanf);
+      fprintf(stderr,"ERROR: Found %d out of expected 12 moltype properties\n",test_sscanf);
       fprintf(stderr,"\t%10s: %s\n","line",inp_line);
       fprintf(stderr,"\t%10s: %d\n","ind",ind);
       fprintf(stderr,"\t%10s: %s\n","name",name);
@@ -3566,22 +3531,11 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
       fprintf(stderr,"\t%10s: %d\n","excls_nra",excls_nra);
       fprintf(stderr,"\t%10s: %d\n","bond_nr",bond_nr);
       fprintf(stderr,"\t%10s: %d\n","angle_nr",angle_nr);
-      fprintf(stderr,"\t%10s: %d\n","pdih_nr",pdih_nr);
-      fprintf(stderr,"\t%10s: %d\n","rbdih_nr",rbdih_nr);
-      fprintf(stderr,"\t%10s: %d\n","tabdih_nr",tabdih_nr);
-      fprintf(stderr,"\t%10s: %d\n","lj14_nr",lj14_nr);
+      fprintf(stderr,"\t%10s: %d\n","dih_nr",dih_nr);
+      fprintf(stderr,"\t%10s: %d\n","imnb_nr",imnb_nr);
       fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__); 
       exit(1); 
     }
-
-    if (rbdih_nr > 0)
-    {
-      fprintf(stderr,"ERROR: we do not support RBDIH dihedral angles. please change all dihedrals to proper or tabulated\n");
-      exit(EXIT_FAILURE);
-    }
-
-    n_total_pdih += pdih_nr;
-    n_total_tabdih += tabdih_nr;
 
 /* Allocate memory or set values for all the elements of the tW_molecule data structure */
     strcpy(MM->molname,name);
@@ -3618,29 +3572,17 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
     MM->angle_ijk = (int **) ecalloc(MM->n_angles,sizeof(int *));
     for (j = 0; j < MM->n_angles; ++j) { MM->angle_ijk[j] = (int *) ecalloc(3,sizeof(int)); }
 
-    MM->pdih_nr = pdih_nr;
-    MM->n_pdihs = pdih_nr / PDIH_DIV;
-    MM->pdih_types = (int *) ecalloc(MM->n_pdihs,sizeof(int));
-    MM->pdih_ijkl = (int **) ecalloc(MM->n_pdihs,sizeof(int *));
-    for (j = 0; j < MM->n_pdihs; ++j) { MM->pdih_ijkl[j] = (int *) ecalloc(4,sizeof(int)); }
+    MM->dih_nr = dih_nr;
+    MM->n_dihs = dih_nr / DIH_DIV; 
+    MM->dih_types = (int *) ecalloc(MM->n_dihs,sizeof(int));
+    MM->dih_ijkl = (int **) ecalloc(MM->n_dihs,sizeof(int *));
+    for (j = 0; j < MM->n_dihs; ++j) { MM->dih_ijkl[j] = (int *) ecalloc(4,sizeof(int)); }
 
-    MM->rbdih_nr = rbdih_nr;
-    MM->n_rbdihs = rbdih_nr / RBDIH_DIV;
-    MM->rbdih_types = (int *) ecalloc(MM->n_rbdihs,sizeof(int));
-    MM->rbdih_ijkl = (int **) ecalloc(MM->n_rbdihs,sizeof(int *));
-    for (j = 0; j < MM->n_rbdihs; ++j) { MM->rbdih_ijkl[j] = (int *) ecalloc(4,sizeof(int)); }
-
-    MM->tabdih_nr = tabdih_nr;
-    MM->n_tabdihs = tabdih_nr / TABDIH_DIV;
-    MM->tabdih_types = (int *) ecalloc(MM->n_tabdihs,sizeof(int));
-    MM->tabdih_ijkl = (int **) ecalloc(MM->n_tabdihs,sizeof(int *));
-    for (j = 0; j < MM->n_tabdihs; ++j) { MM->tabdih_ijkl[j] = (int *) ecalloc(4,sizeof(int)); }
-
-    MM->lj14_nr = lj14_nr;
-    MM->n_lj14s = lj14_nr / LJ14_DIV;
-    MM->lj14_types = (int *) ecalloc(MM->n_lj14s,sizeof(int));
-    MM->lj14_ij = (int **) ecalloc(MM->n_lj14s,sizeof(int *));
-    for (j = 0; j < MM->n_lj14s; ++j) { MM->lj14_ij[j] = (int *) ecalloc(2,sizeof(int)); }
+    MM->imnb_nr = imnb_nr;
+    MM->n_imnbs = imnb_nr / IMNB_DIV;
+    MM->imnb_types = (int *) ecalloc(MM->n_imnbs,sizeof(int));
+    MM->imnb_ij = (int **) ecalloc(MM->n_imnbs,sizeof(int *));
+    for (j = 0; j < MM->n_imnbs; ++j) { MM->imnb_ij[j] = (int *) ecalloc(2,sizeof(int)); }
 
 /* If expected, read this molecule type's [res] directive */
     if (n_res > 0)
@@ -3733,117 +3675,56 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
       }
     }
 
-/* If expected, read this molecule type's [pdih] directive */
-    if (pdih_nr > 0)
+/* If expected, read this molecule type's [dih] directive */
+    if (dih_nr > 0)
     {
       get_next_line(fp,inp_line);
-      test_line(inp_line,"[pdih]",TRUE,"ERROR: unable to find [pdih]\n");
-      for (j = 0; j < MM->n_pdihs; ++j)
+      test_line(inp_line,"[dih]",TRUE,"ERROR: unable to find [dih]\n");
+      for (j = 0; j < MM->n_dihs; ++j)
       {
         get_next_line(fp,inp_line);
 	ind = inp_int = i1 = i2 = i3 = i4 = -1;
         test_sscanf = sscanf(inp_line," %d %d %d %d %d %d ",&ind, &inp_int, &i1, &i2, &i3, &i4);
         if (test_sscanf != 6) 
 	{ 
-	  fprintf(stderr,"ERROR: expected to find idx type i j k l for pdih %d\n",j+1);
+	  fprintf(stderr,"ERROR: expected to find idx type i j k l for dih %d\n",j+1);
           fprintf(stderr,"\tline: %s",inp_line);
           fprintf(stderr,"\t idx: %d\n\ttype: %d\n\t   i: %d\n\t   j: %d\n\t   k: %d\n\t   l: %d\n",
 									ind,inp_int,i1,i2,i3,i4);
 	  fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__); 
 	  exit(1); 
 	}
-        MM->pdih_types[j] = inp_int;
-        MM->pdih_ijkl[j][0] = i1;
-        MM->pdih_ijkl[j][1] = i2;
-        MM->pdih_ijkl[j][2] = i3;
-        MM->pdih_ijkl[j][3] = i4;
+        MM->dih_types[j] = inp_int;
+        MM->dih_ijkl[j][0] = i1;
+        MM->dih_ijkl[j][1] = i2;
+        MM->dih_ijkl[j][2] = i3;
+        MM->dih_ijkl[j][3] = i4;
       }
     }
 
-/* If expected, read this molecule type's [rbdih] directive */
-    if (rbdih_nr > 0)
+/* If expected, read this molecule type's [imnb] directive */
+    if (imnb_nr > 0)
     {
       get_next_line(fp,inp_line);
-      test_line(inp_line,"[rbdih]",TRUE,"ERROR: unable to find [rbdih]\n");
-      for (j = 0; j < MM->n_rbdihs; ++j)
-      {
-        get_next_line(fp,inp_line);
-        ind = inp_int = i1 = i2 = i3 = i4 = -1;
-        test_sscanf = sscanf(inp_line," %d %d %d %d %d %d ",&ind, &inp_int, &i1, &i2, &i3, &i4);
-        if (test_sscanf != 6) 
-        { 
-          fprintf(stderr,"ERROR: expected to find idx type i j k l for rbdih %d\n",j+1);
-          fprintf(stderr,"\tline: %s",inp_line);
-          fprintf(stderr,"\t idx: %d\n\ttype: %d\n\t   i: %d\n\t   j: %d\n\t   k: %d\n\t   l: %d\n",
-                                                                        ind,inp_int,i1,i2,i3,i4);
-          fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__); 
-          exit(1); 
-        }
-        MM->rbdih_types[j] = inp_int;
-        MM->rbdih_ijkl[j][0] = i1;
-        MM->rbdih_ijkl[j][1] = i2;
-        MM->rbdih_ijkl[j][2] = i3;
-        MM->rbdih_ijkl[j][3] = i4;
-      }
-    }
-    
-/* If expected, read this molecule type's [tabdih] directive */
-    if (tabdih_nr > 0)
-    {
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"[tabdih]",TRUE,"ERROR: unable to find [tabdih]\n");
-      for (j = 0; j < MM->n_tabdihs; ++j)
-      {
-        get_next_line(fp,inp_line);
-        ind = inp_int = i1 = i2 = i3 = i4 = -1;
-        test_sscanf = sscanf(inp_line," %d %d %d %d %d %d ",&ind, &inp_int, &i1, &i2, &i3, &i4);
-        if (test_sscanf != 6)
-        { 
-          fprintf(stderr,"ERROR: expected to find idx type i j k l for tabdih %d\n",j+1);
-          fprintf(stderr,"\tline: %s",inp_line);
-          fprintf(stderr,"\t idx: %d\n\ttype: %d\n\t   i: %d\n\t   j: %d\n\t   k: %d\n\t   l: %d\n",
-                                                                        ind,inp_int,i1,i2,i3,i4);
-          fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__);
-          exit(1);
-        }
-        MM->tabdih_types[j] = inp_int;
-        MM->tabdih_ijkl[j][0] = i1;
-        MM->tabdih_ijkl[j][1] = i2;
-        MM->tabdih_ijkl[j][2] = i3;
-        MM->tabdih_ijkl[j][3] = i4;
-      }
-    }
-    
-/* If expected, read this molecule type's [lj14] directive */
-    if (lj14_nr > 0)
-    {
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"[lj14]",TRUE,"ERROR: unable to find [lj14]\n");
-      for (j = 0; j < MM->n_lj14s; ++j)
+      test_line(inp_line,"[imnb]",TRUE,"ERROR: unable to find [imnb]\n");
+      for (j = 0; j < MM->n_imnbs; ++j)
       {
         get_next_line(fp,inp_line);
         ind = inp_int = i1 = i2 = -1;
         test_sscanf = sscanf(inp_line," %d %d %d %d ",&ind, &inp_int, &i1, &i2);
-        if (test_sscanf != 4) 
-        { 
-          fprintf(stderr,"ERROR: expected to find idx type i j for lj14 %d\n",j+1);
+        if (test_sscanf != 4)
+        {
+          fprintf(stderr,"ERROR: expected to find idx type i j for imnb %d\n",j+1);
           fprintf(stderr,"\tline: %s",inp_line);
-          fprintf(stderr,"\t idx: %d\n\ttype: %d\n\t   i: %d\n\t   j: %d\n",ind,inp_int,i1,i2);
+          fprintf(stderr,"\t idx: %d\n\ttype: %d\n\t   i: %d\n\t   j:%d\n",ind,inp_int,i1,i2);
           fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__);
           exit(1);
         }
-        MM->lj14_types[j] = inp_int;
-        MM->lj14_ij[j][0] = i1;
-        MM->lj14_ij[j][1] = i2;
+        MM->imnb_types[j] = inp_int;
+        MM->imnb_ij[j][0] = i1;
+        MM->imnb_ij[j][1] = i2;
       }
     }
-  }
-
-  if ((n_total_pdih > 0) && (n_total_tabdih > 0))
-  {
-    fprintf(stderr,"ERROR: we found both proper dihedrals and tabulated dihedrals present!\n");
-    fprintf(stderr,"\t Please change all dihedrals to the same type\n");
-    exit(EXIT_FAILURE);
   }
 
 /*
@@ -3900,7 +3781,7 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
         tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
 	get_words_delim(inp_line," ",word_list);
         for (k = 0; k < n_words; ++k) { (top->molecules[i].excls[j][k]) = atoi(word_list[k]); }
-        free(word_list); 
+        efree(word_list); 
       }
     }
   }
@@ -5629,7 +5510,7 @@ void write_lammps_data(tW_gmx_trxframe *fr, tW_gmx_topology *top)
   {
     n_bonds += top->molecules[i].n_bonds * top->molecules[i].n_mols;
     n_angles += top->molecules[i].n_angles * top->molecules[i].n_mols;
-    n_dih += (top->molecules[i].n_pdihs + top->molecules[i].n_rbdihs + top->molecules[i].n_tabdihs) * top->molecules[i].n_mols;
+    n_dih += top->molecules[i].n_dihs * top->molecules[i].n_mols;
     for (j = 0; j < top->molecules[i].n_apm; ++j)
     {
       if (top->molecules[i].type_ids[j] + 1 > n_att ) { n_att = top->molecules[i].type_ids[j] + 1 ; }
@@ -5753,34 +5634,14 @@ void write_lammps_data(tW_gmx_trxframe *fr, tW_gmx_topology *top)
     for (mol_idx = 0; mol_idx < top->molecules[molt_idx].n_mols; ++mol_idx)
     {
 //reusing at_idx here instead of making dih_idx
-      for (at_idx = 0; at_idx < top->molecules[molt_idx].n_pdihs; ++at_idx)
+      for (at_idx = 0; at_idx < top->molecules[molt_idx].n_dihs; ++at_idx)
       {
         fprintf(fp,"%d %d %d %d %d %d\n",abs_at_idx+1,
-					 top->int_map[top->molecules[molt_idx].pdih_types[at_idx]],
-					 top->molecules[molt_idx].pdih_ijkl[at_idx][0] + n_prev_at + 1,
-					 top->molecules[molt_idx].pdih_ijkl[at_idx][1] + n_prev_at + 1,
-					 top->molecules[molt_idx].pdih_ijkl[at_idx][2] + n_prev_at + 1,
-					 top->molecules[molt_idx].pdih_ijkl[at_idx][3] + n_prev_at + 1);
-        ++abs_at_idx;
-      }
-      for (at_idx = 0; at_idx < top->molecules[molt_idx].n_rbdihs; ++at_idx)
-      {
-        fprintf(fp,"%d %d %d %d %d %d\n",abs_at_idx+1,
-                                         top->int_map[top->molecules[molt_idx].rbdih_types[at_idx]],
-                                         top->molecules[molt_idx].rbdih_ijkl[at_idx][0] + n_prev_at + 1,
-                                         top->molecules[molt_idx].rbdih_ijkl[at_idx][1] + n_prev_at + 1,
-                                         top->molecules[molt_idx].rbdih_ijkl[at_idx][2] + n_prev_at + 1,
-                                         top->molecules[molt_idx].rbdih_ijkl[at_idx][3] + n_prev_at + 1);
-        ++abs_at_idx;
-      }
-      for (at_idx = 0; at_idx < top->molecules[molt_idx].n_tabdihs; ++at_idx)
-      {
-        fprintf(fp,"%d %d %d %d %d %d\n",abs_at_idx+1,
-                                         top->int_map[top->molecules[molt_idx].tabdih_types[at_idx]],
-                                         top->molecules[molt_idx].tabdih_ijkl[at_idx][0] + n_prev_at + 1,
-                                         top->molecules[molt_idx].tabdih_ijkl[at_idx][1] + n_prev_at + 1,
-                                         top->molecules[molt_idx].tabdih_ijkl[at_idx][2] + n_prev_at + 1,
-                                         top->molecules[molt_idx].tabdih_ijkl[at_idx][3] + n_prev_at + 1);
+					 top->int_map[top->molecules[molt_idx].dih_types[at_idx]],
+					 top->molecules[molt_idx].dih_ijkl[at_idx][0] + n_prev_at + 1,
+					 top->molecules[molt_idx].dih_ijkl[at_idx][1] + n_prev_at + 1,
+					 top->molecules[molt_idx].dih_ijkl[at_idx][2] + n_prev_at + 1,
+					 top->molecules[molt_idx].dih_ijkl[at_idx][3] + n_prev_at + 1);
         ++abs_at_idx;
       }
       n_prev_at += top->molecules[molt_idx].n_apm;
@@ -5823,3 +5684,234 @@ void do_PBC(tW_gmx_trxframe *fr)
   }
 }
 
+
+/*
+ *
+ *
+/*
+  while (ret_flag == 1)
+  {
+    if (strstr(inp_line,"moltype") != NULL) { strcpy(*(ret_inp_line),inp_line); return; ret_flag = 0; }
+    else if (strstr(inp_line,"grp") != NULL) { strcpy(*(ret_inp_line),inp_line); return; ret_flag = 0; }
+    else if (strstr(inp_line,"Bond") != NULL) // This should be able to handle regular bonds and tabulated bonds (types 1 and 8), but not both in the same file.
+    {
+      if ((flags & flag_bonds) != 0) 
+      { 
+	fprintf(stderr,"ERROR: found section \"Bond:\" twice in moltype %s\n",mol->molname); 
+	exit(1); 
+      }
+      flags |= flag_bonds;
+      get_next_line(fp,inp_line); // nr: X   
+      test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
+      int n_bonds = inp_int / BOND_DIV;
+      mol->bond_nr = inp_int;
+      mol->n_bonds = n_bonds;
+      mol->bond_types = (int *) ecalloc(n_bonds, sizeof(int));
+      mol->bond_ij = (int **) ecalloc(n_bonds,sizeof(int *));
+      int bidx, btype, bidxi, bidxj;
+      tW_word inp_word;
+      get_next_line(fp,inp_line); // iatoms:
+      for (i = 0; i < n_bonds; ++i)
+      {
+        get_next_line(fp,inp_line); // idx type=X (BONDS) i j
+	test_line(inp_line,"BONDS",TRUE,"Expected to find BONDS");
+        test_sscanf = sscanf(inp_line, " %d type=%d %s %d %d ",&bidx, &btype, &inp_word, &bidxi, &bidxj);
+        mol->bond_ij[i] = (int *) ecalloc(2,sizeof(int));
+	mol->bond_types[i] = btype;
+	mol->bond_ij[i][0] = bidxi;
+	mol->bond_ij[i][1] = bidxj;
+      }      
+      get_next_line(fp,inp_line);
+      test_line(inp_line,"BONDS",FALSE,"Expected to be done finding BONDS");
+    }
+    else if (strstr(inp_line,"Angle") != NULL) // This should be able to handle regular angles and tabulated angles (types 1 and 8), but not both in the same file.
+    {
+      if ((flags & flag_angles) != 0) 
+      { 
+	fprintf(stderr,"ERROR: found section \"Angle:\" twice in moltype %s\n",mol->molname); 
+	fprintf(stderr,"\tflags: %d   flag_angles: %d\n",flags,flag_angles);
+	fprintf(stderr," flags & flag_angles: %d\n",flags & flag_angles);
+        fprintf(stderr," Please make sure that you only have one angle type (either 1=angle or 8=tab angle) in your top file\n");
+	exit(1); 
+      }
+      flags |= flag_angles;
+      get_next_line(fp,inp_line); // nr: X
+      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
+      int n_angles = inp_int / ANGLE_DIV;
+      mol->angle_nr = inp_int;
+      mol->n_angles = n_angles;
+      mol->angle_types = (int *) ecalloc(n_angles,sizeof(int));
+      mol->angle_ijk = (int **) ecalloc(n_angles,sizeof(int *));
+      int aidx, atype, aidxi, aidxj, aidxk;
+      tW_word inp_word;
+      get_next_line(fp,inp_line); // iatoms:
+      for (i = 0; i < n_angles; ++i)
+      {
+	get_next_line(fp,inp_line); // idx type=X (ANGLES) i j k
+	test_line(inp_line,"ANGLES",TRUE,"Expected to find ANGLES");
+        test_sscanf = sscanf(inp_line," %d type=%d %s %d %d %d ",&aidx, &atype, &inp_word, &aidxi, &aidxj, &aidxk);
+        mol->angle_ijk[i] = (int *) ecalloc(3,sizeof(int));
+	mol->angle_types[i] = atype;
+	mol->angle_ijk[i][0] = aidxi;
+        mol->angle_ijk[i][1] = aidxj;
+        mol->angle_ijk[i][2] = aidxk;
+      }
+      get_next_line(fp,inp_line);
+      test_line(inp_line,"ANGLES",FALSE,"Expected to be done finding ANGLES");
+    }
+    else if (strstr(inp_line,"Dih.") != NULL)
+    {
+      if ((flags & flag_pdihs) != 0) 
+      { 
+	fprintf(stderr,"ERROR: found section \"Dih.\" twice in moltype %s\n",mol->molname); 
+	fprintf(stderr,"\tflags: %d   flag_pdihs: %d\n",flags,flag_pdihs);
+	fprintf(stderr," flags & flag_pdihs: %d\n",flags & flag_pdihs);
+        fprintf(stderr,"Make sure you only have one type of dihedral (either 1=pdih or 8=tabdih) in your topology file\n");
+	exit(1); 
+      }
+      flags |= flag_pdihs;
+//      if ((flags & flag_tabdihs) != 0)
+//      {
+//        fprintf(stderr,"ERROR: we found section \"Tab. Dih.\" already, and now have found section \"Proper Dih.\"\n");
+//        fprintf(stderr,"you must have ALL dihedral angles in your topology one or the other \n");
+//        exit(EXIT_FAILURE);
+//      }
+      get_next_line(fp,inp_line); // nr: X
+      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
+      int n_pdih = inp_int / PDIH_DIV;
+      mol->pdih_nr = inp_int;
+      mol->n_pdihs = n_pdih;
+      mol->pdih_types = (int *) ecalloc(n_pdih,sizeof(int));
+      mol->pdih_ijkl = (int **) ecalloc(n_pdih,sizeof(int *));
+      int pdih_idx, pdih_type, pdi, pdj, pdk, pdl;
+      char dihtype[30];
+      get_next_line(fp,inp_line); // iatoms:
+      for (i = 0; i < n_pdih; ++i)
+      { 
+	get_next_line(fp,inp_line); // idx type=X (PDIHS) i j k l
+//	test_line(inp_line,"PDIHS",TRUE,"Expected to find PDIHS");
+        test_sscanf = sscanf(inp_line," %d type=%d %s %d %d %d %d ",&pdih_idx, &pdih_type, &(dihtype), &pdi, &pdj, &pdk, &pdl);
+        mol->pdih_ijkl[i] = (int *) ecalloc(4,sizeof(int));
+        mol->pdih_types[i] = pdih_type;
+        mol->pdih_ijkl[i][0] = pdi;
+        mol->pdih_ijkl[i][1] = pdj;
+        mol->pdih_ijkl[i][2] = pdk;
+        mol->pdih_ijkl[i][3] = pdl;
+      }
+      get_next_line(fp,inp_line);
+      test_line(inp_line,"PDIHS",FALSE,"Expected to be done finding PDIHS");
+      test_line(inp_line,"TABDIHS",FALSE,"Expected to be done finding TABDIHS");
+    }
+    else if (strstr(inp_line,"Ryckaert-Bell.") != NULL)
+    {
+      fprintf(stderr,"ERROR: we do not support RB dihedral angles.\n");
+      fprintf(stderr,"\tPlease change all RB dihedrals to either proper or tabulated\n");
+      exit(1);
+/*      if ((flags & flag_rbdihs) != 0) 
+      { 
+	fprintf(stderr,"ERROR: found section \"Ryckaert-Bell.:\" twice in moltype %s\n",mol->molname); 
+	exit(1); 
+      }
+      flags |= flag_rbdihs;
+      get_next_line(fp,inp_line); // nr: X
+      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
+      int n_rbdih = inp_int / RBDIH_DIV;
+      mol->rbdih_nr = inp_int;
+      mol->n_rbdihs = n_rbdih;
+      mol->rbdih_types = (int *) ecalloc(n_rbdih,sizeof(int));
+      mol->rbdih_ijkl = (int **) ecalloc(n_rbdih,sizeof(int *));
+      int rbidx, rbtype, rbidxi, rbidxj, rbidxk, rbidxl;
+      get_next_line(fp,inp_line); // iatoms:
+      for (i = 0; i < n_rbdih; ++i)
+      {
+        get_next_line(fp,inp_line); // idx type=X (RBDIHS) i j k l
+	test_line(inp_line,"RBDIHS",TRUE,"Expected to find RBDIHS");
+	test_sscanf = sscanf(inp_line," %d type=%d (RBDIHS) %d %d %d %d ",&rbidx, &rbtype, &rbidxi, &rbidxj, &rbidxk, &rbidxl);
+        mol->rbdih_ijkl[i] = (int *) ecalloc(4,sizeof(int));
+	mol->rbdih_types[i] = rbtype;
+	mol->rbdih_ijkl[i][0] = rbidxi;
+        mol->rbdih_ijkl[i][1] = rbidxj;
+        mol->rbdih_ijkl[i][2] = rbidxk;
+        mol->rbdih_ijkl[i][3] = rbidxl;
+      }
+      get_next_line(fp,inp_line);
+      test_line(inp_line,"RBDIHS",FALSE,"Expected to be done finding RBDIHS");
+    }
+/*    else if (strstr(inp_line,"Tab. Dih.") != NULL)
+    {
+      if ((flags & flag_tabdihs) != 0)
+      {
+        fprintf(stderr,"ERROR: found section \"Tab. Dih.:\" twice in moltype %s\n",mol->molname);
+        exit(1);
+      }
+      flags |= flag_tabdihs;
+      if ((flags & flag_pdihs) != 0)
+      {
+        fprintf(stderr,"ERROR: we found section \"Proper Dih.\" previously, and are now in section \"Tab Dih.\" \n");
+        fprintf(stderr,"you must have ALL dihedral angles in your topology one or the other\n");
+        exit(EXIT_FAILURE);
+      }
+      get_next_line(fp,inp_line); // nr: X
+      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
+      int n_tabdih = inp_int / TABDIH_DIV;
+      mol->tabdih_nr = inp_int;
+      mol->n_tabdihs = n_tabdih;
+      mol->tabdih_types = (int *) ecalloc(n_tabdih,sizeof(int));
+      mol->tabdih_ijkl = (int **) ecalloc(n_tabdih,sizeof(int *));
+      int tabidx, tabtype, tabidxi, tabidxj, tabidxk, tabidxl;
+      get_next_line(fp,inp_line); // iatoms:
+      for (i = 0; i < n_tabdih; ++i)
+      {
+        get_next_line(fp,inp_line); // idx type=X (RBDIHS) i j k l
+        test_line(inp_line,"TABDIHS",TRUE,"Expected to find TABDIHS");
+        test_sscanf = sscanf(inp_line," %d type=%d (TABDIHS) %d %d %d %d ",&tabidx, &tabtype, &tabidxi, &tabidxj, &tabidxk, &tabidxl);
+        mol->tabdih_ijkl[i] = (int *) ecalloc(4,sizeof(int));
+        mol->tabdih_types[i] = tabtype;
+        mol->tabdih_ijkl[i][0] = tabidxi;
+        mol->tabdih_ijkl[i][1] = tabidxj;
+        mol->tabdih_ijkl[i][2] = tabidxk;
+        mol->tabdih_ijkl[i][3] = tabidxl;
+      }
+      get_next_line(fp,inp_line);
+      test_line(inp_line,"TABDIHS",FALSE,"Expected to be done finding TABDIHS");
+    }
+    else if (strstr(inp_line,"LJ-14") != NULL)
+    {
+      if ((flags & flag_lj14) != 0) 
+      { 
+	fprintf(stderr,"ERROR: found section \"LJ-14:\" twice in moltype %s\n",mol->molname); 
+	exit(1); 
+      }
+      flags |= flag_lj14;
+      get_next_line(fp,inp_line); // nr: X
+      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
+      int n_lj14 = inp_int / LJ14_DIV;
+      mol->lj14_nr = inp_int;
+      mol->n_lj14s = n_lj14;
+      mol->lj14_types = (int *) ecalloc(n_lj14,sizeof(int));
+      mol->lj14_ij = (int **) ecalloc(n_lj14,sizeof(int *));
+      int lj14idx, lj14type, lj14idxi, lj14idxj;
+      get_next_line(fp,inp_line); // iatoms:
+      for (i = 0; i < n_lj14; ++i)
+      {
+	get_next_line(fp,inp_line); // idx type=X (LJ14) i j
+	test_line(inp_line,"LJ14",TRUE,"Expected to find LJ14");
+	test_sscanf = sscanf(inp_line, "%d type=%d (LJ14) %d %d ",&lj14idx,&lj14type,&lj14idxi,&lj14idxj);
+	mol->lj14_ij[i] = (int *) ecalloc(2,sizeof(int));
+	mol->lj14_types[i] = lj14type;
+	mol->lj14_ij[i][0] = lj14idxi;
+	mol->lj14_ij[i][1] = lj14idxj;
+      }
+      get_next_line(fp,inp_line);
+      test_line(inp_line,"LJ14",FALSE,"Expected to be done finding LJ14");
+    }
+    else if (flags == old_flags)
+    {
+      fprintf(stderr,"ERROR: went around while loop once, flags never changed, and I didn't find moltype nor grp\n");
+      fprintf(stderr,"\tline: %s",inp_line);
+      get_next_line(fp,inp_line);
+      fprintf(stderr,"\t just got line: %s",inp_line);
+    }   
+    old_flags = flags;   
+  }
+*/
