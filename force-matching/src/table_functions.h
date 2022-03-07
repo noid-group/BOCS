@@ -6,6 +6,11 @@
 # ifndef table_functions
 # define table_functions
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 # include <math.h>
 
 int get_inter_type( char *argv[], int argc );
@@ -94,5 +99,8 @@ int interpolate_forces( Input *input, Arrays *arrays, Arrays *tmparrays );
 
 int edit_intra_nb_force( Input *input, Arrays *arrays, Arrays *tmparrays );
 
+#ifdef __cplusplus
+}
+#endif
 
 # endif

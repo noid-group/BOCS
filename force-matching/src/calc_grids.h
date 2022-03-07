@@ -6,6 +6,10 @@
 #ifndef CALC_GRIDS
 #define CALC_CRIDS
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #define Max_Num_Prot_Inter1 100
 
@@ -395,5 +399,9 @@ int direct_solve_lin_eqns(FILE * fp_log, tW_system * sys, tW_word info);
 /****************************************************************************************/
 
 void eval_grad_B2(tW_dihedral * dihedral, tW_CG_site * CG_struct);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

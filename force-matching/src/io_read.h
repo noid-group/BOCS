@@ -6,6 +6,11 @@
 #ifndef IO_READ
 #define IO_READ
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "cgff_types.h"
 
 /* MRD mimicking Gromacs' command line input */
@@ -68,5 +73,8 @@ void build_filename(tW_word fnm, tW_word ipt_name, int ft, const char *def_end);
 
 /****************************************************************************************/
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

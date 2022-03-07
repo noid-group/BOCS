@@ -7,6 +7,11 @@
 #ifndef NOID_TYPES
 #define NOID_TYPES
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdio.h>
 #include <stdint.h>
 
@@ -563,5 +568,9 @@ typedef struct {
     tW_ref_inter *IntraMolecPairs_inter;
     int interpolation_index;
 } tW_ref_potential;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

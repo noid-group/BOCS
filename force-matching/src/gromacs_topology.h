@@ -1,6 +1,10 @@
-
 #ifndef GROMACS_TOPOLOGY_H
 #define GROMACS_TOPOLOGY_H
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1136,5 +1140,9 @@ bool read_topology(tW_gmx_topology *top, const char *fnm);
 
 int get_type(const char *a_type, tW_gmx_topology *top);
 void do_PBC(tW_gmx_trxframe *fr);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -6,6 +6,11 @@
 #ifndef READ_PARAM
 #define READ_PARAM
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "cgff_types.h"
 
 
@@ -470,5 +475,9 @@ void clear_sys_arrays(tW_system * sys);
 int read_save_state(FILE * fp_log, tW_system * sys);
 
 void estimate_memory_usage(tW_files files, tW_system * sys);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

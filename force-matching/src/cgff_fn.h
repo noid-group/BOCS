@@ -7,6 +7,10 @@
 #ifndef CGFF_HELPER
 #define CGFF_HELPER
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 void init_gmx_info(tW_gmx_info * info);
 
@@ -98,5 +102,9 @@ void print_Bond_Types(FILE * fp, tW_system sys);
 void dump_tW_system(char *fnm, tW_system * sys);
 
 void dump_tW_CG_struct(char *fnm, tW_CG_site * sites, int n_sites);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

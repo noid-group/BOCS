@@ -6,6 +6,11 @@
 #ifndef NOID_MATH
 #define NOID_MATH
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "cgff_types.h"
 
 /****************************************************************************************/
@@ -43,5 +48,9 @@ int calc_running_avg_periodic(int Nmax, int Nlength, double *X, double *smX);
 int index_Lpacked(int i, int j, int N);
 
 /****************************************************************************************/
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

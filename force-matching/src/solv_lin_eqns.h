@@ -6,6 +6,10 @@
 #ifndef SOLV_LIN
 #define SOLV_LIN
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /*************************************************************************************************************************************************************************************************
  Functions for solving the system with LU decomposition and in general matrix format such that preconditioning can be applied 
@@ -190,5 +194,9 @@ int Right_PC(int N, double *M, double *b, double *phi, double *norm_col,
 
 int Left_PC(int N, double *M, double *b, double *phi, double *norm_col,
 	    double *row_max, int flag_restore, int flag_solve);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -6,6 +6,11 @@
 #ifndef IO_OUT
 #define IO_OUT
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /****************************************************************************************/
 /*Functions called outside of io_output.c************************************************/
 /****************************************************************************************/
@@ -91,5 +96,9 @@ int was_inter_present(double *g_cnt, int N_coeff);
 /* Functions associated with save state**********************************************/
 /****************************************************************************************/
 void print_save_state(FILE * fp_log, tW_system * sys);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

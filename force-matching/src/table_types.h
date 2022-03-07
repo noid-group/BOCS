@@ -6,6 +6,11 @@
 #ifndef table_types
 #define table_types
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define NB_INDEX       2
 #define BOND_INDEX     3
 #define ANGLE_INDEX    4
@@ -61,5 +66,9 @@ typedef struct{
   int interp_fact;
   int sm;
 } Input;
+
+#ifdef __cplusplus
+}
+#endif
 
 # endif

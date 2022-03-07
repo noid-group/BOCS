@@ -6,6 +6,11 @@
 #ifndef REF_POT
 #define REF_POT
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /****************************************************************************************/
 /*Functions called outside of calc_ref_potential.c***************************************/
 /****************************************************************************************/
@@ -102,5 +107,9 @@ void get_dihedral_vector_forces(double f_phi, double phi, dvec * B,
 				tW_CG_site * site3, tW_CG_site * site4);
 
 /****************************************************************************************/
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

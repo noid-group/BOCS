@@ -7,6 +7,11 @@
 #ifndef SAFE_MEM
 #define SAFE_MEM
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdlib.h>
 
 
@@ -26,5 +31,9 @@ void *erealloc(void *old_ptr, size_t size);
 /*! This function replaces free in code, and checks
  * if a pointer is NULL before trying to free it. */
 void efree(void *ptr);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

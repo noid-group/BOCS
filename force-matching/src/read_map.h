@@ -6,6 +6,11 @@
 #ifndef READ_MAP
 #define READ_MAP
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "cgff_types.h"
 
 void print_site_mapping(tW_site_map map);
@@ -19,5 +24,8 @@ tW_site_map *get_CG_map(FILE * map_top, int *N_sites);
 tW_site_map *NEW_get_CG_map(FILE * map_top, int *N_sites);
 /* this was my rewrite of it but we patched the original instead */
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
