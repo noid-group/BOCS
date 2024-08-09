@@ -125,7 +125,7 @@ class lammps_datafile:
 		for entry in self.ndx_data:
 			if (len(entry) > 0):
 				if entry[0] == "[":
-					print ndx_index, self.ndx_data.index(entry), entry[0], entry[1], entry[2]
+					print(ndx_index, self.ndx_data.index(entry), entry[0], entry[1], entry[2])
 					header_list.append(self.ndx_data.index(entry))
 					ndx_index += 1
 
@@ -152,11 +152,11 @@ class lammps_datafile:
 			if "bond" in entry[0][0] or "Bond" in entry[0][0]:
 				self.N_bonds += len(entry[1])/2
 				self.ndx_bonds.append(entry[1])
-				print entry[0][0], "is a bond entry with", len(entry[1])/2, "members."
+				print(entry[0][0], "is a bond entry with", len(entry[1])/2, "members.")
 			if "angle" in entry[0][0] or "Angle" in entry[0][0]:
 				self.N_angles += len(entry[1])/3
 				self.ndx_angles.append(entry[1])
-				print entry[0][0], "is an angle entry with", len(entry[1])/3, "members."
+				print(entry[0][0], "is an angle entry with", len(entry[1])/3, "members.")
 
 
 	def parse_bonds(self):
