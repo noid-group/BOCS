@@ -4,7 +4,7 @@
 
 [ atomtypes ]
 ;name       mass        charge   ptype       c6           c12
- MEO        92.14    0.000    A           0            1
+ MEO        32.033    0.000    A           0            1
 
 [ moleculetype ]
 ; name  nrexcl
