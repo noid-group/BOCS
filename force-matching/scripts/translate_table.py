@@ -25,10 +25,10 @@ for line in gromacs_file:
 
 #print table_type
 
-if (table_type == "angle"):
-	lammps_file.write("N %d\n\n" %(N_lines))
+if (table_type == "nb"):
+	lammps_file.write("N %d\n\n" %(N_lines-1)) #If nb, we'll later trim the 0.00 interaction so lammps doesnt crash
 else:
-	lammps_file.write("N %d\n\n" %(N_lines-1))
+	lammps_file.write("N %d\n\n" %(N_lines)) #Else, the number at the top should reflect same number of entries in the original table file
 
 lindex= 1
 gromacs_file.seek(0)
