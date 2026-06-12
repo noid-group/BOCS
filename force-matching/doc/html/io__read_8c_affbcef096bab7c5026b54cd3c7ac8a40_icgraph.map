@@ -1,0 +1,20 @@
+<map id="get_word_list" name="get_word_list">
+<area shape="rect" id="Node000001" title="get_word_list(): Reads a list of N_words words, each on separate lines, following a line that contain..." alt="" coords="543,81,641,108"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#a41efd8d8bf8ab23525874097a94ffc7d" title="get_REF():" alt="" coords="401,5,475,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="551,76,493,46,469,35,472,30,496,42,553,71"/>
+<area shape="rect" id="Node000006" href="$read__parameters_8c.html#affd5ec0e59d9104b318acafc756971a7" title="get_TPR():" alt="" coords="401,56,475,83"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="527,87,475,78,476,73,528,81"/>
+<area shape="rect" id="Node000007" href="$read__parameters_8c.html#a8589aa81c0325ecfdef96777bb5309ea" title="read_site_types(): Reads the site types listed in the parameter file." alt="" coords="381,107,495,133"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="528,108,495,113,495,108,527,103"/>
+<area shape="rect" id="Node000008" href="$read__parameters_8c.html#ad9ee6b752ced82b2353be504663215d3" title="read_structures(): Reads in the file names that contain structures." alt="" coords="382,157,494,184"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="553,118,496,148,472,159,469,154,493,143,551,113"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#ad59ee67290b65b03bcfa5766b31cd49b" title="get_parameters(): Reads a line from the parameter file passed from read_par()." alt="" coords="222,81,333,108"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="394,41,382,46,308,83,306,78,380,42,391,36"/>
+<area shape="rect" id="Node000004" href="$read__parameters_8c.html#a05efae93beb41e2b0d8cbe4581086bd1" title="read_par(): Reads the information from the parameter file and files listed in the param&#45; eter file." alt="" coords="103,81,174,108"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="206,97,174,97,174,92,206,92"/>
+<area shape="rect" id="Node000005" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,81,55,108"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="87,97,55,97,55,92,87,92"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="387,80,334,88,333,83,386,75"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="366,111,333,106,334,101,366,106"/>
+<area shape="poly" id="edge10_Node000008_Node000003" title=" " alt="" coords="391,153,380,148,306,111,308,106,382,143,394,148"/>
+</map>

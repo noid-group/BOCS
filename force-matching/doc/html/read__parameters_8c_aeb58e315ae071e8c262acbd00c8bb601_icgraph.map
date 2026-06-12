@@ -1,0 +1,7 @@
+<map id="check_input" name="check_input">
+<area shape="rect" id="Node000001" title="check_input(): Makes sure that the input read from the parameter file is consistent." alt="" coords="222,5,313,32"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#a05efae93beb41e2b0d8cbe4581086bd1" title="read_par(): Reads the information from the parameter file and files listed in the param&#45; eter file." alt="" coords="103,5,174,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,21,174,21,174,16,206,16"/>
+<area shape="rect" id="Node000003" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="87,21,55,21,55,16,87,16"/>
+</map>

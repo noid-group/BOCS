@@ -1,0 +1,83 @@
+<map id="get_grid_index_for_linear_basis" name="get_grid_index_for_linear_basis">
+<area shape="rect" id="Node000001" title="get_grid_index_for_linear_basis():" alt="" coords="1374,516,1501,559"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#ae8375fd538f510ba6aa27438e9620043" title="calc_linear_spline_A():" alt="" coords="1173,387,1313,413"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1392,509,1262,416,1265,412,1395,504"/>
+<area shape="rect" id="Node000021" href="$calc__grids_8c.html#a458bc4181fbcdce9445b3f1337fc90e5" title="eval_Bspline_basis_vectors: Weights the contributions from a given pair distance (Psi = R_IJ = X) to ..." alt="" coords="269,480,402,523"/>
+<area shape="poly" id="edge29_Node000001_Node000021" title=" " alt="" coords="1358,529,1200,513,1108,506,1015,504,783,504,403,504,403,499,783,499,1016,499,1108,501,1200,507,1358,524"/>
+<area shape="rect" id="Node000022" href="$calc__grids_8c.html#a158ff68c97a5f7bbf34552884bb2c73c" title="eval_Bspline_basis_vectors_ext(): MRD &#45; 06.18.2020" alt="" coords="1176,588,1310,631"/>
+<area shape="poly" id="edge32_Node000001_Node000022" title=" " alt="" coords="1364,567,1303,590,1302,585,1362,562"/>
+<area shape="rect" id="Node000023" href="$calc__grids_8c.html#ae16e2af41be07115f5bd6c3a74db961d" title=" " alt="" coords="500,723,634,765"/>
+<area shape="poly" id="edge34_Node000001_Node000023" title=" " alt="" coords="1425,574,1409,605,1388,640,1360,672,1327,698,1283,721,1238,740,1143,767,1045,782,948,788,855,787,769,780,634,761,635,756,769,775,855,782,948,783,1044,777,1142,762,1236,735,1281,716,1324,694,1357,668,1384,636,1405,603,1420,571"/>
+<area shape="rect" id="Node000024" href="$calc__grids_8c.html#a9f82627f4467b34f1fb1e633f87af39f" title=" " alt="" coords="500,651,634,693"/>
+<area shape="poly" id="edge36_Node000001_Node000024" title=" " alt="" coords="1414,573,1376,612,1353,631,1327,645,1234,677,1137,697,1039,709,942,712,850,710,766,704,634,687,635,682,767,699,850,705,942,707,1038,703,1136,692,1233,672,1325,640,1350,626,1373,608,1410,569"/>
+<area shape="rect" id="Node000025" href="$calc__grids_8c.html#af536f354b8e2bb65ad61fe15c9dc1566" title="get_Bspline_angle_basis_vector(): JFR &#45; 07.23.12" alt="" coords="1160,117,1326,160"/>
+<area shape="poly" id="edge38_Node000001_Node000025" title=" " alt="" coords="1421,502,1381,396,1323,269,1289,210,1257,162,1262,159,1294,207,1328,267,1386,394,1426,500"/>
+<area shape="rect" id="Node000026" href="$calc__grids_8c.html#afb407f46598337e2513be34821cf2d0c" title="get_Bspline_bond_basis_vector():" alt="" coords="933,203,1095,245"/>
+<area shape="poly" id="edge40_Node000001_Node000026" title=" " alt="" coords="1416,503,1378,440,1353,407,1324,377,1267,333,1205,298,1143,270,1087,248,1089,244,1145,265,1208,293,1270,329,1327,373,1357,403,1382,437,1421,501"/>
+<area shape="rect" id="Node000028" href="$calc__grids_8c.html#a942aacfc097feda9f38887fa09d06003" title="get_Bspline_dihedral_basis_vector(): Range is not checked since the R_min and R_max are assumed to be..." alt="" coords="1172,5,1314,48"/>
+<area shape="poly" id="edge44_Node000001_Node000028" title=" " alt="" coords="1431,501,1422,425,1403,324,1371,213,1350,158,1323,107,1300,76,1272,50,1276,46,1303,72,1328,104,1354,156,1376,211,1408,323,1427,424,1436,500"/>
+<area shape="rect" id="Node000029" href="$io__output_8c.html#aad1b889f9e0d13a158cb7320a74b9487" title="print_Bspline_basis_forces(): JFR &#45; 07.22.12: This function is the same as print_Bspline_basis_output..." alt="" coords="1176,792,1310,835"/>
+<area shape="poly" id="edge46_Node000001_Node000029" title=" " alt="" coords="1430,574,1416,619,1395,672,1366,726,1328,775,1303,794,1300,789,1324,771,1361,723,1390,669,1411,617,1425,572"/>
+<area shape="rect" id="Node000031" href="$io__output_8c.html#a4908395a6416248ba5cc26f105415e02" title="print_Bspline_basis_output(): Prints the results for Bspline basis functions." alt="" coords="1176,859,1310,901"/>
+<area shape="poly" id="edge49_Node000001_Node000031" title=" " alt="" coords="1435,575,1426,633,1407,706,1375,781,1353,817,1328,849,1312,861,1309,857,1324,845,1349,814,1370,779,1401,704,1420,632,1430,574"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#ae73b6bd90917294f02834bb05a771240" title="eval_linear_basis_vectors():" alt="" coords="250,379,421,405"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1157,402,422,395,422,390,1157,397"/>
+<area shape="rect" id="Node000007" href="$calc__grids_8c.html#a5f46f6fbd889dc1c3380e29e01d62a8d" title=" " alt="" coords="916,589,1112,616"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="1230,428,1185,500,1152,539,1114,573,1078,591,1075,586,1111,568,1148,535,1181,497,1226,426"/>
+<area shape="rect" id="Node000009" href="$calc__grids_8c.html#a0303fa62809a65b7eec6443ab0da50f1" title=" " alt="" coords="238,547,433,573"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="1184,421,1113,440,926,479,738,511,434,552,434,547,738,505,925,474,1112,435,1182,416"/>
+<area shape="rect" id="Node000010" href="$calc__grids_8c.html#a833fd46be95180f0c56e054a88c1ab75" title="eval_linear_basis_vectors_LDGRAD:" alt="" coords="481,421,653,464"/>
+<area shape="poly" id="edge12_Node000002_Node000010" title=" " alt="" coords="1158,416,1113,421,862,438,653,444,653,439,862,432,1112,416,1157,411"/>
+<area shape="rect" id="Node000011" href="$calc__grids_8c.html#af72e60feac003edae12f29d43e9fce9b" title="get_linear_angle_basis_vector():" alt="" coords="938,136,1091,179"/>
+<area shape="poly" id="edge14_Node000002_Node000011" title=" " alt="" coords="1229,373,1212,333,1186,285,1153,235,1111,193,1090,180,1093,175,1114,189,1157,232,1191,282,1217,331,1234,371"/>
+<area shape="rect" id="Node000014" href="$calc__grids_8c.html#af124a6f2e52afabe5a7594e248cdb693" title="get_linear_bond_basis_vector: Based on a passed bond length (norm_ij) determine the dPsi/dR_I contrib..." alt="" coords="939,320,1089,363"/>
+<area shape="poly" id="edge19_Node000002_Node000014" title=" " alt="" coords="1173,385,1089,363,1090,358,1174,380"/>
+<area shape="rect" id="Node000018" href="$calc__grids_8c.html#ad10f1cbcb56d9ca2da8f8e0980ef8805" title="get_linear_dihedral_basis_vector(): Range is not checked since the R_min and R_max are assumed to be ..." alt="" coords="950,69,1079,112"/>
+<area shape="poly" id="edge25_Node000002_Node000018" title=" " alt="" coords="1233,372,1220,320,1196,254,1160,185,1137,154,1111,126,1078,107,1081,102,1114,122,1141,150,1164,182,1201,251,1225,318,1239,371"/>
+<area shape="rect" id="Node000020" href="$calc__grids_8c.html#a0b06c971d9fd12775a41c0351fb96faa" title="update_nb_pair_grids(): Currently, not using L for this basis." alt="" coords="942,269,1086,296"/>
+<area shape="poly" id="edge28_Node000002_Node000020" title=" " alt="" coords="1213,378,1167,343,1111,310,1081,299,1083,294,1113,306,1170,339,1216,374"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#a96846b6bba2ec2fb420b5f640d6998e7" title="calc_grids2(): The fast loops." alt="" coords="103,433,190,460"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="273,413,191,437,189,432,271,408"/>
+<area shape="rect" id="Node000006" href="$calc__grids_8c.html#a4ef17206f80a98140cdd4d5034e6c577" title="calc_grids3(): Eliminating the 3 particle loop" alt="" coords="103,543,190,569"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="260,414,240,426,210,454,186,487,156,543,151,541,182,484,206,451,236,422,257,410"/>
+<area shape="rect" id="Node000005" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,543,55,569"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="122,473,47,544,44,540,118,469"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="87,559,55,559,55,553,87,553"/>
+<area shape="rect" id="Node000008" href="$calc__grids_8c.html#a75029bac80e0b870a6467edf8c0b0ab6" title="eval_external_basis_vectors():" alt="" coords="716,589,852,632"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="901,609,853,611,853,606,901,604"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="700,616,606,617,490,614,363,605,237,588,182,573,184,567,239,583,364,600,490,609,606,612,700,611"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="223,560,191,560,191,554,223,555"/>
+<area shape="poly" id="edge13_Node000010_Node000006" title=" " alt="" coords="466,436,412,436,354,440,295,451,239,470,214,486,191,506,159,544,155,541,187,502,210,482,237,466,294,446,353,435,412,430,466,430"/>
+<area shape="rect" id="Node000012" href="$calc__grids_8c.html#aad463cf44b20bdf0efe4eb27793c990a" title="get_Angle_basis_vectors: Associates the angle that CG_struct[i] is involved in with a corresponding v..." alt="" coords="701,136,868,163"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="922,157,868,155,868,150,922,151"/>
+<area shape="rect" id="Node000013" href="$calc__grids_8c.html#a05584288f36cea4b4192998d2543b5c6" title="eval_bond_basis_vectors: Evaluates the basis vectors for bonded interactions for site i_site." alt="" coords="252,232,420,259"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="686,155,586,165,482,185,417,208,363,234,361,229,415,204,481,180,586,160,685,150"/>
+<area shape="poly" id="edge17_Node000013_Node000004" title=" " alt="" coords="313,272,163,435,159,431,310,268"/>
+<area shape="poly" id="edge18_Node000013_Node000006" title=" " alt="" coords="314,272,277,315,240,368,215,419,192,473,157,544,152,541,188,471,210,417,236,365,273,312,310,268"/>
+<area shape="rect" id="Node000015" href="$calc__grids_8c.html#a058ee5dcba0c5649d1a1d5751685fa8c" title="get_BondStretch_basis_vectors: Associates a Bonded interaction instance (index i_inter) with halfG in..." alt="" coords="706,253,862,296"/>
+<area shape="poly" id="edge20_Node000014_Node000015" title=" " alt="" coords="923,318,860,299,861,294,925,313"/>
+<area shape="rect" id="Node000016" href="$calc__grids_8c.html#a61f8160d95775a9a3a391431f9bcc1d4" title="get_linear_IntraMolec_NB_Pair_basis_vector():" alt="" coords="705,320,864,363"/>
+<area shape="poly" id="edge22_Node000014_Node000016" title=" " alt="" coords="924,344,864,344,864,339,924,339"/>
+<area shape="poly" id="edge21_Node000015_Node000013" title=" " alt="" coords="691,271,420,253,421,248,691,266"/>
+<area shape="rect" id="Node000017" href="$calc__grids_8c.html#a97ba35573b889284cd0c89f108d33e5c" title="get_IntraMolec_NB_Pair_basis_vectors():" alt="" coords="485,195,649,237"/>
+<area shape="poly" id="edge23_Node000016_Node000017" title=" " alt="" coords="709,315,699,310,642,275,594,240,597,235,645,270,702,306,712,311"/>
+<area shape="poly" id="edge24_Node000017_Node000013" title=" " alt="" coords="470,231,421,237,420,232,470,226"/>
+<area shape="rect" id="Node000019" href="$calc__grids_8c.html#ada107de8de2c7e6767cdbe070af6af93" title="get_Dihedral_basis_vectors():" alt="" coords="718,69,850,112"/>
+<area shape="poly" id="edge26_Node000018_Node000019" title=" " alt="" coords="934,93,851,93,851,88,934,88"/>
+<area shape="poly" id="edge27_Node000019_Node000013" title=" " alt="" coords="704,101,596,119,538,134,482,153,445,171,410,193,355,233,352,229,407,189,442,167,480,148,537,129,595,114,703,95"/>
+<area shape="poly" id="edge30_Node000021_Node000004" title=" " alt="" coords="253,480,189,462,191,457,255,475"/>
+<area shape="poly" id="edge31_Node000021_Node000006" title=" " alt="" coords="255,527,191,546,189,541,253,522"/>
+<area shape="poly" id="edge33_Node000022_Node000008" title=" " alt="" coords="1161,625,1113,631,1014,635,916,631,853,624,853,619,916,625,1014,630,1112,625,1161,620"/>
+<area shape="poly" id="edge35_Node000023_Node000006" title=" " alt="" coords="485,746,427,740,363,728,297,708,237,678,207,654,182,624,152,571,156,568,187,621,211,650,239,674,299,703,364,723,428,735,486,740"/>
+<area shape="poly" id="edge37_Node000024_Node000006" title=" " alt="" coords="484,676,428,673,365,666,300,653,237,632,213,619,191,603,158,571,161,568,194,599,216,614,239,627,301,648,366,661,429,668,485,671"/>
+<area shape="poly" id="edge39_Node000025_Node000012" title=" " alt="" coords="1203,110,1161,81,1111,60,1057,44,1012,36,968,40,917,60,901,73,893,90,886,108,870,126,848,138,846,133,866,122,881,106,888,88,897,70,915,55,967,35,1012,31,1058,39,1113,55,1163,77,1206,105"/>
+<area shape="poly" id="edge41_Node000026_Node000015" title=" " alt="" coords="919,248,864,260,863,255,918,243"/>
+<area shape="rect" id="Node000027" href="$calc__grids_8c.html#a57bd57d4f5f0d2e8128be612b62a166a" title="get_Bspline_IntraMolec_NB_Pair_basis_vector(): JFR &#45; 07.23.12: Bspline" alt="" coords="705,187,864,229"/>
+<area shape="poly" id="edge42_Node000026_Node000027" title=" " alt="" coords="918,220,864,216,864,211,918,215"/>
+<area shape="poly" id="edge43_Node000027_Node000017" title=" " alt="" coords="690,214,649,216,649,210,690,209"/>
+<area shape="poly" id="edge45_Node000028_Node000019" title=" " alt="" coords="1157,19,1042,15,978,19,917,29,865,47,821,71,818,66,863,43,915,24,978,14,1042,10,1157,14"/>
+<area shape="rect" id="Node000030" href="$io__output_8c.html#aaf03153665ceaee1b8cb5fab8b1c1acb" title="print_output(): Print the results." alt="" coords="970,800,1059,827"/>
+<area shape="poly" id="edge47_Node000029_Node000030" title=" " alt="" coords="1160,816,1059,816,1059,811,1160,811"/>
+<area shape="poly" id="edge48_Node000030_Node000005" title=" " alt="" coords="954,815,568,812,334,812,306,810,279,804,228,782,181,750,139,711,104,671,74,631,37,571,41,569,79,628,108,667,143,708,184,746,230,777,280,799,307,805,334,807,568,807,954,810"/>
+<area shape="poly" id="edge50_Node000031_Node000030" title=" " alt="" coords="1161,859,1059,829,1060,824,1162,854"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="check_Type_Inter2" name="check_Type_Inter2">
+<area shape="rect" id="Node000001" title="check_Type_Inter2(): Makes sure that the pair intermolecular interaction are not listed more than onc..." alt="" coords="5,31,137,57"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#a74ff3fee708a34436cc782f8c19b9043" title="check_inter_sites(): Makes sure interaction was not listed more than once." alt="" coords="185,5,308,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,32,169,27,170,32,138,37"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#a8f3a3abbf69d7638fab4419aee46552d" title="check_site_list(): Makes sure that sites were listed under [Site_Types]." alt="" coords="192,56,300,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="138,51,177,57,176,62,137,56"/>
+</map>

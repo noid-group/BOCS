@@ -1,0 +1,13 @@
+<map id="get_BondStretch_info" name="get_BondStretch_info">
+<area shape="rect" id="Node000001" title="get_BondStretch_info: Calculates and stores data needed to calculated the BondStretch basis vectors." alt="" coords="5,56,152,83"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#a4ec3dc2dbb208811be33fdc94163836e" title="get_difference_unit_vector(): From x_i and x_j, calculates the differenc vector, the unit difference ..." alt="" coords="200,48,330,91"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,67,184,67,184,72,152,72"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#aed00bac3dd87333226ee1d7cb19700af" title="calc_norm(): Returns the norm of an dvec." alt="" coords="396,5,477,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="330,47,380,32,382,37,331,53"/>
+<area shape="rect" id="Node000005" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="378,56,494,83"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="330,67,362,67,362,72,330,72"/>
+<area shape="rect" id="Node000006" href="$wnoid__math_8c.html#a1f483015ac47277c71a1e600b42befd8" title="vect_diff(): Calculates diff = v1 &#45; v2." alt="" coords="401,107,471,133"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="331,86,387,103,385,108,330,91"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="542,5,614,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="477,16,527,16,527,21,477,21"/>
+</map>

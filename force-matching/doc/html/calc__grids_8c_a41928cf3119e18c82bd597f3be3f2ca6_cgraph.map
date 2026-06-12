@@ -1,0 +1,7 @@
+<map id="eval_delta_basis_vectors_LD" name="eval_delta_basis_vectors_LD">
+<area shape="rect" id="Node000001" title="eval_delta_basis_vectors_LD():" alt="" coords="5,31,198,57"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="268,5,340,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,29,252,22,253,28,198,35"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="246,56,362,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,53,230,58,230,63,198,59"/>
+</map>

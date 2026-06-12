@@ -1,0 +1,5 @@
+<map id="copy_arrays" name="copy_arrays">
+<area shape="rect" id="Node000001" title="copy_arrays(): Allocates memory for arrays in sys_copy and makes sure they are zeroed." alt="" coords="5,5,98,32"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#abb17bf2cde61bbf80e87b7881dd7ea73" title="clear_sys_arrays(): Zeros the arrays that are not pointing to NULL." alt="" coords="146,5,266,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,16,130,16,130,21,98,21"/>
+</map>

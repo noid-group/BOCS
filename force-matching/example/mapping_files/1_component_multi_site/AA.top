@@ -1,0 +1,16 @@
+;
+; Topology file for 800 ortho-terphenyl molecules.
+; OTP is 3 benzene rings connected (32 atoms) 
+; Include forcefield parameters
+#include "oplsaa.ff/forcefield.itp"
+
+; Include OTP topology (otp.itp contains atom list / top connections) 
+#include "AAOTP.itp"
+
+[ system ]
+Ortho-terphenyl
+
+[ molecules ]
+; molecule name number
+  OTP           800
+

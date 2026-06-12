@@ -1,0 +1,315 @@
+.TH "io_output.c" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+io_output.c \- Functions related to writing cgff output\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <string\&.h>\fP
+.br
+\fR#include <stdlib\&.h>\fP
+.br
+\fR#include <math\&.h>\fP
+.br
+\fR#include 'cgff_types\&.h'\fP
+.br
+\fR#include 'io_read\&.h'\fP
+.br
+\fR#include 'io_output\&.h'\fP
+.br
+\fR#include 'gromacs_topology\&.h'\fP
+.br
+\fR#include 'wnoid_math\&.h'\fP
+.br
+\fR#include 'calc_grids\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBget_top_tag\fP (\fBtW_word\fP coord_fnm, \fBtW_word\fP tag)"
+.br
+.RI "\fBget_top_tag()\fP: Saves the name of the GROMACS trajectory file minus the extension into the variable tag\&. "
+.ti -1c
+.RI "FILE * \fBopen_output_file1\fP (\fBtW_word\fP tag)"
+.br
+.RI "\fBopen_output_file1()\fP: Opens a file to print general information about the results for the topology labeled with tag\&. "
+.ti -1c
+.RI "int \fBprint_output\fP (int forces, \fBtW_system\fP sys, \fBtW_word\fP tag)"
+.br
+.RI "\fBprint_output()\fP: Print the results\&. "
+.ti -1c
+.RI "FILE * \fBopen_output_file2\fP (\fBtW_word\fP function, \fBtW_word\fP inter_type, \fBtW_word\fP inter_name, \fBtW_word\fP tag)"
+.br
+.RI "\fBopen_output_file2()\fP: Opens files for printing tabulated results\&. "
+.ti -1c
+.RI "void \fBprint_delta_basis_output\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_delta_basis_output()\fP: Prints the results for delta basis functions\&. "
+.ti -1c
+.RI "void \fBprint_delta_basis_forces\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_delta_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_delta_basis_output()\fP\&. "
+.ti -1c
+.RI "void \fBprint_linear_basis_output\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_linear_basis_output()\fP: Prints the results for delta basis functions\&. "
+.ti -1c
+.RI "void \fBprint_linear_basis_forces\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_linear_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_linear_basis_output()\fP\&. "
+.ti -1c
+.RI "void \fBprint_Bspline_basis_output\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int m)"
+.br
+.RI "\fBprint_Bspline_basis_output()\fP: Prints the results for Bspline basis functions\&. "
+.ti -1c
+.RI "void \fBprint_Bspline_basis_forces\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int m)"
+.br
+.RI "\fBprint_Bspline_basis_forces()\fP: JFR - 07\&.22\&.12: This function is the same as \fBprint_Bspline_basis_output()\fP\&. "
+.ti -1c
+.RI "void \fBprint_harmonic_basis_output\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_harmonic_basis_output()\fP: Print the results for a harmonic basis\&. "
+.ti -1c
+.RI "void \fBprint_harmonic_basis_forces\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_harmonic_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_harmonic_basis_output()\fP\&. "
+.ti -1c
+.RI "void \fBprint_RB_basis_output\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_RB_basis_output()\fP: Print results for a RB basis\&. "
+.ti -1c
+.RI "void \fBprint_RB_basis_forces\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_RB_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_RB_basis_output()\fP\&. "
+.ti -1c
+.RI "void \fBprint_TOY_basis_output\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_TOY_basis_output()\fP: Prints resutls for a TOY dihedral basis\&. "
+.ti -1c
+.RI "void \fBprint_TOY_basis_forces\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_TOY_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_TOY_basis_output()\fP\&. "
+.ti -1c
+.RI "void \fBprint_general_inter_output\fP (FILE *fp, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_general_inter_output()\fP: Prints general information about a particular interaction\&. "
+.ti -1c
+.RI "void \fBprint_power_basis_output\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_power_basis_output()\fP: Print results for a power basis\&. "
+.ti -1c
+.RI "void \fBprint_power_basis_forces\fP (FILE *fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP *inter, int i)"
+.br
+.RI "\fBprint_power_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_power_basis_output()\fP\&. "
+.ti -1c
+.RI "int \fBwas_inter_present\fP (double *g_cnt, int N_coeff)"
+.br
+.RI "was_inter_sampled(): Returns FALSE if the interaction was not present in calculation and TRUE otherwise\&. "
+.ti -1c
+.RI "void \fBprint_M_matrix2\fP (\fBtW_system\fP *sys)"
+.br
+.RI "\fBprint_M_matrix2()\fP: Print elements of the M matrix\&. "
+.ti -1c
+.RI "void \fBprint_save_state\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "\fBprint_save_state()\fP: Prints high precision values of M,b,\&.\&.\&. for resuming a calculation after the loop over particles\&. "
+.ti -1c
+.RI "void \fBprint_Chi2\fP (FILE *fp, \fBtW_system\fP *sys)"
+.br
+.RI "\fBprint_Chi2()\fP: Calc the CG-dependent part of Chi2 and then print the final result\&. "
+.ti -1c
+.RI "void \fBprint_decomp_Chi2\fP (FILE *fp, \fBtW_system\fP *sys)"
+.br
+.RI "\fBprint_decomp_Chi2()\fP: Calc the CG-dependent part of Chi2 and then print the final result\&. "
+.ti -1c
+.RI "void \fBprint_sep_forces\fP (\fBtW_word\fP fname, double *phi, \fBtW_system\fP *sys)"
+.br
+.RI "\fBprint_sep_forces()\fP: Separate the force vector into different interactions before printing JFR - added 10\&.05\&.12 "
+.ti -1c
+.RI "void \fBprint_sep_M\fP (\fBtW_word\fP fname, double **M, \fBtW_system\fP *sys)"
+.br
+.RI "\fBprint_sep_M()\fP: Separate the metric tensor into different interaction blocks before printing JFR - added 10\&.05\&.12 "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Functions related to writing cgff output\&. 
+
+
+.PP
+\fBAuthors\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "int get_top_tag (\fBtW_word\fP coord_fnm, \fBtW_word\fP tag)"
+
+.PP
+\fBget_top_tag()\fP: Saves the name of the GROMACS trajectory file minus the extension into the variable tag\&. This is used for naming files for each topology\&. NJD 5\&.24\&.16 - Now also strips the folder / file location preceding the file name\&. Currently will not support windows file locations\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "FILE * open_output_file1 (\fBtW_word\fP tag)"
+
+.PP
+\fBopen_output_file1()\fP: Opens a file to print general information about the results for the topology labeled with tag\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "FILE * open_output_file2 (\fBtW_word\fP function, \fBtW_word\fP inter_type, \fBtW_word\fP inter_name, \fBtW_word\fP tag)"
+
+.PP
+\fBopen_output_file2()\fP: Opens files for printing tabulated results\&. 
+.PP
+Referenced by \fBprint_Bspline_basis_forces()\fP, \fBprint_Bspline_basis_output()\fP, \fBprint_delta_basis_forces()\fP, \fBprint_delta_basis_output()\fP, \fBprint_harmonic_basis_forces()\fP, \fBprint_linear_basis_forces()\fP, \fBprint_linear_basis_output()\fP, \fBprint_power_basis_forces()\fP, \fBprint_RB_basis_forces()\fP, and \fBprint_TOY_basis_forces()\fP\&.
+.SS "void print_Bspline_basis_forces (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int m)"
+
+.PP
+\fBprint_Bspline_basis_forces()\fP: JFR - 07\&.22\&.12: This function is the same as \fBprint_Bspline_basis_output()\fP\&. I just separated the printing of the forces for the different Calculation Modes\&. For the Bspline, we'll print out the calculated coefficients, but also need to print a finer tabulated version of the actual force to use in calculations\&. MCL 05\&.08\&.25 - I've also made it so that this output only prints f_forces where the interpolation from the Bspline is okay based on what we solved for 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_Bspline_basis_output (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int m)"
+
+.PP
+\fBprint_Bspline_basis_output()\fP: Prints the results for Bspline basis functions\&. Prints results in degrees for angles and dihedrals\&. Adds the 180 degree grid point for dihedrals\&. JFR - 07\&.22\&.12: this is the same as the other spline output 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_Chi2 (FILE * fp, \fBtW_system\fP * sys)"
+
+.PP
+\fBprint_Chi2()\fP: Calc the CG-dependent part of Chi2 and then print the final result\&. 
+.br
+ JFR - added 06\&.16\&.12 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_decomp_Chi2 (FILE * fp, \fBtW_system\fP * sys)"
+
+.PP
+\fBprint_decomp_Chi2()\fP: Calc the CG-dependent part of Chi2 and then print the final result\&. 
+.br
+ Decompose into various contributions JFR - added 09\&.10\&.12 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_delta_basis_forces (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_delta_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_delta_basis_output()\fP\&. I just separated the printing of the forces for the different Calculation Modes\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_delta_basis_output (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_delta_basis_output()\fP: Prints the results for delta basis functions\&. Prints results in degrees for angles and dihedrals\&. Adds the 180 degree grid point for dihedrals\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_general_inter_output (FILE * fp, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_general_inter_output()\fP: Prints general information about a particular interaction\&. 
+.PP
+Referenced by \fBprint_Bspline_basis_forces()\fP, \fBprint_Bspline_basis_output()\fP, \fBprint_delta_basis_forces()\fP, \fBprint_delta_basis_output()\fP, \fBprint_harmonic_basis_forces()\fP, \fBprint_harmonic_basis_output()\fP, \fBprint_linear_basis_forces()\fP, \fBprint_linear_basis_output()\fP, \fBprint_power_basis_forces()\fP, \fBprint_power_basis_output()\fP, \fBprint_RB_basis_forces()\fP, \fBprint_RB_basis_output()\fP, \fBprint_TOY_basis_forces()\fP, and \fBprint_TOY_basis_output()\fP\&.
+.SS "void print_harmonic_basis_forces (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_harmonic_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_harmonic_basis_output()\fP\&. I just separated the printing of the forces for the different Calculation Modes\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_harmonic_basis_output (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_harmonic_basis_output()\fP: Print the results for a harmonic basis\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_linear_basis_forces (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_linear_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_linear_basis_output()\fP\&. I just separated the printing of the forces for the different Calculation Modes\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_linear_basis_output (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_linear_basis_output()\fP: Prints the results for delta basis functions\&. Prints results in degrees for angles and dihedrals\&. Adds the 180 degree grid point for dihedrals\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_M_matrix2 (\fBtW_system\fP * sys)"
+
+.PP
+\fBprint_M_matrix2()\fP: Print elements of the M matrix\&. JFR - added 09\&.01\&.10 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int print_output (int forces, \fBtW_system\fP sys, \fBtW_word\fP tag)"
+
+.PP
+\fBprint_output()\fP: Print the results\&. General information and results for functional forms are printed to the file pointed to by fp\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void print_power_basis_forces (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_power_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_power_basis_output()\fP\&. I just separated the printing of the forces for the different Calculation Modes\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_power_basis_output (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_power_basis_output()\fP: Print results for a power basis\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_RB_basis_forces (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_RB_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_RB_basis_output()\fP\&. I just separated the printing of the forces for the different Calculation Modes\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_RB_basis_output (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_RB_basis_output()\fP: Print results for a RB basis\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_save_state (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+\fBprint_save_state()\fP: Prints high precision values of M,b,\&.\&.\&. for resuming a calculation after the loop over particles\&. JFR - added 04\&.11\&.12 
+.PP
+Referenced by \fBget_results()\fP\&.
+.SS "void print_sep_forces (\fBtW_word\fP fname, double * phi, \fBtW_system\fP * sys)"
+
+.PP
+\fBprint_sep_forces()\fP: Separate the force vector into different interactions before printing JFR - added 10\&.05\&.12 
+.PP
+Referenced by \fBsolv_lin_eqns_PT()\fP\&.
+.SS "void print_sep_M (\fBtW_word\fP fname, double ** M, \fBtW_system\fP * sys)"
+
+.PP
+\fBprint_sep_M()\fP: Separate the metric tensor into different interaction blocks before printing JFR - added 10\&.05\&.12 
+.PP
+Referenced by \fBsolv_lin_eqns_PT()\fP\&.
+.SS "void print_TOY_basis_forces (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_TOY_basis_forces()\fP: JFR - added 04\&.06\&.12: This function is the same as \fBprint_TOY_basis_output()\fP\&. I just separated the printing of the forces for the different Calculation Modes\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "void print_TOY_basis_output (FILE * fp, int forces, \fBtW_system\fP sys, \fBtW_word\fP tag, \fBtW_Inter_Types\fP * inter, int i)"
+
+.PP
+\fBprint_TOY_basis_output()\fP: Prints resutls for a TOY dihedral basis\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SS "int was_inter_present (double * g_cnt, int N_coeff)"
+
+.PP
+was_inter_sampled(): Returns FALSE if the interaction was not present in calculation and TRUE otherwise\&. 
+.PP
+Referenced by \fBprint_output()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

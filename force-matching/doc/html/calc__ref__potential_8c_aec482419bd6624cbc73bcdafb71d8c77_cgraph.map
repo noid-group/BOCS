@@ -1,0 +1,5 @@
+<map id="get_angle_inter_ptr" name="get_angle_inter_ptr">
+<area shape="rect" id="Node000001" title="get_angle_inter_ptr(): Returns the pointer to the angle interaction depending on the sequence found i..." alt="" coords="5,5,137,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a5a715a0635053d2135ccef36af1599f7" title="check_word_list(): Checks to see if the n_words words in list1[] occur in list_2[] in any order." alt="" coords="185,5,300,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,16,169,16,169,21,137,21"/>
+</map>

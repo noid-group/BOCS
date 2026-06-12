@@ -1,0 +1,7 @@
+<map id="solv_lin_eqns_rescalephi" name="solv_lin_eqns_rescalephi">
+<area shape="rect" id="Node000001" title="Functions for solving the system with preconditioning by rescaling phi." alt="" coords="5,31,172,57"/>
+<area shape="rect" id="Node000002" href="$solv__lin__eqns_8h.html#a3a9a99ab0e7872430985cb7583396def" title=" " alt="" coords="242,5,306,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,30,226,22,227,28,172,35"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#aeabe54d7c475d74f71a949ba78a84247" title="index_Lpacked(): Calculate the index of element aij in an NxN matrix in Lower&#45;packed storage form." alt="" coords="220,56,328,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="172,53,205,57,204,63,172,58"/>
+</map>

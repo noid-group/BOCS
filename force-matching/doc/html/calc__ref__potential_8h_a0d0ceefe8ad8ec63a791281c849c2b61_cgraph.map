@@ -1,0 +1,9 @@
+<map id="get_angle_vector_forces" name="get_angle_vector_forces">
+<area shape="rect" id="Node000001" title="get_angle_vector_forces(): Calculate the forces due to the angle beding reference potential." alt="" coords="5,56,169,83"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="217,5,333,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,53,207,34,209,39,140,58"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#a1f483015ac47277c71a1e600b42befd8" title="vect_diff(): Calculates diff = v1 &#45; v2." alt="" coords="240,56,310,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,67,224,67,224,72,169,72"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8c.html#af6e6af9e1403c9a1a78c91a688a3f38f" title="vect_sum(): Calculates sum = v1 + v2." alt="" coords="236,107,314,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="140,81,221,103,220,108,139,86"/>
+</map>

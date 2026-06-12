@@ -1,0 +1,63 @@
+<map id="get_Angle_basis_vectors" name="get_Angle_basis_vectors">
+<area shape="rect" id="Node000001" title="get_Angle_basis_vectors: Associates the angle that CG_struct[i] is involved in with a corresponding v..." alt="" coords="5,369,173,396"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#af536f354b8e2bb65ad61fe15c9dc1566" title="get_Bspline_angle_basis_vector(): JFR &#45; 07.23.12" alt="" coords="221,261,386,304"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,366,220,314,232,308,234,313,222,318,117,371"/>
+<area shape="rect" id="Node000017" href="$calc__grids_8c.html#acffdba3d10c1ba35e2287986ffac37ef" title="get_delta_angle_basis_vector():" alt="" coords="228,461,378,504"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="117,394,222,447,234,452,232,457,220,452,115,399"/>
+<area shape="rect" id="Node000019" href="$calc__grids_8c.html#a66db1e8cd418b3da3017fd804a2125f3" title="get_harmonic_angle_basis_vector():" alt="" coords="235,395,372,437"/>
+<area shape="poly" id="edge27_Node000001_Node000019" title=" " alt="" coords="173,393,220,400,219,406,172,398"/>
+<area shape="rect" id="Node000020" href="$calc__grids_8c.html#af72e60feac003edae12f29d43e9fce9b" title="get_linear_angle_basis_vector():" alt="" coords="227,328,380,371"/>
+<area shape="poly" id="edge33_Node000001_Node000020" title=" " alt="" coords="172,367,211,361,212,366,173,372"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#a48726d58a1b9dfc1502f9efea032c099" title="calc_Bspline(): JFR &#45; 07.16.12: This is the De Boor iterative method for calculating normalized Bspli..." alt="" coords="456,5,552,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="308,260,323,215,349,157,385,96,407,67,432,42,441,36,444,40,436,46,411,71,389,99,354,159,328,217,313,262"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#ac827b2055c7c1e64a2388bb8b97cf8c9" title="calc_Bspline_deriv: Uses the De Boor iterative method for calculating derivatives of normalized Bspli..." alt="" coords="439,56,569,83"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="313,260,359,183,393,139,432,99,449,88,452,92,436,103,397,142,363,186,318,262"/>
+<area shape="rect" id="Node000005" href="$calc__grids_8c.html#afaa61c6900fdbb1dbb42e0eee0567360" title="get_Angle_info: gets theta/vectors required to figure out dPsi/dR_I for an angle site_I takes place i..." alt="" coords="450,411,558,437"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="371,302,388,314,405,336,412,357,420,377,436,397,441,401,438,405,432,401,415,379,407,358,400,338,384,318,368,307"/>
+<area shape="rect" id="Node000010" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="836,553,952,580"/>
+<area shape="poly" id="edge18_Node000002_Node000010" title=" " alt="" coords="319,259,366,210,398,186,433,167,533,128,577,114,619,106,660,105,701,112,744,131,789,161,811,187,830,228,847,279,860,336,881,450,892,538,887,538,876,451,855,337,841,280,825,230,807,190,786,165,742,135,700,118,659,110,619,111,578,119,534,133,435,172,401,190,370,214,323,263"/>
+<area shape="rect" id="Node000013" href="$calc__grids_8c.html#ad24bd48bf2573a22036e521a3793da91" title="get_g_theta_angle():" alt="" coords="440,309,568,336"/>
+<area shape="poly" id="edge15_Node000002_Node000013" title=" " alt="" coords="387,297,426,304,425,310,386,302"/>
+<area shape="rect" id="Node000014" href="$calc__grids_8c.html#ace1ee15830bc3d158e0437f3dea91b65" title="get_grid_index_for_linear_basis():" alt="" coords="641,175,769,217"/>
+<area shape="poly" id="edge16_Node000002_Node000014" title=" " alt="" coords="326,259,373,223,402,206,433,193,482,183,533,178,626,182,626,187,533,184,483,188,435,199,404,211,376,227,329,263"/>
+<area shape="rect" id="Node000015" href="$calc__grids_8c.html#a4cf0a630770b70f674e4c317c6bd0d5b" title="get_laplacian_theta_angle():" alt="" coords="438,461,571,504"/>
+<area shape="poly" id="edge17_Node000002_Node000015" title=" " alt="" coords="374,303,388,314,401,332,409,349,413,382,417,414,424,431,436,448,438,450,434,453,432,451,419,433,412,416,408,383,403,350,397,334,384,318,370,307"/>
+<area shape="rect" id="Node000016" href="$wnoid__math_8c.html#af6e6af9e1403c9a1a78c91a688a3f38f" title="vect_sum(): Calculates sum = v1 + v2." alt="" coords="465,360,543,387"/>
+<area shape="poly" id="edge19_Node000002_Node000016" title=" " alt="" coords="363,302,387,314,411,330,435,346,452,353,449,358,433,350,408,334,385,318,361,307"/>
+<area shape="rect" id="Node000006" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="1000,549,1071,576"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="559,421,666,426,727,434,788,447,848,466,906,491,999,539,997,543,904,496,846,471,787,452,727,439,665,431,558,426"/>
+<area shape="rect" id="Node000007" href="$calc__grids_8c.html#af9c226fc952c36ac1ca615019b75057d" title="get_atom_position_angle: Determines the position of site_i (i_site) in the angle_triple passed" alt="" coords="622,461,788,488"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="559,435,635,454,634,460,557,440"/>
+<area shape="rect" id="Node000008" href="$wnoid__math_8c.html#a4ec3dc2dbb208811be33fdc94163836e" title="get_difference_unit_vector(): From x_i and x_j, calculates the differenc vector, the unit difference ..." alt="" coords="640,680,770,723"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="560,435,576,448,595,476,603,504,604,531,602,558,599,585,600,612,607,639,624,666,629,671,625,675,620,670,602,641,594,613,594,585,596,558,599,531,598,505,590,478,572,451,557,439"/>
+<area shape="rect" id="Node000012" href="$calc__grids_8c.html#aa7d8eb252c0ba695df318b75920a2901" title="get_L2_L3_angles():" alt="" coords="642,629,768,656"/>
+<area shape="poly" id="edge12_Node000005_Node000012" title=" " alt="" coords="557,436,576,447,603,477,635,522,691,614,686,617,630,525,599,480,573,451,554,440"/>
+<area shape="rect" id="Node000009" href="$wnoid__math_8c.html#aed00bac3dd87333226ee1d7cb19700af" title="calc_norm(): Returns the norm of an dvec." alt="" coords="853,685,934,712"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="770,698,838,697,838,702,770,703"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="766,677,786,666,811,644,834,619,865,589,869,593,838,623,815,648,789,670,768,682"/>
+<area shape="rect" id="Node000011" href="$wnoid__math_8c.html#a1f483015ac47277c71a1e600b42befd8" title="vect_diff(): Calculates diff = v1 &#45; v2." alt="" coords="859,633,929,660"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="770,680,843,659,844,664,771,685"/>
+<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="930,683,950,670,989,629,1017,588,1021,591,993,633,954,674,933,687"/>
+<area shape="poly" id="edge13_Node000012_Node000010" title=" " alt="" coords="741,626,787,608,845,584,847,589,789,613,743,631"/>
+<area shape="poly" id="edge14_Node000012_Node000011" title=" " alt="" coords="768,641,843,643,843,648,768,647"/>
+<area shape="poly" id="edge21_Node000017_Node000005" title=" " alt="" coords="378,458,441,440,442,445,379,463"/>
+<area shape="poly" id="edge25_Node000017_Node000010" title=" " alt="" coords="333,502,379,533,406,547,435,557,485,569,537,577,642,584,739,581,820,574,820,580,739,587,642,589,537,583,484,575,433,563,404,552,376,537,330,507"/>
+<area shape="poly" id="edge22_Node000017_Node000013" title=" " alt="" coords="369,459,384,447,401,423,407,398,414,372,432,346,437,342,440,346,436,350,418,374,412,399,406,425,388,451,372,463"/>
+<area shape="poly" id="edge24_Node000017_Node000015" title=" " alt="" coords="379,480,422,480,422,485,379,485"/>
+<area shape="poly" id="edge26_Node000017_Node000016" title=" " alt="" coords="365,459,384,447,399,435,408,422,417,409,432,396,450,387,452,392,436,401,421,413,412,425,403,438,388,451,367,463"/>
+<area shape="rect" id="Node000018" href="$calc__grids_8c.html#a0716f00ea9ff31cbfb4c329249846597" title="get_grid_index_for_delta_basis():" alt="" coords="440,629,568,672"/>
+<area shape="poly" id="edge23_Node000017_Node000018" title=" " alt="" coords="325,502,373,553,436,609,450,619,447,623,432,613,370,557,321,506"/>
+<area shape="poly" id="edge28_Node000019_Node000005" title=" " alt="" coords="372,416,435,419,435,424,372,421"/>
+<area shape="poly" id="edge31_Node000019_Node000010" title=" " alt="" coords="370,436,388,447,403,465,411,483,419,499,435,514,465,526,506,537,609,551,722,559,820,563,820,568,721,565,609,557,505,542,463,531,433,518,415,503,407,485,399,468,384,451,367,440"/>
+<area shape="poly" id="edge29_Node000019_Node000013" title=" " alt="" coords="362,392,385,380,408,363,433,346,444,340,446,345,435,350,411,367,387,385,364,397"/>
+<area shape="poly" id="edge30_Node000019_Node000015" title=" " alt="" coords="370,435,424,453,423,458,369,440"/>
+<area shape="poly" id="edge32_Node000019_Node000016" title=" " alt="" coords="372,399,449,382,450,387,373,404"/>
+<area shape="poly" id="edge36_Node000020_Node000005" title=" " alt="" coords="362,369,435,396,451,402,449,407,433,401,360,374"/>
+<area shape="poly" id="edge39_Node000020_Node000010" title=" " alt="" coords="358,325,433,295,505,283,536,285,575,295,626,316,675,344,720,377,762,412,830,483,876,539,872,543,826,486,758,416,717,381,672,348,624,321,574,300,536,290,505,288,435,300,360,330"/>
+<area shape="poly" id="edge37_Node000020_Node000013" title=" " alt="" coords="380,337,425,330,426,336,381,342"/>
+<area shape="poly" id="edge38_Node000020_Node000015" title=" " alt="" coords="370,369,388,381,404,398,413,414,421,431,436,447,440,450,436,454,432,451,417,434,408,417,399,401,384,385,367,374"/>
+<area shape="poly" id="edge40_Node000020_Node000016" title=" " alt="" coords="380,356,450,364,450,370,380,361"/>
+<area shape="rect" id="Node000021" href="$calc__grids_8c.html#ae8375fd538f510ba6aa27438e9620043" title="calc_linear_spline_A():" alt="" coords="434,208,574,235"/>
+<area shape="poly" id="edge34_Node000020_Node000021" title=" " alt="" coords="366,325,384,314,399,299,408,284,417,268,432,251,450,240,453,244,436,255,421,271,413,286,404,302,388,318,369,330"/>
+<area shape="poly" id="edge35_Node000021_Node000014" title=" " alt="" coords="574,210,625,203,626,209,575,215"/>
+</map>

@@ -1,0 +1,40 @@
+<map id="check_word_list" name="check_word_list">
+<area shape="rect" id="Node000001" title="check_word_list(): Checks to see if the n_words words in list1[] occur in list_2[] in any order." alt="" coords="1017,107,1133,133"/>
+<area shape="rect" id="Node000002" href="$cgff__fn_8c.html#a726e6ece0355e35c40a956bd68a66251" title="determine_angle_type():" alt="" coords="821,5,969,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1045,99,1009,72,968,46,942,35,944,30,971,42,1012,67,1048,94"/>
+<area shape="rect" id="Node000008" href="$cgff__fn_8c.html#afaaabfa3d373818883b5d8d11507cc6e" title="determine_bond_type():" alt="" coords="822,56,968,83"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1010,104,944,86,946,81,1011,99"/>
+<area shape="rect" id="Node000010" href="$cgff__fn_8c.html#ab8dd5699919a1bbcbeeaa572c491f267" title="determine_pair_type():" alt="" coords="826,107,964,133"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="1002,123,965,123,965,117,1002,117"/>
+<area shape="rect" id="Node000012" href="$calc__ref__potential_8c.html#aec482419bd6624cbc73bcdafb71d8c77" title="get_angle_inter_ptr(): Returns the pointer to the angle interaction depending on the sequence found i..." alt="" coords="830,157,961,184"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="1011,141,946,159,944,154,1010,136"/>
+<area shape="rect" id="Node000015" href="$calc__ref__potential_8c.html#a5ac2499f606ee2745d4427cd50884c95" title="get_inter_ptr(): Returns an pointer to the interaction based on the sequence of sites in site_names." alt="" coords="848,216,942,243"/>
+<area shape="poly" id="edge17_Node000001_Node000015" title=" " alt="" coords="1047,145,971,198,932,218,929,213,968,194,1044,141"/>
+<area shape="rect" id="Node000003" href="$cgff__fn_8c.html#a97873b04948c14b133f49988c6c5d51e" title="check_angles():" alt="" coords="643,5,744,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="806,21,744,21,744,16,806,16"/>
+<area shape="rect" id="Node000004" href="$cgff__fn_8c.html#ab47b14bd0a876c87199ec11ecc1e4e30" title="check_bond_interactions(): Store indices to Bond_Type_List[] for each bond interaction found in the G..." alt="" coords="400,81,566,108"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="634,40,615,47,519,83,517,78,613,41,632,35"/>
+<area shape="rect" id="Node000005" href="$cgff__fn_8c.html#abb2b8a29a7a7945017e5136b273d7f13" title="get_bonds(): Stores information from top into sys and CG_struct." alt="" coords="271,88,352,115"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="385,101,353,102,352,97,385,96"/>
+<area shape="rect" id="Node000006" href="$cgff__fn_8c.html#a9e513ad59f589f2c9b4bbac849a6897b" title="setup_CG_struct(): Stores the information in top into sys and CG_struct." alt="" coords="103,103,223,129"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="256,109,224,113,223,107,255,104"/>
+<area shape="rect" id="Node000007" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,157,55,184"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="115,138,56,163,54,158,113,133"/>
+<area shape="rect" id="Node000009" href="$cgff__fn_8c.html#a5da896e6ba32cd74b67141871658f40a" title="check_bonds(): Make sure bonds in topology match those in input file." alt="" coords="644,56,742,83"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="807,72,743,72,743,67,807,67"/>
+<area shape="poly" id="edge9_Node000009_Node000004" title=" " alt="" coords="629,80,566,87,566,82,629,74"/>
+<area shape="rect" id="Node000011" href="$cgff__fn_8c.html#ac4b74b893cbf6387af2b51c759c14444" title="check_pairs():" alt="" coords="648,107,739,133"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="811,123,739,123,739,117,811,117"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="632,115,566,107,566,102,633,110"/>
+<area shape="rect" id="Node000013" href="$calc__ref__potential_8c.html#a1c6089fde66d61ef80d61a12e6c02cd6" title="calc_ref_Angle_forces():" alt="" coords="618,157,768,184"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="814,173,769,173,769,168,814,168"/>
+<area shape="rect" id="Node000014" href="$calc__ref__potential_8c.html#ae7be9c817dc9816635b89d346f4f2ed4" title="get_ref_forces(): Calculate the forces due to the reference potential." alt="" coords="431,200,535,227"/>
+<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="610,190,536,205,535,200,609,185"/>
+<area shape="poly" id="edge16_Node000014_Node000007" title=" " alt="" coords="415,210,55,176,55,170,416,204"/>
+<area shape="rect" id="Node000016" href="$calc__ref__potential_8c.html#a3955939e6709c062689b041a16512ab6" title="calc_ref_BondStretch_forces(): Calculates the forces due to bond stretching." alt="" coords="620,208,766,251"/>
+<area shape="poly" id="edge18_Node000015_Node000016" title=" " alt="" coords="833,232,767,232,767,227,833,227"/>
+<area shape="rect" id="Node000017" href="$calc__ref__potential_8c.html#a8ae41292d9a3977fa5c29e0dbcbb9f8c" title="calc_ref_nb_pair_forces(): Evaluate the pair forces over all pairs due to the reference potential." alt="" coords="614,275,773,301"/>
+<area shape="poly" id="edge20_Node000015_Node000017" title=" " alt="" coords="835,250,743,277,741,272,833,244"/>
+<area shape="poly" id="edge19_Node000016_Node000014" title=" " alt="" coords="604,225,535,220,536,215,605,220"/>
+<area shape="poly" id="edge21_Node000017_Node000014" title=" " alt="" coords="632,272,613,265,518,230,520,225,615,260,634,267"/>
+</map>

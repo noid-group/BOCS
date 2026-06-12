@@ -1,0 +1,5 @@
+<map id="read_nrexcl" name="read_nrexcl">
+<area shape="rect" id="Node000001" title="read_nrexcl(): Reads the number of bonds for determining exclusion lists." alt="" coords="5,5,94,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#aa58790fe8cbcf89bdbad529d8e038d77" title="delete_directive_from_line(): For lines that contain a directive marked by [...], the ending brace is..." alt="" coords="142,5,314,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,16,126,16,126,21,94,21"/>
+</map>

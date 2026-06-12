@@ -1,0 +1,65 @@
+[Mode] GROMACS
+
+[Temperature]  275
+
+[Structures]    1
+inp.txt
+[End Structures]
+
+[Site_Types]    2
+NEP
+MEO
+[End Site_Types]
+
+[Inter_Types]  3
+!inter_name   inter_type        basis       dr         R_min      R_max    spline_order    n_smooth
+ Pair_NEP_NEP   Pair_Interaction  linear      0.015      0.000      2.000                    0
+ Pair_NEP_MEO   Pair_Interaction  Bspline     0.015      0.000      2.000    4               0
+ Pair_MEO_MEO   Pair_Interaction  Bspline     0.01       0.000      2.000    4               0
+[End Inter_Types]
+
+[Pair_Interaction] 3
+! inter_name   type1  type2
+ Pair_NEP_NEP  NEP    NEP
+ Pair_NEP_MEO  NEP    MEO
+ Pair_MEO_MEO  MEO    MEO
+[End Pair_Interaction]
+
+[SVD]
+0.00000001
+YES
+NO
+YES
+[End SVD]
+
+[TRIM]
+0.0000000001
+[End TRIM]
+
+[TPR] 24
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+CG_NEP_MEO.btp
+[End TPR]
+

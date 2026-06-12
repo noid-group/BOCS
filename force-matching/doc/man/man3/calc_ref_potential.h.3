@@ -1,0 +1,267 @@
+.TH "calc_ref_potential.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+calc_ref_potential.h
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBget_ref_forces\fP (FILE *fp, int N_sites, \fBtW_CG_site\fP *CG_struct, \fBtW_gmx_info\fP info, \fBtW_gmx_topology\fP *top, \fBtW_ref_potential\fP ref_potential)"
+.br
+.RI "\fBget_ref_forces()\fP: Calculate the forces due to the reference potential\&. "
+.ti -1c
+.RI "void \fBprint_bref\fP (int N_coeff, double *bref, \fBtW_word\fP tag)"
+.br
+.RI "\fBprint_bref()\fP: JFR - 07\&.16\&.12: Prints bref\&. "
+.ti -1c
+.RI "void \fBinitialize_ref_forces\fP (int N_sites, \fBtW_CG_site\fP *CG_struct)"
+.br
+.RI "\fBinitialize_ref_forces()\fP: Clear out the reference force variables\&. "
+.ti -1c
+.RI "void \fBcalc_ref_nb_pair_forces\fP (int N_sites, \fBtW_CG_site\fP *CG_struct, \fBtW_gmx_info\fP info, \fBtW_ref_potential\fP ref_potential, FILE *fp)"
+.br
+.RI "\fBcalc_ref_nb_pair_forces()\fP: Evaluate the pair forces over all pairs due to the reference potential\&. "
+.ti -1c
+.RI "void \fBcalc_ref_BondStretch_forces\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, \fBtW_ref_potential\fP ref_potential, FILE *fp)"
+.br
+.RI "\fBcalc_ref_BondStretch_forces()\fP: Calculates the forces due to bond stretching\&. "
+.ti -1c
+.RI "void \fBcalc_ref_Angle_forces\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, \fBtW_ref_potential\fP ref_potential, FILE *fp)"
+.br
+.RI "\fBcalc_ref_Angle_forces()\fP: "
+.ti -1c
+.RI "void \fBcalc_ref_Dihedral_forces\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, \fBtW_ref_potential\fP ref_potential, FILE *fp)"
+.br
+.RI "\fBcalc_ref_Dihedral_forces()\fP: Calculate the forces due to the reference dihedral potential\&. "
+.ti -1c
+.RI "void \fBcalc_ref_IntraMolecPairs_forces\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, \fBtW_ref_potential\fP ref_potential, FILE *fp)"
+.br
+.RI "\fBcalc_ref_IntraMolecPairs_forces()\fP: Calculate forces due to intramolecular pair forces\&. "
+.ti -1c
+.RI "void \fBprint_CG_ref_f\fP (int N_sites, \fBtW_CG_site\fP *CG_struct, FILE *fp)"
+.br
+.RI "\fBprint_CG_ref_f()\fP: Prints the forces due to the reference potential\&. "
+.ti -1c
+.RI "double \fBget_difference_vector_PBC\fP (\fBbool\fP b_PBC, \fBdvec\fP box, \fBdvec\fP x_i, \fBdvec\fP x_j, \fBdvec\fP x_ij)"
+.br
+.RI "\fBget_difference_vector_PBC()\fP: If periodic boundary conditions are present, then applies the minimum image convention\&. "
+.ti -1c
+.RI "void \fBcopy_2_site_names\fP (\fBtW_word\fP *site_names, \fBtW_word\fP name1, \fBtW_word\fP name2)"
+.br
+.RI "\fBcopy_2_site_names()\fP: "
+.ti -1c
+.RI "void \fBcopy_3_site_names\fP (\fBtW_word\fP *site_names, \fBtW_word\fP name1, \fBtW_word\fP name2, \fBtW_word\fP name3)"
+.br
+.RI "\fBcopy_3_site_names()\fP: "
+.ti -1c
+.RI "void \fBcopy_4_site_names\fP (\fBtW_word\fP *site_names, \fBtW_word\fP name1, \fBtW_word\fP name2, \fBtW_word\fP name3, \fBtW_word\fP name4)"
+.br
+.RI "\fBcopy_4_site_names()\fP: "
+.ti -1c
+.RI "double \fBget_scalar_f_from_table\fP (double x, \fBtW_ref_inter\fP *inter, int interpolation_index)"
+.br
+.RI "\fBget_scalar_f_from_table()\fP: Returns f(x) which were read in from input\&. "
+.ti -1c
+.RI "double \fBget_no_interpolation_f\fP (\fBtW_ref_inter\fP *inter, int coeff, double x)"
+.br
+.RI "\fBget_no_interpolation_f()\fP: Returns f(x) without interpolating between grid points\&. "
+.ti -1c
+.RI "double \fBget_linear_interpolation_f\fP (\fBtW_ref_inter\fP *inter, int coeff, double x)"
+.br
+.RI "\fBget_linear_interpolation_f()\fP: Returns f(x) by linearly interpolating between grid points on either side of x\&. "
+.ti -1c
+.RI "void \fBget_central_pair_vector_forces\fP (\fBdvec\fP x_ij, double r_ij, double f_r, \fBtW_CG_site\fP *i_site, \fBtW_CG_site\fP *j_site)"
+.br
+.RI "\fBget_central_pair_vector_forces()\fP: Calculates the force between two pairs of site\&. "
+.ti -1c
+.RI "\fBtW_ref_inter\fP * \fBget_inter_ptr\fP (\fBtW_word\fP *site_names, \fBtW_ref_inter\fP *inter, int N_inter)"
+.br
+.RI "\fBget_inter_ptr()\fP: Returns an pointer to the interaction based on the sequence of sites in site_names\&. "
+.ti -1c
+.RI "\fBtW_ref_inter\fP * \fBget_angle_inter_ptr\fP (\fBtW_word\fP *site_names, \fBtW_ref_inter\fP *inter, int N_inter)"
+.br
+.RI "\fBget_angle_inter_ptr()\fP: Returns the pointer to the angle interaction depending on the sequence found in site_names\&. "
+.ti -1c
+.RI "\fBtW_ref_inter\fP * \fBget_dihedral_inter_ptr\fP (\fBtW_word\fP *site_names, \fBtW_ref_inter\fP *inter, int N_inter)"
+.br
+.RI "\fBget_dihedral_inter_ptr()\fP: Returns the pointer to a dihedral interaction depending on the squence found in site_names\&. "
+.ti -1c
+.RI "\fBtW_ref_inter\fP * \fBget_IntraMolecPair_inter_ptr\fP (\fBtW_word\fP *site_names, \fBtW_ref_inter\fP *inter, int N_inter)"
+.br
+.RI "\fBget_IntraMolecPair_inter_ptr()\fP: Returns the pointer to a intramolecular interaction depending on the sequence in site_names\&. "
+.ti -1c
+.RI "double \fBget_ref_Angle_info\fP (\fBdvec\fP x_1, \fBdvec\fP x_2, \fBdvec\fP x_3, \fBdvec\fP L_2, \fBdvec\fP L_3, FILE *fp)"
+.br
+.RI "\fBget_ref_Angle_info()\fP: Calculates the forces on the sites for the angle defined as <213\&. "
+.ti -1c
+.RI "void \fBget_angle_vector_forces\fP (double f_theta, \fBdvec\fP L_2, \fBdvec\fP L_3, double theta, \fBtW_CG_site\fP *site1, \fBtW_CG_site\fP *site2, \fBtW_CG_site\fP *site3)"
+.br
+.RI "\fBget_angle_vector_forces()\fP: Calculate the forces due to the angle beding reference potential\&. "
+.ti -1c
+.RI "double \fBget_ref_Dihedral_info\fP (\fBtW_dihedral\fP *dihedral, \fBtW_CG_site\fP *CG_struct, \fBdvec\fP *B)"
+.br
+.RI "\fBget_ref_Dihedral_info()\fP: Copies information for a dihedral interactions into the variable dihedral\&. "
+.ti -1c
+.RI "void \fBget_dihedral_vector_forces\fP (double f_phi, double phi, \fBdvec\fP *B, \fBtW_CG_site\fP *site1, \fBtW_CG_site\fP *site2, \fBtW_CG_site\fP *site3, \fBtW_CG_site\fP *site4)"
+.br
+.RI "\fBget_dihedral_vector_forces()\fP: Calculates the forces due to the dihedral reference potential\&. "
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void calc_ref_Angle_forces (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, \fBtW_ref_potential\fP ref_potential, FILE * fp)"
+
+.PP
+\fBcalc_ref_Angle_forces()\fP: 
+.PP
+Referenced by \fBget_ref_forces()\fP\&.
+.SS "void calc_ref_BondStretch_forces (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, \fBtW_ref_potential\fP ref_potential, FILE * fp)"
+
+.PP
+\fBcalc_ref_BondStretch_forces()\fP: Calculates the forces due to bond stretching\&. 
+.PP
+Referenced by \fBget_ref_forces()\fP\&.
+.SS "void calc_ref_Dihedral_forces (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, \fBtW_ref_potential\fP ref_potential, FILE * fp)"
+
+.PP
+\fBcalc_ref_Dihedral_forces()\fP: Calculate the forces due to the reference dihedral potential\&. 
+.PP
+Referenced by \fBget_ref_forces()\fP\&.
+.SS "void calc_ref_IntraMolecPairs_forces (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, \fBtW_ref_potential\fP ref_potential, FILE * fp)"
+
+.PP
+\fBcalc_ref_IntraMolecPairs_forces()\fP: Calculate forces due to intramolecular pair forces\&. 
+.PP
+Referenced by \fBget_ref_forces()\fP\&.
+.SS "void calc_ref_nb_pair_forces (int N_sites, \fBtW_CG_site\fP * CG_struct, \fBtW_gmx_info\fP info, \fBtW_ref_potential\fP ref_potential, FILE * fp)"
+
+.PP
+\fBcalc_ref_nb_pair_forces()\fP: Evaluate the pair forces over all pairs due to the reference potential\&. 
+.PP
+Referenced by \fBget_ref_forces()\fP\&.
+.SS "void copy_2_site_names (\fBtW_word\fP * site_names, \fBtW_word\fP name1, \fBtW_word\fP name2)"
+
+.PP
+\fBcopy_2_site_names()\fP: 
+.PP
+Referenced by \fBcalc_ref_BondStretch_forces()\fP, \fBcalc_ref_IntraMolecPairs_forces()\fP, and \fBcalc_ref_nb_pair_forces()\fP\&.
+.SS "void copy_3_site_names (\fBtW_word\fP * site_names, \fBtW_word\fP name1, \fBtW_word\fP name2, \fBtW_word\fP name3)"
+
+.PP
+\fBcopy_3_site_names()\fP: 
+.PP
+Referenced by \fBcalc_ref_Angle_forces()\fP\&.
+.SS "void copy_4_site_names (\fBtW_word\fP * site_names, \fBtW_word\fP name1, \fBtW_word\fP name2, \fBtW_word\fP name3, \fBtW_word\fP name4)"
+
+.PP
+\fBcopy_4_site_names()\fP: 
+.PP
+Referenced by \fBcalc_ref_Dihedral_forces()\fP\&.
+.SS "\fBtW_ref_inter\fP * get_angle_inter_ptr (\fBtW_word\fP * site_names, \fBtW_ref_inter\fP * inter, int N_inter)"
+
+.PP
+\fBget_angle_inter_ptr()\fP: Returns the pointer to the angle interaction depending on the sequence found in site_names\&. Returns NULL if no interaction for the triplet\&. 
+.PP
+Referenced by \fBcalc_ref_Angle_forces()\fP\&.
+.SS "void get_angle_vector_forces (double f_theta, \fBdvec\fP L_2, \fBdvec\fP L_3, double theta, \fBtW_CG_site\fP * site1, \fBtW_CG_site\fP * site2, \fBtW_CG_site\fP * site3)"
+
+.PP
+\fBget_angle_vector_forces()\fP: Calculate the forces due to the angle beding reference potential\&. 
+.PP
+Referenced by \fBcalc_ref_Angle_forces()\fP\&.
+.SS "void get_central_pair_vector_forces (\fBdvec\fP x_ij, double r_ij, double f_r, \fBtW_CG_site\fP * i_site, \fBtW_CG_site\fP * j_site)"
+
+.PP
+\fBget_central_pair_vector_forces()\fP: Calculates the force between two pairs of site\&. 
+.PP
+Referenced by \fBcalc_ref_BondStretch_forces()\fP, \fBcalc_ref_IntraMolecPairs_forces()\fP, and \fBcalc_ref_nb_pair_forces()\fP\&.
+.SS "double get_difference_vector_PBC (\fBbool\fP b_PBC, \fBdvec\fP box, \fBdvec\fP x_i, \fBdvec\fP x_j, \fBdvec\fP x_ij)"
+
+.PP
+\fBget_difference_vector_PBC()\fP: If periodic boundary conditions are present, then applies the minimum image convention\&. Only works for cubic boxes\&. 
+.PP
+Referenced by \fBcalc_ref_nb_pair_forces()\fP\&.
+.SS "\fBtW_ref_inter\fP * get_dihedral_inter_ptr (\fBtW_word\fP * site_names, \fBtW_ref_inter\fP * inter, int N_inter)"
+
+.PP
+\fBget_dihedral_inter_ptr()\fP: Returns the pointer to a dihedral interaction depending on the squence found in site_names\&. Returns NULL if no interaction for the quartet\&. 
+.PP
+Referenced by \fBcalc_ref_Dihedral_forces()\fP\&.
+.SS "void get_dihedral_vector_forces (double f_phi, double phi, \fBdvec\fP * B, \fBtW_CG_site\fP * site1, \fBtW_CG_site\fP * site2, \fBtW_CG_site\fP * site3, \fBtW_CG_site\fP * site4)"
+
+.PP
+\fBget_dihedral_vector_forces()\fP: Calculates the forces due to the dihedral reference potential\&. 
+.PP
+Referenced by \fBcalc_ref_Dihedral_forces()\fP\&.
+.SS "\fBtW_ref_inter\fP * get_inter_ptr (\fBtW_word\fP * site_names, \fBtW_ref_inter\fP * inter, int N_inter)"
+
+.PP
+\fBget_inter_ptr()\fP: Returns an pointer to the interaction based on the sequence of sites in site_names\&. Returns NULL if no interaction is present for that sequence of sites\&. 
+.PP
+Referenced by \fBcalc_ref_BondStretch_forces()\fP, and \fBcalc_ref_nb_pair_forces()\fP\&.
+.SS "\fBtW_ref_inter\fP * get_IntraMolecPair_inter_ptr (\fBtW_word\fP * site_names, \fBtW_ref_inter\fP * inter, int N_inter)"
+
+.PP
+\fBget_IntraMolecPair_inter_ptr()\fP: Returns the pointer to a intramolecular interaction depending on the sequence in site_names\&. Returns NULL if no interaction for the pair\&. I need to be able to specify the nuber of bonds away so that I could have for example a B-B 1-4 interaction and a B-L 1-4 interaction\&. 
+.PP
+Referenced by \fBcalc_ref_IntraMolecPairs_forces()\fP\&.
+.SS "double get_linear_interpolation_f (\fBtW_ref_inter\fP * inter, int coeff, double x)"
+
+.PP
+\fBget_linear_interpolation_f()\fP: Returns f(x) by linearly interpolating between grid points on either side of x\&. 
+.PP
+Referenced by \fBget_scalar_f_from_table()\fP\&.
+.SS "double get_no_interpolation_f (\fBtW_ref_inter\fP * inter, int coeff, double x)"
+
+.PP
+\fBget_no_interpolation_f()\fP: Returns f(x) without interpolating between grid points\&. 
+.PP
+Referenced by \fBget_scalar_f_from_table()\fP\&.
+.SS "double get_ref_Angle_info (\fBdvec\fP x_1, \fBdvec\fP x_2, \fBdvec\fP x_3, \fBdvec\fP L_2, \fBdvec\fP L_3, FILE * fp)"
+
+.PP
+\fBget_ref_Angle_info()\fP: Calculates the forces on the sites for the angle defined as <213\&. 
+.PP
+Referenced by \fBcalc_ref_Angle_forces()\fP\&.
+.SS "double get_ref_Dihedral_info (\fBtW_dihedral\fP * dihedral, \fBtW_CG_site\fP * CG_struct, \fBdvec\fP * B)"
+
+.PP
+\fBget_ref_Dihedral_info()\fP: Copies information for a dihedral interactions into the variable dihedral\&. 
+.PP
+Referenced by \fBcalc_ref_Dihedral_forces()\fP\&.
+.SS "void get_ref_forces (FILE * fp, int N_sites, \fBtW_CG_site\fP * CG_struct, \fBtW_gmx_info\fP info, \fBtW_gmx_topology\fP * top, \fBtW_ref_potential\fP ref_potential)"
+
+.PP
+\fBget_ref_forces()\fP: Calculate the forces due to the reference potential\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "double get_scalar_f_from_table (double x, \fBtW_ref_inter\fP * inter, int interpolation_index)"
+
+.PP
+\fBget_scalar_f_from_table()\fP: Returns f(x) which were read in from input\&. 
+.PP
+Referenced by \fBcalc_ref_Angle_forces()\fP, \fBcalc_ref_BondStretch_forces()\fP, \fBcalc_ref_Dihedral_forces()\fP, \fBcalc_ref_IntraMolecPairs_forces()\fP, and \fBcalc_ref_nb_pair_forces()\fP\&.
+.SS "void initialize_ref_forces (int N_sites, \fBtW_CG_site\fP * CG_struct)"
+
+.PP
+\fBinitialize_ref_forces()\fP: Clear out the reference force variables\&. 
+.PP
+Referenced by \fBget_ref_forces()\fP\&.
+.SS "void print_bref (int N_coeff, double * bref, \fBtW_word\fP tag)"
+
+.PP
+\fBprint_bref()\fP: JFR - 07\&.16\&.12: Prints bref\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void print_CG_ref_f (int N_sites, \fBtW_CG_site\fP * CG_struct, FILE * fp)"
+
+.PP
+\fBprint_CG_ref_f()\fP: Prints the forces due to the reference potential\&. 
+.PP
+Referenced by \fBget_ref_forces()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

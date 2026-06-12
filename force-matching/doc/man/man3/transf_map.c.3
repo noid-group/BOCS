@@ -1,0 +1,62 @@
+.TH "transf_map.c" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+transf_map.c \- Functions related to mapping to a cg representation\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <stdlib\&.h>\fP
+.br
+\fR#include <string\&.h>\fP
+.br
+\fR#include 'transf_map\&.h'\fP
+.br
+\fR#include 'safe_mem\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBsetup_CG_trr\fP (int N_sites, \fBtW_gmx_topology\fP *top, \fBtW_gmx_trxframe\fP *fr_aa, \fBtW_gmx_trxframe\fP *fr_cg)"
+.br
+.ti -1c
+.RI "int \fBmap_config\fP (int N_sites, \fBtW_site_map\fP *CG_map, \fBtW_gmx_trxframe\fP *fr_aa, \fBtW_gmx_trxframe\fP *fr_cg)"
+.br
+.ti -1c
+.RI "void \fBprint_gro_frame\fP (FILE *out_gro, int N_sites, \fBtW_site_map\fP *CG_map, \fBtW_gmx_trxframe\fP *fr)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Functions related to mapping to a cg representation\&. 
+
+
+.PP
+\fBAuthors\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "int map_config (int N_sites, \fBtW_site_map\fP * CG_map, \fBtW_gmx_trxframe\fP * fr_aa, \fBtW_gmx_trxframe\fP * fr_cg)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void print_gro_frame (FILE * out_gro, int N_sites, \fBtW_site_map\fP * CG_map, \fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int setup_CG_trr (int N_sites, \fBtW_gmx_topology\fP * top, \fBtW_gmx_trxframe\fP * fr_aa, \fBtW_gmx_trxframe\fP * fr_cg)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

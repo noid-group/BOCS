@@ -1,0 +1,12 @@
+<map id="get_inter_ptr" name="get_inter_ptr">
+<area shape="rect" id="Node000001" title="get_inter_ptr(): Returns an pointer to the interaction based on the sequence of sites in site_names." alt="" coords="462,43,556,69"/>
+<area shape="rect" id="Node000002" href="$calc__ref__potential_8c.html#a3955939e6709c062689b041a16512ab6" title="calc_ref_BondStretch_forces(): Calculates the forces due to bond stretching." alt="" coords="262,5,408,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="447,48,408,42,409,36,448,43"/>
+<area shape="rect" id="Node000005" href="$calc__ref__potential_8c.html#a8ae41292d9a3977fa5c29e0dbcbb9f8c" title="calc_ref_nb_pair_forces(): Evaluate the pair forces over all pairs due to the reference potential." alt="" coords="255,72,414,99"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="448,69,415,74,415,69,447,64"/>
+<area shape="rect" id="Node000003" href="$calc__ref__potential_8c.html#ae7be9c817dc9816635b89d346f4f2ed4" title="get_ref_forces(): Calculate the forces due to the reference potential." alt="" coords="103,43,207,69"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="247,44,208,50,207,45,246,38"/>
+<area shape="rect" id="Node000004" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,43,55,69"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="87,59,55,59,55,53,87,53"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="239,72,207,67,208,62,240,67"/>
+</map>

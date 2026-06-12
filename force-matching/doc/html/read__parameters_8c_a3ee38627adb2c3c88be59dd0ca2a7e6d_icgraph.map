@@ -1,0 +1,8 @@
+<map id="initialize_sys" name="initialize_sys">
+<area shape="rect" id="Node000001" title="initialize_sys(): Initializes the variables in the sys data structure." alt="" coords="222,5,318,32"/>
+<area shape="rect" id="Node000002" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,21,55,21,55,16,207,16"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#a05efae93beb41e2b0d8cbe4581086bd1" title="read_par(): Reads the information from the parameter file and files listed in the param&#45; eter file." alt="" coords="103,31,174,57"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="207,33,175,40,174,35,206,28"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="87,35,55,27,56,22,88,30"/>
+</map>

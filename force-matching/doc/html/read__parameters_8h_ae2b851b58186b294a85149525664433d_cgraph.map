@@ -1,0 +1,5 @@
+<map id="read_mode" name="read_mode">
+<area shape="rect" id="Node000001" title="read_mode(): Reads and stores the mode for the calculation." alt="" coords="5,5,91,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#aa58790fe8cbcf89bdbad529d8e038d77" title="delete_directive_from_line(): For lines that contain a directive marked by [...], the ending brace is..." alt="" coords="139,5,311,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,16,123,16,123,21,91,21"/>
+</map>

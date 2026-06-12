@@ -1,0 +1,9 @@
+<map id="Precondition" name="Precondition">
+<area shape="rect" id="Node000001" title="Preconditioning." alt="" coords="5,56,99,83"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#aeabe54d7c475d74f71a949ba78a84247" title="index_Lpacked(): Calculate the index of element aij in an NxN matrix in Lower&#45;packed storage form." alt="" coords="147,5,255,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,53,144,35,146,40,95,58"/>
+<area shape="rect" id="Node000003" href="$solv__lin__eqns_8c.html#a6a57f31a57669a0a0d9400d853fa8830" title=" " alt="" coords="166,56,236,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="99,67,151,67,151,72,99,72"/>
+<area shape="rect" id="Node000004" href="$solv__lin__eqns_8c.html#a7e04670de0610e981d59e370bdb7aff8" title=" " alt="" coords="162,107,240,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="95,81,148,99,146,104,93,86"/>
+</map>

@@ -1,0 +1,97 @@
+.TH "tW_indicator_function" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tW_indicator_function
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <C:/Users/maria/Documents/Noid_Group/MYBOCS/05_11_26\-releasedoc/BOCS_Developers/force\-matching/src/LDD\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "\fBint\fP \fBtype\fP"
+.br
+.ti -1c
+.RI "\fBdouble\fP \fBnorm\fP"
+.br
+.ti -1c
+.RI "\fBdouble\fP \fBr0\fP"
+.br
+.ti -1c
+.RI "\fBdouble\fP \fBrC\fP"
+.br
+.ti -1c
+.RI "\fBdouble\fP \fBR\fP"
+.br
+.ti -1c
+.RI "double \fBr\fP"
+.br
+.ti -1c
+.RI "\fBint\fP \fBn_coeffs\fP"
+.br
+.ti -1c
+.RI "\fBdouble\fP * \fBcoeffs\fP"
+.br
+.ti -1c
+.RI "\fBdouble\fP(* \fBget_w\fP )(\fBstruct\fP \fBtW_indicator_function\fP *, \fBdouble\fP)"
+.br
+.ti -1c
+.RI "\fBdouble\fP(* \fBget_wp1\fP )(\fBstruct\fP \fBtW_indicator_function\fP *, \fBdouble\fP)"
+.br
+.ti -1c
+.RI "\fBdouble\fP(* \fBget_wp2\fP )(\fBstruct\fP \fBtW_indicator_function\fP *, \fBdouble\fP)"
+.br
+.in -1c
+.SH "Field Documentation"
+.PP 
+.SS "\fBdouble\fP* coeffs"
+
+.PP
+Referenced by \fBget_w_1_dpd()\fP, \fBget_w_1_lucy()\fP, \fBget_w_1_shell()\fP, \fBget_w_1_smooth()\fP, \fBget_w_1_sphere()\fP, \fBget_w_2_dpd()\fP, \fBget_w_2_lucy()\fP, \fBget_w_2_shell()\fP, \fBget_w_2_smooth()\fP, \fBget_w_2_sphere()\fP, \fBget_w_dpd()\fP, \fBget_w_lucy()\fP, \fBget_w_shell()\fP, \fBget_w_smooth()\fP, \fBget_w_sphere()\fP, \fBpop_coeffs_dpd()\fP, \fBpop_coeffs_lucy()\fP, \fBpop_coeffs_shell()\fP, \fBpop_coeffs_smooth()\fP, and \fBpop_coeffs_sphere()\fP\&.
+.SS "\fBdouble\fP(* get_w) (\fBstruct\fP \fBtW_indicator_function\fP *, \fBdouble\fP)"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP, and \fBpop_indicator()\fP\&.
+.SS "\fBdouble\fP(* get_wp1) (\fBstruct\fP \fBtW_indicator_function\fP *, \fBdouble\fP)"
+
+.PP
+Referenced by \fBcalc_grids3()\fP, \fBcalculate_local_densities()\fP, \fBeval_Bspline_basis_vectors_LD()\fP, \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBeval_delta_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LDGRAD()\fP, and \fBpop_indicator()\fP\&.
+.SS "\fBdouble\fP(* get_wp2) (\fBstruct\fP \fBtW_indicator_function\fP *, \fBdouble\fP)"
+
+.PP
+Referenced by \fBeval_Bspline_basis_vectors_LD()\fP, \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBeval_delta_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LDGRAD()\fP, and \fBpop_indicator()\fP\&.
+.SS "\fBint\fP n_coeffs"
+
+.PP
+Referenced by \fBpop_coeffs_dpd()\fP, \fBpop_coeffs_lucy()\fP, \fBpop_coeffs_shell()\fP, \fBpop_coeffs_smooth()\fP, and \fBpop_coeffs_sphere()\fP\&.
+.SS "\fBdouble\fP norm"
+
+.PP
+Referenced by \fBcalc_grids3()\fP, \fBcalculate_local_densities()\fP, \fBeval_Bspline_basis_vectors_LD()\fP, \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBeval_delta_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LDGRAD()\fP, \fBpop_coeffs_dpd()\fP, \fBpop_coeffs_lucy()\fP, \fBpop_coeffs_shell()\fP, \fBpop_coeffs_smooth()\fP, and \fBpop_coeffs_sphere()\fP\&.
+.SS "\fBdouble\fP R"
+
+.PP
+Referenced by \fBpop_coeffs_sphere()\fP\&.
+.SS "double r"
+
+.PP
+Referenced by \fBpop_coeffs_sphere()\fP\&.
+.SS "\fBdouble\fP r0"
+
+.PP
+Referenced by \fBpop_coeffs_dpd()\fP, \fBpop_coeffs_lucy()\fP, \fBpop_coeffs_shell()\fP, \fBpop_coeffs_smooth()\fP, \fBpop_coeffs_sphere()\fP, \fBpop_indicator()\fP, and \fBsummarize_input_pair_inter()\fP\&.
+.SS "\fBdouble\fP rC"
+
+.PP
+Referenced by \fBcalc_grids3()\fP, \fBget_w_1_dpd()\fP, \fBget_w_1_lucy()\fP, \fBget_w_1_shell()\fP, \fBget_w_1_smooth()\fP, \fBget_w_1_sphere()\fP, \fBget_w_2_dpd()\fP, \fBget_w_2_lucy()\fP, \fBget_w_2_shell()\fP, \fBget_w_2_smooth()\fP, \fBget_w_2_sphere()\fP, \fBget_w_dpd()\fP, \fBget_w_lucy()\fP, \fBget_w_shell()\fP, \fBget_w_smooth()\fP, \fBget_w_sphere()\fP, \fBpop_coeffs_dpd()\fP, \fBpop_coeffs_lucy()\fP, \fBpop_coeffs_shell()\fP, \fBpop_coeffs_smooth()\fP, \fBpop_coeffs_sphere()\fP, \fBpop_indicator()\fP, and \fBsummarize_input_pair_inter()\fP\&.
+.SS "\fBint\fP type"
+
+.PP
+Referenced by \fBget_indicator_type()\fP, and \fBpop_indicator()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

@@ -1,0 +1,5 @@
+<map id="check_sites_ref_potential" name="check_sites_ref_potential">
+<area shape="rect" id="Node000001" title="check_sites_ref_potential(): Makes sure the interaction sites for the reference potential are consist..." alt="" coords="5,5,175,32"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#a8f3a3abbf69d7638fab4419aee46552d" title="check_site_list(): Makes sure that sites were listed under [Site_Types]." alt="" coords="223,5,331,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,16,207,16,207,21,175,21"/>
+</map>

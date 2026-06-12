@@ -1,0 +1,21 @@
+<map id="dfill_bigdihedrals_from_gmx_bigdihedraltype_headers" name="dfill_bigdihedrals_from_gmx_bigdihedraltype_headers">
+<area shape="rect" id="Node000001" title="dfill_bigdihedrals_from_gmx_bigdihedraltype_headers:" alt="" coords="5,91,186,149"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a742ca6a5a9d8ab40fd4b92636c71c406" title="elim_char(): Replaces occurrances of char &quot;elim&quot; with &#39;\0&#39; in word." alt="" coords="255,5,332,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,88,232,42,244,36,246,41,235,46,149,93"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8c.html#a6ec5b0fcfcf8e8378e61b7f09c3bfcdd" title="find_line_in_file():" alt="" coords="238,56,348,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="185,94,223,84,224,90,187,99"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="428,81,526,108"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="186,111,412,96,412,102,186,117"/>
+<area shape="rect" id="Node000008" href="$gromacs__topology_8c.html#a581bab4e93beac29679039c89fd62a2a" title="get_word_count_delim(): Gets the number of words separated by chars in delims in a line" alt="" coords="401,183,552,209"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="187,135,391,176,390,182,186,141"/>
+<area shape="rect" id="Node000009" href="$gromacs__topology_8c.html#a3f6ef7a52af42aeade6f168e9e4670b5" title="get_words_delim(): supposed to be like python&#39;s string.split()" alt="" coords="234,208,353,235"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="156,147,253,198,251,203,153,152"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="349,74,413,83,412,89,349,80"/>
+<area shape="rect" id="Node000005" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="600,56,705,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="526,85,585,76,586,82,527,90"/>
+<area shape="rect" id="Node000007" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="617,107,688,133"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="527,99,602,110,601,115,526,104"/>
+<area shape="rect" id="Node000006" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="753,56,885,83"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="705,67,737,67,737,72,705,72"/>
+<area shape="poly" id="edge10_Node000009_Node000008" title=" " alt="" coords="353,210,385,206,386,211,354,216"/>
+</map>

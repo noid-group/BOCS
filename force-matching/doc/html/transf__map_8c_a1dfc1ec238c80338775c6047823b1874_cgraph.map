@@ -1,0 +1,9 @@
+<map id="setup_CG_trr" name="setup_CG_trr">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,105,32"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a41845752298114af9ae31d4f6b9c48ce" title="copy_trxframe_info(): copies the resolution&#45;independent information from source to dest" alt="" coords="153,5,285,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,16,137,16,137,21,105,21"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#aefbae9c3407885e1bcea60aa230f1167" title="copy_vector(): Copies source into dest." alt="" coords="333,5,425,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="286,16,317,16,317,21,286,21"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8c.html#abe60d7580b13d8226cb3bd124e760b92" title="copy_vector(): Copies source into dest." alt="" coords="473,5,566,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="426,16,458,16,458,21,426,21"/>
+</map>

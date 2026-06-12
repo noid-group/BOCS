@@ -1,0 +1,5 @@
+<map id="tW_read_first_trr_frame" name="tW_read_first_trr_frame">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,164,32"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a7e3813472aef3ea0800c4f8843906f1a" title="set_natoms(): sets the number of atoms in the frame self to natoms, and allocates memory for those ar..." alt="" coords="212,5,301,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,16,196,16,196,21,164,21"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="calculate_local_densities" name="calculate_local_densities">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,132,172,159"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#aed00bac3dd87333226ee1d7cb19700af" title="calc_norm(): Returns the norm of an dvec." alt="" coords="237,5,318,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,130,153,88,218,42,227,37,229,42,221,46,156,92,107,134"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8c.html#abe60d7580b13d8226cb3bd124e760b92" title="copy_vector(): Copies source into dest." alt="" coords="232,56,324,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="123,129,228,86,230,91,125,134"/>
+<area shape="rect" id="Node000005" href="$_l_d_d_8c.html#a686df6ebb434e57aa7d760c3b43625d8" title=" " alt="" coords="248,107,308,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="172,132,232,123,233,129,173,137"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#a1b2722b503422a6f7805f6355d8c9b5f" title=" " alt="" coords="242,157,314,184"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="173,154,227,161,226,167,172,159"/>
+<area shape="rect" id="Node000007" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="220,208,336,235"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="125,157,230,199,228,204,123,162"/>
+<area shape="rect" id="Node000008" href="$gromacs__topology_8c.html#a83ffcb1d231afb48f1b2824bc88880ef" title="skip_excl():" alt="" coords="240,259,316,285"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="107,157,156,199,221,244,229,249,227,254,218,249,153,203,103,161"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="384,5,455,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="319,16,369,16,369,21,319,21"/>
+</map>

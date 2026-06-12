@@ -1,0 +1,70 @@
+.TH "cgmap.c" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+cgmap.c \- Driver for the cgmap executable\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <math\&.h>\fP
+.br
+\fR#include <string\&.h>\fP
+.br
+\fR#include 'wnoid_math\&.h'\fP
+.br
+\fR#include 'read_map\&.h'\fP
+.br
+\fR#include 'transf_map\&.h'\fP
+.br
+\fR#include 'safe_mem\&.h'\fP
+.br
+\fR#include 'io_read\&.h'\fP
+.br
+\fR#include 'gromacs_topology\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBDEBUG_setup\fP   \fBFALSE\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmain\fP (int argc, char *argv[])"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Driver for the cgmap executable\&. 
+
+
+.PP
+\fBAuthors\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser 
+.RE
+.PP
+MRD 09/17/2018: I modified the user input to match the analysis programs I wrote\&. There's less command line options required now\&. We infer what trajectory file types are desired for both the input and output files based on the file extensions (and manually add a \&.trr extension if none of the standard extensions are found)\&. Note, this new version can't do -b -e -dt like the old version\&. If you only want a subset of the trajectory mapped, then trim down the atomistic \&.trr file itself\&. Or, map the entire atomistic trajectory, and then trim the cg one\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser 
+.RE
+.PP
+
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define DEBUG_setup   \fBFALSE\fP"
+
+.SH "Function Documentation"
+.PP 
+.SS "int main (int argc, char * argv[])"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

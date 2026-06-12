@@ -1,0 +1,1819 @@
+.TH "read_parameters.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+read_parameters.h
+.SH SYNOPSIS
+.br
+.PP
+\fR#include 'cgff_types\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBPar_Flags\fP"
+.br
+.ti -1c
+.RI "struct \fBRef_Flags\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBKEY_TEMP\fP   'Temperature'"
+.br
+.ti -1c
+.RI "#define \fBKEY_STRUCT\fP   'Structures'"
+.br
+.ti -1c
+.RI "#define \fBKEY_SITES\fP   'Site_Types'"
+.br
+.ti -1c
+.RI "#define \fBINTER_TYPES\fP   'Inter_Types'"
+.br
+.ti -1c
+.RI "#define \fBKEY_NREXCL\fP   'nrexcl'"
+.br
+.ti -1c
+.RI "#define \fBKEY_REF_POT\fP   'Reference_Potential'"
+.br
+.ti -1c
+.RI "#define \fBKEY_MODE\fP   'Mode'"
+.br
+.ti -1c
+.RI "#define \fBKEY_STRUCT_FILES\fP   'Struct_Files'"
+.br
+.ti -1c
+.RI "#define \fBKEY_PT\fP   'Iterative_Inversion'"
+.br
+.ti -1c
+.RI "#define \fBKEY_EIGEN\fP   'Eigen'"
+.br
+.ti -1c
+.RI "#define \fBKEY_SVD\fP   'SVD'"
+.br
+.ti -1c
+.RI "#define \fBKEY_TPR\fP   'TPR'"
+.br
+.ti -1c
+.RI "#define \fBKEY_TPR_EXCL\fP   'TOP_EXCL'"
+.br
+.ti -1c
+.RI "#define \fBKEY_MT\fP   'Metric_Tensor'"
+.br
+.ti -1c
+.RI "#define \fBKEY_MFD\fP   'Mean_Force_Decomposition'"
+.br
+.ti -1c
+.RI "#define \fBKEY_CalcMODE\fP   'Calculation_Mode'"
+.br
+.ti -1c
+.RI "#define \fBKEY_PC\fP   'Preconditioning'"
+.br
+.ti -1c
+.RI "#define \fBKEY_MEM\fP   'Memory'"
+.br
+.ti -1c
+.RI "#define \fBKEY_SOLN\fP   'Solution_Method'"
+.br
+.ti -1c
+.RI "#define \fBKEY_FRAMEWEIGHT\fP   'Frame_Weighting'"
+.br
+.ti -1c
+.RI "#define \fBKEY_ERR\fP   'Error_Estimates'"
+.br
+.ti -1c
+.RI "#define \fBKEY_REF\fP   'Reference_Options'"
+.br
+.ti -1c
+.RI "#define \fBKEY_TRIM\fP   'TRIM'"
+.br
+.ti -1c
+.RI "#define \fBKEY_CHISQD\fP   'CHISQD'"
+.br
+.ti -1c
+.RI "#define \fBKEY_REG\fP   'Regularization'"
+.br
+.ti -1c
+.RI "#define \fBKEY_RESCALE\fP   'Rescale_Forces'"
+.br
+.ti -1c
+.RI "#define \fBKEY_CONSTRAIN\fP   'Constrain_Dih'"
+.br
+.ti -1c
+.RI "#define \fBKEY_ITER\fP   'Iterative_gYBG'"
+.br
+.ti -1c
+.RI "#define \fBKEY_OLD_ALGORITHM\fP   'Use_Old_Algorithm'"
+.br
+.ti -1c
+.RI "#define \fBSUM_INPUT_FNAME\fP   'summarize_input\&.txt'"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBread_par\fP (\fBtW_files\fP *files, \fBtW_system\fP *sys, \fBtW_ref_potential\fP *ref_potential)"
+.br
+.RI "\fBread_par()\fP: Reads the information from the parameter file and files listed in the param- eter file\&. "
+.ti -1c
+.RI "int \fBsetup_tables\fP (\fBtW_system\fP *sys)"
+.br
+.RI "\fBsetup_tables()\fP: Allocates memories for the grids\&. "
+.ti -1c
+.RI "void \fBsummarize_input\fP (\fBtW_files\fP files, \fBtW_system\fP sys, \fBtW_ref_potential\fP ref_potential)"
+.br
+.RI "\fBsummarize_input()\fP: Summarizes the input read from the parameter files\&. "
+.ti -1c
+.RI "void \fBsetup_sys_copy\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy, int overwrite_arrays)"
+.br
+.RI "\fBsetup_sys_copy()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "int \fBfree_sys_copy\fP (\fBtW_system\fP *sys_top)"
+.br
+.RI "\fBfree_sys_copy()\fP: Frees memory allocated for the data structure sys_top\&. "
+.ti -1c
+.RI "void \fBinitialize_sys\fP (\fBtW_system\fP *sys)"
+.br
+.RI "\fBinitialize_sys()\fP: Initializes the variables in the sys data structure\&. "
+.ti -1c
+.RI "void \fBinitialize_files\fP (\fBtW_files\fP *files)"
+.br
+.RI "\fBinitialize_files()\fP: Initializes the variables in the files data structure\&. "
+.ti -1c
+.RI "void \fBinitialize_par_flags\fP (\fBPar_Flags\fP *flags)"
+.br
+.RI "\fBinitialize_par_flags()\fP: Initializes the variables in the flags data structure\&. "
+.ti -1c
+.RI "void \fBget_parameters\fP (FILE *fp_par, \fBtW_line\fP inp_line, \fBtW_system\fP *sys, \fBtW_files\fP *files, \fBtW_ref_potential\fP *ref_potential, \fBPar_Flags\fP *flags)"
+.br
+.RI "\fBget_parameters()\fP: Reads a line from the parameter file passed from \fBread_par()\fP\&. "
+.ti -1c
+.RI "int \fBread_temperature\fP (int b_Temperature, \fBtW_line\fP inp_line, \fBtW_system\fP *sys)"
+.br
+.RI "\fBread_temperature()\fP: Reads the temperature from the parameter file\&. "
+.ti -1c
+.RI "int \fBread_structures\fP (int b_Structures, \fBtW_line\fP inp_line, \fBtW_files\fP *files, FILE *fp_par)"
+.br
+.RI "\fBread_structures()\fP: Reads in the file names that contain structures\&. "
+.ti -1c
+.RI "\fBtW_word\fP * \fBget_structures\fP (\fBtW_files\fP *files, int *N_struct)"
+.br
+.RI "\fBget_structures()\fP: Saves all the file names that contain structures from the list of files names read from the parameter file\&. "
+.ti -1c
+.RI "int \fBread_site_types\fP (int b_SiteTypes, \fBtW_line\fP inp_line, \fBtW_system\fP *sys, FILE *fp_par)"
+.br
+.RI "\fBread_site_types()\fP: Reads the site types listed in the parameter file\&. "
+.ti -1c
+.RI "int \fBread_Inter_Types\fP (int b_Inter_Types, \fBtW_line\fP inp_line, \fBtW_system\fP *sys, FILE *fp_par)"
+.br
+.RI "\fBread_Inter_Types()\fP: Reads the interaction types listed in the parameter file\&. "
+.ti -1c
+.RI "int \fBget_no_inter_types\fP (\fBtW_word\fP keyword, \fBtW_line\fP inp_line)"
+.br
+.RI "get_no_inter_type(s): Returns the number of interactions listed after a directive in- dicated by keyword\&. "
+.ti -1c
+.RI "\fBtW_Inter_Types\fP * \fBget_Inter_Type_List\fP (FILE *fp_par, \fBtW_line\fP inp_line, \fBtW_system\fP sys, int N_Inter_Types, \fBtW_word\fP keyword)"
+.br
+.RI "\fBget_Inter_Type_List()\fP: Reads and stores the information for each interaction type listed in the parameter file into the data Inter_Types\&. "
+.ti -1c
+.RI "void \fBinitialize_Inter_Types\fP (int N_Inter_Types, \fBtW_Inter_Types\fP *Inter_Types)"
+.br
+.RI "\fBinitialize_Inter_Types()\fP: Initializes the variables in the data structure Inter_Types\&. "
+.ti -1c
+.RI "void \fBget_Inter_Type\fP (\fBtW_line\fP inp_line, \fBtW_Inter_Types\fP *Inter_Types)"
+.br
+.RI "\fBget_Inter_Type()\fP: Reads and stores the relevant information for a single interaction type listed in the parameter file\&. "
+.ti -1c
+.RI "int \fBget_delta_basis_param\fP (\fBtW_line\fP inp_line, double *dr, double *R_0, double *R_max, int *N_pts, int *N_coeff, int *n_smooth, \fBtW_word\fP inter_type)"
+.br
+.RI "\fBget_delta_basis_param()\fP: Reads in the parameters for a interaction parameterized using a disrete delta basis\&. "
+.ti -1c
+.RI "int \fBget_linear_basis_param\fP (\fBtW_line\fP inp_line, double *dr, double *R_0, double *R_max, int *N_pts, int *N_coeff, int *n_smooth, \fBtW_word\fP inter_type)"
+.br
+.RI "\fBget_linear_basis_param()\fP: Reads in the parameters for a interaction parameterized using a linear spline basis\&. "
+.ti -1c
+.RI "int \fBget_Bspline_basis_param\fP (\fBtW_line\fP inp_line, double *dr, double *R_0, double *R_max, int *N_pts, int *kspline, int *N_coeff, int *n_smooth, \fBtW_word\fP inter_type, double *user_R_0, double *user_R_max)"
+.br
+.RI "\fBget_Bspline_basis_param()\fP: Reads in the parameters for a interaction parameterized using a Bspline basis\&. "
+.ti -1c
+.RI "void \fBget_local_density_extra_params\fP (\fBtW_line\fP inp_line, \fBtW_Inter_Types\fP *Inter_Type)"
+.br
+.RI "\fBget_local_density_extra_params()\fP: gets wtype, r0, and rC from the line in [Inter_Types] "
+.ti -1c
+.RI "int \fBget_power_basis_param\fP (\fBtW_line\fP inp_line, \fBtW_Inter_Types\fP *inter)"
+.br
+.RI "\fBget_power_basis_param()\fP: Stores the parameters for a 'powers' basis (e\&.g\&. "
+.ti -1c
+.RI "\fBtW_type_inter2\fP * \fBget_Type_Inter2_List\fP (FILE *fp_par, \fBtW_line\fP inp_line, \fBtW_system\fP sys, int N_Inter_Types, \fBtW_word\fP keyword)"
+.br
+.RI "\fBget_Type_Inter2_List()\fP: Reads the pair interaction from the parameter file\&. "
+.ti -1c
+.RI "int \fBread_Type_Inter2\fP (\fBtW_line\fP inp_line, \fBtW_type_inter2\fP *inter, \fBtW_system\fP sys)"
+.br
+.RI "\fBread_Type_Inter2()\fP: Finds the interaction type store in sys and copies that information for a given pair of site types\&. "
+.ti -1c
+.RI "int \fBread_nb_pair_inter\fP (int b_Pairs, \fBtW_line\fP inp_line, \fBtW_system\fP *sys, FILE *fp_par)"
+.br
+.RI "\fBread_nb_pair_inter()\fP: Reads in the non-bonded intermolecular pair interactions\&. "
+.ti -1c
+.RI "int \fBread_Type_Inter_Ext\fP (\fBtW_line\fP inp_line, \fBtW_type_inter_external\fP *inter, \fBtW_system\fP sys)"
+.br
+.RI "\fBread_Type_Inter_Ext()\fP: Finds the interaction type stored in sys and copies that information for a given site type\&. "
+.ti -1c
+.RI "\fBtW_type_inter_external\fP * \fBget_Type_Ext_List\fP (FILE *fp_par, \fBtW_line\fP inp_line, \fBtW_system\fP sys, int N_Inter_Ext_types, \fBtW_word\fP keyword)"
+.br
+.RI "\fBget_Type_Ext_List()\fP: Reads the external interaction from the parameter file\&. "
+.ti -1c
+.RI "void \fBget_ext_potl_param\fP (\fBtW_line\fP inp_line, \fBtW_Inter_Types\fP *Inter_Types)"
+.br
+.ti -1c
+.RI "int \fBread_external_potential_inter\fP (int b_EP, \fBtW_line\fP inp_line, \fBtW_system\fP *sys, FILE *fp_par)"
+.br
+.RI "\fBread_external_potential_inter()\fP: reads the [External_Potential] Directive "
+.ti -1c
+.RI "int \fBread_BOND_stretch_inter\fP (int b_Bonds, \fBtW_line\fP inp_line, \fBtW_system\fP *sys, FILE *fp_par)"
+.br
+.RI "\fBread_BOND_stretch_inter()\fP: Reads the bond stretch intramolecular interactions from the parameter file\&. "
+.ti -1c
+.RI "int \fBread_BOND_angle_inter\fP (int b_Angles, \fBtW_line\fP inp_line, \fBtW_system\fP *sys, FILE *fp_par)"
+.br
+.RI "\fBread_BOND_angle_inter()\fP: Reads the angle bending intramolecular interactions from the parameter file\&. "
+.ti -1c
+.RI "int \fBread_Bond_dihedral_inter\fP (int b_Dihedrals, \fBtW_line\fP inp_line, \fBtW_system\fP *sys, FILE *fp_par)"
+.br
+.RI "\fBread_Bond_dihedral_inter()\fP: Reads the dihedral intramolecular interactions from the parameter file\&. "
+.ti -1c
+.RI "int \fBread_Bond_nb_pair_inter\fP (int b_Pair_bond, \fBtW_line\fP inp_line, \fBtW_system\fP *sys, FILE *fp_par)"
+.br
+.RI "\fBread_Bond_nb_pair_inter()\fP: Reads the non-bonded intramolecular interactions from the parameter file\&. "
+.ti -1c
+.RI "\fBtW_Bonded_Inter\fP * \fBget_Bond_Inter_Types\fP (FILE *fp_par, \fBtW_line\fP inp_line, \fBtW_system\fP sys, int *N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, \fBtW_word\fP keyword, int N_Int_sites, int N_Inter_Types)"
+.br
+.RI "\fBget_Bond_Inter_Types()\fP: Copies the parameters for a intramolecular interaction in the sys data structure for a interaction type listed in the parameter file for a specific group of site types\&. "
+.ti -1c
+.RI "void \fBget_bond_inter_site_types\fP (\fBtW_line\fP inp_line, \fBtW_Bonded_Inter\fP *Bond_ptr, int N_Int_Sites, \fBtW_word\fP inter_name)"
+.br
+.RI "\fBget_bond_inter_site_types()\fP: Reads in the site types for intramolecular interactions\&. "
+.ti -1c
+.RI "void \fBget_bond_basis_parameters\fP (\fBtW_word\fP inter_name, \fBtW_Bonded_Inter\fP *Bond_ptr, int N_Int_sites, \fBtW_line\fP inp_line, \fBtW_system\fP sys)"
+.br
+.RI "\fBget_bond_basis_parameters()\fP: Copies the parameters for a intramolecular interaction type for a specific group of site types\&. "
+.ti -1c
+.RI "int \fBget_ref_potential\fP (\fBtW_line\fP inp_line, \fBtW_ref_potential\fP *ref_potential, int ref_flag, \fBtW_word\fP mode)"
+.br
+.RI "\fBget_ref_potential()\fP: Reads and stores the information for a reference potential\&. "
+.ti -1c
+.RI "int \fBget_PT\fP (FILE *fp_par, \fBtW_line\fP inp_line, int PT_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_PT()\fP: "
+.ti -1c
+.RI "int \fBget_Eigen\fP (FILE *fp_par, \fBtW_line\fP inp_line, int Eigen_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_Eigen()\fP: "
+.ti -1c
+.RI "int \fBget_SVD\fP (FILE *fp_par, \fBtW_line\fP inp_line, int SVD_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_SVD()\fP: "
+.ti -1c
+.RI "int \fBget_TPR\fP (FILE *fp_par, \fBtW_line\fP inp_line, int TPR_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_TPR()\fP: "
+.ti -1c
+.RI "int \fBget_TPR_EXCL\fP (FILE *fp_par, \fBtW_line\fP inp_line, int TPR_EXCL_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_TPR_EXCL()\fP: "
+.ti -1c
+.RI "int \fBget_MT\fP (FILE *fp_par, \fBtW_line\fP inp_line, int MT_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_MT()\fP: "
+.ti -1c
+.RI "int \fBget_MFD\fP (FILE *fp_par, \fBtW_line\fP inp_line, int MFD_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_MFD()\fP: "
+.ti -1c
+.RI "int \fBget_CalcMODE\fP (FILE *fp_par, \fBtW_line\fP inp_line, int CalcMODE_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_CalcMODE()\fP: "
+.ti -1c
+.RI "int \fBget_PC\fP (FILE *fp_par, \fBtW_line\fP inp_line, int PC_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_PC()\fP: "
+.ti -1c
+.RI "int \fBget_MEM\fP (FILE *fp_par, \fBtW_line\fP inp_line, int MEM_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_MEM()\fP: "
+.ti -1c
+.RI "int \fBget_SOLN\fP (FILE *fp_par, \fBtW_line\fP inp_line, int SOLN_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_SOLN()\fP: "
+.ti -1c
+.RI "int \fBget_FRAMEWEIGHT\fP (FILE *fp_par, \fBtW_line\fP inp_line, int FRAMEWEIGHT_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_FRAMEWEIGHT()\fP: "
+.ti -1c
+.RI "int \fBget_ERR\fP (FILE *fp_par, \fBtW_line\fP inp_line, int ERR_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_ERR()\fP: "
+.ti -1c
+.RI "int \fBget_REF\fP (FILE *fp_par, \fBtW_line\fP inp_line, int REF_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_REF()\fP: "
+.ti -1c
+.RI "int \fBget_TRIM\fP (FILE *fp_par, \fBtW_line\fP inp_line, int TRIM_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_TRIM()\fP: "
+.ti -1c
+.RI "int \fBget_CHISQD\fP (FILE *fp_par, \fBtW_line\fP inp_line, int CHISQD_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_CHISQD()\fP: "
+.ti -1c
+.RI "int \fBget_REG\fP (FILE *fp_par, \fBtW_line\fP inp_line, int REG_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_REG()\fP: "
+.ti -1c
+.RI "int \fBget_RESCALE\fP (FILE *fp_par, \fBtW_line\fP inp_line, int RESCALE_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_RESCALE()\fP: "
+.ti -1c
+.RI "int \fBget_CONSTRAIN\fP (FILE *fp_par, \fBtW_line\fP inp_line, int CONSTRAIN_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_CONSTRAIN()\fP: "
+.ti -1c
+.RI "int \fBget_ITER\fP (FILE *fp_par, \fBtW_line\fP inp_line, int ITER_flag, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_ITER()\fP: "
+.ti -1c
+.RI "void \fBinitialize_ref_potential\fP (\fBtW_ref_potential\fP *ref_potential)"
+.br
+.RI "\fBinitialize_ref_potential()\fP: Initializes the variables in the ref_potential data structure\&. "
+.ti -1c
+.RI "void \fBinitialize_ref_flags\fP (\fBRef_Flags\fP *flags)"
+.br
+.RI "\fBinitialize_ref_flags()\fP: Initializes the variables in the flags data structure\&. "
+.ti -1c
+.RI "FILE * \fBopen_ref_potential_file\fP (\fBtW_line\fP inp_line)"
+.br
+.RI "\fBopen_ref_potential_file()\fP: Opens the file that contains the reference potential information\&. "
+.ti -1c
+.RI "void \fBread_REF_information\fP (FILE *fp_ref, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP *ref_potential, \fBRef_Flags\fP *flags, \fBtW_word\fP mode)"
+.br
+.RI "\fBread_REF_information()\fP: Reads the information for a reference potential\&. "
+.ti -1c
+.RI "int \fBread_REF_nb_inter\fP (int b_Pairs, int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP *ref_potential, FILE *fp_ref, \fBtW_word\fP mode)"
+.br
+.RI "\fBread_REF_nb_inter()\fP: Reads information for the intermolecular interactions\&. "
+.ti -1c
+.RI "int \fBread_REF_BOND_stretch_inter\fP (int b_Bonds, int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP *ref_potential, FILE *fp_ref, \fBtW_word\fP mode)"
+.br
+.RI "\fBread_REF_BOND_stretch_inter()\fP: Reads information for the bond stretch interactions\&. "
+.ti -1c
+.RI "int \fBread_REF_BOND_angle_inter\fP (int b_Angles, int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP *ref_potential, FILE *fp_ref, \fBtW_word\fP mode)"
+.br
+.RI "\fBread_REF_BOND_angle_inter()\fP: Reads information for the angle bending interactions\&. "
+.ti -1c
+.RI "int \fBread_REF_Bond_dihedral_inter\fP (int b_Dihedrals, int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP *ref_potential, FILE *fp_ref, \fBtW_word\fP mode)"
+.br
+.RI "\fBread_REF_Bond_dihedral_inter()\fP: Reads information for the dihedral interactions\&. "
+.ti -1c
+.RI "int \fBread_REF_interpol_type\fP (int b_interpolation, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP *ref_potential)"
+.br
+.RI "\fBread_REF_interpol_type()\fP: Reads the interpolation type used for the reference potential\&. "
+.ti -1c
+.RI "int \fBget_interpolation_index\fP (\fBtW_line\fP inp_line)"
+.br
+.RI "\fBget_interpolation_index()\fP: Returns the interpolation index or stops execution if the specified interpolation type is not supported\&. "
+.ti -1c
+.RI "\fBtW_ref_inter\fP * \fBget_ref_inter\fP (\fBtW_word\fP inter_name, int N_Inter_Sites, int N_Inter_Types, FILE *fp, \fBtW_ref_inter\fP *inter_list, \fBtW_ref_potential\fP *ref_potential, \fBtW_word\fP mode)"
+.br
+.RI "\fBget_ref_inter()\fP: Reads information for a interaction type in the reference potential\&. "
+.ti -1c
+.RI "void \fBget_ref_potential_info\fP (\fBtW_ref_inter\fP *inter_ptr, int N_Inter_Sites, \fBtW_word\fP inter_name, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP *ref_potential, \fBtW_word\fP mode)"
+.br
+.RI "\fBget_ref_potential_info()\fP: Stores information for a interaction in the reference potential\&. "
+.ti -1c
+.RI "void \fBread_ref_potential\fP (\fBtW_word\fP fname, \fBtW_ref_force\fP *inter_ptr, \fBtW_word\fP inter_type)"
+.br
+.RI "\fBread_ref_potential()\fP: Stores information for a interaction in the reference potential\&. "
+.ti -1c
+.RI "int \fBget_no_points\fP (FILE *fp)"
+.br
+.RI "\fBget_no_points()\fP: Returns the number of lines in a file before the first blank line\&. "
+.ti -1c
+.RI "int \fBget_force\fP (FILE *fp, \fBtW_ref_force\fP *inter_ptr, \fBtW_word\fP inter_type)"
+.br
+.RI "\fBget_force()\fP: Reads the force for a given interaction for the reference potential\&. "
+.ti -1c
+.RI "int \fBread_nrexcl\fP (int b_nrexcl, \fBtW_line\fP inp_line, \fBtW_system\fP *sys)"
+.br
+.RI "\fBread_nrexcl()\fP: Reads the number of bonds for determining exclusion lists\&. "
+.ti -1c
+.RI "int \fBread_mode\fP (int b_mode, \fBtW_line\fP inp_line, \fBtW_files\fP *files)"
+.br
+.RI "\fBread_mode()\fP: Reads and stores the mode for the calculation\&. "
+.ti -1c
+.RI "void \fBcheck_input\fP (\fBtW_files\fP files, \fBtW_system\fP *sys, \fBPar_Flags\fP flags, \fBtW_ref_potential\fP ref_potential)"
+.br
+.RI "\fBcheck_input()\fP: Makes sure that the input read from the parameter file is consistent\&. "
+.ti -1c
+.RI "void \fBcheck_struct_files\fP (\fBtW_files\fP files)"
+.br
+.RI "\fBcheck_struct_files()\fP: Makes sure no duplicate structure files listed\&. "
+.ti -1c
+.RI "void \fBcheck_site_types\fP (\fBtW_system\fP sys)"
+.br
+.RI "\fBcheck_site_types()\fP: Makes sure no site type is more than once\&. "
+.ti -1c
+.RI "void \fBcheck_Inter_Types\fP (\fBtW_system\fP sys)"
+.br
+.RI "\fBcheck_Inter_Types()\fP: Makes sure no interaction type is listed more than once\&. "
+.ti -1c
+.RI "void \fBcheck_Type_Inter2\fP (\fBtW_system\fP sys)"
+.br
+.RI "\fBcheck_Type_Inter2()\fP: Makes sure that the pair intermolecular interaction are not listed more than once and that they include sites listed in the site type list\&. "
+.ti -1c
+.RI "void \fBcheck_Bonded_Inter_Types\fP (\fBtW_system\fP, \fBtW_word\fP inter_name, int N_Int_Sites, \fBtW_word\fP mode)"
+.br
+.RI "\fBcheck_Bonded_Inter_Types()\fP: Makes sure information for the intramolecular interaction is consistent\&. "
+.ti -1c
+.RI "void \fBcheck_site_list\fP (\fBtW_word\fP *trial_list, int N_inter_sites, \fBtW_system\fP sys, \fBtW_word\fP keyword, \fBtW_word\fP input_file)"
+.br
+.RI "\fBcheck_site_list()\fP: Makes sure that sites were listed under [Site_Types]\&. "
+.ti -1c
+.RI "void \fBcheck_inter_sites\fP (\fBtW_word\fP list1[], \fBtW_word\fP list2[], int N_words, \fBtW_word\fP inter_name)"
+.br
+.RI "\fBcheck_inter_sites()\fP: Makes sure interaction was not listed more than once\&. "
+.ti -1c
+.RI "void \fBcheck_ref_input\fP (\fBtW_ref_potential\fP ref_potential, \fBtW_system\fP sys)"
+.br
+.RI "\fBcheck_ref_input()\fP: Makes sure that the information for the reference potential is consisten with the rest of the input parameters\&. "
+.ti -1c
+.RI "void \fBcheck_sites_ref_potential\fP (int N_interactions, \fBtW_ref_inter\fP *inter, \fBtW_system\fP sys)"
+.br
+.RI "\fBcheck_sites_ref_potential()\fP: Makes sure the interaction sites for the reference potential are consisten with the site type list\&. "
+.ti -1c
+.RI "int \fBcheck_if_interaction_requested\fP (\fBtW_system\fP sys, \fBtW_word\fP inter_name)"
+.br
+.RI "\fBcheck_if_interaction_requested()\fP: Searches the stored information about the cgff systems for a particular interaction type "
+.ti -1c
+.RI "int \fBread_REF_forces\fP (int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP *ref_potential, FILE *fp)"
+.br
+.RI "\fBread_REF_forces()\fP: Read in the reference forces listed in input\&. "
+.ti -1c
+.RI "void \fBget_ref_potential_ptr\fP (\fBtW_word\fP fname, \fBtW_ref_inter\fP *inter_ptr, \fBtW_ref_potential\fP *ref_potential)"
+.br
+.RI "\fBget_ref_potential_ptr()\fP: Stores information read from ref\&. "
+.ti -1c
+.RI "void \fBtest_read_ref_forces\fP (int b_Forces, \fBtW_word\fP keyword)"
+.br
+.RI "\fBtest_read_ref_forces()\fP: Tests to see if the reference forces have been read in yet\&. "
+.ti -1c
+.RI "int \fBread_REF_IntraMolecPair_inter\fP (int b_IntraMolecPair, int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP *ref_potential, FILE *fp_ref, \fBtW_word\fP mode)"
+.br
+.RI "\fBread_REF_IntraMolecPair_inter()\fP: Reads information for the intramolecular pair inter- actions\&. "
+.ti -1c
+.RI "void \fBsummarize_Inter_Types\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_Inter_Types()\fP: Summarizes the input stored for each interaction type\&. "
+.ti -1c
+.RI "void \fBsummarize_input_pair_inter\fP (FILE *fp, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_pair_inter()\fP: Summarizes the information stored for each intermolecular pair interaction\&. "
+.ti -1c
+.RI "void \fBsummarize_input_local_density_inter\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.ti -1c
+.RI "void \fBsummarize_input_external_potential_inter\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "summarize_input_local_external_potential_inter(): Clone of above for ext potl inter "
+.ti -1c
+.RI "void \fBsummarize_input_bond_inter\fP (FILE *fp, \fBtW_system\fP sys, \fBtW_word\fP inter_name, int N_Int_Sites, \fBtW_word\fP mode)"
+.br
+.RI "\fBsummarize_input_bond_inter()\fP: Summarizes the information stored for the intramolecular interactions\&. "
+.ti -1c
+.RI "void \fBsummarize_input_ref_potential\fP (FILE *fp_log, \fBtW_system\fP sys, \fBtW_ref_potential\fP ref_potential)"
+.br
+.RI "\fBsummarize_input_ref_potential()\fP: Summarizes the information store for the reference potential\&. "
+.ti -1c
+.RI "void \fBsummarize_input_PT\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_PT()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_Eigen\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_Eigen()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_SVD\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_SVD()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_TPR\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_TPR()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_TPR_EXCL\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_TPR_EXCL()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_MT\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_MT()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_MFD\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_MFD()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_CalcMODE\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_CalcMODE()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_PC\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_PC()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_MEM\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_MEM()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_SOLN\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_SOLN()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_FRAMEWEIGHT\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "summarize_input_EMSEMBLE(): "
+.ti -1c
+.RI "void \fBsummarize_input_ERR\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_ERR()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_REF\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_REF()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_TRIM\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_TRIM()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_CHISQD\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_CHISQD()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_REG\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_REG()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_RESCALE\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_RESCALE()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_CONSTRAIN\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_CONSTRAIN()\fP: "
+.ti -1c
+.RI "void \fBsummarize_input_ITER\fP (FILE *fp_log, \fBtW_system\fP sys)"
+.br
+.RI "\fBsummarize_input_ITER()\fP: "
+.ti -1c
+.RI "void \fBprint_interpolation_type\fP (int interpolation_index, FILE *fp_log)"
+.br
+.RI "\fBprint_interpolation_type()\fP: Prints the interpolation type for the reference potential\&. "
+.ti -1c
+.RI "void \fBprint_ref_inter\fP (\fBtW_ref_inter\fP *ref_inter, FILE *fp_log, int *ctr, int N_inter)"
+.br
+.RI "\fBprint_ref_inter()\fP: Prints the information stored for a interaction in the reference potential\&. "
+.ti -1c
+.RI "void \fBcopy_site_types\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_site_types()\fP: Copies information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_arrays\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_arrays()\fP: Allocates memory for arrays in sys_copy and makes sure they are zeroed\&. "
+.ti -1c
+.RI "void \fBcopy_Inter_Types\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_Inter_Types()\fP: Copies information from sys_orig to sys_copy for all interaction types\&. "
+.ti -1c
+.RI "void \fBcopy_Inter2_Types\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_Inter2_Types()\fP: Copies information from sys_orig to sys_copy for all pair intermolecular interactions\&. "
+.ti -1c
+.RI "void \fBcopy_Bonded_Inter_Types\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_Bonded_Inter_Types()\fP: Copies information from sys_orig to sys_copy for all intramolecular interactions\&. "
+.ti -1c
+.RI "void \fBcopy_Inter_Ext_Types\fP (\fBtW_system\fP sys_org, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_Inter_Ext_Types()\fP: Copies information from sys_orig to sys_copy for all external potential interactions\&. "
+.ti -1c
+.RI "void \fBcopy_PT\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_PT()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_Eigen\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_Eigen()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_SVD\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_SVD()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_TPR\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_TPR()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_TPR_EXCL\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_TPR_EXCL()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_MT\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_MT()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_MFD\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_MFD()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_CalcMODE\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_CalcMODE()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_PC\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_PC()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_MEM\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_MEM()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_SOLN\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_SOLN()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_FRAMEWEIGHT\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_FRAMEWEIGHT()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_ERR\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_ERR()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_REF\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_REF()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_TRIM\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_TRIM()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_CHISQD\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_CHISQD()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_REG\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_REG()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_RESCALE\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_RESCALE()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_CONSTRAIN\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_CONSTRAIN()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "void \fBcopy_ITER\fP (\fBtW_system\fP sys_orig, \fBtW_system\fP *sys_copy)"
+.br
+.RI "\fBcopy_ITER()\fP: Copies the information from sys_orig to sys_copy\&. "
+.ti -1c
+.RI "int \fBget_interaction_i_0\fP (\fBtW_word\fP inter_name, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_interaction_i_0()\fP: Finds the index to the grids for an interaction\&. "
+.ti -1c
+.RI "void \fBclear_sys_arrays\fP (\fBtW_system\fP *sys)"
+.br
+.RI "\fBclear_sys_arrays()\fP: Zeros the arrays that are not pointing to NULL\&. "
+.ti -1c
+.RI "int \fBread_save_state\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "\fBread_save_state()\fP: for resuming a calculation after the loop over particles\&. "
+.ti -1c
+.RI "void \fBestimate_memory_usage\fP (\fBtW_files\fP files, \fBtW_system\fP *sys)"
+.br
+.RI "\fBestimate_memory_usage()\fP: estimates the memory that will be used for the calculation based on the number of coefficients and some other input options\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn 
+.RE
+.PP
+
+.SH "Data Structure Documentation"
+.PP 
+.SH "struct Par_Flags"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIb_Angles\fP 
+.br
+.PP
+int \fIb_Bonds\fP 
+.br
+.PP
+int \fIb_Dihedrals\fP 
+.br
+.PP
+int \fIb_Ext_Potl\fP 
+.br
+.PP
+int \fIb_Inter_Types\fP 
+.br
+.PP
+int \fIb_mode\fP 
+.br
+.PP
+int \fIb_nrexcl\fP 
+.br
+.PP
+int \fIb_Pair_bond\fP 
+.br
+.PP
+int \fIb_Pairs\fP 
+.br
+.PP
+int \fIb_SiteTypes\fP 
+.br
+.PP
+int \fIb_Structures\fP 
+.br
+.PP
+int \fIb_Temperature\fP 
+.br
+.PP
+.RE
+.PP
+.SH "struct Ref_Flags"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIb_Angles\fP 
+.br
+.PP
+int \fIb_Bonds\fP 
+.br
+.PP
+int \fIb_Dihedrals\fP 
+.br
+.PP
+int \fIb_Ext_Potl\fP 
+.br
+.PP
+int \fIb_Forces\fP 
+.br
+.PP
+int \fIb_interpolation\fP 
+.br
+.PP
+int \fIb_IntraMolecPair\fP 
+.br
+.PP
+int \fIb_LD_Gradient\fP 
+.br
+.PP
+int \fIb_Pairs\fP 
+.br
+.PP
+.RE
+.PP
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define INTER_TYPES   'Inter_Types'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBread_Inter_Types()\fP\&.
+.SS "#define KEY_CalcMODE   'Calculation_Mode'"
+
+.PP
+Referenced by \fBget_CalcMODE()\fP, and \fBget_parameters()\fP\&.
+.SS "#define KEY_CHISQD   'CHISQD'"
+
+.PP
+Referenced by \fBget_CHISQD()\fP, and \fBget_parameters()\fP\&.
+.SS "#define KEY_CONSTRAIN   'Constrain_Dih'"
+
+.PP
+Referenced by \fBget_CONSTRAIN()\fP, and \fBget_parameters()\fP\&.
+.SS "#define KEY_EIGEN   'Eigen'"
+
+.PP
+Referenced by \fBget_Eigen()\fP, and \fBget_parameters()\fP\&.
+.SS "#define KEY_ERR   'Error_Estimates'"
+
+.PP
+Referenced by \fBget_ERR()\fP, and \fBget_parameters()\fP\&.
+.SS "#define KEY_FRAMEWEIGHT   'Frame_Weighting'"
+
+.PP
+Referenced by \fBget_FRAMEWEIGHT()\fP, and \fBget_parameters()\fP\&.
+.SS "#define KEY_ITER   'Iterative_gYBG'"
+
+.PP
+Referenced by \fBget_ITER()\fP, and \fBget_parameters()\fP\&.
+.SS "#define KEY_MEM   'Memory'"
+
+.PP
+Referenced by \fBget_MEM()\fP, and \fBget_parameters()\fP\&.
+.SS "#define KEY_MFD   'Mean_Force_Decomposition'"
+
+.PP
+Referenced by \fBget_MFD()\fP, and \fBget_parameters()\fP\&.
+.SS "#define KEY_MODE   'Mode'"
+
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "#define KEY_MT   'Metric_Tensor'"
+
+.PP
+Referenced by \fBget_MT()\fP, and \fBget_parameters()\fP\&.
+.SS "#define KEY_NREXCL   'nrexcl'"
+
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "#define KEY_OLD_ALGORITHM   'Use_Old_Algorithm'"
+
+.PP
+Referenced by \fBcheck_input()\fP, and \fBget_parameters()\fP\&.
+.SS "#define KEY_PC   'Preconditioning'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBget_PC()\fP\&.
+.SS "#define KEY_PT   'Iterative_Inversion'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBget_PT()\fP\&.
+.SS "#define KEY_REF   'Reference_Options'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBget_REF()\fP\&.
+.SS "#define KEY_REF_POT   'Reference_Potential'"
+
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "#define KEY_REG   'Regularization'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBget_REG()\fP\&.
+.SS "#define KEY_RESCALE   'Rescale_Forces'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBget_RESCALE()\fP\&.
+.SS "#define KEY_SITES   'Site_Types'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBread_site_types()\fP\&.
+.SS "#define KEY_SOLN   'Solution_Method'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBget_SOLN()\fP\&.
+.SS "#define KEY_STRUCT   'Structures'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBread_structures()\fP\&.
+.SS "#define KEY_STRUCT_FILES   'Struct_Files'"
+
+.PP
+Referenced by \fBget_structures()\fP\&.
+.SS "#define KEY_SVD   'SVD'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBget_SVD()\fP\&.
+.SS "#define KEY_TEMP   'Temperature'"
+
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "#define KEY_TPR   'TPR'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBget_TPR()\fP\&.
+.SS "#define KEY_TPR_EXCL   'TOP_EXCL'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBget_TPR_EXCL()\fP\&.
+.SS "#define KEY_TRIM   'TRIM'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBget_TRIM()\fP\&.
+.SS "#define SUM_INPUT_FNAME   'summarize_input\&.txt'"
+
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void check_Bonded_Inter_Types (\fBtW_system\fP sys, \fBtW_word\fP inter_name, int N_Int_Sites, \fBtW_word\fP mode)"
+
+.PP
+\fBcheck_Bonded_Inter_Types()\fP: Makes sure information for the intramolecular interaction is consistent\&. 
+.PP
+Referenced by \fBcheck_input()\fP\&.
+.SS "int check_if_interaction_requested (\fBtW_system\fP sys, \fBtW_word\fP inter_name)"
+
+.PP
+\fBcheck_if_interaction_requested()\fP: Searches the stored information about the cgff systems for a particular interaction type 
+.PP
+\fBSee also\fP
+.RS 4
+\fBcgff_types\&.h\fP (There are constants associated with each inter_name) 
+.PD 0
+.IP "\(bu" 1
+sys The cgff linear equations system being built with par\&.txt 
+.IP "\(bu" 1
+inter_name the pre-defined char array for the intertype 
+.PP
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 if not found, 1 if found 
+.RE
+.PP
+
+.PP
+Referenced by \fBcheck_input()\fP\&.
+.SS "void check_input (\fBtW_files\fP files, \fBtW_system\fP * sys, \fBPar_Flags\fP flags, \fBtW_ref_potential\fP ref_potential)"
+
+.PP
+\fBcheck_input()\fP: Makes sure that the input read from the parameter file is consistent\&. 
+.PP
+Referenced by \fBread_par()\fP\&.
+.SS "void check_inter_sites (\fBtW_word\fP list1[], \fBtW_word\fP list2[], int N_words, \fBtW_word\fP inter_name)"
+
+.PP
+\fBcheck_inter_sites()\fP: Makes sure interaction was not listed more than once\&. 
+.PP
+Referenced by \fBcheck_Bonded_Inter_Types()\fP, and \fBcheck_Type_Inter2()\fP\&.
+.SS "void check_Inter_Types (\fBtW_system\fP sys)"
+
+.PP
+\fBcheck_Inter_Types()\fP: Makes sure no interaction type is listed more than once\&. 
+.PP
+Referenced by \fBcheck_input()\fP\&.
+.SS "void check_ref_input (\fBtW_ref_potential\fP ref_potential, \fBtW_system\fP sys)"
+
+.PP
+\fBcheck_ref_input()\fP: Makes sure that the information for the reference potential is consisten with the rest of the input parameters\&. 
+.PP
+Referenced by \fBcheck_input()\fP\&.
+.SS "void check_site_list (\fBtW_word\fP * trial_list, int N_inter_sites, \fBtW_system\fP sys, \fBtW_word\fP keyword, \fBtW_word\fP input_file)"
+
+.PP
+\fBcheck_site_list()\fP: Makes sure that sites were listed under [Site_Types]\&. 
+.PP
+Referenced by \fBcheck_Bonded_Inter_Types()\fP, \fBcheck_sites_ref_potential()\fP, and \fBcheck_Type_Inter2()\fP\&.
+.SS "void check_site_types (\fBtW_system\fP sys)"
+
+.PP
+\fBcheck_site_types()\fP: Makes sure no site type is more than once\&. 
+.PP
+Referenced by \fBcheck_input()\fP\&.
+.SS "void check_sites_ref_potential (int N_interactions, \fBtW_ref_inter\fP * inter, \fBtW_system\fP sys)"
+
+.PP
+\fBcheck_sites_ref_potential()\fP: Makes sure the interaction sites for the reference potential are consisten with the site type list\&. 
+.PP
+Referenced by \fBcheck_ref_input()\fP\&.
+.SS "void check_struct_files (\fBtW_files\fP files)"
+
+.PP
+\fBcheck_struct_files()\fP: Makes sure no duplicate structure files listed\&. Also, makes sure that the mode (the formate of the structure files) is supported\&. 
+.PP
+Referenced by \fBcheck_input()\fP\&.
+.SS "void check_Type_Inter2 (\fBtW_system\fP sys)"
+
+.PP
+\fBcheck_Type_Inter2()\fP: Makes sure that the pair intermolecular interaction are not listed more than once and that they include sites listed in the site type list\&. 
+.PP
+Referenced by \fBcheck_input()\fP\&.
+.SS "void clear_sys_arrays (\fBtW_system\fP * sys)"
+
+.PP
+\fBclear_sys_arrays()\fP: Zeros the arrays that are not pointing to NULL\&. 
+.PP
+Referenced by \fBcopy_arrays()\fP, and \fBsetup_tables()\fP\&.
+.SS "void copy_arrays (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_arrays()\fP: Allocates memory for arrays in sys_copy and makes sure they are zeroed\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_Bonded_Inter_Types (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_Bonded_Inter_Types()\fP: Copies information from sys_orig to sys_copy for all intramolecular interactions\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_CalcMODE (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_CalcMODE()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_CHISQD (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_CHISQD()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_CONSTRAIN (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_CONSTRAIN()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_Eigen (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_Eigen()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_ERR (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_ERR()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_FRAMEWEIGHT (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_FRAMEWEIGHT()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_Inter2_Types (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_Inter2_Types()\fP: Copies information from sys_orig to sys_copy for all pair intermolecular interactions\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_Inter_Ext_Types (\fBtW_system\fP sys_org, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_Inter_Ext_Types()\fP: Copies information from sys_orig to sys_copy for all external potential interactions\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_Inter_Types (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_Inter_Types()\fP: Copies information from sys_orig to sys_copy for all interaction types\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_ITER (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_ITER()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_MEM (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_MEM()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_MFD (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_MFD()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_MT (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_MT()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_PC (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_PC()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_PT (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_PT()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_REF (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_REF()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_REG (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_REG()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_RESCALE (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_RESCALE()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_site_types (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_site_types()\fP: Copies information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_SOLN (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_SOLN()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_SVD (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_SVD()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_TPR (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_TPR()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_TPR_EXCL (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_TPR_EXCL()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void copy_TRIM (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy)"
+
+.PP
+\fBcopy_TRIM()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBsetup_sys_copy()\fP\&.
+.SS "void estimate_memory_usage (\fBtW_files\fP files, \fBtW_system\fP * sys)"
+
+.PP
+\fBestimate_memory_usage()\fP: estimates the memory that will be used for the calculation based on the number of coefficients and some other input options\&. JFR - added 04\&.19\&.12 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int free_sys_copy (\fBtW_system\fP * sys_top)"
+
+.PP
+\fBfree_sys_copy()\fP: Frees memory allocated for the data structure sys_top\&. 
+.SS "void get_bond_basis_parameters (\fBtW_word\fP inter_name, \fBtW_Bonded_Inter\fP * Bond_ptr, int N_Int_sites, \fBtW_line\fP inp_line, \fBtW_system\fP sys)"
+
+.PP
+\fBget_bond_basis_parameters()\fP: Copies the parameters for a intramolecular interaction type for a specific group of site types\&. Stops execution if the interaction type is not found or is of the incorrect type\&. 
+.PP
+Referenced by \fBget_Bond_Inter_Types()\fP\&.
+.SS "void get_bond_inter_site_types (\fBtW_line\fP inp_line, \fBtW_Bonded_Inter\fP * Bond_ptr, int N_Int_Sites, \fBtW_word\fP inter_name)"
+
+.PP
+\fBget_bond_inter_site_types()\fP: Reads in the site types for intramolecular interactions\&. If two sites are present, then it also looks for the number of bonds separating the two interaction sites\&. This is only relevant for the PDB loop for intramolecular interactions\&. 
+.PP
+Referenced by \fBget_Bond_Inter_Types()\fP\&.
+.SS "\fBtW_Bonded_Inter\fP * get_Bond_Inter_Types (FILE * fp_par, \fBtW_line\fP inp_line, \fBtW_system\fP sys, int * N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, \fBtW_word\fP keyword, int N_Int_sites, int N_Inter_Types)"
+
+.PP
+\fBget_Bond_Inter_Types()\fP: Copies the parameters for a intramolecular interaction in the sys data structure for a interaction type listed in the parameter file for a specific group of site types\&. 
+.PP
+Referenced by \fBread_BOND_angle_inter()\fP, \fBread_Bond_dihedral_inter()\fP, \fBread_Bond_nb_pair_inter()\fP, and \fBread_BOND_stretch_inter()\fP\&.
+.SS "int get_Bspline_basis_param (\fBtW_line\fP inp_line, double * dr, double * R_0, double * R_max, int * N_pts, int * kspline, int * N_coeff, int * n_smooth, \fBtW_word\fP inter_type, double * user_R_0, double * user_R_max)"
+
+.PP
+\fBget_Bspline_basis_param()\fP: Reads in the parameters for a interaction parameterized using a Bspline basis\&. Returns index for this basis\&. Identical to \fBget_delta_basis_param()\fP except returns BSPLINE_BASIS_INDEX and also reads in kspline = order of the Bspline\&. JFR - 07\&.22\&.12 
+.PP
+Referenced by \fBget_Inter_Type()\fP\&.
+.SS "int get_CalcMODE (FILE * fp_par, \fBtW_line\fP inp_line, int CalcMODE_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_CalcMODE()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_CHISQD (FILE * fp_par, \fBtW_line\fP inp_line, int CHISQD_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_CHISQD()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_CONSTRAIN (FILE * fp_par, \fBtW_line\fP inp_line, int CONSTRAIN_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_CONSTRAIN()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_delta_basis_param (\fBtW_line\fP inp_line, double * dr, double * R_0, double * R_max, int * N_pts, int * N_coeff, int * n_smooth, \fBtW_word\fP inter_type)"
+
+.PP
+\fBget_delta_basis_param()\fP: Reads in the parameters for a interaction parameterized using a disrete delta basis\&. Returns index for this basis\&. 
+.PP
+Referenced by \fBget_Inter_Type()\fP\&.
+.SS "int get_Eigen (FILE * fp_par, \fBtW_line\fP inp_line, int Eigen_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_Eigen()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_ERR (FILE * fp_par, \fBtW_line\fP inp_line, int ERR_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_ERR()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "void get_ext_potl_param (\fBtW_line\fP inp_line, \fBtW_Inter_Types\fP * Inter_Types)"
+
+.SS "int get_force (FILE * fp, \fBtW_ref_force\fP * inter_ptr, \fBtW_word\fP inter_type)"
+
+.PP
+\fBget_force()\fP: Reads the force for a given interaction for the reference potential\&. Converts angles and forces to radians for angle bending and dihedrals interactions\&. 
+.PP
+Referenced by \fBread_ref_potential()\fP\&.
+.SS "int get_FRAMEWEIGHT (FILE * fp_par, \fBtW_line\fP inp_line, int FRAMEWEIGHT_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_FRAMEWEIGHT()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "void get_Inter_Type (\fBtW_line\fP inp_line, \fBtW_Inter_Types\fP * Inter_Types)"
+
+.PP
+\fBget_Inter_Type()\fP: Reads and stores the relevant information for a single interaction type listed in the parameter file\&. The MACROS are defined in wnoid_types\&.h\&. Execution is stopped if an unsupported interaction type is listed\&. 
+.PP
+Referenced by \fBget_Inter_Type_List()\fP\&.
+.SS "\fBtW_Inter_Types\fP * get_Inter_Type_List (FILE * fp_par, \fBtW_line\fP inp_line, \fBtW_system\fP sys, int N_Inter_Types, \fBtW_word\fP keyword)"
+
+.PP
+\fBget_Inter_Type_List()\fP: Reads and stores the information for each interaction type listed in the parameter file into the data Inter_Types\&. A pointer to this data structure is returned\&. Ultimately, this structure is part of the sys data structure\&. Calls to \fBget_Inter_Type()\fP retrieves the information for a single interaction type\&. 
+.PP
+Referenced by \fBread_Inter_Types()\fP\&.
+.SS "int get_interaction_i_0 (\fBtW_word\fP inter_name, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_interaction_i_0()\fP: Finds the index to the grids for an interaction\&. 
+.PP
+Referenced by \fBsetup_tables()\fP\&.
+.SS "int get_interpolation_index (\fBtW_line\fP inp_line)"
+
+.PP
+\fBget_interpolation_index()\fP: Returns the interpolation index or stops execution if the specified interpolation type is not supported\&. 
+.PP
+Referenced by \fBread_REF_interpol_type()\fP\&.
+.SS "int get_ITER (FILE * fp_par, \fBtW_line\fP inp_line, int ITER_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_ITER()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_linear_basis_param (\fBtW_line\fP inp_line, double * dr, double * R_0, double * R_max, int * N_pts, int * N_coeff, int * n_smooth, \fBtW_word\fP inter_type)"
+
+.PP
+\fBget_linear_basis_param()\fP: Reads in the parameters for a interaction parameterized using a linear spline basis\&. Returns index for this basis\&. Identical to \fBget_delta_basis_param()\fP except returns LINEAR_BASIS_INDEX\&. 
+.PP
+Referenced by \fBget_Inter_Type()\fP\&.
+.SS "void get_local_density_extra_params (\fBtW_line\fP inp_line, \fBtW_Inter_Types\fP * Inter_Type)"
+
+.PP
+\fBget_local_density_extra_params()\fP: gets wtype, r0, and rC from the line in [Inter_Types] 
+.PP
+Referenced by \fBget_Inter_Type()\fP\&.
+.SS "int get_MEM (FILE * fp_par, \fBtW_line\fP inp_line, int MEM_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_MEM()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_MFD (FILE * fp_par, \fBtW_line\fP inp_line, int MFD_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_MFD()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_MT (FILE * fp_par, \fBtW_line\fP inp_line, int MT_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_MT()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_no_inter_types (\fBtW_word\fP keyword, \fBtW_line\fP inp_line)"
+
+.PP
+get_no_inter_type(s): Returns the number of interactions listed after a directive in- dicated by keyword\&. Stops execution if the number is not found\&. 
+.PP
+Referenced by \fBread_BOND_angle_inter()\fP, \fBread_Bond_dihedral_inter()\fP, \fBread_Bond_nb_pair_inter()\fP, \fBread_BOND_stretch_inter()\fP, \fBread_external_potential_inter()\fP, \fBread_Inter_Types()\fP, \fBread_nb_pair_inter()\fP, \fBread_REF_BOND_angle_inter()\fP, \fBread_REF_Bond_dihedral_inter()\fP, \fBread_REF_BOND_stretch_inter()\fP, \fBread_REF_forces()\fP, \fBread_REF_IntraMolecPair_inter()\fP, and \fBread_REF_nb_inter()\fP\&.
+.SS "int get_no_points (FILE * fp)"
+
+.PP
+\fBget_no_points()\fP: Returns the number of lines in a file before the first blank line\&. 
+.PP
+Referenced by \fBmain()\fP, and \fBread_ref_potential()\fP\&.
+.SS "void get_parameters (FILE * fp_par, \fBtW_line\fP inp_line, \fBtW_system\fP * sys, \fBtW_files\fP * files, \fBtW_ref_potential\fP * ref_potential, \fBPar_Flags\fP * flags)"
+
+.PP
+\fBget_parameters()\fP: Reads a line from the parameter file passed from \fBread_par()\fP\&. This line should start with a directive (i\&.e\&. a keyword enclosed by [\&.\&.\&.])\&. This function reads that keyword and calls the appropriate function to read associated line(s) from the parameter file\&. If the line is not understood, (i\&.e\&. a known keyword is not found), execution is stopped\&. After a successful call to this function, the next line read in \fBread_par()\fP will be a line with a different directive\&. The MACROS for the keywords are defined in \fBread_parameters\&.h\fP and wnoid_types\&.h\&. 
+.PP
+Referenced by \fBread_par()\fP\&.
+.SS "int get_PC (FILE * fp_par, \fBtW_line\fP inp_line, int PC_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_PC()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_power_basis_param (\fBtW_line\fP inp_line, \fBtW_Inter_Types\fP * inter)"
+
+.PP
+\fBget_power_basis_param()\fP: Stores the parameters for a 'powers' basis (e\&.g\&. for a LJ potential, the powers listed would be 6, 12)\&. Returns index to this basis\&. The powers must be separated by commas and listed in parentheses\&. 
+.PP
+Referenced by \fBget_Inter_Type()\fP\&.
+.SS "int get_PT (FILE * fp_par, \fBtW_line\fP inp_line, int PT_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_PT()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_REF (FILE * fp_par, \fBtW_line\fP inp_line, int REF_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_REF()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "\fBtW_ref_inter\fP * get_ref_inter (\fBtW_word\fP inter_name, int N_Inter_Sites, int N_Inter_Types, FILE * fp, \fBtW_ref_inter\fP * inter_list, \fBtW_ref_potential\fP * ref_potential, \fBtW_word\fP mode)"
+
+.PP
+\fBget_ref_inter()\fP: Reads information for a interaction type in the reference potential\&. 
+.PP
+Referenced by \fBread_REF_BOND_angle_inter()\fP, \fBread_REF_Bond_dihedral_inter()\fP, \fBread_REF_BOND_stretch_inter()\fP, \fBread_REF_IntraMolecPair_inter()\fP, and \fBread_REF_nb_inter()\fP\&.
+.SS "int get_ref_potential (\fBtW_line\fP inp_line, \fBtW_ref_potential\fP * ref_potential, int ref_flag, \fBtW_word\fP mode)"
+
+.PP
+\fBget_ref_potential()\fP: Reads and stores the information for a reference potential\&. Execution is stopped if this information has been read previously or expected information is not found\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "void get_ref_potential_info (\fBtW_ref_inter\fP * inter_ptr, int N_Inter_Sites, \fBtW_word\fP inter_name, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP * ref_potential, \fBtW_word\fP mode)"
+
+.PP
+\fBget_ref_potential_info()\fP: Stores information for a interaction in the reference potential\&. 
+.PP
+Referenced by \fBget_ref_inter()\fP\&.
+.SS "void get_ref_potential_ptr (\fBtW_word\fP fname, \fBtW_ref_inter\fP * inter_ptr, \fBtW_ref_potential\fP * ref_potential)"
+
+.PP
+\fBget_ref_potential_ptr()\fP: Stores information read from ref\&. force file and sets pointers\&. 
+.PP
+Referenced by \fBget_ref_potential_info()\fP\&.
+.SS "int get_REG (FILE * fp_par, \fBtW_line\fP inp_line, int REG_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_REG()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_RESCALE (FILE * fp_par, \fBtW_line\fP inp_line, int RESCALE_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_RESCALE()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_SOLN (FILE * fp_par, \fBtW_line\fP inp_line, int SOLN_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_SOLN()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "\fBtW_word\fP * get_structures (\fBtW_files\fP * files, int * N_struct)"
+
+.PP
+\fBget_structures()\fP: Saves all the file names that contain structures from the list of files names read from the parameter file\&. Returns the combined list of file names that contain structures\&. Also, makes sure that the topology distribution is normalized\&. 
+.PP
+Referenced by \fBread_structures()\fP\&.
+.SS "int get_SVD (FILE * fp_par, \fBtW_line\fP inp_line, int SVD_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_SVD()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_TPR (FILE * fp_par, \fBtW_line\fP inp_line, int TPR_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_TPR()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_TPR_EXCL (FILE * fp_par, \fBtW_line\fP inp_line, int TPR_EXCL_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_TPR_EXCL()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int get_TRIM (FILE * fp_par, \fBtW_line\fP inp_line, int TRIM_flag, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_TRIM()\fP: 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "\fBtW_type_inter_external\fP * get_Type_Ext_List (FILE * fp_par, \fBtW_line\fP inp_line, \fBtW_system\fP sys, int N_Inter_Ext_types, \fBtW_word\fP keyword)"
+
+.PP
+\fBget_Type_Ext_List()\fP: Reads the external interaction from the parameter file\&. Returns a pointer to the data structure Inter_Ext_Type_List which contains the information read from the parameter file\&. 
+.PP
+Referenced by \fBread_external_potential_inter()\fP\&.
+.SS "\fBtW_type_inter2\fP * get_Type_Inter2_List (FILE * fp_par, \fBtW_line\fP inp_line, \fBtW_system\fP sys, int N_Inter_Types, \fBtW_word\fP keyword)"
+
+.PP
+\fBget_Type_Inter2_List()\fP: Reads the pair interaction from the parameter file\&. Returns a pointer to the data structure Inter2_Type_List which contains the information read from the parameter file\&. 
+.PP
+Referenced by \fBread_nb_pair_inter()\fP\&.
+.SS "void initialize_files (\fBtW_files\fP * files)"
+
+.PP
+\fBinitialize_files()\fP: Initializes the variables in the files data structure\&. 
+.PP
+Referenced by \fBread_par()\fP\&.
+.SS "void initialize_Inter_Types (int N_Inter_Types, \fBtW_Inter_Types\fP * Inter_Types)"
+
+.PP
+\fBinitialize_Inter_Types()\fP: Initializes the variables in the data structure Inter_Types\&. 
+.PP
+Referenced by \fBget_Inter_Type_List()\fP\&.
+.SS "void initialize_par_flags (\fBPar_Flags\fP * flags)"
+
+.PP
+\fBinitialize_par_flags()\fP: Initializes the variables in the flags data structure\&. 
+.PP
+Referenced by \fBread_par()\fP\&.
+.SS "void initialize_ref_flags (\fBRef_Flags\fP * flags)"
+
+.PP
+\fBinitialize_ref_flags()\fP: Initializes the variables in the flags data structure\&. 
+.PP
+Referenced by \fBget_ref_potential()\fP\&.
+.SS "void initialize_ref_potential (\fBtW_ref_potential\fP * ref_potential)"
+
+.PP
+\fBinitialize_ref_potential()\fP: Initializes the variables in the ref_potential data structure\&. 
+.PP
+Referenced by \fBget_ref_potential()\fP\&.
+.SS "void initialize_sys (\fBtW_system\fP * sys)"
+
+.PP
+\fBinitialize_sys()\fP: Initializes the variables in the sys data structure\&. This ensures that variables have known values for later use, particularly, the pointers are set to NULL\&. 
+.PP
+Referenced by \fBmain()\fP, and \fBread_par()\fP\&.
+.SS "FILE * open_ref_potential_file (\fBtW_line\fP inp_line)"
+
+.PP
+\fBopen_ref_potential_file()\fP: Opens the file that contains the reference potential information\&. Execulation is stopped if the file name is not found or the file could not be opened\&. Returns a pointer to this file\&. 
+.PP
+Referenced by \fBget_ref_potential()\fP\&.
+.SS "void print_interpolation_type (int interpolation_index, FILE * fp_log)"
+
+.PP
+\fBprint_interpolation_type()\fP: Prints the interpolation type for the reference potential\&. 
+.PP
+Referenced by \fBsummarize_input_ref_potential()\fP\&.
+.SS "void print_ref_inter (\fBtW_ref_inter\fP * ref_inter, FILE * fp_log, int * ctr, int N_inter)"
+
+.PP
+\fBprint_ref_inter()\fP: Prints the information stored for a interaction in the reference potential\&. 
+.PP
+Referenced by \fBsummarize_input_ref_potential()\fP\&.
+.SS "int read_BOND_angle_inter (int b_Angles, \fBtW_line\fP inp_line, \fBtW_system\fP * sys, FILE * fp_par)"
+
+.PP
+\fBread_BOND_angle_inter()\fP: Reads the angle bending intramolecular interactions from the parameter file\&. Stops execution if they have been read previously\&. Returns TRUE\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_Bond_dihedral_inter (int b_Dihedrals, \fBtW_line\fP inp_line, \fBtW_system\fP * sys, FILE * fp_par)"
+
+.PP
+\fBread_Bond_dihedral_inter()\fP: Reads the dihedral intramolecular interactions from the parameter file\&. Stops execution if they have been read previously\&. Returns TRUE\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_Bond_nb_pair_inter (int b_Pair_bond, \fBtW_line\fP inp_line, \fBtW_system\fP * sys, FILE * fp_par)"
+
+.PP
+\fBread_Bond_nb_pair_inter()\fP: Reads the non-bonded intramolecular interactions from the parameter file\&. Stops execution if they have been read previously\&. Returns TRUE\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_BOND_stretch_inter (int b_Bonds, \fBtW_line\fP inp_line, \fBtW_system\fP * sys, FILE * fp_par)"
+
+.PP
+\fBread_BOND_stretch_inter()\fP: Reads the bond stretch intramolecular interactions from the parameter file\&. Stops execution if they have been read previously\&. Returns TRUE\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_external_potential_inter (int b_EP, \fBtW_line\fP inp_line, \fBtW_system\fP * sys, FILE * fp_par)"
+
+.PP
+\fBread_external_potential_inter()\fP: reads the [External_Potential] Directive 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_Inter_Types (int b_Inter_Types, \fBtW_line\fP inp_line, \fBtW_system\fP * sys, FILE * fp_par)"
+
+.PP
+\fBread_Inter_Types()\fP: Reads the interaction types listed in the parameter file\&. Stops execution if interaction types has been previously read\&. Calls \fBget_no_inter_types()\fP to retrieve the number of interaction types listed\&. Calls, \fBget_Inter_Type_List()\fP to get the list of interaction types\&. Returns TRUE\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_mode (int b_mode, \fBtW_line\fP inp_line, \fBtW_files\fP * files)"
+
+.PP
+\fBread_mode()\fP: Reads and stores the mode for the calculation\&. Currently, only structures read from GROMACS trajectories or PDB files are supproted\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_nb_pair_inter (int b_Pairs, \fBtW_line\fP inp_line, \fBtW_system\fP * sys, FILE * fp_par)"
+
+.PP
+\fBread_nb_pair_inter()\fP: Reads in the non-bonded intermolecular pair interactions\&. Returns TRUE\&. Stops execution if interactions have been read previously\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_nrexcl (int b_nrexcl, \fBtW_line\fP inp_line, \fBtW_system\fP * sys)"
+
+.PP
+\fBread_nrexcl()\fP: Reads the number of bonds for determining exclusion lists\&. Not used in the GROMACS loop, but used in building topology for the PDB loop\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_par (\fBtW_files\fP * files, \fBtW_system\fP * sys, \fBtW_ref_potential\fP * ref_potential)"
+
+.PP
+\fBread_par()\fP: Reads the information from the parameter file and files listed in the param- eter file\&. Stores this information in the data structures files, sys, and ref_potential\&. A non-blank line is read from the parameter file and is passed to \fBget_parameters()\fP to read and store information on associated line for each directive ([\&.\&.\&.])\&. After all lines have been read, \fBcheck_input()\fP is called to make sure the input is consistent\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int read_REF_BOND_angle_inter (int b_Angles, int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP * ref_potential, FILE * fp_ref, \fBtW_word\fP mode)"
+
+.PP
+\fBread_REF_BOND_angle_inter()\fP: Reads information for the angle bending interactions\&. Stops execution if this information has been read previously\&. Returns TRUE\&. 
+.PP
+Referenced by \fBread_REF_information()\fP\&.
+.SS "int read_REF_Bond_dihedral_inter (int b_Dihedrals, int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP * ref_potential, FILE * fp_ref, \fBtW_word\fP mode)"
+
+.PP
+\fBread_REF_Bond_dihedral_inter()\fP: Reads information for the dihedral interactions\&. Stops execution if this information has been read previously\&. Returns TRUE\&. 
+.PP
+Referenced by \fBread_REF_information()\fP\&.
+.SS "int read_REF_BOND_stretch_inter (int b_Bonds, int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP * ref_potential, FILE * fp_ref, \fBtW_word\fP mode)"
+
+.PP
+\fBread_REF_BOND_stretch_inter()\fP: Reads information for the bond stretch interactions\&. Stops execution if this information has been read previously\&. Returns TRUE\&. 
+.PP
+Referenced by \fBread_REF_information()\fP\&.
+.SS "int read_REF_forces (int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP * ref_potential, FILE * fp)"
+
+.PP
+\fBread_REF_forces()\fP: Read in the reference forces listed in input\&. 
+.PP
+Referenced by \fBread_REF_information()\fP\&.
+.SS "void read_REF_information (FILE * fp_ref, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP * ref_potential, \fBRef_Flags\fP * flags, \fBtW_word\fP mode)"
+
+.PP
+\fBread_REF_information()\fP: Reads the information for a reference potential\&. Calls the relevant function for each keyword that is found\&. 
+.PP
+Referenced by \fBget_ref_potential()\fP\&.
+.SS "int read_REF_interpol_type (int b_interpolation, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP * ref_potential)"
+
+.PP
+\fBread_REF_interpol_type()\fP: Reads the interpolation type used for the reference potential\&. 
+.PP
+Referenced by \fBread_REF_information()\fP\&.
+.SS "int read_REF_IntraMolecPair_inter (int b_IntraMolecPair, int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP * ref_potential, FILE * fp_ref, \fBtW_word\fP mode)"
+
+.PP
+\fBread_REF_IntraMolecPair_inter()\fP: Reads information for the intramolecular pair inter- actions\&. Stops execution if this information has been read previously\&. Returns TRUE\&. 
+.PP
+Referenced by \fBread_REF_information()\fP\&.
+.SS "int read_REF_nb_inter (int b_Pairs, int b_Forces, \fBtW_line\fP inp_line, \fBtW_ref_potential\fP * ref_potential, FILE * fp_ref, \fBtW_word\fP mode)"
+
+.PP
+\fBread_REF_nb_inter()\fP: Reads information for the intermolecular interactions\&. Stops execution if this information has been read previously\&. Returns TRUE\&. 
+.PP
+Referenced by \fBread_REF_information()\fP\&.
+.SS "void read_ref_potential (\fBtW_word\fP fname, \fBtW_ref_force\fP * inter_ptr, \fBtW_word\fP inter_type)"
+
+.PP
+\fBread_ref_potential()\fP: Stores information for a interaction in the reference potential\&. 
+.PP
+Referenced by \fBread_REF_forces()\fP\&.
+.SS "int read_save_state (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+\fBread_save_state()\fP: for resuming a calculation after the loop over particles\&. JFR - added 04\&.11\&.12 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int read_site_types (int b_SiteTypes, \fBtW_line\fP inp_line, \fBtW_system\fP * sys, FILE * fp_par)"
+
+.PP
+\fBread_site_types()\fP: Reads the site types listed in the parameter file\&. Stops execution if the site types has been read previously or the number of site types is not found\&. Returns TRUE\&. Calls get_word_list to retrieve the list from the parameter file\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_structures (int b_Structures, \fBtW_line\fP inp_line, \fBtW_files\fP * files, FILE * fp_par)"
+
+.PP
+\fBread_structures()\fP: Reads in the file names that contain structures\&. Stops execution if the file names have been read previously or the number of file names is not found\&. Otherwise, calls \fBget_word_list()\fP to read the file names that contain lists of file names of files that contain structures (confusing?)\&. Then, calls \fBget_structures()\fP to read the lists of files that contain structures\&. The idea is that there can be several file listed in the parameter file under [Structures] and these files can contain different lists of files that actually contain the coordinates (and forces)\&. Returns TRUE\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_temperature (int b_Temperature, \fBtW_line\fP inp_line, \fBtW_system\fP * sys)"
+
+.PP
+\fBread_temperature()\fP: Reads the temperature from the parameter file\&. If the temperature has been previously read or if unable to read temperature, execution is stopped\&. Otherwise TRUE is returned\&. 
+.PP
+Referenced by \fBget_parameters()\fP\&.
+.SS "int read_Type_Inter2 (\fBtW_line\fP inp_line, \fBtW_type_inter2\fP * inter, \fBtW_system\fP sys)"
+
+.PP
+\fBread_Type_Inter2()\fP: Finds the interaction type store in sys and copies that information for a given pair of site types\&. Execution is stopped if the interaction name found for a pair of sites listed in the parameter file is not a pair interaction (in sys) or the interaction name is not found in the interaction types listed in sys\&. 
+.PP
+Referenced by \fBget_Type_Inter2_List()\fP\&.
+.SS "int read_Type_Inter_Ext (\fBtW_line\fP inp_line, \fBtW_type_inter_external\fP * inter, \fBtW_system\fP sys)"
+
+.PP
+\fBread_Type_Inter_Ext()\fP: Finds the interaction type stored in sys and copies that information for a given site type\&. Execution is stopped if the interaction name found for site listed in parameter file is not an external interaction (in sys) or the interaction name is not found in the interaction types listed in sys\&. 
+.PP
+Referenced by \fBget_Type_Ext_List()\fP\&.
+.SS "void setup_sys_copy (\fBtW_system\fP sys_orig, \fBtW_system\fP * sys_copy, int overwrite_arrays)"
+
+.PP
+\fBsetup_sys_copy()\fP: Copies the information from sys_orig to sys_copy\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int setup_tables (\fBtW_system\fP * sys)"
+
+.PP
+\fBsetup_tables()\fP: Allocates memories for the grids\&. Zeros the grids just in case\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void summarize_input (\fBtW_files\fP files, \fBtW_system\fP sys, \fBtW_ref_potential\fP ref_potential)"
+
+.PP
+\fBsummarize_input()\fP: Summarizes the input read from the parameter files\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void summarize_input_bond_inter (FILE * fp, \fBtW_system\fP sys, \fBtW_word\fP inter_name, int N_Int_Sites, \fBtW_word\fP mode)"
+
+.PP
+\fBsummarize_input_bond_inter()\fP: Summarizes the information stored for the intramolecular interactions\&. 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_CalcMODE (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_CalcMODE()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_CHISQD (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_CHISQD()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_CONSTRAIN (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_CONSTRAIN()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_Eigen (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_Eigen()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_ERR (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_ERR()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_external_potential_inter (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+summarize_input_local_external_potential_inter(): Clone of above for ext potl inter 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_FRAMEWEIGHT (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+summarize_input_EMSEMBLE(): 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_ITER (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_ITER()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_local_density_inter (FILE * fp_log, \fBtW_system\fP sys)"
+
+.SS "void summarize_input_MEM (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_MEM()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_MFD (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_MFD()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_MT (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_MT()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_pair_inter (FILE * fp, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_pair_inter()\fP: Summarizes the information stored for each intermolecular pair interaction\&. 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_PC (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_PC()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_PT (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_PT()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_REF (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_REF()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_ref_potential (FILE * fp_log, \fBtW_system\fP sys, \fBtW_ref_potential\fP ref_potential)"
+
+.PP
+\fBsummarize_input_ref_potential()\fP: Summarizes the information store for the reference potential\&. 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_REG (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_REG()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_RESCALE (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_RESCALE()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_SOLN (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_SOLN()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_SVD (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_SVD()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_TPR (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_TPR()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_TPR_EXCL (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_TPR_EXCL()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_input_TRIM (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_input_TRIM()\fP: 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void summarize_Inter_Types (FILE * fp_log, \fBtW_system\fP sys)"
+
+.PP
+\fBsummarize_Inter_Types()\fP: Summarizes the input stored for each interaction type\&. 
+.PP
+Referenced by \fBsummarize_input()\fP\&.
+.SS "void test_read_ref_forces (int b_Forces, \fBtW_word\fP keyword)"
+
+.PP
+\fBtest_read_ref_forces()\fP: Tests to see if the reference forces have been read in yet\&. Stops execution if they have not\&. 
+.PP
+Referenced by \fBread_REF_BOND_angle_inter()\fP, \fBread_REF_Bond_dihedral_inter()\fP, \fBread_REF_BOND_stretch_inter()\fP, \fBread_REF_IntraMolecPair_inter()\fP, and \fBread_REF_nb_inter()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

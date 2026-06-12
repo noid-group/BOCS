@@ -1,0 +1,7 @@
+<map id="open_ref_potential_file" name="open_ref_potential_file">
+<area shape="rect" id="Node000001" title="open_ref_potential_file(): Opens the file that contains the reference potential information." alt="" coords="5,31,157,57"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#aa58790fe8cbcf89bdbad529d8e038d77" title="delete_directive_from_line(): For lines that contain a directive marked by [...], the ending brace is..." alt="" coords="205,5,377,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,32,189,28,189,34,157,38"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a465f5441ca7fc78824e4e834b46a747f" title="file_exists(): Checks whether the supplied filename can be opened for reading." alt="" coords="251,56,331,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="157,50,236,60,235,65,157,56"/>
+</map>

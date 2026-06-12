@@ -1,0 +1,5 @@
+<map id="get_inter_ptr" name="get_inter_ptr">
+<area shape="rect" id="Node000001" title="get_inter_ptr(): Returns an pointer to the interaction based on the sequence of sites in site_names." alt="" coords="5,5,99,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a5a715a0635053d2135ccef36af1599f7" title="check_word_list(): Checks to see if the n_words words in list1[] occur in list_2[] in any order." alt="" coords="147,5,262,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,16,131,16,131,21,99,21"/>
+</map>

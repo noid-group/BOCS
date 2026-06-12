@@ -1,0 +1,15 @@
+<map id="get_word_list" name="get_word_list">
+<area shape="rect" id="Node000001" title="get_word_list(): Reads a list of N_words words, each on separate lines, following a line that contain..." alt="" coords="5,56,104,83"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#afc26ee948fc1451d49561f3b6f1cb06a" title="check_inp_line(): Makes sure that the ending directive is not found were it is not supposed to be." alt="" coords="162,5,269,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,53,155,35,157,40,100,58"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="166,56,264,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="104,67,151,67,151,72,104,72"/>
+<area shape="rect" id="Node000007" href="$io__read_8c.html#a7b47f18d3649b2d4b9383a5aa3ddee38" title="test_end_directive(): Test to make sure the ending directive is found." alt="" coords="152,107,279,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="100,81,157,99,155,104,99,86"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="327,31,431,57"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="265,59,312,52,312,57,265,64"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="344,81,414,108"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="265,74,329,84,329,90,265,80"/>
+<area shape="rect" id="Node000005" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="479,31,612,57"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="432,41,464,41,464,47,432,47"/>
+</map>

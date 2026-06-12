@@ -1,0 +1,5 @@
+<map id="get_no_inter_types" name="get_no_inter_types">
+<area shape="rect" id="Node000001" title="get_no_inter_type(s): Returns the number of interactions listed after a directive in&#45; dicated by keyw..." alt="" coords="5,5,137,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#aa58790fe8cbcf89bdbad529d8e038d77" title="delete_directive_from_line(): For lines that contain a directive marked by [...], the ending brace is..." alt="" coords="185,5,357,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,16,169,16,169,21,137,21"/>
+</map>

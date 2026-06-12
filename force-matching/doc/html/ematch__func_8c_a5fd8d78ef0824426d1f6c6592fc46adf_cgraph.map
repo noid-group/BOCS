@@ -1,0 +1,11 @@
+<map id="read_epairs" name="read_epairs">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,94,57"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="142,31,240,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,41,126,41,126,47,94,47"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="288,5,392,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="240,33,272,27,273,33,241,38"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="305,56,375,83"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="241,50,290,58,289,63,240,55"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="440,5,573,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="393,16,425,16,425,21,393,21"/>
+</map>

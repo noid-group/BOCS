@@ -1,0 +1,7 @@
+<map id="setup_tables" name="setup_tables">
+<area shape="rect" id="Node000001" title="setup_tables(): Allocates memories for the grids." alt="" coords="5,31,101,57"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#abb17bf2cde61bbf80e87b7881dd7ea73" title="clear_sys_arrays(): Zeros the arrays that are not pointing to NULL." alt="" coords="154,5,274,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,34,138,28,139,33,101,39"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#a88656da40fd81721ee3f7a9769052756" title="get_interaction_i_0(): Finds the index to the grids for an interaction." alt="" coords="149,56,279,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="101,49,134,54,133,59,101,54"/>
+</map>

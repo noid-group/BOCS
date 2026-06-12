@@ -1,0 +1,14 @@
+<map id="calc_running_avg_periodic" name="calc_running_avg_periodic">
+<area shape="rect" id="Node000001" title="calc_running_avg_periodic(): Calculate running averages for periodic functions." alt="" coords="702,13,876,40"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#ad57745737b5b34d79d978168f4a8ef44" title="calc_b_struct(): Calculate b_struct from g and L." alt="" coords="419,13,519,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="686,29,519,29,519,24,686,24"/>
+<area shape="rect" id="Node000006" href="$calc__grids_8c.html#a249691db7f149668222a7ead356d51e3" title="calc_dg_dz(): Calculates the derivative of g and stores it into sm_dg_dz." alt="" coords="567,39,654,65"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="687,44,655,48,654,43,686,39"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#a693f2404f7a2ed6eeb2ec49540a2aa85" title="get_b_struct_and_b_forces(): (1) Allocates memory for sys&#45;&gt;b_forces and sys&#45;&gt;b_struct." alt="" coords="236,5,371,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="404,29,372,29,372,24,404,24"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#a7d1f81fde08821aebf1b645466f849a4" title="get_results(): (1) Calculate and store b_forces and b_struct." alt="" coords="103,13,188,40"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="220,29,188,29,188,24,220,24"/>
+<area shape="rect" id="Node000005" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,13,55,40"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="87,29,55,29,55,24,87,24"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="551,44,519,38,519,33,552,39"/>
+</map>

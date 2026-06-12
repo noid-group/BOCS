@@ -1,0 +1,13 @@
+<map id="setup_lists" name="setup_lists">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,107,90,133"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#ae692d337a5dbba8884a6b3021943e350" title="get_angle_list() Returns a list of angles in the t_ilist format:" alt="" coords="138,5,239,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="61,105,94,74,136,42,143,38,146,42,139,46,97,78,64,109"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8c.html#aba73b4daab5d7f7b9ea13b38dcdd2f4a" title="get_bond_list() Returns a list of bonds in the t_ilist format:" alt="" coords="139,56,238,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="86,104,134,86,136,91,88,109"/>
+<area shape="rect" id="Node000004" href="$gromacs__topology_8c.html#af351fe227c85c462c42706fe63c89870" title="get_dih_list() Returns a list of dihedrals in the t_ilist format:" alt="" coords="145,107,232,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="90,117,129,117,129,123,90,123"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8c.html#a14fce78305d581503887498ad9127531" title="get_nangles(): Returns the number of angles listed in self" alt="" coords="143,157,234,184"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="88,131,136,149,134,154,86,136"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#a0fb86b577162acde77a66b3ffa30a278" title="get_ndihs(): Returns the number of dihedrals listed in self" alt="" coords="150,208,227,235"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="64,131,97,162,139,194,146,198,143,202,136,198,94,166,61,135"/>
+</map>

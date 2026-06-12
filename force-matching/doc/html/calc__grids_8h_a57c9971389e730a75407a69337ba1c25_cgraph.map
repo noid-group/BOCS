@@ -1,0 +1,7 @@
+<map id="eval_power_basis_vectors" name="eval_power_basis_vectors">
+<area shape="rect" id="Node000001" title="eval_power_basis_vectors():" alt="" coords="5,31,181,57"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="251,5,322,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,30,235,23,236,28,181,35"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="229,56,345,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,53,213,57,213,62,181,58"/>
+</map>

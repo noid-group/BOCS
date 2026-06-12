@@ -1,0 +1,15 @@
+<map id="read_first_gro_frame" name="read_first_gro_frame">
+<area shape="rect" id="Node000001" title="read_first_gro_frame(): reads the first 3 lines of a .gro file, then rewinds it." alt="" coords="5,81,146,108"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="194,31,292,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,78,181,60,182,65,123,83"/>
+<area shape="rect" id="Node000006" href="$io__read_8c.html#a5aa8df5077291896b83782e74ab17317" title="open_file(): Opens a file named &quot;file_name&quot; with option &quot;mode.&quot; Returns the pointer to the file." alt="" coords="206,81,280,108"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="146,92,191,92,191,97,146,97"/>
+<area shape="rect" id="Node000007" href="$gromacs__topology_8c.html#a7e3813472aef3ea0800c4f8843906f1a" title="set_natoms(): sets the number of atoms in the frame self to natoms, and allocates memory for those ar..." alt="" coords="198,132,288,159"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="123,106,184,125,183,130,121,111"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="340,5,444,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="292,33,324,27,325,33,293,38"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="357,56,427,83"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="293,50,342,58,341,63,292,55"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="492,5,625,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="445,16,477,16,477,21,445,21"/>
+</map>

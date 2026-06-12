@@ -1,0 +1,21 @@
+<map id="calc_b_struct" name="calc_b_struct">
+<area shape="rect" id="Node000001" title="calc_b_struct(): Calculate b_struct from g and L." alt="" coords="5,157,105,184"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#a249691db7f149668222a7ead356d51e3" title="calc_dg_dz(): Calculates the derivative of g and stores it into sm_dg_dz." alt="" coords="183,56,270,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,155,107,128,151,99,175,87,177,92,154,104,111,132,75,159"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8c.html#ab494fb3070ff8cfcbb0c0c91f08cefcd" title="calc_running_avg(): Calculates a running average." alt="" coords="375,5,497,32"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="60,156,92,99,118,67,151,42,203,21,257,10,311,6,360,7,360,12,311,11,258,15,204,26,154,46,122,71,96,102,64,158"/>
+<area shape="rect" id="Node000005" href="$wnoid__math_8c.html#a0111272413fc103491b51fef9fa03d49" title="calc_running_avg_periodic(): Calculate running averages for periodic functions." alt="" coords="349,107,523,133"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="102,154,152,143,245,130,333,122,334,128,245,135,153,148,104,159"/>
+<area shape="rect" id="Node000006" href="$calc__grids_8c.html#aef2decc942d057de8534a2473e07106d" title="get_b_harmonic_bond():" alt="" coords="153,157,301,184"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="105,168,137,168,137,173,105,173"/>
+<area shape="rect" id="Node000007" href="$calc__grids_8c.html#a46f42fa0d4d3edbf15b01eb719b5e878" title="get_b_power():" alt="" coords="179,208,274,235"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="104,182,165,201,164,206,102,187"/>
+<area shape="rect" id="Node000008" href="$calc__grids_8c.html#abacf3324f7a74b96162c74b0c7e0e417" title="get_b_rb_dihedral():" alt="" coords="165,259,288,285"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="72,182,108,213,154,244,165,250,163,255,151,249,104,217,69,186"/>
+<area shape="rect" id="Node000009" href="$calc__grids_8c.html#a5a1b24ff83d7b36ccd6205b4d10783a2" title="get_b_TOY_dihedral():" alt="" coords="157,309,296,336"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="66,183,99,237,124,268,154,295,162,300,159,304,151,299,121,272,95,241,61,186"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#ad10f231e689de1598ee729119a8d9b02" title="calc_centered_diff(): Calculate the centered difference." alt="" coords="373,56,499,83"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="271,67,357,67,357,72,271,72"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="270,56,363,34,364,39,272,61"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="272,77,364,100,363,105,270,82"/>
+</map>

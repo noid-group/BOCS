@@ -1,0 +1,279 @@
+.TH "tW_gmx_topology" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tW_gmx_topology
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <C:/Users/maria/Documents/Noid_Group/MYBOCS/05_11_26\-releasedoc/BOCS_Developers/force\-matching/src/gromacs_topology\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "\fBtW_t_topology\fP * \fBcontents\fP"
+.br
+.ti -1c
+.RI "int \fBeFileType\fP"
+.br
+.ti -1c
+.RI "\fBtW_word\fP \fBfilename\fP"
+.br
+.ti -1c
+.RI "int \fBn_molblocks\fP"
+.br
+.ti -1c
+.RI "int \fBn_molecule_types\fP"
+.br
+.ti -1c
+.RI "\fBtW_molecule\fP * \fBmolecules\fP"
+.br
+.ti -1c
+.RI "\fBtW_molblock\fP * \fBmolblocks\fP"
+.br
+.ti -1c
+.RI "\fBtW_word\fP * \fBforce_names\fP"
+.br
+.ti -1c
+.RI "\fBtW_word\fP * \fBatom_type_names\fP"
+.br
+.ti -1c
+.RI "int \fBn_atomtypes\fP"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBb_tpr\fP"
+.br
+.ti -1c
+.RI "int * \fBint_map\fP"
+.br
+.ti -1c
+.RI "double ** \fBhi_LDs\fP"
+.br
+.ti -1c
+.RI "double ** \fBlo_LDs\fP"
+.br
+.ti -1c
+.RI "\fBbool\fP ** \fBbLocalDens\fP"
+.br
+.ti -1c
+.RI "\fBtW_indicator_function\fP *** \fBindicators\fP"
+.br
+.ti -1c
+.RI "\fBtW_index_file\fP * \fBidx_file\fP"
+.br
+.ti -1c
+.RI "int(* \fBget_natoms\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "char *(* \fBget_name\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int(* \fBget_nbonds\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int(* \fBget_bond_count\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int(* \fBget_n_bond_types\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int(* \fBget_nangles\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int(* \fBget_angle_count\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int(* \fBget_n_angle_types\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int(* \fBget_ndihs\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int(* \fBget_dihedral_count\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int(* \fBget_n_dihedral_types\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int(* \fBget_npairs\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int *(* \fBget_bond_list\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int *(* \fBget_angle_list\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int *(* \fBget_dih_list\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int *(* \fBget_pair_list\fP )(struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "int(* \fBget_resind\fP )(struct \fBtW_gmx_topology\fP *, int)"
+.br
+.ti -1c
+.RI "char *(* \fBget_atomtype\fP )(struct \fBtW_gmx_topology\fP *, int)"
+.br
+.ti -1c
+.RI "int(* \fBget_nexcl\fP )(struct \fBtW_gmx_topology\fP *, int)"
+.br
+.ti -1c
+.RI "int *(* \fBget_excl_list\fP )(struct \fBtW_gmx_topology\fP *, int)"
+.br
+.in -1c
+.SH "Field Documentation"
+.PP 
+.SS "\fBtW_word\fP* atom_type_names"
+
+.PP
+Referenced by \fBgenerate_generic_index_file()\fP, \fBget_type()\fP, \fBinit_LD_info()\fP, \fBpop_contents()\fP, \fBread_bocs_top()\fP, \fBrun_checks()\fP, \fBsetup_lists()\fP, and \fBwrite_bocs_top()\fP\&.
+.SS "\fBbool\fP b_tpr"
+
+.PP
+Referenced by \fBget_top()\fP, \fBinit_tW_gmx_topology()\fP, \fBmain()\fP, and \fBset_atom_labels()\fP\&.
+.SS "\fBbool\fP** bLocalDens"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP, \fBinit_LD_info()\fP, and \fBinit_tW_gmx_topology()\fP\&.
+.SS "\fBtW_t_topology\fP* contents"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP, \fBdget_top_ff_info()\fP, \fBdo_ematch_pairs()\fP, \fBdprocess_sysname_natoms()\fP, \fBdump_molecule_info()\fP, \fBgenerate_generic_index_file()\fP, \fBget_angle_count()\fP, \fBget_angle_list()\fP, \fBget_atomtype()\fP, \fBget_bond_count()\fP, \fBget_bond_list()\fP, \fBget_dih_list()\fP, \fBget_dihedral_count()\fP, \fBget_excl_list()\fP, \fBget_n_angle_types()\fP, \fBget_n_bond_types()\fP, \fBget_n_dihedral_types()\fP, \fBget_name()\fP, \fBget_nangles()\fP, \fBget_natoms()\fP, \fBget_nbonds()\fP, \fBget_ndihs()\fP, \fBget_nexcl()\fP, \fBget_npairs()\fP, \fBget_pair_list()\fP, \fBget_resind()\fP, \fBget_site_info()\fP, \fBinit_tW_gmx_topology()\fP, \fBmain()\fP, \fBpop_contents()\fP, \fBprint_tpr_file()\fP, \fBread_bocs_top()\fP, \fBread_etopology()\fP, \fBread_tpr_dump()\fP, \fBset_atom_labels()\fP, \fBwrite_bocs_top()\fP, \fBwrite_lammps_data()\fP, and \fBwrite_lammps_frame()\fP\&.
+.SS "int eFileType"
+
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP, \fBmain()\fP, and \fBread_topology()\fP\&.
+.SS "\fBtW_word\fP filename"
+
+.PP
+Referenced by \fBsummarize_esystem()\fP\&.
+.SS "\fBtW_word\fP* force_names"
+
+.PP
+Referenced by \fBdget_top_ff_info()\fP, \fBget_n_angle_types()\fP, \fBget_n_bond_types()\fP, \fBget_n_dihedral_types()\fP, \fBprint_tpr_file()\fP, \fBread_bocs_top()\fP, \fBwrite_bocs_top()\fP, and \fBwrite_lammps_data()\fP\&.
+.SS "int(* get_angle_count) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int *(* get_angle_list) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBcalc_ref_Angle_forces()\fP, \fBcheck_angles()\fP, \fBinit_tW_gmx_topology()\fP, and \fBstore_angle_lists()\fP\&.
+.SS "char *(* get_atomtype) (struct \fBtW_gmx_topology\fP *, int)"
+
+.PP
+Referenced by \fBget_site_info()\fP, \fBinit_tW_gmx_topology()\fP, and \fBsetup_lists()\fP\&.
+.SS "int(* get_bond_count) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP, and \fBsetup_lists()\fP\&.
+.SS "int *(* get_bond_list) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBcalc_ref_BondStretch_forces()\fP, \fBcheck_bonds()\fP, \fBinit_tW_gmx_topology()\fP, and \fBstore_bond_lists()\fP\&.
+.SS "int *(* get_dih_list) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBcalc_ref_Dihedral_forces()\fP, \fBcheck_dihedrals()\fP, \fBinit_tW_gmx_topology()\fP, and \fBstore_dihedral_lists()\fP\&.
+.SS "int(* get_dihedral_count) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int *(* get_excl_list) (struct \fBtW_gmx_topology\fP *, int)"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP, \fBdo_bins_allocate_mem()\fP, \fBget_site_info()\fP, and \fBinit_tW_gmx_topology()\fP\&.
+.SS "int(* get_n_angle_types) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP, and \fBrun_checks()\fP\&.
+.SS "int(* get_n_bond_types) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP, and \fBrun_checks()\fP\&.
+.SS "int(* get_n_dihedral_types) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP, and \fBrun_checks()\fP\&.
+.SS "char *(* get_name) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBget_site_info()\fP, and \fBinit_tW_gmx_topology()\fP\&.
+.SS "int(* get_nangles) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBallocate_memory_bond_type_indices()\fP, \fBcalc_ref_Angle_forces()\fP, \fBcheck_angles()\fP, \fBget_angle_list()\fP, \fBinit_tW_gmx_topology()\fP, and \fBstore_angle_lists()\fP\&.
+.SS "int(* get_natoms) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBget_site_info()\fP, \fBinit_tW_gmx_topology()\fP, \fBmain()\fP, and \fBsetup_CG_struct()\fP\&.
+.SS "int(* get_nbonds) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBallocate_memory_bond_type_indices()\fP, \fBcalc_ref_BondStretch_forces()\fP, \fBcheck_bonds()\fP, \fBget_bond_list()\fP, \fBinit_tW_gmx_topology()\fP, and \fBstore_bond_lists()\fP\&.
+.SS "int(* get_ndihs) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBallocate_memory_bond_type_indices()\fP, \fBcalc_ref_Dihedral_forces()\fP, \fBcheck_dihedrals()\fP, \fBget_dih_list()\fP, \fBinit_tW_gmx_topology()\fP, and \fBstore_dihedral_lists()\fP\&.
+.SS "int(* get_nexcl) (struct \fBtW_gmx_topology\fP *, int)"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP, \fBdo_bins_allocate_mem()\fP, \fBget_site_info()\fP, and \fBinit_tW_gmx_topology()\fP\&.
+.SS "int(* get_npairs) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBallocate_memory_bond_type_indices()\fP, \fBcalc_ref_IntraMolecPairs_forces()\fP, \fBcheck_pairs()\fP, \fBget_pair_list()\fP, \fBinit_tW_gmx_topology()\fP, and \fBstore_pair_lists()\fP\&.
+.SS "int *(* get_pair_list) (struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBcalc_ref_IntraMolecPairs_forces()\fP, \fBcheck_pairs()\fP, \fBinit_tW_gmx_topology()\fP, and \fBstore_pair_lists()\fP\&.
+.SS "int(* get_resind) (struct \fBtW_gmx_topology\fP *, int)"
+
+.PP
+Referenced by \fBget_site_info()\fP, and \fBinit_tW_gmx_topology()\fP\&.
+.SS "double** hi_LDs"
+
+.PP
+Referenced by \fBinit_LD_info()\fP, and \fBinit_tW_gmx_topology()\fP\&.
+.SS "\fBtW_index_file\fP* idx_file"
+
+.PP
+Referenced by \fBgenerate_generic_index_file()\fP, \fBinit_tW_gmx_topology()\fP, and \fBread_index_file()\fP\&.
+.SS "\fBtW_indicator_function\fP*** indicators"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP, \fBinit_LD_info()\fP, and \fBinit_tW_gmx_topology()\fP\&.
+.SS "int* int_map"
+
+.PP
+Referenced by \fBdump_molecule_info()\fP, \fBinit_LD_info()\fP, \fBinit_tW_gmx_topology()\fP, and \fBwrite_lammps_data()\fP\&.
+.SS "double ** lo_LDs"
+
+.PP
+Referenced by \fBinit_LD_info()\fP, and \fBinit_tW_gmx_topology()\fP\&.
+.SS "\fBtW_molblock\fP* molblocks"
+
+.PP
+Referenced by \fBdget_moltypes_in_molblocks()\fP, \fBpop_contents()\fP, \fBread_bocs_top()\fP, \fBread_tpr_dump()\fP, and \fBwrite_bocs_top()\fP\&.
+.SS "\fBtW_molecule\fP* molecules"
+
+.PP
+Referenced by \fBdump_molecule_info()\fP, \fBgenerate_generic_index_file()\fP, \fBget_angle_count()\fP, \fBget_bond_count()\fP, \fBget_dihedral_count()\fP, \fBpop_contents()\fP, \fBread_bocs_top()\fP, \fBread_tpr_dump()\fP, \fBwrite_bocs_top()\fP, and \fBwrite_lammps_data()\fP\&.
+.SS "int n_atomtypes"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP, \fBgenerate_generic_index_file()\fP, \fBget_site_info()\fP, \fBget_type()\fP, \fBinit_LD_info()\fP, \fBmain()\fP, \fBpop_contents()\fP, \fBread_bocs_top()\fP, \fBrun_checks()\fP, and \fBwrite_bocs_top()\fP\&.
+.SS "int n_molblocks"
+
+.PP
+Referenced by \fBdget_moltypes_in_molblocks()\fP, \fBdprocess_nmolblocks()\fP, \fBpop_contents()\fP, \fBread_bocs_top()\fP, \fBread_tpr_dump()\fP, and \fBwrite_bocs_top()\fP\&.
+.SS "int n_molecule_types"
+
+.PP
+Referenced by \fBdget_moltypes_in_molblocks()\fP, \fBread_bocs_top()\fP, and \fBread_tpr_dump()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

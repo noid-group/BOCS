@@ -1,0 +1,20 @@
+<map id="get_Angle_info" name="get_Angle_info">
+<area shape="rect" id="Node000001" title="get_Angle_info: gets theta/vectors required to figure out dPsi/dR_I for an angle site_I takes place i..." alt="" coords="5,86,113,113"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="538,6,610,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,84,112,57,160,34,208,21,258,12,359,4,450,5,523,10,522,16,450,10,359,9,259,17,209,26,162,39,115,62,78,88"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#af9c226fc952c36ac1ca615019b75057d" title="get_atom_position_angle: Determines the position of site_i (i_site) in the angle_triple passed" alt="" coords="161,166,326,193"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="84,111,162,152,179,158,177,163,160,157,82,116"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8c.html#a4ec3dc2dbb208811be33fdc94163836e" title="get_difference_unit_vector(): From x_i and x_j, calculates the differenc vector, the unit difference ..." alt="" coords="178,49,308,92"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="112,88,163,80,164,86,113,94"/>
+<area shape="rect" id="Node000008" href="$calc__grids_8c.html#aa7d8eb252c0ba695df318b75920a2901" title="get_L2_L3_angles():" alt="" coords="180,116,306,142"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="113,105,165,114,164,119,112,111"/>
+<area shape="rect" id="Node000005" href="$wnoid__math_8c.html#aed00bac3dd87333226ee1d7cb19700af" title="calc_norm(): Returns the norm of an dvec." alt="" coords="392,32,473,58"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="308,59,376,50,377,55,309,64"/>
+<area shape="rect" id="Node000006" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="374,82,490,109"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="309,76,359,83,358,88,308,82"/>
+<area shape="rect" id="Node000007" href="$wnoid__math_8c.html#a1f483015ac47277c71a1e600b42befd8" title="vect_diff(): Calculates diff = v1 &#45; v2." alt="" coords="397,133,467,160"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="300,90,384,124,382,129,298,95"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="473,35,523,26,523,31,474,40"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="306,115,358,106,359,111,307,120"/>
+<area shape="poly" id="edge10_Node000008_Node000007" title=" " alt="" coords="307,132,382,139,381,144,306,137"/>
+</map>

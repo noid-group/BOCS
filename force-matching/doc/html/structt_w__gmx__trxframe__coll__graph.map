@@ -1,0 +1,13 @@
+<map id="tW_gmx_trxframe" name="tW_gmx_trxframe">
+<area shape="rect" id="Node000001" title=" " alt="" coords="100,277,225,304"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8h.html#structt_w__t__trxframe" title=" " alt="" coords="110,187,215,213"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,229,165,277,160,277,160,229"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8h.html#structt_w__t__atoms" title=" " alt="" coords="116,96,209,123"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="165,138,165,186,160,186,160,138"/>
+<area shape="rect" id="Node000004" href="$gromacs__topology_8h.html#structt_w__t__atom" title=" " alt="" coords="5,5,91,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="78,40,148,93,145,98,75,44"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8h.html#structt_w__t__resinfo" title=" " alt="" coords="115,5,210,32"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="165,48,165,95,160,95,160,48"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8h.html#structt_w__t__pdbinfo" title=" " alt="" coords="235,5,333,32"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="256,43,182,98,178,93,253,39"/>
+</map>

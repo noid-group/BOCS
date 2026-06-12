@@ -1,0 +1,117 @@
+<map id="get_ref_forces" name="get_ref_forces">
+<area shape="rect" id="Node000001" title="get_ref_forces(): Calculate the forces due to the reference potential." alt="" coords="5,727,110,753"/>
+<area shape="rect" id="Node000002" href="$calc__ref__potential_8c.html#a1c6089fde66d61ef80d61a12e6c02cd6" title="calc_ref_Angle_forces():" alt="" coords="165,259,316,285"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="58,726,65,666,83,575,112,468,132,415,155,364,182,326,211,294,214,298,186,329,160,367,136,417,117,470,88,576,71,667,63,727"/>
+<area shape="rect" id="Node000019" href="$calc__ref__potential_8c.html#a3955939e6709c062689b041a16512ab6" title="calc_ref_BondStretch_forces(): Calculates the forces due to bond stretching." alt="" coords="167,377,314,420"/>
+<area shape="poly" id="edge23_Node000001_Node000019" title=" " alt="" coords="64,725,218,433,223,435,68,727"/>
+<area shape="rect" id="Node000023" href="$calc__ref__potential_8c.html#a8a106dbcfdcc72c188daa315897819dc" title="calc_ref_Dihedral_forces(): Calculate the forces due to the reference dihedral potential." alt="" coords="158,777,323,804"/>
+<area shape="poly" id="edge35_Node000001_Node000023" title=" " alt="" coords="109,751,176,770,174,775,108,757"/>
+<area shape="rect" id="Node000032" href="$calc__ref__potential_8c.html#a60054637049b6655a7577ed4360a8ea6" title="calc_ref_IntraMolecPairs_forces(): Calculate forces due to intramolecular pair forces." alt="" coords="158,580,323,623"/>
+<area shape="poly" id="edge53_Node000001_Node000032" title=" " alt="" coords="75,724,197,630,200,634,78,728"/>
+<area shape="rect" id="Node000034" href="$calc__ref__potential_8c.html#a8ae41292d9a3977fa5c29e0dbcbb9f8c" title="calc_ref_nb_pair_forces(): Evaluate the pair forces over all pairs due to the reference potential." alt="" coords="161,727,320,753"/>
+<area shape="poly" id="edge62_Node000001_Node000034" title=" " alt="" coords="110,737,145,737,145,743,110,743"/>
+<area shape="rect" id="Node000039" href="$calc__ref__potential_8c.html#af80fb686ab8c97edbbd4f96cf248fb2f" title="initialize_ref_forces(): Clear out the reference force variables." alt="" coords="174,828,307,855"/>
+<area shape="poly" id="edge74_Node000001_Node000039" title=" " alt="" coords="75,752,111,783,159,814,172,820,170,825,156,818,108,787,71,756"/>
+<area shape="rect" id="Node000040" href="$calc__ref__potential_8c.html#a05c984ce58b6b7a2989688ed55806b9e" title="print_CG_ref_f(): Prints the forces due to the reference potential." alt="" coords="187,879,294,905"/>
+<area shape="poly" id="edge75_Node000001_Node000040" title=" " alt="" coords="68,752,102,807,128,838,159,864,174,873,172,878,156,869,125,842,98,810,64,755"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#a9c5a3b6937e85e5ab095336277f0f7ce" title="check_inter_range():" alt="" coords="388,360,515,387"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="271,283,409,350,407,355,269,288"/>
+<area shape="rect" id="Node000004" href="$calc__ref__potential_8c.html#a8141a1371e866788d1bd92b138d7e1c5" title="copy_3_site_names():" alt="" coords="382,5,520,32"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="244,258,259,218,285,162,321,102,344,74,369,49,386,37,389,41,373,53,348,77,326,105,289,164,264,220,249,259"/>
+<area shape="rect" id="Node000005" href="$calc__ref__potential_8c.html#aec482419bd6624cbc73bcdafb71d8c77" title="get_angle_inter_ptr(): Returns the pointer to the angle interaction depending on the sequence found i..." alt="" coords="386,259,517,285"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="316,269,370,269,370,275,316,275"/>
+<area shape="rect" id="Node000007" href="$calc__ref__potential_8c.html#a0d0ceefe8ad8ec63a791281c849c2b61" title="get_angle_vector_forces(): Calculate the forces due to the angle beding reference potential." alt="" coords="588,360,751,387"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="280,255,331,241,395,230,465,229,499,234,532,244,570,264,603,291,652,345,648,349,599,295,567,269,530,249,498,239,464,234,396,236,332,246,281,261"/>
+<area shape="rect" id="Node000011" href="$calc__ref__potential_8c.html#a27bc94b493f15044999850f9c3cbda63" title="get_ref_Angle_info(): Calculates the forces on the sites for the angle defined as &lt;213." alt="" coords="386,107,516,133"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="252,256,300,206,333,176,370,150,392,138,395,142,372,154,337,180,304,209,255,260"/>
+<area shape="rect" id="Node000016" href="$calc__ref__potential_8c.html#a415bf569c0f814317f584c37ca17853a" title="get_scalar_f_from_table(): Returns f(x) which were read in from input." alt="" coords="371,613,531,640"/>
+<area shape="poly" id="edge20_Node000002_Node000016" title=" " alt="" coords="259,284,293,318,325,364,337,391,344,415,348,458,354,501,361,524,373,549,395,578,420,602,417,605,391,581,369,552,356,526,348,502,343,459,339,416,332,393,321,367,289,321,255,287"/>
+<area shape="rect" id="Node000006" href="$io__read_8c.html#a5a715a0635053d2135ccef36af1599f7" title="check_word_list(): Checks to see if the n_words words in list1[] occur in list_2[] in any order." alt="" coords="612,411,727,437"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="504,284,533,302,551,327,557,351,564,374,581,397,598,407,596,412,578,401,559,377,552,353,546,329,530,306,501,288"/>
+<area shape="rect" id="Node000008" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="808,541,924,568"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="741,385,761,397,780,414,790,432,798,451,810,473,848,527,844,530,805,476,793,453,785,434,775,418,758,401,738,390"/>
+<area shape="rect" id="Node000009" href="$wnoid__math_8c.html#a1f483015ac47277c71a1e600b42befd8" title="vect_diff(): Calculates diff = v1 &#45; v2." alt="" coords="831,436,901,463"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="727,385,761,396,809,422,820,427,818,432,806,426,759,401,726,390"/>
+<area shape="rect" id="Node000010" href="$wnoid__math_8c.html#af6e6af9e1403c9a1a78c91a688a3f38f" title="vect_sum(): Calculates sum = v1 + v2." alt="" coords="827,797,905,824"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="747,385,762,397,780,422,792,446,800,471,803,495,800,542,790,590,780,637,775,685,777,709,783,733,794,758,810,784,816,790,812,794,806,787,789,761,778,735,772,710,770,685,774,636,785,589,795,542,798,495,794,472,787,448,775,425,758,400,744,389"/>
+<area shape="rect" id="Node000012" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="972,385,1043,412"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="516,108,571,104,633,105,699,114,761,135,802,158,840,186,875,218,907,252,959,318,993,371,989,373,954,321,903,255,871,222,837,190,799,162,759,140,697,120,633,110,571,109,517,113"/>
+<area shape="rect" id="Node000013" href="$wnoid__math_8c.html#a4ec3dc2dbb208811be33fdc94163836e" title="get_difference_unit_vector(): From x_i and x_j, calculates the differenc vector, the unit difference ..." alt="" coords="604,149,735,192"/>
+<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="513,131,590,150,589,155,511,137"/>
+<area shape="rect" id="Node000015" href="$calc__grids_8c.html#aa7d8eb252c0ba695df318b75920a2901" title="get_L2_L3_angles():" alt="" coords="606,216,733,243"/>
+<area shape="poly" id="edge17_Node000011_Node000015" title=" " alt="" coords="498,131,533,150,548,164,557,177,566,190,581,202,593,208,591,213,578,206,562,193,553,180,544,167,530,154,495,136"/>
+<area shape="poly" id="edge15_Node000013_Node000008" title=" " alt="" coords="737,183,762,202,785,237,796,269,799,301,798,332,794,398,798,434,810,474,826,502,844,528,840,531,821,505,805,476,793,435,789,398,793,332,794,301,791,271,780,239,758,206,734,188"/>
+<area shape="poly" id="edge16_Node000013_Node000009" title=" " alt="" coords="737,184,762,202,780,231,789,259,790,286,787,314,785,340,785,367,793,394,810,422,819,431,815,435,806,426,788,396,780,368,779,340,782,313,784,286,783,260,776,233,758,206,733,188"/>
+<area shape="rect" id="Node000014" href="$wnoid__math_8c.html#aed00bac3dd87333226ee1d7cb19700af" title="calc_norm(): Returns the norm of an dvec." alt="" coords="825,385,906,412"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="737,186,761,202,797,242,825,287,845,332,859,369,854,371,840,334,820,290,793,245,758,206,734,191"/>
+<area shape="poly" id="edge14_Node000014_Node000012" title=" " alt="" coords="907,396,957,396,957,401,907,401"/>
+<area shape="poly" id="edge18_Node000015_Node000008" title=" " alt="" coords="685,241,722,287,762,347,778,382,786,410,795,439,810,473,846,528,842,531,805,476,790,441,781,412,773,384,757,349,718,290,681,245"/>
+<area shape="poly" id="edge19_Node000015_Node000009" title=" " alt="" coords="735,241,762,259,777,280,785,301,787,342,789,382,796,402,810,422,819,430,815,434,806,426,791,404,784,383,782,342,779,302,772,283,758,263,732,245"/>
+<area shape="rect" id="Node000017" href="$calc__ref__potential_8c.html#ab93a0f08cba524f3e61a1e04bcebe8f5" title="get_linear_interpolation_f(): Returns f(x) by linearly interpolating between grid points on either si..." alt="" coords="587,563,752,589"/>
+<area shape="poly" id="edge21_Node000016_Node000017" title=" " alt="" coords="511,610,593,591,595,596,513,615"/>
+<area shape="rect" id="Node000018" href="$calc__ref__potential_8c.html#a5e372043274f5537c02fff4c7cce3289" title="get_no_interpolation_f(): Returns f(x) without interpolating between grid points." alt="" coords="595,613,744,640"/>
+<area shape="poly" id="edge22_Node000016_Node000018" title=" " alt="" coords="532,624,580,624,580,629,532,629"/>
+<area shape="poly" id="edge25_Node000019_Node000003" title=" " alt="" coords="314,387,372,380,372,385,314,393"/>
+<area shape="poly" id="edge34_Node000019_Node000009" title=" " alt="" coords="257,375,323,296,370,244,413,229,449,227,486,234,532,244,602,259,656,276,705,303,762,346,778,366,786,385,794,403,809,422,819,429,815,433,806,426,789,406,781,387,773,369,758,350,702,307,654,281,600,265,531,249,485,239,449,233,414,235,372,249,327,299,261,379"/>
+<area shape="poly" id="edge24_Node000019_Node000014" title=" " alt="" coords="262,375,293,340,321,296,331,266,335,239,332,186,332,162,336,138,348,115,369,92,404,76,451,68,506,67,566,72,626,83,681,97,728,115,761,135,787,161,808,190,825,222,838,255,856,319,865,370,859,371,851,320,833,257,820,224,803,193,783,164,758,139,725,120,679,102,625,88,565,78,506,73,451,74,405,81,373,97,352,118,341,140,337,162,338,186,340,239,336,268,325,299,297,343,266,379"/>
+<area shape="poly" id="edge33_Node000019_Node000016" title=" " alt="" coords="261,419,310,478,373,549,426,601,422,605,369,553,306,482,257,422"/>
+<area shape="rect" id="Node000020" href="$calc__ref__potential_8c.html#ab9e41b84b13c02a89806eb0bdb5264e0" title="copy_2_site_names():" alt="" coords="382,512,520,539"/>
+<area shape="poly" id="edge26_Node000019_Node000020" title=" " alt="" coords="279,418,416,501,413,506,276,423"/>
+<area shape="rect" id="Node000021" href="$calc__ref__potential_8c.html#a3ccad20aea65378c17769881a2e85f25" title="get_central_pair_vector_forces(): Calculates the force between two pairs of site." alt="" coords="591,664,748,707"/>
+<area shape="poly" id="edge27_Node000019_Node000021" title=" " alt="" coords="275,375,330,347,398,324,434,318,469,319,503,327,533,346,550,363,562,381,573,418,572,456,565,494,556,533,553,572,559,611,568,631,581,650,582,651,578,655,577,654,563,633,554,613,547,572,551,532,559,493,567,455,568,418,557,383,546,367,530,350,501,332,469,324,434,323,399,329,332,352,277,379"/>
+<area shape="rect" id="Node000022" href="$calc__ref__potential_8c.html#a5ac2499f606ee2745d4427cd50884c95" title="get_inter_ptr(): Returns an pointer to the interaction based on the sequence of sites in site_names." alt="" coords="404,411,498,437"/>
+<area shape="poly" id="edge31_Node000019_Node000022" title=" " alt="" coords="314,405,390,414,389,419,314,410"/>
+<area shape="poly" id="edge28_Node000021_Node000008" title=" " alt="" coords="736,661,758,650,804,614,841,577,845,581,808,618,761,654,739,666"/>
+<area shape="poly" id="edge29_Node000021_Node000009" title=" " alt="" coords="743,661,758,650,778,622,786,594,792,564,805,528,842,473,846,476,810,531,797,565,791,595,783,624,762,654,746,666"/>
+<area shape="poly" id="edge30_Node000021_Node000010" title=" " alt="" coords="743,705,761,717,778,734,786,750,794,767,809,783,815,787,812,792,806,787,790,770,782,753,773,737,758,721,740,709"/>
+<area shape="poly" id="edge32_Node000022_Node000006" title=" " alt="" coords="498,421,596,421,596,427,498,427"/>
+<area shape="poly" id="edge36_Node000023_Node000003" title=" " alt="" coords="307,775,321,764,338,741,349,718,355,695,358,673,354,628,345,583,335,537,331,491,334,468,341,445,352,421,369,397,373,393,377,396,373,400,357,424,346,446,339,469,337,492,340,537,350,582,360,627,363,673,360,696,354,720,342,743,325,767,311,779"/>
+<area shape="poly" id="edge52_Node000023_Node000016" title=" " alt="" coords="300,774,321,763,337,749,347,735,369,701,421,649,425,653,373,704,351,738,341,752,325,768,303,779"/>
+<area shape="rect" id="Node000024" href="$calc__ref__potential_8c.html#a9df7c69c5e25bc0d6a58d62343de7821" title="copy_4_site_names():" alt="" coords="382,1035,520,1061"/>
+<area shape="poly" id="edge37_Node000023_Node000024" title=" " alt="" coords="310,803,325,814,343,841,351,867,352,894,350,919,347,945,348,970,356,996,373,1021,375,1023,372,1027,369,1024,351,998,343,971,342,945,344,919,347,893,346,868,338,843,321,818,307,807"/>
+<area shape="rect" id="Node000025" href="$calc__ref__potential_8c.html#a2970f72b6d14d95a1b513db8dd3a501e" title="get_dihedral_inter_ptr(): Returns the pointer to a dihedral interaction depending on the squence foun..." alt="" coords="378,984,524,1011"/>
+<area shape="poly" id="edge38_Node000023_Node000025" title=" " alt="" coords="309,802,325,814,340,834,348,854,350,894,352,933,359,951,373,970,376,973,372,977,369,974,354,954,347,934,344,894,342,855,335,837,321,818,306,807"/>
+<area shape="rect" id="Node000027" href="$calc__ref__potential_8c.html#ab4c23dce64743634c05e9038896333b5" title="get_dihedral_vector_forces(): Calculates the forces due to the dihedral reference potential." alt="" coords="602,832,737,875"/>
+<area shape="poly" id="edge40_Node000023_Node000027" title=" " alt="" coords="310,802,325,814,346,848,353,882,351,916,345,950,340,982,339,1014,349,1043,373,1071,412,1096,432,1102,451,1104,470,1102,489,1096,530,1071,548,1051,557,1030,559,1008,557,984,555,935,561,910,577,885,587,876,591,880,581,888,566,912,560,936,562,984,564,1008,562,1032,553,1054,533,1075,491,1101,471,1107,451,1109,430,1107,410,1101,369,1075,344,1046,334,1014,334,982,340,949,346,916,348,883,341,850,321,818,307,807"/>
+<area shape="rect" id="Node000028" href="$calc__ref__potential_8c.html#a4b659623e5b6e82ea077ccd47e9d29f6" title="get_ref_Dihedral_info(): Copies information for a dihedral interactions into the variable dihedral." alt="" coords="379,1136,523,1163"/>
+<area shape="poly" id="edge43_Node000023_Node000028" title=" " alt="" coords="311,802,325,814,350,853,359,891,358,929,351,966,345,1003,343,1040,351,1077,373,1116,384,1126,380,1130,369,1119,346,1079,338,1040,339,1002,346,965,352,928,353,892,345,855,321,818,307,807"/>
+<area shape="rect" id="Node000026" href="$io__read_8c.html#acd760e677364733e6b6c64b5db6d7d2e" title="match_word_list(): Determines if list_1 and list_2 match in either normal or reverse order." alt="" coords="611,731,728,757"/>
+<area shape="poly" id="edge39_Node000025_Node000026" title=" " alt="" coords="515,981,529,970,546,945,554,921,555,896,552,871,550,845,551,819,559,793,577,767,596,754,599,759,581,771,564,796,556,820,555,845,558,870,560,896,559,921,551,948,533,974,518,986"/>
+<area shape="poly" id="edge41_Node000027_Node000008" title=" " alt="" coords="736,834,758,818,771,801,785,776,812,711,854,583,859,584,817,713,789,778,775,804,762,822,739,838"/>
+<area shape="poly" id="edge42_Node000027_Node000010" title=" " alt="" coords="736,836,811,820,812,825,738,841"/>
+<area shape="rect" id="Node000029" href="$wnoid__math_8c.html#abe60d7580b13d8226cb3bd124e760b92" title="copy_vector(): Copies source into dest." alt="" coords="820,949,912,976"/>
+<area shape="poly" id="edge44_Node000028_Node000029" title=" " alt="" coords="482,1133,819,980,821,985,484,1138"/>
+<area shape="rect" id="Node000030" href="$calc__grids_8c.html#ab10b377244fec6cc3f32ace1d2fb7ae1" title="eval_grad_B(): Code adopted from pages 278&#45;283 of Rapaport&#39;s &quot;The Art of MD Sim.&quot; This gives the same..." alt="" coords="623,899,716,925"/>
+<area shape="poly" id="edge45_Node000028_Node000030" title=" " alt="" coords="499,1133,530,1115,547,1097,556,1079,564,1060,577,1036,647,936,651,939,582,1039,569,1062,561,1081,551,1100,533,1119,502,1138"/>
+<area shape="poly" id="edge49_Node000030_Node000008" title=" " alt="" coords="716,905,738,898,758,885,853,582,858,584,762,888,741,902,718,910"/>
+<area shape="poly" id="edge50_Node000030_Node000009" title=" " alt="" coords="716,907,739,899,758,885,787,841,801,800,803,760,798,719,792,676,787,631,790,582,805,528,821,498,840,472,844,476,826,501,810,530,796,583,793,631,797,676,804,718,808,760,806,801,792,844,762,889,741,904,717,912"/>
+<area shape="poly" id="edge51_Node000030_Node000010" title=" " alt="" coords="716,901,758,884,773,873,782,860,791,847,806,834,813,829,816,834,809,838,795,851,786,864,777,876,761,889,718,906"/>
+<area shape="poly" id="edge48_Node000030_Node000012" title=" " alt="" coords="717,920,765,926,820,925,875,913,900,901,922,885,944,852,962,801,976,738,987,669,999,531,1003,428,1009,428,1004,531,992,670,982,739,967,803,949,854,926,889,903,906,877,918,821,930,765,931,716,925"/>
+<area shape="poly" id="edge46_Node000030_Node000029" title=" " alt="" coords="717,921,805,944,804,950,716,927"/>
+<area shape="rect" id="Node000031" href="$wnoid__math_8c.html#a32fc7e429fa98aaa76797c630eda7e94" title="cross_product(): Calculates v_cross = v1 x v2." alt="" coords="814,848,918,875"/>
+<area shape="poly" id="edge47_Node000030_Node000031" title=" " alt="" coords="716,897,799,876,800,881,717,903"/>
+<area shape="poly" id="edge55_Node000032_Node000003" title=" " alt="" coords="247,578,264,540,290,491,325,440,369,397,376,392,379,396,373,401,329,444,295,493,269,542,252,581"/>
+<area shape="poly" id="edge61_Node000032_Node000009" title=" " alt="" coords="323,588,524,552,642,525,759,491,820,467,822,472,761,496,643,530,525,557,324,593"/>
+<area shape="poly" id="edge54_Node000032_Node000014" title=" " alt="" coords="260,577,307,536,338,514,370,498,426,478,476,468,521,466,563,467,651,467,701,461,759,447,783,436,806,422,818,416,820,421,809,426,785,440,761,452,702,467,652,473,563,472,521,471,476,474,428,483,372,502,340,519,311,540,264,581"/>
+<area shape="poly" id="edge60_Node000032_Node000016" title=" " alt="" coords="324,609,356,613,355,618,323,614"/>
+<area shape="poly" id="edge56_Node000032_Node000020" title=" " alt="" coords="301,577,397,542,399,547,303,582"/>
+<area shape="poly" id="edge57_Node000032_Node000021" title=" " alt="" coords="290,621,329,636,372,649,477,669,576,679,576,684,476,674,370,655,327,641,288,626"/>
+<area shape="rect" id="Node000033" href="$calc__ref__potential_8c.html#a01c0cc5a8d9525027030345721be2603" title="get_IntraMolecPair_inter_ptr(): Returns the pointer to a intramolecular interaction depending on the ..." alt="" coords="386,715,516,757"/>
+<area shape="poly" id="edge58_Node000032_Node000033" title=" " alt="" coords="270,621,317,656,372,694,392,705,389,709,370,698,314,661,267,625"/>
+<area shape="poly" id="edge59_Node000033_Node000026" title=" " alt="" coords="517,736,596,739,596,744,517,741"/>
+<area shape="poly" id="edge71_Node000034_Node000016" title=" " alt="" coords="266,724,410,645,413,650,268,728"/>
+<area shape="poly" id="edge63_Node000034_Node000020" title=" " alt="" coords="252,725,369,599,422,547,426,551,373,603,256,728"/>
+<area shape="poly" id="edge64_Node000034_Node000021" title=" " alt="" coords="291,751,371,767,453,780,488,780,530,767,545,757,554,744,563,730,578,717,585,712,588,716,581,721,567,734,559,747,549,761,532,772,489,785,453,786,371,772,290,757"/>
+<area shape="poly" id="edge70_Node000034_Node000022" title=" " alt="" coords="253,724,286,685,321,633,336,597,343,566,351,535,369,499,392,470,418,445,421,449,396,473,373,501,356,537,348,567,341,598,325,636,290,688,257,728"/>
+<area shape="rect" id="Node000035" href="$calc__ref__potential_8c.html#abd7d2b3619ea07974f7ab38a25dbd0ba" title="get_difference_vector_PBC(): If periodic boundary conditions are present, then applies the minimum im..." alt="" coords="579,781,760,808"/>
+<area shape="poly" id="edge65_Node000034_Node000035" title=" " alt="" coords="292,751,324,763,348,776,372,787,420,796,470,801,564,801,564,807,469,806,419,801,370,792,345,781,322,768,290,756"/>
+<area shape="rect" id="Node000037" href="$calc__grids_8c.html#aec32fc1ee64e8d28a890d6738f2795fb" title="setup_box_dimensions(): Stores the box vectors for a cubic box from the diagonal elements of matrix." alt="" coords="374,883,528,909"/>
+<area shape="poly" id="edge72_Node000034_Node000037" title=" " alt="" coords="306,752,325,763,343,788,350,813,356,838,373,862,388,873,385,878,369,866,351,840,345,815,339,791,321,767,303,756"/>
+<area shape="rect" id="Node000038" href="$gromacs__topology_8c.html#a83ffcb1d231afb48f1b2824bc88880ef" title="skip_excl():" alt="" coords="413,933,489,960"/>
+<area shape="poly" id="edge73_Node000034_Node000038" title=" " alt="" coords="309,752,325,763,340,783,348,804,350,843,352,882,359,901,373,919,399,936,397,940,369,923,354,903,347,883,344,843,342,805,335,786,321,767,306,756"/>
+<area shape="poly" id="edge69_Node000035_Node000009" title=" " alt="" coords="743,779,758,767,779,739,790,711,793,684,792,657,790,598,794,564,805,528,821,499,840,473,844,476,826,502,810,530,799,566,795,598,798,657,799,685,795,713,783,741,762,771,747,783"/>
+<area shape="poly" id="edge66_Node000035_Node000014" title=" " alt="" coords="744,779,758,767,774,746,785,725,794,683,792,642,784,600,776,557,773,514,780,469,791,446,806,422,810,417,814,421,810,426,795,448,786,470,778,514,781,556,789,599,798,641,800,684,790,727,778,749,762,771,747,783"/>
+<area shape="poly" id="edge67_Node000035_Node000029" title=" " alt="" coords="739,806,761,818,779,833,789,849,810,885,847,935,843,938,805,888,785,852,775,837,758,822,737,811"/>
+<area shape="rect" id="Node000036" href="$calc__grids_8c.html#aeeb6c57ca5eb497c365f392fce1798e5" title="det_min_image: detemines image of prtcl at R closest to the particle at Origin." alt="" coords="811,747,920,773"/>
+<area shape="poly" id="edge68_Node000035_Node000036" title=" " alt="" coords="748,778,795,770,796,775,749,783"/>
+</map>

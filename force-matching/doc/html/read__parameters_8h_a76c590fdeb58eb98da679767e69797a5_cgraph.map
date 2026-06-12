@@ -1,0 +1,5 @@
+<map id="summarize_input_CONSTRAIN" name="summarize_input_CONSTRAIN">
+<area shape="rect" id="Node000001" title="summarize_input_CONSTRAIN():" alt="" coords="5,5,213,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a7553f151522b5594937944e18c906b59" title="print_line_stars(): Prints a line of &#39;*&#39;." alt="" coords="261,5,370,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,16,245,16,245,21,213,21"/>
+</map>

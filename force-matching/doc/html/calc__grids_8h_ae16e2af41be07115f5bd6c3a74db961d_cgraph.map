@@ -1,0 +1,13 @@
+<map id="eval_Bspline_basis_vectors_LD" name="eval_Bspline_basis_vectors_LD">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,99,139,141"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#a48726d58a1b9dfc1502f9efea032c099" title="calc_Bspline(): JFR &#45; 07.16.12: This is the De Boor iterative method for calculating normalized Bspli..." alt="" coords="204,5,300,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,96,140,69,185,42,197,36,199,41,188,46,143,73,104,100"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#ac827b2055c7c1e64a2388bb8b97cf8c9" title="calc_Bspline_deriv: Uses the De Boor iterative method for calculating derivatives of normalized Bspli..." alt="" coords="187,56,317,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="139,99,186,85,188,90,140,104"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="216,107,288,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="139,117,201,117,201,123,139,123"/>
+<area shape="rect" id="Node000005" href="$calc__grids_8c.html#ace1ee15830bc3d158e0437f3dea91b65" title="get_grid_index_for_linear_basis():" alt="" coords="188,157,316,200"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="140,139,175,151,173,156,138,144"/>
+<area shape="rect" id="Node000006" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="194,224,310,251"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="97,140,138,175,188,210,198,215,195,220,185,214,135,179,94,144"/>
+</map>

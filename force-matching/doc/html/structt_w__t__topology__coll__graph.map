@@ -1,0 +1,32 @@
+<map id="tW_t_topology" name="tW_t_topology">
+<area shape="rect" id="Node000001" title=" " alt="" coords="590,325,696,352"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8h.html#structt_w__t__idef" title="The struct t_idef defines all the interactions for the complete simulation." alt="" coords="244,219,322,245"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="328,249,395,274,471,299,591,326,589,331,469,304,393,279,326,254"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8h.html#uniont_w__t__iparams" title=" " alt="" coords="5,96,108,123"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="64,137,74,167,94,193,120,204,159,214,244,225,244,230,158,219,118,209,90,197,70,169,59,139"/>
+<area shape="rect" id="Node000004" href="$gromacs__topology_8h.html#structt_w__gmx__cmap__t" title=" " alt="" coords="132,96,253,123"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="200,136,210,165,227,193,240,206,256,216,253,220,237,210,222,196,205,168,195,138"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8h.html#structt_w__gmx__cmapdata__t" title=" " alt="" coords="120,5,265,32"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="195,48,195,95,190,95,190,48"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8h.html#structt_w__t__ilist" title=" " alt="" coords="277,96,353,123"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="311,138,289,219,284,217,305,137"/>
+<area shape="rect" id="Node000007" href="$gromacs__topology_8h.html#structt_w__t__atoms" title=" " alt="" coords="405,219,497,245"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="481,253,552,299,607,322,605,327,550,304,478,257"/>
+<area shape="rect" id="Node000008" href="$gromacs__topology_8h.html#structt_w__t__atom" title=" " alt="" coords="378,96,463,123"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="430,137,451,218,445,219,425,138"/>
+<area shape="rect" id="Node000009" href="$gromacs__topology_8h.html#structt_w__t__resinfo" title=" " alt="" coords="488,96,583,123"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="522,137,481,196,463,220,459,217,477,193,517,134"/>
+<area shape="rect" id="Node000010" href="$gromacs__topology_8h.html#structt_w__t__pdbinfo" title=" " alt="" coords="607,96,706,123"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="637,136,603,167,562,197,530,212,498,222,497,217,528,207,559,192,600,163,633,132"/>
+<area shape="rect" id="Node000011" href="$gromacs__topology_8h.html#structt_w__t__atomtypes" title=" " alt="" coords="522,219,639,245"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="594,259,615,300,634,324,630,327,611,303,589,261"/>
+<area shape="rect" id="Node000012" href="$gromacs__topology_8h.html#structt_w__t__block" title=" " alt="" coords="664,219,751,245"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="701,261,680,303,659,327,655,323,676,300,696,259"/>
+<area shape="rect" id="Node000013" href="$gromacs__topology_8h.html#structt_w__t__blocka" title=" " alt="" coords="775,219,869,245"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="796,258,728,304,678,327,676,322,726,299,793,253"/>
+<area shape="rect" id="Node000014" href="$gromacs__topology_8h.html#structt_w__t__symtab" title=" " alt="" coords="894,219,993,245"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="913,256,868,281,816,304,755,322,697,333,696,328,753,316,814,299,865,276,910,251"/>
+<area shape="rect" id="Node000015" href="$gromacs__topology_8h.html#structt_w__t__symbuf" title=" " alt="" coords="894,96,993,123"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="946,138,946,218,940,218,940,138"/>
+<area shape="poly" id="edge15_Node000015_Node000015" title=" " alt="" coords="1010,101,1019,109,1011,118,994,120,993,115,1009,113,1014,109,1007,105"/>
+</map>

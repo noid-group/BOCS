@@ -1,7 +1,7 @@
 cmake_minimum_required( VERSION 3.0 )
 project( "BOCS-FM" )
 
-set ( BOCS_FM_VERSION_MAJOR 2 )
+set ( BOCS_FM_VERSION_MAJOR 0 )
 set ( BOCS_FM_VERSION_MINOR 0 )
 
 if( COMMAND cmake_policy )
@@ -14,19 +14,23 @@ set ( CMAKE_BUILD_TYPE Release )
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 
 # Set compiler flags
-set ( CMAKE_C_FLAGS "-O2 -g" )
+set ( CMAKE_C_FLAGS "-O2 -g -fopenmp" )
 set ( CMAKE_C_FLAGS_DEBUG "-g" )
 
 # Uncomment this line to use MKL
 set ( USE_MKL "ON" )
-# And then make sure the path set in line 29 corresponds to the location of your MKL library
+# And then make sure the path set in line 36 corresponds to the location of your MKL library
 
+set ( RPC_HOME ${RPC_HOME} /xxx/xxx/path/to/tirpc/library )
+include_directories(${RPC_HOME}/include/tirpc)
+set ( RPC_LIB ${RPC_LIB} ${RPC_HOME}/lib/libtirpc.so )
+option( ENABLE_DEBUG_BUILD "Sets the DEBUG_BUILD macro in the code to 1(on) or 0(off)" OFF)
 ##############################################################################################
 # Try to find specified linear algebra libraries 
 ##############################################################################################
 if (USE_MKL STREQUAL "ON")
   if (NOT MKL_LIB)
-    set ( MKL_LIB ${MKL_LIB} /opt/intel/compilers_and_libraries_2016.3.210/linux/mkl/lib/intel64 )
+    set ( MKL_LIB ${MKL_LIB} /xxx/xxx/xxx/path/to/mkl/library )
   endif(NOT MKL_LIB)
 
   find_library( MKLRT mkl_rt ${MKL_LIB} )
@@ -44,10 +48,10 @@ if (USE_MKL STREQUAL "ON")
 
 else (USE_MKL STREQUAL "ON") 
   if (NOT LAPACK_LIB)
-    set ( LAPACK_LIB ${LAPACK_LIB} /usr/lib64 )
+    set ( LAPACK_LIB ${LAPACK_LIB} /xxx/xxx/xxx/path/to/LAPACK/library )
   endif (NOT LAPACK_LIB)
   if (NOT BLAS_LIB)
-    set ( BLAS_LIB ${BLAS_LIB} /usr/lib64/ )
+    set ( BLAS_LIB ${BLAS_LIB} /xxx/xxx/xxx/path/to/BLAS/library )
   endif (NOT BLAS_LIB)
 
   find_library(LAPACK lapack ${LAPACK_LIB})
@@ -70,13 +74,13 @@ else (USE_MKL STREQUAL "ON")
 
 endif (USE_MKL STREQUAL "ON")
 
-
 ######################################################################################################################
 
 # Set the library combinations we need for compiling different executables
-set ( TLIBS ${TLIBS} m dl )
-set ( MLIBS ${MLIBS} ${GLIBS} ${LINALG_LIBS} m dl )
+set ( TLIBS ${TLIBS} ${RPC_LIB} m dl )
+set ( MLIBS ${MLIBS} ${GLIBS} ${LINALG_LIBS} ${RPC_LIB} m dl )
 
+# Process the CMake List inside of src
 add_subdirectory( src )
 
 file( COPY src DESTINATION ${CMAKE_BINARY_DIR} ) 

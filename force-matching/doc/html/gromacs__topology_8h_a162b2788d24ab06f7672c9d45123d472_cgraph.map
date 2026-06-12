@@ -1,0 +1,20 @@
+<map id="read_next_dump_frame" name="read_next_dump_frame">
+<area shape="rect" id="Node000001" title="read_next_dump_frame(): self explanatory?" alt="" coords="5,31,163,57"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="531,31,630,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="141,27,210,16,347,15,484,23,516,28,516,33,483,28,347,20,211,21,142,33"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#a207e245b546a27f8b98b76a9e96a56da" title="get_prop(): makes sure the dumped trajectory file has the correct property next." alt="" coords="211,31,282,57"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="163,41,195,41,195,47,163,47"/>
+<area shape="rect" id="Node000008" href="$gromacs__topology_8c.html#a742ed9312d00beeaed81dece725da358" title="read_box_dump_frame(): This function reads the box information from a dumped trr file" alt="" coords="330,107,483,133"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="145,55,332,100,331,105,143,61"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="678,5,782,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="630,33,662,27,663,33,631,38"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="695,56,765,83"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="631,50,679,58,679,63,630,55"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="830,5,962,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="783,16,815,16,815,21,783,21"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="283,41,516,41,516,47,283,47"/>
+<area shape="rect" id="Node000007" href="$gromacs__topology_8c.html#a1a205a540dee3c756ca2a245d6bb48c8" title="copy_atom_props(): Reads &quot;natoms&quot; lines from a dump file and stores the numbers in the appropriate ar..." alt="" coords="344,56,469,83"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="283,47,330,55,329,60,282,52"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="469,58,516,51,517,56,470,63"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="453,104,482,92,541,63,544,68,484,97,454,109"/>
+</map>

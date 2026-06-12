@@ -1,0 +1,5 @@
+<map id="get_dihedral_inter_ptr" name="get_dihedral_inter_ptr">
+<area shape="rect" id="Node000001" title="get_dihedral_inter_ptr(): Returns the pointer to a dihedral interaction depending on the squence foun..." alt="" coords="5,5,151,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#acd760e677364733e6b6c64b5db6d7d2e" title="match_word_list(): Determines if list_1 and list_2 match in either normal or reverse order." alt="" coords="199,5,315,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,16,183,16,183,21,151,21"/>
+</map>

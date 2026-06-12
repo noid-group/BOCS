@@ -1,0 +1,21 @@
+<map id="read_index_file" name="read_index_file">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,132,114,159"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a35f91505cb902df5b6ea227fa58e5c6a" title=" " alt="" coords="184,5,294,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="69,130,106,87,132,63,160,42,170,36,173,41,163,46,135,67,110,90,73,133"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8c.html#a45928c195e2df3b6190508c340de16cd" title=" " alt="" coords="186,56,293,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="85,129,161,92,177,86,179,91,163,97,87,134"/>
+<area shape="rect" id="Node000004" href="$gromacs__topology_8c.html#a591e38d7d643f9cd5fab7c1e372cf277" title=" " alt="" coords="162,107,317,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="114,135,146,130,147,136,114,140"/>
+<area shape="rect" id="Node000005" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="190,157,288,184"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="114,150,175,159,175,164,114,156"/>
+<area shape="rect" id="Node000009" href="$io__read_8c.html#a5aa8df5077291896b83782e74ab17317" title="open_file(): Opens a file named &quot;file_name&quot; with option &quot;mode.&quot; Returns the pointer to the file." alt="" coords="203,208,276,235"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="87,157,163,194,189,203,187,208,161,198,85,162"/>
+<area shape="rect" id="Node000010" href="$gromacs__topology_8c.html#a6be682239e337555fcf88a5cc2ff1821" title=" " alt="" coords="183,259,296,285"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="73,157,110,200,135,224,163,244,173,250,170,254,160,249,132,228,106,204,69,161"/>
+<area shape="rect" id="Node000006" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="365,132,469,159"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="289,161,349,152,350,158,289,166"/>
+<area shape="rect" id="Node000008" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="382,183,452,209"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="289,175,367,186,366,191,289,180"/>
+<area shape="rect" id="Node000007" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="517,132,650,159"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="470,143,502,143,502,148,470,148"/>
+</map>

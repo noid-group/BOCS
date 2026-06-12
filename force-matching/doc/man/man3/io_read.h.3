@@ -1,0 +1,354 @@
+.TH "io_read.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+io_read.h
+.SH SYNOPSIS
+.br
+.PP
+\fR#include 'cgff_types\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBt_pargs\fP"
+.br
+.RI "This is a structure to store arguments from the command line for each executable in BOCS It contains relevent info for troubleshooting user input\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct t_pargs \fBt_pargs\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum { \fBetINT\fP, \fBetBOOL\fP, \fBetSTRING\fP, \fBetREAL\fP }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBfile_exists\fP (const char *filename)"
+.br
+.RI "\fBfile_exists()\fP: Checks whether the supplied filename can be opened for reading\&. "
+.ti -1c
+.RI "int \fBget_next_line\fP (FILE *fp_in, \fBtW_line\fP inp_line)"
+.br
+.RI "\fBget_next_line()\fP: Stores the next non-blank (excluding comments) line from fp_in into the variable inp_line\&. "
+.ti -1c
+.RI "int \fBget_clean_line\fP (FILE *fp_in, \fBtW_line\fP inp_line)"
+.br
+.RI "\fBget_clean_line()\fP: Reads the next line of fp_in and removes commented sections from the line\&. "
+.ti -1c
+.RI "int \fBremove_comments\fP (char *before, char *after)"
+.br
+.RI "\fBremove_comments()\fP: Searches for characters that denote comments (COMMENTFLAG)\&. "
+.ti -1c
+.RI "FILE * \fBopen_file\fP (const \fBtW_word\fP file_name, char mode)"
+.br
+.RI "\fBopen_file()\fP: Opens a file named 'file_name' with option 'mode\&.' Returns the pointer to the file\&. "
+.ti -1c
+.RI "int \fBmatch_word_list\fP (int n_words, \fBtW_word\fP list_1[], \fBtW_word\fP list_2[])"
+.br
+.RI "\fBmatch_word_list()\fP: Determines if list_1 and list_2 match in either normal or reverse order\&. "
+.ti -1c
+.RI "void \fBdelete_directive_from_line\fP (\fBtW_line\fP inp_line)"
+.br
+.RI "\fBdelete_directive_from_line()\fP: For lines that contain a directive marked by [\&.\&.\&.], the ending brace is found and the line is truncated to the character to the right of the ']'\&. "
+.ti -1c
+.RI "\fBtW_word\fP * \fBget_word_list\fP (FILE *fp_in, \fBtW_word\fP keyword, int N_words)"
+.br
+.RI "\fBget_word_list()\fP: Reads a list of N_words words, each on separate lines, following a line that contains [ keyword ]\&. "
+.ti -1c
+.RI "void \fBtest_end_directive\fP (\fBtW_line\fP inp_line, \fBtW_word\fP keyword, \fBtW_word\fP input_file)"
+.br
+.RI "\fBtest_end_directive()\fP: Test to make sure the ending directive is found\&. "
+.ti -1c
+.RI "void \fBcheck_inp_line\fP (\fBtW_word\fP input_file, \fBtW_word\fP keyword, \fBtW_line\fP inp_line)"
+.br
+.RI "\fBcheck_inp_line()\fP: Makes sure that the ending directive is not found were it is not supposed to be\&. "
+.ti -1c
+.RI "void \fBprint_line_stars\fP (FILE *fp)"
+.br
+.RI "\fBprint_line_stars()\fP: Prints a line of '*'\&. "
+.ti -1c
+.RI "int \fBcheck_word_list\fP (int n_words, \fBtW_word\fP list_1[], \fBtW_word\fP list_2[])"
+.br
+.RI "\fBcheck_word_list()\fP: Checks to see if the n_words words in list1[] occur in list_2[] in any order\&. "
+.ti -1c
+.RI "int \fBmatch_word\fP (int N_words, \fBtW_word\fP word, \fBtW_word\fP *word_list)"
+.br
+.RI "\fBmatch_word()\fP: Searches through N_words words in word_list to see if the string stored in word is included in the list\&. "
+.ti -1c
+.RI "int \fBmatch_word_1\fP (int N_words, \fBtW_word\fP word, \fBtW_word\fP *word_list)"
+.br
+.RI "\fBmatch_word_1()\fP: Searches through N_words words in word_list to see if the string stored in word is included in the list\&. "
+.ti -1c
+.RI "int \fBmatch_word_n\fP (int N_words, \fBtW_word\fP word, \fBtW_word\fP *word_list, int *idxes)"
+.br
+.RI "\fBmatch_word_n()\fP: Searches through N_words words in word_list to see if the string stored in word is included in the list\&. "
+.ti -1c
+.RI "const char * \fBget_arg_type\fP (\fBt_pargs\fP par)"
+.br
+.RI "Gromacs-esque command line argument parsing\&. "
+.ti -1c
+.RI "void \fBinit_arg\fP (\fBt_pargs\fP *param, const char *flag, int type, const char *desc, \fBbool\fP bMan)"
+.br
+.ti -1c
+.RI "void \fBinit_arg_def\fP (\fBt_pargs\fP *param, const char *flag, int type, const char *desc, const char *init_val)"
+.br
+.ti -1c
+.RI "int \fBget_command_line_args\fP (int argc, char *argv[], int n_args, \fBt_pargs\fP *params)"
+.br
+.RI "get_command_line_args Takes list of arguments we expect [stored in \fBt_pargs\fP] and checks how many the user actually passed "
+.ti -1c
+.RI "\fBbool\fP \fBprint_arg_table\fP (int n_args, \fBt_pargs\fP *params, \fBbool\fP HELP)"
+.br
+.RI "print_arg_table Prints a list of arguments we expected to see withing \fBt_pargs\fP and their current values "
+.ti -1c
+.RI "void \fBcheck_mand_args\fP (\fBt_pargs\fP *params, int nPars)"
+.br
+.RI "check_mand_args Checks the status of the parameter list passed (params) to assure all required args are set Kills the program if something is missing "
+.ti -1c
+.RI "void \fBbuild_filename\fP (\fBtW_word\fP fnm, \fBtW_word\fP ipt_name, int ft, const char *def_end)"
+.br
+.RI "build_filename This function takes a filename passed by the user and checks if it has an extension we recognize If its a top file and they didnt put an extension we append \&.btp If its a traj file and theyu didnt put an extension we append def_end passed "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser 
+.RE
+.PP
+
+.SH "Data Structure Documentation"
+.PP 
+.SH "struct t_pargs"
+.PP 
+This is a structure to store arguments from the command line for each executable in BOCS It contains relevent info for troubleshooting user input\&. 
+.PP
+\fBData Fields:\fP
+.RS 4
+\fBbool\fP \fIbMandatory\fP Whether we should crash the program if we can't find this arg 
+.br
+.PP
+\fBbool\fP \fIbSet\fP whether or not this argument was found after checking the command line 
+.br
+.PP
+char * \fIdesc\fP The place to store what the help menu says when we print about this param 
+.br
+.PP
+char * \fIflag\fP identifier expected ahead of the string passed\&. e\&.g\&. -p for a top file 
+.br
+.PP
+int \fItype\fP What kind of argument [what data structurer do we store this in?] 
+.PP
+\fBSee also\fP
+.RS 4
+enum 
+.RE
+.PP
+
+.br
+.PP
+\fBtW_word\fP \fIvalue\fP The place to store the word the user typed in 
+.br
+.PP
+.RE
+.PP
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef struct t_pargs t_pargs"
+
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "anonymous enum"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIetINT \fP\fP
+.TP
+\fB\fIetBOOL \fP\fP
+.TP
+\fB\fIetSTRING \fP\fP
+.TP
+\fB\fIetREAL \fP\fP
+.SH "Function Documentation"
+.PP 
+.SS "void build_filename (\fBtW_word\fP fnm, \fBtW_word\fP ipt_name, int ft, const char * def_end)"
+
+.PP
+build_filename This function takes a filename passed by the user and checks if it has an extension we recognize If its a top file and they didnt put an extension we append \&.btp If its a traj file and theyu didnt put an extension we append def_end passed 
+.PD 0
+.IP "\(bu" 1
+ipt_name The string passed as a filename 
+.IP "\(bu" 1
+ft An index corresponding to a filetype and the corresponding append name failsafe 
+.IP "\(bu" 1
+fnm A string to store the altered filename 
+.IP "\(bu" 1
+def_end A default extension to pin on trajectories 
+.PP
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void check_inp_line (\fBtW_word\fP input_file, \fBtW_word\fP keyword, \fBtW_line\fP inp_line)"
+
+.PP
+\fBcheck_inp_line()\fP: Makes sure that the ending directive is not found were it is not supposed to be\&. 
+.PP
+Referenced by \fBget_Bond_Inter_Types()\fP, \fBget_CalcMODE()\fP, \fBget_CHISQD()\fP, \fBget_CONSTRAIN()\fP, \fBget_Eigen()\fP, \fBget_ERR()\fP, \fBget_FRAMEWEIGHT()\fP, \fBget_Inter_Type_List()\fP, \fBget_ITER()\fP, \fBget_MEM()\fP, \fBget_MT()\fP, \fBget_PC()\fP, \fBget_PT()\fP, \fBget_REF()\fP, \fBget_ref_inter()\fP, \fBget_REG()\fP, \fBget_RESCALE()\fP, \fBget_SOLN()\fP, \fBget_structures()\fP, \fBget_SVD()\fP, \fBget_TPR_EXCL()\fP, \fBget_TRIM()\fP, \fBget_Type_Ext_List()\fP, \fBget_Type_Inter2_List()\fP, and \fBget_word_list()\fP\&.
+.SS "void check_mand_args (\fBt_pargs\fP * params, int nPars)"
+
+.PP
+check_mand_args Checks the status of the parameter list passed (params) to assure all required args are set Kills the program if something is missing 
+.PD 0
+.IP "\(bu" 1
+params The list of parameters expected / set up at the begining of the driver 
+.IP "\(bu" 1
+nPars The length of the params list 
+.PP
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int check_word_list (int n_words, \fBtW_word\fP list_1[], \fBtW_word\fP list_2[])"
+
+.PP
+\fBcheck_word_list()\fP: Checks to see if the n_words words in list1[] occur in list_2[] in any order\&. The flag bX_2[] ensures that there is a 1:1 matching between elements in list_1 and elements in list_2\&. (I think that this function is not realy useful anymore\&.) 
+.PP
+Referenced by \fBdetermine_angle_type()\fP, \fBdetermine_bond_type()\fP, \fBdetermine_pair_type()\fP, \fBget_angle_inter_ptr()\fP, and \fBget_inter_ptr()\fP\&.
+.SS "void delete_directive_from_line (\fBtW_line\fP inp_line)"
+
+.PP
+\fBdelete_directive_from_line()\fP: For lines that contain a directive marked by [\&.\&.\&.], the ending brace is found and the line is truncated to the character to the right of the ']'\&. It is assumed that the first occurance of ']' marks the end of the directive name\&. 
+.PP
+Referenced by \fBget_no_inter_types()\fP, \fBget_structures()\fP, \fBget_TPR()\fP, \fBopen_ref_potential_file()\fP, \fBread_mode()\fP, \fBread_nrexcl()\fP, \fBread_site_types()\fP, \fBread_structures()\fP, and \fBread_temperature()\fP\&.
+.SS "int file_exists (const char * filename)"
+
+.PP
+\fBfile_exists()\fP: Checks whether the supplied filename can be opened for reading\&. Returns true if the file exists, returns false otherwise\&. 
+.PP
+Referenced by \fBget_REF()\fP, \fBget_results()\fP, \fBget_structures()\fP, \fBget_top()\fP, \fBmain()\fP, \fBopen_ref_potential_file()\fP, \fBprint_Chi2()\fP, \fBprint_decomp_Chi2()\fP, and \fBread_save_state()\fP\&.
+.SS "const char * get_arg_type (\fBt_pargs\fP par)"
+
+.PP
+Gromacs-esque command line argument parsing\&. 
+.PP
+Referenced by \fBprint_arg_table()\fP\&.
+.SS "int get_clean_line (FILE * fp_in, \fBtW_line\fP inp_line)"
+
+.PP
+\fBget_clean_line()\fP: Reads the next line of fp_in and removes commented sections from the line\&. Copies the uncommented section into inp_line\&. Comments are define as all text after the first element of COMMENTFLAG and are stripped using the function \fBremove_comments()\fP\&. Returns -1 if EOF has been reached and otherwise returns the length of the uncommented string which may include the newline character\&. 
+.PP
+Referenced by \fBget_next_line()\fP\&.
+.SS "int get_command_line_args (int argc, char * argv[], int n_args, \fBt_pargs\fP * params)"
+
+.PP
+get_command_line_args Takes list of arguments we expect [stored in \fBt_pargs\fP] and checks how many the user actually passed 
+.PD 0
+.IP "\(bu" 1
+argc length of input from user 
+.IP "\(bu" 1
+list of user input strings [len(argc)] 
+.IP "\(bu" 1
+n_args number of strings expected 
+.IP "\(bu" 1
+params the list of strings we expect 
+.PP
+\fBReturns\fP
+.RS 4
+number of arguments the user passed 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int get_next_line (FILE * fp_in, \fBtW_line\fP inp_line)"
+
+.PP
+\fBget_next_line()\fP: Stores the next non-blank (excluding comments) line from fp_in into the variable inp_line\&. Returns the number of characters in the line (including a newline character if present)\&. If the end of file is reached, l_inp is -1\&. The sscanf() call tests if anything is on the line and the if statement ensures that blank lines are ignored\&. 
+.PP
+Referenced by \fBcopy_atom_props()\fP, \fBdfill_14nb_from_gmx_IMNB_headers()\fP, \fBdfill_angles_from_gmx_angletype_headers()\fP, \fBdfill_bigdihedrals_from_gmx_bigdihedraltype_headers()\fP, \fBdfill_bonds_from_gmx_bondtype_headers()\fP, \fBdfill_dihedrals_from_gmx_dihedraltype_headers()\fP, \fBdfind_all_molinfo()\fP, \fBdget_moltypes_in_molblocks()\fP, \fBdget_top_ff_info()\fP, \fBdparse_atom_per_molecule_info()\fP, \fBdparse_atomic_exclusions_per_molecule()\fP, \fBdparse_charge_groups_per_molecule()\fP, \fBdparse_residue_per_molecule_info()\fP, \fBdproc_other_headers()\fP, \fBdprocess_nmolblocks()\fP, \fBdprocess_sysname_natoms()\fP, \fBfind_line_in_file()\fP, \fBget_b_soln_err()\fP, \fBget_b_soln_errAA()\fP, \fBget_b_struct_and_b_forces()\fP, \fBget_Bond_Inter_Types()\fP, \fBget_CalcMODE()\fP, \fBget_CHISQD()\fP, \fBget_CONSTRAIN()\fP, \fBget_Eigen()\fP, \fBget_ERR()\fP, \fBget_force()\fP, \fBget_FRAMEWEIGHT()\fP, \fBget_Inter_Type_List()\fP, \fBget_ITER()\fP, \fBget_MEM()\fP, \fBget_MFD()\fP, \fBget_MT()\fP, \fBget_no_points()\fP, \fBget_PC()\fP, \fBget_prop()\fP, \fBget_PT()\fP, \fBget_REF()\fP, \fBget_ref_inter()\fP, \fBget_ref_potential()\fP, \fBget_REG()\fP, \fBget_RESCALE()\fP, \fBget_results()\fP, \fBget_SOLN()\fP, \fBget_structures()\fP, \fBget_SVD()\fP, \fBget_TPR_EXCL()\fP, \fBget_TRIM()\fP, \fBget_Type_Ext_List()\fP, \fBget_Type_Inter2_List()\fP, \fBget_word_list()\fP, \fBinit_LD_info()\fP, \fBNEW_get_CG_map()\fP, \fBnew_read_next_bocs_frame()\fP, \fBprint_Chi2()\fP, \fBprint_decomp_Chi2()\fP, \fBread_A_matrix()\fP, \fBread_bocs_frame_dir_box()\fP, \fBread_bocs_frame_dir_flags()\fP, \fBread_bocs_frame_dir_frame()\fP, \fBread_bocs_frame_dir_local_densities()\fP, \fBread_bocs_frame_dir_local_density_gradients()\fP, \fBread_bocs_frame_dir_natoms()\fP, \fBread_bocs_frame_dir_prec()\fP, \fBread_bocs_frame_dir_step()\fP, \fBread_bocs_frame_dir_time()\fP, \fBread_bocs_frame_dir_title()\fP, \fBread_bocs_frame_dir_xvf()\fP, \fBread_bocs_top()\fP, \fBread_box_dump_frame()\fP, \fBread_eangles()\fP, \fBread_ebonds()\fP, \fBread_edihedrals()\fP, \fBread_eenergy()\fP, \fBread_epairs()\fP, \fBread_epar()\fP, \fBread_esites()\fP, \fBread_first_bocs_frame()\fP, \fBread_first_dump_frame()\fP, \fBread_first_gro_frame()\fP, \fBread_first_lammps_frame()\fP, \fBread_index_file()\fP, \fBread_next_bocs_frame()\fP, \fBread_next_dump_frame()\fP, \fBread_next_gro_frame()\fP, \fBread_next_lammps_frame()\fP, \fBread_par()\fP, \fBread_REF_forces()\fP, and \fBread_save_state()\fP\&.
+.SS "\fBtW_word\fP * get_word_list (FILE * fp_in, \fBtW_word\fP keyword, int N_words)"
+
+.PP
+\fBget_word_list()\fP: Reads a list of N_words words, each on separate lines, following a line that contains [ keyword ]\&. Makes sure that the next non-blank line after the word list contains [ End keyword ] to mark the end of the section\&. Returns the word list\&. 
+.PP
+Referenced by \fBget_REF()\fP, \fBget_TPR()\fP, \fBread_site_types()\fP, and \fBread_structures()\fP\&.
+.SS "void init_arg (\fBt_pargs\fP * param, const char * flag, int type, const char * desc, \fBbool\fP bMan)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void init_arg_def (\fBt_pargs\fP * param, const char * flag, int type, const char * desc, const char * init_val)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int match_word (int N_words, \fBtW_word\fP word, \fBtW_word\fP * word_list)"
+
+.PP
+\fBmatch_word()\fP: Searches through N_words words in word_list to see if the string stored in word is included in the list\&. Returns the index to word_list if there's a match or returns -1 if there is no match\&. 
+.PP
+Referenced by \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBget_nb_pair_inter_ptr()\fP, \fBget_ref_potential_ptr()\fP, and \fBget_site_info()\fP\&.
+.SS "int match_word_1 (int N_words, \fBtW_word\fP word, \fBtW_word\fP * word_list)"
+
+.PP
+\fBmatch_word_1()\fP: Searches through N_words words in word_list to see if the string stored in word is included in the list\&. Returns the index to word_list if there's a match or returns -1 if there is no match\&. Use when you know there's only 1 occurrence of word in word_list\&. MRD 09\&.17\&.18 
+.SS "int match_word_list (int n_words, \fBtW_word\fP list_1[], \fBtW_word\fP list_2[])"
+
+.PP
+\fBmatch_word_list()\fP: Determines if list_1 and list_2 match in either normal or reverse order\&. 
+.PP
+Referenced by \fBdetermine_dihedral_type()\fP, \fBget_dihedral_inter_ptr()\fP, and \fBget_IntraMolecPair_inter_ptr()\fP\&.
+.SS "int match_word_n (int N_words, \fBtW_word\fP word, \fBtW_word\fP * word_list, int * idx_list)"
+
+.PP
+\fBmatch_word_n()\fP: Searches through N_words words in word_list to see if the string stored in word is included in the list\&. Returns the indices to word_list if there's a match\&. Use when it's possible there are multiple occurrences of word in word_list\&. MRD 09\&.17\&.18 
+.PP
+Referenced by \fBget_nb_pair_inter_ptr_n()\fP\&.
+.SS "FILE * open_file (const \fBtW_word\fP file_name, char mode)"
+
+.PP
+\fBopen_file()\fP: Opens a file named 'file_name' with option 'mode\&.' Returns the pointer to the file\&. Prints error messages if file could not be opened and terminates execution\&. 
+.PP
+Referenced by \fBcheck_answer()\fP, \fBdo_ematch_pairs()\fP, \fBinit_LD_info()\fP, \fBmain()\fP, \fBopen_write_trajectory()\fP, \fBread_A_matrix()\fP, \fBread_bocs_top()\fP, \fBread_eenergy()\fP, \fBread_epar()\fP, \fBread_first_bocs_frame()\fP, \fBread_first_dump_frame()\fP, \fBread_first_gro_frame()\fP, \fBread_first_lammps_frame()\fP, \fBread_index_file()\fP, \fBread_ref_potential()\fP, \fBread_tpr_dump()\fP, \fBsave_A_matrix()\fP, \fBsave_answer()\fP, \fBsummarize_esystem()\fP, and \fBwrite_bocs_top()\fP\&.
+.SS "\fBbool\fP print_arg_table (int n_args, \fBt_pargs\fP * params, \fBbool\fP HELP)"
+
+.PP
+print_arg_table Prints a list of arguments we expected to see withing \fBt_pargs\fP and their current values 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void print_line_stars (FILE * fp)"
+
+.PP
+\fBprint_line_stars()\fP: Prints a line of '*'\&. Useful for making output easier to read\&. 
+.PP
+Referenced by \fBprint_Bspline_basis_forces()\fP, \fBprint_Bspline_basis_output()\fP, \fBprint_delta_basis_forces()\fP, \fBprint_delta_basis_output()\fP, \fBprint_harmonic_basis_forces()\fP, \fBprint_harmonic_basis_output()\fP, \fBprint_linear_basis_forces()\fP, \fBprint_linear_basis_output()\fP, \fBprint_output()\fP, \fBprint_power_basis_forces()\fP, \fBprint_power_basis_output()\fP, \fBprint_RB_basis_forces()\fP, \fBprint_RB_basis_output()\fP, \fBprint_TOY_basis_forces()\fP, \fBprint_TOY_basis_output()\fP, \fBsummarize_input()\fP, \fBsummarize_input_CalcMODE()\fP, \fBsummarize_input_CHISQD()\fP, \fBsummarize_input_CONSTRAIN()\fP, \fBsummarize_input_Eigen()\fP, \fBsummarize_input_ERR()\fP, \fBsummarize_input_FRAMEWEIGHT()\fP, \fBsummarize_input_ITER()\fP, \fBsummarize_input_MEM()\fP, \fBsummarize_input_MFD()\fP, \fBsummarize_input_MT()\fP, \fBsummarize_input_PC()\fP, \fBsummarize_input_PT()\fP, \fBsummarize_input_REF()\fP, \fBsummarize_input_REG()\fP, \fBsummarize_input_RESCALE()\fP, \fBsummarize_input_SOLN()\fP, \fBsummarize_input_SVD()\fP, \fBsummarize_input_TPR()\fP, \fBsummarize_input_TPR_EXCL()\fP, and \fBsummarize_input_TRIM()\fP\&.
+.SS "int remove_comments (char * before, char * after)"
+
+.PP
+\fBremove_comments()\fP: Searches for characters that denote comments (COMMENTFLAG)\&. Provides a pointer to a string that has removed all sections after the first COMMENTFLAG\&. Returns the length of the uncommented string which will include the new line character if no comments are present\&. 
+.PP
+Referenced by \fBget_clean_line()\fP\&.
+.SS "void test_end_directive (\fBtW_line\fP inp_line, \fBtW_word\fP keyword, \fBtW_word\fP input_file)"
+
+.PP
+\fBtest_end_directive()\fP: Test to make sure the ending directive is found\&. Removes ']' if no space between keyword and ending ']'\&. 
+.PP
+Referenced by \fBget_Bond_Inter_Types()\fP, \fBget_CalcMODE()\fP, \fBget_CHISQD()\fP, \fBget_CONSTRAIN()\fP, \fBget_Eigen()\fP, \fBget_ERR()\fP, \fBget_FRAMEWEIGHT()\fP, \fBget_Inter_Type_List()\fP, \fBget_ITER()\fP, \fBget_MEM()\fP, \fBget_MFD()\fP, \fBget_MT()\fP, \fBget_PC()\fP, \fBget_PT()\fP, \fBget_ref_inter()\fP, \fBget_REG()\fP, \fBget_RESCALE()\fP, \fBget_SOLN()\fP, \fBget_structures()\fP, \fBget_SVD()\fP, \fBget_TPR_EXCL()\fP, \fBget_TRIM()\fP, \fBget_Type_Ext_List()\fP, \fBget_Type_Inter2_List()\fP, \fBget_word_list()\fP, and \fBread_REF_forces()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

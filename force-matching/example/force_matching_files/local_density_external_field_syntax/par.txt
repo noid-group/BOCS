@@ -1,0 +1,49 @@
+[Mode] GROMACS
+
+[Temperature]  300.0
+
+[Structures]    1
+inp.txt
+[End Structures]
+
+[Site_Types]    1
+MET
+[End Site_Types]
+
+[Inter_Types]  3
+!inter_name  inter_type        basis       dr         R_min      R_max   spline_order    n_smooth 
+!            Local_Density                                                                        wtype    r0     rc
+!            External                                                                             solveExt extPBC
+ Pair_METMET      Pair_Interaction  Bspline     0.01       0.000      1.400    4               0
+ LD_METMET   Local_Density     Bspline     0.1        10.0       30.0     4               0       lucy     0.0    0.53
+ Ext_MET     External          Bspline     0.05       0.0        7.5      4               0       1        0
+[End Inter_Types]
+
+[Pair_Interaction] 2
+! inter_name   type1  type2
+  Pair_METMET       MET    MET
+  LD_METMET MET MET
+[End Pair_Interaction]
+
+[External_Potential] 1
+Ext_MET MET
+[End External_Potential]
+
+[Calculation_Mode]
+FULL
+[End Calculation_Mode]
+
+[SVD]
+0.00000001
+YES
+NO
+YES
+[End SVD]
+
+[TRIM]
+0.0000000001
+[End TRIM]
+
+[ TPR ] 1
+cg_methanol.btp
+[End TPR]

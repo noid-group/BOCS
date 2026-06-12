@@ -1,0 +1,254 @@
+.TH "tW_gmx_trxframe" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tW_gmx_trxframe
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <C:/Users/maria/Documents/Noid_Group/MYBOCS/05_11_26\-releasedoc/BOCS_Developers/force\-matching/src/gromacs_topology\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "\fBtW_t_trxframe\fP * \fBcontents\fP"
+.br
+.ti -1c
+.RI "\fBtW_word\fP \fBfilename\fP"
+.br
+.ti -1c
+.RI "FILE * \fBfp\fP"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBbInput\fP"
+.br
+.ti -1c
+.RI "int \fBeFileType\fP"
+.br
+.ti -1c
+.RI "int \fBcounter\fP"
+.br
+.ti -1c
+.RI "enum xdr_op \fBxdrmode\fP"
+.br
+.ti -1c
+.RI "XDR * \fBxdr\fP"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBbDouble\fP"
+.br
+.ti -1c
+.RI "long \fBframe_size\fP"
+.br
+.ti -1c
+.RI "long \fBfile_size\fP"
+.br
+.ti -1c
+.RI "int \fBn_frames\fP"
+.br
+.ti -1c
+.RI "int * \fBxids\fP"
+.br
+.ti -1c
+.RI "int * \fBvids\fP"
+.br
+.ti -1c
+.RI "int * \fBfids\fP"
+.br
+.ti -1c
+.RI "int \fBatid_id\fP"
+.br
+.ti -1c
+.RI "int \fBattype_id\fP"
+.br
+.ti -1c
+.RI "int \fBmolid_id\fP"
+.br
+.ti -1c
+.RI "int * \fBld_id\fP"
+.br
+.ti -1c
+.RI "int * \fBldg_id\fP"
+.br
+.ti -1c
+.RI "double * \fBlinear_lds\fP"
+.br
+.ti -1c
+.RI "double ** \fBlocal_densities\fP"
+.br
+.ti -1c
+.RI "int \fBn_atomtypes\fP"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBbLDs\fP"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBbLD_Grads\fP"
+.br
+.ti -1c
+.RI "\fBdvec\fP * \fBlinear_ldgs\fP"
+.br
+.ti -1c
+.RI "\fBdvec\fP ** \fBlocal_density_gradients\fP"
+.br
+.ti -1c
+.RI "void(* \fBsetup_xdr\fP )(struct \fBtW_gmx_trxframe\fP *, const char *, \fBbool\fP)"
+.br
+.ti -1c
+.RI "void(* \fBset_natoms\fP )(struct \fBtW_gmx_trxframe\fP *, int)"
+.br
+.ti -1c
+.RI "void(* \fBset_atom_labels\fP )(struct \fBtW_gmx_trxframe\fP *, struct \fBtW_gmx_topology\fP *)"
+.br
+.ti -1c
+.RI "void(* \fBprint_frame_dump\fP )(struct \fBtW_gmx_trxframe\fP *)"
+.br
+.ti -1c
+.RI "void(* \fBget_pos_of\fP )(struct \fBtW_gmx_trxframe\fP *, int, \fBdvec\fP)"
+.br
+.ti -1c
+.RI "void(* \fBget_vel_of\fP )(struct \fBtW_gmx_trxframe\fP *, int, \fBdvec\fP)"
+.br
+.ti -1c
+.RI "void(* \fBget_box\fP )(struct \fBtW_gmx_trxframe\fP *, \fBmatrix\fP)"
+.br
+.in -1c
+.SH "Field Documentation"
+.PP 
+.SS "int atid_id"
+
+.PP
+Referenced by \fBread_first_lammps_frame()\fP, and \fBread_next_lammps_frame()\fP\&.
+.SS "int attype_id"
+
+.SS "\fBbool\fP bDouble"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, and \fBsetup_xdr()\fP\&.
+.SS "\fBbool\fP bInput"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP\&.
+.SS "\fBbool\fP bLD_Grads"
+
+.PP
+Referenced by \fBcopy_ldgs()\fP, \fBcopy_trr_2_CGstruct()\fP, \fBinit_LD_info()\fP, \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, \fBnew_read_next_bocs_frame()\fP, \fBread_first_bocs_frame()\fP, \fBread_first_lammps_frame()\fP, \fBread_next_lammps_frame()\fP, \fBset_natoms()\fP, and \fBwrite_bocs_frame()\fP\&.
+.SS "\fBbool\fP bLDs"
+
+.PP
+Referenced by \fBcopy_lds()\fP, \fBcopy_trr_2_CGstruct()\fP, \fBinit_LD_info()\fP, \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, \fBnew_read_next_bocs_frame()\fP, \fBread_first_bocs_frame()\fP, \fBread_first_lammps_frame()\fP, \fBread_next_lammps_frame()\fP, \fBset_natoms()\fP, and \fBwrite_bocs_frame()\fP\&.
+.SS "\fBtW_t_trxframe\fP* contents"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP, \fBcomp_2_frames()\fP, \fBcopy_ldgs()\fP, \fBcopy_lds()\fP, \fBcopy_trr_2_CGstruct()\fP, \fBcopy_trr_2_CGstruct_ref()\fP, \fBcopy_trxframe_info()\fP, \fBcopy_xvf()\fP, \fBdo_ematch_angles()\fP, \fBdo_ematch_bonds()\fP, \fBdo_ematch_dihedrals()\fP, \fBdo_ematch_pairs()\fP, \fBdo_PBC()\fP, \fBget_box()\fP, \fBget_pos_of()\fP, \fBget_vel_of()\fP, \fBinit_LD_info()\fP, \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, \fBmap_trxframe()\fP, \fBnew_read_next_bocs_frame()\fP, \fBprint_frame_dump()\fP, \fBprint_gro_frame()\fP, \fBread_bocs_frame_dir_box()\fP, \fBread_bocs_frame_dir_flags()\fP, \fBread_bocs_frame_dir_local_densities()\fP, \fBread_bocs_frame_dir_local_density_gradients()\fP, \fBread_bocs_frame_dir_natoms()\fP, \fBread_bocs_frame_dir_prec()\fP, \fBread_bocs_frame_dir_step()\fP, \fBread_bocs_frame_dir_time()\fP, \fBread_bocs_frame_dir_title()\fP, \fBread_bocs_frame_dir_xvf()\fP, \fBread_first_bocs_frame()\fP, \fBread_first_dump_frame()\fP, \fBread_first_gro_frame()\fP, \fBread_first_lammps_frame()\fP, \fBread_next_bocs_frame()\fP, \fBread_next_dump_frame()\fP, \fBread_next_gro_frame()\fP, \fBread_next_lammps_frame()\fP, \fBset_atom_labels()\fP, \fBset_natoms()\fP, \fBtW_read_first_trj_frame()\fP, \fBtW_read_first_trr_frame()\fP, \fBupdate_info_trr()\fP, \fBwrite_bocs_frame()\fP, \fBwrite_delta_frame()\fP, \fBwrite_dump_frame()\fP, \fBwrite_gro_frame()\fP, \fBwrite_lammps_data()\fP, and \fBwrite_lammps_frame()\fP\&.
+.SS "int counter"
+
+.PP
+Referenced by \fBcomp_2_frames()\fP, \fBcopy_trxframe_info()\fP, \fBdo_ematch_angles()\fP, \fBdo_ematch_bonds()\fP, \fBdo_ematch_dihedrals()\fP, \fBdo_ematch_pairs()\fP, \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, \fBnew_read_next_bocs_frame()\fP, \fBread_bocs_frame_dir_flags()\fP, \fBread_next_bocs_frame()\fP, \fBread_next_dump_frame()\fP, \fBread_next_frame()\fP, \fBread_next_gro_frame()\fP, \fBread_next_lammps_frame()\fP, \fBtW_read_next_trj_frame()\fP, \fBtW_read_next_trr_frame()\fP, \fBwrite_bocs_frame()\fP, and \fBwrite_lammps_frame()\fP\&.
+.SS "int eFileType"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, \fBopen_write_trajectory()\fP, \fBread_first_frame()\fP, \fBread_next_frame()\fP, and \fBwrite_frame()\fP\&.
+.SS "int * fids"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, \fBread_first_lammps_frame()\fP, and \fBread_next_lammps_frame()\fP\&.
+.SS "long file_size"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP\&.
+.SS "\fBtW_word\fP filename"
+
+.PP
+Referenced by \fBopen_write_trajectory()\fP, \fBread_first_frame()\fP, and \fBsummarize_esystem()\fP\&.
+.SS "FILE* fp"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, \fBnew_read_next_bocs_frame()\fP, \fBopen_write_trajectory()\fP, \fBread_bocs_frame_dir_box()\fP, \fBread_bocs_frame_dir_flags()\fP, \fBread_bocs_frame_dir_frame()\fP, \fBread_bocs_frame_dir_local_densities()\fP, \fBread_bocs_frame_dir_local_density_gradients()\fP, \fBread_bocs_frame_dir_natoms()\fP, \fBread_bocs_frame_dir_prec()\fP, \fBread_bocs_frame_dir_step()\fP, \fBread_bocs_frame_dir_time()\fP, \fBread_bocs_frame_dir_title()\fP, \fBread_bocs_frame_dir_xvf()\fP, \fBread_first_bocs_frame()\fP, \fBread_first_dump_frame()\fP, \fBread_first_gro_frame()\fP, \fBread_first_lammps_frame()\fP, \fBread_next_bocs_frame()\fP, \fBread_next_dump_frame()\fP, \fBread_next_gro_frame()\fP, \fBread_next_lammps_frame()\fP, \fBsetup_xdr()\fP, \fBtW_read_first_trj_frame()\fP, \fBtW_read_first_trr_frame()\fP, \fBwrite_bocs_frame()\fP, \fBwrite_dump_frame()\fP, \fBwrite_gro_frame()\fP, \fBwrite_lammps_data()\fP, and \fBwrite_lammps_frame()\fP\&.
+.SS "long frame_size"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP\&.
+.SS "void(* get_box) (struct \fBtW_gmx_trxframe\fP *, \fBmatrix\fP)"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, and \fBprint_gro_frame()\fP\&.
+.SS "void(* get_pos_of) (struct \fBtW_gmx_trxframe\fP *, int, \fBdvec\fP)"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, and \fBprint_gro_frame()\fP\&.
+.SS "void(* get_vel_of) (struct \fBtW_gmx_trxframe\fP *, int, \fBdvec\fP)"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, and \fBprint_gro_frame()\fP\&.
+.SS "int* ld_id"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, \fBread_first_lammps_frame()\fP, and \fBread_next_lammps_frame()\fP\&.
+.SS "int* ldg_id"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, \fBread_first_lammps_frame()\fP, and \fBread_next_lammps_frame()\fP\&.
+.SS "\fBdvec\fP* linear_ldgs"
+
+.PP
+Referenced by \fBinit_LD_info()\fP, \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, and \fBset_natoms()\fP\&.
+.SS "double* linear_lds"
+
+.PP
+Referenced by \fBinit_LD_info()\fP, \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, and \fBset_natoms()\fP\&.
+.SS "double** local_densities"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP, \fBcopy_lds()\fP, \fBcopy_trr_2_CGstruct()\fP, \fBinit_LD_info()\fP, \fBinit_tW_gmx_trxframe()\fP, \fBld_tally_impl()\fP, \fBmain()\fP, \fBread_bocs_frame_dir_local_densities()\fP, \fBread_next_lammps_frame()\fP, \fBset_natoms()\fP, and \fBwrite_bocs_frame()\fP\&.
+.SS "\fBdvec\fP** local_density_gradients"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP, \fBcopy_ldgs()\fP, \fBcopy_trr_2_CGstruct()\fP, \fBinit_LD_info()\fP, \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, \fBread_bocs_frame_dir_local_density_gradients()\fP, \fBread_next_lammps_frame()\fP, \fBset_natoms()\fP, \fBsg_tally_impl()\fP, and \fBwrite_bocs_frame()\fP\&.
+.SS "int molid_id"
+
+.SS "int n_atomtypes"
+
+.PP
+Referenced by \fBcopy_ldgs()\fP, \fBcopy_lds()\fP, \fBcopy_trr_2_CGstruct()\fP, \fBinit_LD_info()\fP, \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, \fBread_bocs_frame_dir_local_densities()\fP, \fBread_bocs_frame_dir_local_density_gradients()\fP, \fBread_first_bocs_frame()\fP, \fBread_first_lammps_frame()\fP, \fBread_next_lammps_frame()\fP, \fBset_natoms()\fP, and \fBwrite_bocs_frame()\fP\&.
+.SS "int n_frames"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, \fBrun_checks()\fP, and \fBsummarize_esystem()\fP\&.
+.SS "void(* print_frame_dump) (struct \fBtW_gmx_trxframe\fP *)"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP\&.
+.SS "void(* set_atom_labels) (struct \fBtW_gmx_trxframe\fP *, struct \fBtW_gmx_topology\fP *)"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, and \fBsetup_CG_trr()\fP\&.
+.SS "void(* set_natoms) (struct \fBtW_gmx_trxframe\fP *, int)"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, and \fBsetup_CG_trr()\fP\&.
+.SS "void(* setup_xdr) (struct \fBtW_gmx_trxframe\fP *, const char *, \fBbool\fP)"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, \fBopen_write_trajectory()\fP, and \fBtW_read_first_trr_frame()\fP\&.
+.SS "int * vids"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, \fBread_first_lammps_frame()\fP, and \fBread_next_lammps_frame()\fP\&.
+.SS "XDR* xdr"
+
+.PP
+Referenced by \fBsetup_xdr()\fP\&.
+.SS "enum xdr_op xdrmode"
+
+.PP
+Referenced by \fBsetup_xdr()\fP\&.
+.SS "int* xids"
+
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, \fBread_first_lammps_frame()\fP, and \fBread_next_lammps_frame()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

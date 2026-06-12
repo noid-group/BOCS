@@ -1,0 +1,15 @@
+<map id="get_FRAMEWEIGHT" name="get_FRAMEWEIGHT">
+<area shape="rect" id="Node000001" title="get_FRAMEWEIGHT():" alt="" coords="5,56,153,83"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#afc26ee948fc1451d49561f3b6f1cb06a" title="check_inp_line(): Makes sure that the ending directive is not found were it is not supposed to be." alt="" coords="211,5,318,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,53,198,34,199,39,131,58"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="215,56,314,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="153,67,199,67,199,72,153,72"/>
+<area shape="rect" id="Node000007" href="$io__read_8c.html#a7b47f18d3649b2d4b9383a5aa3ddee38" title="test_end_directive(): Test to make sure the ending directive is found." alt="" coords="201,107,328,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="131,81,199,100,198,105,130,86"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="376,31,480,57"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="314,59,361,52,361,57,314,64"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="393,81,463,108"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="314,74,378,84,378,90,314,80"/>
+<area shape="rect" id="Node000005" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="528,31,661,57"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="481,41,513,41,513,47,481,47"/>
+</map>

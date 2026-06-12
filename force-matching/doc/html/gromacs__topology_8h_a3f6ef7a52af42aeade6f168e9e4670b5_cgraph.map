@@ -1,0 +1,5 @@
+<map id="get_words_delim" name="get_words_delim">
+<area shape="rect" id="Node000001" title="get_words_delim(): supposed to be like python&#39;s string.split()" alt="" coords="5,5,125,32"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a581bab4e93beac29679039c89fd62a2a" title="get_word_count_delim(): Gets the number of words separated by chars in delims in a line" alt="" coords="173,5,324,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,16,157,16,157,21,125,21"/>
+</map>

@@ -1,0 +1,14 @@
+<map id="wnoid_math.c" name="wnoid_math.c">
+<area shape="rect" id="Node000001" title="Functions for basic math operations not basic enough to be in the standard c math library." alt="" coords="10,5,112,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,229,66,256"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="50,34,34,55,21,81,14,116,16,152,29,214,23,215,10,152,9,116,16,79,29,52,46,31"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="30,80,92,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="64,33,64,64,58,64,58,33"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8h.html" title=" " alt="" coords="115,80,217,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="81,30,137,69,134,73,78,35"/>
+<area shape="rect" id="Node000005" href="$cgff__types_8h.html" title="Defines properties and structures of the cgff and cgmap calculations." alt="" coords="97,155,190,181"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="165,108,155,141,149,139,160,106"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="126,184,69,222,66,218,123,180"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="111,229,176,256"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="146,182,146,214,141,214,141,182"/>
+</map>

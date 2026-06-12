@@ -1,0 +1,8 @@
+<map id="copy_trr_2_CGstruct" name="copy_trr_2_CGstruct">
+<area shape="rect" id="Node000001" title="copy_trr_2_CGstruct(): copies position and force information from one data structure to another" alt="" coords="290,5,432,32"/>
+<area shape="rect" id="Node000002" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="274,21,55,21,55,16,274,16"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8c.html#a98e797f71ed51e4cc6bd05c3443c4742" title="read_trr_2_CGstruct(): Tries to read another frame from trr file." alt="" coords="103,31,242,57"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="275,33,243,37,242,32,274,28"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="87,32,54,26,55,20,88,26"/>
+</map>

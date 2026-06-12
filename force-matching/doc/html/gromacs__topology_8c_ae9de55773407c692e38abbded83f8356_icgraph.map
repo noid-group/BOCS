@@ -1,0 +1,124 @@
+<map id="test_line" name="test_line">
+<area shape="rect" id="Node000001" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="776,2327,846,2353"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="629,1221,728,1248"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="803,2311,679,1249,684,1248,809,2311"/>
+<area shape="rect" id="Node000109" href="$gromacs__topology_8c.html#a3ccb4ce8d5a6dc664bfa8cfd215e786e" title=" " alt="" coords="452,2301,558,2328"/>
+<area shape="poly" id="edge70_Node000001_Node000109" title=" " alt="" coords="760,2339,558,2322,559,2316,760,2333"/>
+<area shape="rect" id="Node000120" href="$gromacs__topology_8c.html#aeb390eec48884f706988dadabc7d5ac8" title="read_first_bocs_frame(): reads the first frame of a bocs.traj file." alt="" coords="430,2352,580,2379"/>
+<area shape="poly" id="edge71_Node000001_Node000120" title=" " alt="" coords="761,2347,581,2362,580,2356,760,2341"/>
+<area shape="rect" id="Node000124" href="$gromacs__topology_8c.html#acf9cdacec5788876c6300d1b1bf2403a" title=" " alt="" coords="428,2403,581,2429"/>
+<area shape="poly" id="edge72_Node000001_Node000124" title=" " alt="" coords="761,2355,562,2405,561,2399,760,2350"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8c.html#a1a205a540dee3c756ca2a245d6bb48c8" title="copy_atom_props(): Reads &quot;natoms&quot; lines from a dump file and stores the numbers in the appropriate ar..." alt="" coords="442,512,567,539"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="674,1206,669,1070,655,877,643,778,627,687,606,611,593,582,579,559,557,541,560,537,583,556,598,579,611,609,632,686,649,777,661,877,675,1070,679,1205"/>
+<area shape="rect" id="Node000004" href="$gromacs__topology_8c.html#a207e245b546a27f8b98b76a9e96a56da" title="get_prop(): makes sure the dumped trajectory file has the correct property next." alt="" coords="240,432,312,459"/>
+<area shape="poly" id="edge57_Node000002_Node000004" title=" " alt="" coords="675,1206,675,1059,665,846,653,737,636,637,611,556,596,525,579,502,561,489,533,479,459,463,379,454,312,449,312,444,379,448,460,458,535,473,563,484,583,498,601,522,616,554,641,636,658,736,670,846,680,1058,680,1206"/>
+<area shape="rect" id="Node000010" href="$gromacs__topology_8c.html#a40563bcc7a3e5dc4a1d8c5b9606ba7b5" title="dfill_14nb_from_gmx_IMNB_headers" alt="" coords="205,584,346,627"/>
+<area shape="poly" id="edge4_Node000002_Node000010" title=" " alt="" coords="673,1206,664,1101,646,957,634,884,618,817,600,762,579,724,564,711,542,697,482,670,412,646,346,626,348,621,414,641,484,665,544,692,567,706,583,721,605,760,624,816,639,883,651,956,669,1100,678,1206"/>
+<area shape="rect" id="Node000022" href="$gromacs__topology_8c.html#aff84460640e722b830313fbc78cc115e" title="dfill_angles_from_gmx_angletype_headers:" alt="" coords="200,651,352,693"/>
+<area shape="poly" id="edge5_Node000002_Node000022" title=" " alt="" coords="672,1206,662,1110,644,981,632,917,617,858,599,809,579,776,564,764,543,752,484,728,351,691,353,686,486,723,545,747,567,760,583,773,604,807,622,856,637,915,649,980,668,1109,678,1206"/>
+<area shape="rect" id="Node000023" href="$gromacs__topology_8c.html#a31dc368d007253914825891731324e8f" title="dfill_bigdihedrals_from_gmx_bigdihedraltype_headers:" alt="" coords="186,717,366,776"/>
+<area shape="poly" id="edge6_Node000002_Node000023" title=" " alt="" coords="672,1206,661,1120,642,1008,614,900,598,859,579,831,557,812,533,795,478,772,421,757,366,750,367,745,422,752,480,766,535,791,561,807,583,828,602,857,619,899,647,1006,666,1119,677,1206"/>
+<area shape="rect" id="Node000024" href="$gromacs__topology_8c.html#ad26a3e1e726bb9a1264d766919c25e3b" title="dfill_bonds_from_gmx_bondtype_headers:" alt="" coords="202,800,350,843"/>
+<area shape="poly" id="edge7_Node000002_Node000024" title=" " alt="" coords="671,1206,659,1129,639,1030,612,938,597,903,579,879,555,860,528,845,468,826,407,818,351,817,351,812,407,813,469,821,530,841,558,856,583,875,601,900,617,936,644,1029,664,1128,676,1205"/>
+<area shape="rect" id="Node000025" href="$gromacs__topology_8c.html#ae0fad570f452568b6e37c396b77fd5b0" title="dfill_dihedrals_from_gmx_dihedraltype_headers:" alt="" coords="184,867,368,909"/>
+<area shape="poly" id="edge8_Node000002_Node000025" title=" " alt="" coords="675,1206,673,1145,660,1067,648,1027,631,988,609,952,580,922,557,906,532,894,477,879,421,874,368,876,368,870,421,868,478,874,534,889,559,902,583,918,613,949,636,985,653,1025,665,1066,678,1144,681,1206"/>
+<area shape="rect" id="Node000012" href="$gromacs__topology_8c.html#aaf387faf43167e053c62e4de7214e6d1" title="dfind_all_molinfo:" alt="" coords="5,971,124,997"/>
+<area shape="poly" id="edge9_Node000002_Node000012" title=" " alt="" coords="674,1206,668,1080,653,903,641,813,625,730,604,661,592,634,579,614,563,596,546,585,512,575,473,569,427,553,403,537,379,524,319,505,269,493,246,492,223,496,199,506,173,523,161,537,149,556,128,607,110,671,96,742,78,879,69,970,64,970,72,878,91,741,105,670,123,605,144,553,156,534,170,519,196,501,221,491,246,487,270,488,321,500,381,519,406,532,429,548,474,563,513,570,548,580,566,592,583,610,597,632,609,659,630,728,646,812,658,903,673,1080,679,1206"/>
+<area shape="rect" id="Node000026" href="$gromacs__topology_8c.html#aa3af3ef732c5e182c31ed8225c4ee663" title="dget_moltypes_in_molblocks():" alt="" coords="181,1117,370,1144"/>
+<area shape="poly" id="edge10_Node000002_Node000026" title=" " alt="" coords="649,1214,617,1191,580,1172,528,1156,474,1145,371,1134,371,1129,474,1139,529,1150,582,1167,620,1186,652,1209"/>
+<area shape="rect" id="Node000027" href="$gromacs__topology_8c.html#a6e3976b7564523f63539ea7ce350c546" title="dget_top_ff_info():" alt="" coords="219,1168,332,1195"/>
+<area shape="poly" id="edge11_Node000002_Node000027" title=" " alt="" coords="635,1217,581,1199,515,1188,448,1182,333,1181,333,1176,448,1177,516,1182,582,1193,637,1212"/>
+<area shape="rect" id="Node000028" href="$gromacs__topology_8c.html#af88b58c7cd17cc4737adec3923967023" title="dparse_atom_per_molecule_info:" alt="" coords="172,533,380,560"/>
+<area shape="poly" id="edge12_Node000002_Node000028" title=" " alt="" coords="673,1207,665,1091,649,931,636,849,621,774,602,712,579,668,563,650,546,637,512,623,474,614,427,597,379,574,341,563,343,558,381,570,429,592,475,608,514,618,549,632,566,646,584,665,607,710,626,773,641,848,654,930,671,1091,678,1206"/>
+<area shape="rect" id="Node000029" href="$gromacs__topology_8c.html#afeda7d0d3d61f48a28696d39ec7b7b15" title="dparse_atomic_exclusions_per_molecule:" alt="" coords="188,933,364,976"/>
+<area shape="poly" id="edge14_Node000002_Node000029" title=" " alt="" coords="675,1206,670,1150,657,1081,645,1046,628,1013,607,983,580,958,554,943,526,933,466,924,406,926,352,935,351,930,406,921,467,918,527,928,556,938,583,954,611,979,633,1010,650,1044,662,1080,676,1150,680,1205"/>
+<area shape="rect" id="Node000030" href="$gromacs__topology_8c.html#a36b1c74a2a5ca4dfcaa2e7b4251bc088" title="dparse_charge_groups_per_molecule:" alt="" coords="200,1051,352,1093"/>
+<area shape="poly" id="edge16_Node000002_Node000030" title=" " alt="" coords="657,1210,624,1172,603,1153,580,1137,523,1112,463,1095,405,1084,352,1078,352,1072,405,1078,465,1089,525,1107,583,1132,606,1148,628,1168,661,1207"/>
+<area shape="rect" id="Node000031" href="$gromacs__topology_8c.html#a3f4adb996d832b268447e37b0e5647fc" title="dparse_residue_per_molecule_info:" alt="" coords="209,1371,343,1413"/>
+<area shape="poly" id="edge18_Node000002_Node000031" title=" " alt="" coords="653,1261,621,1287,583,1310,521,1336,458,1357,344,1384,343,1379,456,1352,520,1331,580,1306,618,1282,650,1257"/>
+<area shape="rect" id="Node000032" href="$gromacs__topology_8c.html#a26c5825606311551c7465d159ed03e8d" title="dproc_other_headers" alt="" coords="205,1219,347,1245"/>
+<area shape="poly" id="edge20_Node000002_Node000032" title=" " alt="" coords="613,1223,581,1219,520,1215,458,1216,348,1225,347,1220,457,1211,520,1210,582,1213,614,1218"/>
+<area shape="rect" id="Node000033" href="$gromacs__topology_8c.html#a4f5fb1a4b748012754c3f0af666847d5" title="dprocess_nmolblocks():" alt="" coords="202,1269,350,1296"/>
+<area shape="poly" id="edge21_Node000002_Node000033" title=" " alt="" coords="614,1245,350,1277,350,1271,614,1240"/>
+<area shape="rect" id="Node000034" href="$gromacs__topology_8c.html#a81d7b4fb891f27f2a0f7ed99e20ba3b6" title="dprocess_sysname_natoms():" alt="" coords="184,1320,368,1347"/>
+<area shape="poly" id="edge22_Node000002_Node000034" title=" " alt="" coords="625,1256,582,1269,461,1299,352,1322,351,1317,460,1294,581,1264,623,1251"/>
+<area shape="rect" id="Node000035" href="$gromacs__topology_8c.html#a6ec5b0fcfcf8e8378e61b7f09c3bfcdd" title="find_line_in_file():" alt="" coords="450,968,560,995"/>
+<area shape="poly" id="edge23_Node000002_Node000035" title=" " alt="" coords="669,1206,659,1165,641,1114,615,1061,580,1015,553,997,555,993,583,1011,620,1059,646,1112,664,1163,674,1205"/>
+<area shape="rect" id="Node000036" href="$calc__grids_8c.html#a1fa321c193df634627351fcb58db2cb4" title="get_b_soln_err(): multiply the obtained forces with the original matrix to obtain the solns,..." alt="" coords="452,1424,558,1451"/>
+<area shape="poly" id="edge37_Node000002_Node000036" title=" " alt="" coords="670,1264,639,1334,614,1373,583,1407,554,1426,551,1421,580,1403,610,1370,634,1332,666,1262"/>
+<area shape="rect" id="Node000037" href="$calc__grids_8c.html#a7d1f81fde08821aebf1b645466f849a4" title="get_results(): (1) Calculate and store b_forces and b_struct." alt="" coords="233,1437,318,1464"/>
+<area shape="poly" id="edge64_Node000002_Node000037" title=" " alt="" coords="666,1263,633,1316,610,1344,583,1368,482,1399,381,1428,319,1443,318,1438,379,1423,481,1394,580,1363,606,1340,629,1313,662,1260"/>
+<area shape="rect" id="Node000038" href="$calc__grids_8c.html#a1bbcce63290226ad9b1cfa162bdf4ff4" title="get_b_soln_errAA(): multiply the obtained forces with the original matrix to obtain the solns,..." alt="" coords="442,1541,567,1568"/>
+<area shape="poly" id="edge39_Node000002_Node000038" title=" " alt="" coords="679,1264,673,1320,658,1391,645,1429,629,1466,609,1500,583,1531,567,1543,564,1539,580,1527,604,1497,624,1463,640,1427,652,1390,667,1319,673,1263"/>
+<area shape="rect" id="Node000039" href="$calc__grids_8c.html#a693f2404f7a2ed6eeb2ec49540a2aa85" title="get_b_struct_and_b_forces(): (1) Allocates memory for sys&#45;&gt;b_forces and sys&#45;&gt;b_struct." alt="" coords="437,1475,572,1517"/>
+<area shape="poly" id="edge40_Node000002_Node000039" title=" " alt="" coords="675,1264,665,1307,647,1360,620,1415,583,1465,569,1476,565,1472,579,1461,616,1413,642,1358,659,1305,670,1262"/>
+<area shape="rect" id="Node000040" href="$read__parameters_8c.html#a3e777b5590e7326da2653ba564b33263" title="get_Bond_Inter_Types(): Copies the parameters for a intramolecular interaction in the sys data struct..." alt="" coords="429,1592,580,1619"/>
+<area shape="poly" id="edge42_Node000002_Node000040" title=" " alt="" coords="680,1264,677,1328,664,1413,652,1458,635,1503,612,1545,583,1582,568,1594,564,1589,579,1578,608,1542,630,1500,647,1456,659,1412,672,1327,675,1263"/>
+<area shape="rect" id="Node000047" href="$read__parameters_8c.html#a5588bcef349422752be6c2c9ab229628" title="get_CalcMODE():" alt="" coords="448,1643,561,1669"/>
+<area shape="poly" id="edge43_Node000002_Node000047" title=" " alt="" coords="676,1264,665,1348,645,1458,618,1563,602,1604,583,1633,563,1647,560,1642,579,1629,597,1601,613,1561,640,1457,660,1347,671,1263"/>
+<area shape="rect" id="Node000048" href="$read__parameters_8c.html#a51ba9ecb245cc74e1a264a4603a25553" title="get_CHISQD():" alt="" coords="455,1693,554,1720"/>
+<area shape="poly" id="edge44_Node000002_Node000048" title=" " alt="" coords="677,1263,667,1357,649,1482,621,1603,604,1650,583,1683,571,1694,556,1701,554,1696,568,1689,579,1680,599,1648,616,1601,643,1481,662,1357,672,1263"/>
+<area shape="rect" id="Node000049" href="$read__parameters_8c.html#a987fab0cfeb716fd1af327f7a2b1806a" title="get_CONSTRAIN():" alt="" coords="442,1744,568,1771"/>
+<area shape="poly" id="edge45_Node000002_Node000049" title=" " alt="" coords="678,1263,669,1367,652,1507,639,1578,624,1643,605,1696,583,1734,569,1745,566,1741,579,1730,601,1694,619,1641,634,1577,647,1506,664,1366,673,1263"/>
+<area shape="rect" id="Node000050" href="$read__parameters_8c.html#af41dae3ff5b855a4a5924451521132e1" title="get_Eigen():" alt="" coords="465,1795,544,1821"/>
+<area shape="poly" id="edge46_Node000002_Node000050" title=" " alt="" coords="679,1264,671,1376,655,1532,643,1611,627,1683,607,1743,583,1784,566,1798,546,1806,544,1801,563,1793,579,1781,602,1741,622,1682,637,1610,650,1531,666,1376,673,1263"/>
+<area shape="rect" id="Node000051" href="$read__parameters_8c.html#aae08e56350b71ca1f179e155cef55c57" title="get_ERR():" alt="" coords="467,1845,542,1872"/>
+<area shape="poly" id="edge47_Node000002_Node000051" title=" " alt="" coords="679,1263,673,1385,658,1556,646,1643,630,1723,609,1789,597,1815,583,1835,565,1849,544,1857,542,1852,562,1845,579,1832,592,1812,604,1787,625,1722,641,1642,653,1555,668,1385,674,1263"/>
+<area shape="rect" id="Node000052" href="$read__parameters_8c.html#a8edca8213975469a05af99405bfc3b37" title="get_force(): Reads the force for a given interaction for the reference potential." alt="" coords="467,1896,542,1923"/>
+<area shape="poly" id="edge48_Node000002_Node000052" title=" " alt="" coords="679,1264,675,1395,661,1581,649,1676,632,1763,611,1835,598,1864,583,1886,565,1900,544,1908,542,1903,562,1895,579,1882,593,1861,606,1833,627,1762,644,1675,656,1580,670,1395,674,1264"/>
+<area shape="rect" id="Node000057" href="$read__parameters_8c.html#ab1dfa51768127e0a64e269a1d559b520" title="get_FRAMEWEIGHT():" alt="" coords="431,1947,578,1973"/>
+<area shape="poly" id="edge49_Node000002_Node000057" title=" " alt="" coords="680,1264,677,1404,664,1604,652,1708,635,1803,613,1882,599,1912,583,1936,570,1948,566,1944,579,1933,594,1910,608,1880,630,1802,647,1707,659,1604,671,1404,674,1263"/>
+<area shape="rect" id="Node000058" href="$read__parameters_8c.html#a60a964bb6417cf2d224fbdbf2791f8c1" title="get_Inter_Type_List(): Reads and stores the information for each interaction type listed in the param..." alt="" coords="437,1997,572,2024"/>
+<area shape="poly" id="edge50_Node000002_Node000058" title=" " alt="" coords="680,1264,678,1413,667,1629,655,1740,638,1843,615,1928,600,1961,583,1987,570,1999,566,1995,579,1984,595,1959,610,1926,633,1842,650,1740,662,1628,673,1413,675,1264"/>
+<area shape="rect" id="Node000060" href="$read__parameters_8c.html#abc5b898fe4148100b3a989585821bd94" title="get_ITER():" alt="" coords="466,2048,543,2075"/>
+<area shape="poly" id="edge51_Node000002_Node000060" title=" " alt="" coords="680,1264,680,1422,670,1653,658,1773,641,1883,616,1974,601,2010,583,2038,566,2052,545,2060,543,2055,563,2047,579,2034,596,2007,611,1972,636,1882,653,1772,665,1653,675,1422,675,1264"/>
+<area shape="rect" id="Node000061" href="$read__parameters_8c.html#a3322125991bfcc70f381910c7dff9bf9" title="get_MEM():" alt="" coords="466,2099,543,2125"/>
+<area shape="poly" id="edge52_Node000002_Node000061" title=" " alt="" coords="678,1264,668,1443,648,1704,635,1835,620,1951,603,2039,593,2069,583,2088,566,2103,545,2110,543,2105,563,2098,579,2085,589,2067,598,2038,615,1950,630,1835,643,1704,663,1443,673,1264"/>
+<area shape="rect" id="Node000062" href="$read__parameters_8c.html#a2f9d9d1f8411fea3b88d5ec12f54c7c4" title="get_MFD():" alt="" coords="467,2149,542,2176"/>
+<area shape="poly" id="edge53_Node000002_Node000062" title=" " alt="" coords="679,1264,669,1452,650,1730,637,1869,621,1992,604,2086,594,2119,583,2139,565,2154,544,2161,542,2156,563,2149,579,2136,589,2117,599,2085,616,1992,632,1869,645,1729,664,1452,673,1263"/>
+<area shape="rect" id="Node000063" href="$read__parameters_8c.html#aa20a3c4ce5cd13d1480bb123f6508d59" title="get_MT():" alt="" coords="472,2200,537,2227"/>
+<area shape="poly" id="edge54_Node000002_Node000063" title=" " alt="" coords="679,1263,670,1461,651,1755,638,1903,623,2034,605,2134,595,2168,583,2190,563,2205,538,2213,537,2208,560,2201,579,2186,590,2166,600,2133,618,2033,633,1902,646,1754,665,1461,673,1263"/>
+<area shape="rect" id="Node000064" href="$read__parameters_8c.html#a320a09504affa1057a608ce15b3b9fda" title="get_no_points(): Returns the number of lines in a file before the first blank line." alt="" coords="454,2251,556,2277"/>
+<area shape="poly" id="edge55_Node000002_Node000064" title=" " alt="" coords="679,1263,671,1471,653,1780,640,1937,624,2075,606,2181,595,2217,583,2240,572,2251,558,2258,555,2254,569,2247,579,2237,590,2216,600,2180,619,2075,635,1936,648,1780,665,1470,674,1263"/>
+<area shape="rect" id="Node000066" href="$read__parameters_8c.html#ad5beaaf02f189d142a41f3e870c64ece" title="get_PC():" alt="" coords="472,5,537,32"/>
+<area shape="poly" id="edge56_Node000002_Node000066" title=" " alt="" coords="674,1206,668,964,653,595,640,408,624,241,604,114,592,72,579,46,560,31,537,24,539,19,563,26,583,42,597,70,609,113,630,241,646,407,658,595,674,964,679,1206"/>
+<area shape="rect" id="Node000067" href="$read__parameters_8c.html#ad5a5cd555671f137f0d12aed0aeeeb94" title="get_PT():" alt="" coords="473,56,536,83"/>
+<area shape="poly" id="edge58_Node000002_Node000067" title=" " alt="" coords="674,1206,668,974,651,621,639,442,623,283,603,162,592,121,579,96,560,82,536,74,537,69,562,77,583,93,596,119,608,161,628,282,644,441,657,621,673,974,679,1206"/>
+<area shape="rect" id="Node000068" href="$read__parameters_8c.html#a41efd8d8bf8ab23525874097a94ffc7d" title="get_REF():" alt="" coords="468,107,541,133"/>
+<area shape="poly" id="edge59_Node000002_Node000068" title=" " alt="" coords="674,1206,667,983,650,646,637,475,621,324,602,209,591,171,579,147,562,133,541,126,542,121,565,129,583,144,596,169,607,208,627,324,643,475,655,646,672,983,679,1206"/>
+<area shape="rect" id="Node000069" href="$read__parameters_8c.html#a0e0b20eb58926151439c0bac9ef27223" title="get_ref_inter(): Reads information for a interaction type in the reference potential." alt="" coords="458,157,551,184"/>
+<area shape="poly" id="edge60_Node000002_Node000069" title=" " alt="" coords="674,1206,666,993,649,672,636,510,620,366,601,257,590,220,579,198,567,187,551,179,553,175,569,182,583,194,595,218,606,256,625,365,641,509,654,672,671,992,679,1206"/>
+<area shape="rect" id="Node000056" href="$read__parameters_8c.html#ad5ab07944494d7bfa6d7122321bb1d98" title="get_ref_potential(): Reads and stores the information for a reference potential." alt="" coords="446,208,563,235"/>
+<area shape="poly" id="edge61_Node000002_Node000056" title=" " alt="" coords="674,1206,665,1002,647,697,634,544,619,408,600,304,590,269,579,248,562,235,565,231,583,245,595,267,605,303,624,407,640,543,652,697,670,1002,679,1206"/>
+<area shape="rect" id="Node000075" href="$read__parameters_8c.html#ac2ec8199d00ce22ed7147b5caee86c46" title="get_REG():" alt="" coords="467,259,542,285"/>
+<area shape="poly" id="edge62_Node000002_Node000075" title=" " alt="" coords="673,1206,664,1011,646,723,633,577,617,449,599,352,589,319,579,299,563,286,542,278,544,273,565,281,583,296,594,317,604,350,622,448,638,577,651,722,670,1010,679,1205"/>
+<area shape="rect" id="Node000076" href="$read__parameters_8c.html#aa5f6304385499a89d5d54b899987ba32" title="get_RESCALE():" alt="" coords="450,309,559,336"/>
+<area shape="poly" id="edge63_Node000002_Node000076" title=" " alt="" coords="673,1206,663,1021,644,749,631,612,616,491,598,399,589,368,579,350,558,334,561,330,583,346,594,366,604,398,621,490,636,611,649,749,669,1021,679,1206"/>
+<area shape="rect" id="Node000077" href="$read__parameters_8c.html#a96f033de7c6eee8ab20256f1b796b9b8" title="get_SOLN():" alt="" coords="464,360,546,387"/>
+<area shape="poly" id="edge65_Node000002_Node000077" title=" " alt="" coords="673,1206,662,1030,643,774,629,646,614,533,597,447,588,418,579,400,564,388,545,381,547,376,567,383,583,397,593,416,603,445,620,532,635,645,648,773,668,1029,678,1206"/>
+<area shape="rect" id="Node000078" href="$read__parameters_8c.html#ae5d06088756e63f85d49a86d4a250310" title="get_structures(): Saves all the file names that contain structures from the list of files names read ..." alt="" coords="452,411,557,437"/>
+<area shape="poly" id="edge66_Node000002_Node000078" title=" " alt="" coords="675,1206,673,1053,661,830,649,714,632,607,609,519,595,484,579,458,556,439,559,435,583,454,600,482,614,517,638,606,655,713,666,829,678,1053,680,1206"/>
+<area shape="poly" id="edge67_Node000002_Node000109" title=" " alt="" coords="679,1263,672,1480,654,1806,642,1971,626,2117,607,2229,596,2267,583,2291,560,2308,557,2304,579,2288,591,2265,601,2227,621,2116,636,1970,649,1805,666,1480,674,1263"/>
+<area shape="poly" id="edge68_Node000002_Node000120" title=" " alt="" coords="679,1264,672,1490,656,1831,643,2005,627,2159,608,2276,596,2316,583,2342,570,2353,567,2349,579,2338,591,2314,602,2275,622,2158,638,2005,650,1831,667,1489,674,1264"/>
+<area shape="poly" id="edge69_Node000002_Node000124" title=" " alt="" coords="679,1263,673,1498,657,1856,645,2039,629,2200,608,2323,597,2366,583,2392,570,2404,567,2400,579,2389,592,2364,603,2322,623,2199,639,2038,652,1856,668,1498,674,1263"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="454,508,379,480,311,458,313,453,381,475,456,503"/>
+<area shape="poly" id="edge13_Node000028_Node000012" title=" " alt="" coords="177,571,174,574,153,605,134,651,103,769,81,889,70,971,65,970,76,889,98,768,129,649,148,602,170,570,173,567"/>
+<area shape="poly" id="edge15_Node000029_Node000012" title=" " alt="" coords="173,972,124,978,124,973,173,966"/>
+<area shape="poly" id="edge17_Node000030_Node000012" title=" " alt="" coords="202,1047,171,1034,94,1000,96,995,173,1030,204,1042"/>
+<area shape="poly" id="edge19_Node000031_Node000012" title=" " alt="" coords="193,1377,170,1361,135,1316,109,1266,90,1212,77,1159,64,1062,63,998,68,998,70,1062,82,1158,95,1211,114,1264,140,1313,174,1357,196,1373"/>
+<area shape="poly" id="edge24_Node000035_Node000010" title=" " alt="" coords="499,953,490,889,470,805,454,761,434,717,409,676,378,641,363,629,346,621,348,616,366,625,382,637,413,673,439,714,459,759,475,803,495,888,504,952"/>
+<area shape="poly" id="edge25_Node000035_Node000022" title=" " alt="" coords="496,953,483,901,461,835,427,766,404,735,378,707,351,690,353,686,382,703,408,732,431,763,466,832,489,899,501,952"/>
+<area shape="poly" id="edge26_Node000035_Node000023" title=" " alt="" coords="490,955,473,918,448,874,416,829,378,790,362,779,365,774,382,786,421,826,453,871,477,916,495,953"/>
+<area shape="poly" id="edge27_Node000035_Node000024" title=" " alt="" coords="482,957,438,906,410,880,379,857,349,843,352,838,381,852,413,876,442,902,486,953"/>
+<area shape="poly" id="edge28_Node000035_Node000025" title=" " alt="" coords="463,963,379,924,348,912,350,907,381,919,465,958"/>
+<area shape="poly" id="edge29_Node000035_Node000012" title=" " alt="" coords="434,988,380,991,172,991,124,989,124,984,172,985,380,985,434,983"/>
+<area shape="poly" id="edge30_Node000035_Node000026" title=" " alt="" coords="483,1008,430,1065,381,1108,355,1119,353,1114,379,1103,427,1061,479,1005"/>
+<area shape="poly" id="edge31_Node000035_Node000027" title=" " alt="" coords="494,1010,477,1044,452,1085,420,1125,382,1158,358,1170,334,1178,332,1173,356,1165,378,1154,416,1121,447,1081,472,1042,489,1008"/>
+<area shape="poly" id="edge32_Node000035_Node000029" title=" " alt="" coords="434,976,364,968,364,962,435,971"/>
+<area shape="poly" id="edge33_Node000035_Node000030" title=" " alt="" coords="457,1003,381,1034,335,1053,333,1048,379,1030,455,998"/>
+<area shape="poly" id="edge34_Node000035_Node000032" title=" " alt="" coords="499,1010,484,1054,460,1108,426,1162,405,1187,382,1209,349,1225,346,1221,378,1204,402,1184,422,1159,455,1105,479,1052,494,1008"/>
+<area shape="poly" id="edge35_Node000035_Node000033" title=" " alt="" coords="502,1010,490,1064,468,1131,433,1200,409,1232,382,1259,351,1276,348,1271,378,1255,405,1228,428,1198,463,1129,485,1062,496,1009"/>
+<area shape="poly" id="edge36_Node000035_Node000034" title=" " alt="" coords="504,1011,495,1073,475,1154,459,1196,439,1238,413,1276,382,1310,364,1322,362,1317,378,1306,409,1273,434,1235,454,1194,470,1152,490,1072,499,1010"/>
+<area shape="poly" id="edge38_Node000036_Node000037" title=" " alt="" coords="436,1444,319,1451,319,1446,436,1439"/>
+<area shape="poly" id="edge41_Node000039_Node000037" title=" " alt="" coords="422,1482,319,1462,320,1456,423,1477"/>
+</map>

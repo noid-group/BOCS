@@ -1,0 +1,8 @@
+<map id="open_write_trajectory" name="open_write_trajectory">
+<area shape="rect" id="Node000001" title=" " alt="" coords="240,5,385,32"/>
+<area shape="rect" id="Node000002" href="$cgmap_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,21,55,21,55,16,225,16"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8c.html#ae44b88ddec9f6686b574c14376e472eb" title=" " alt="" coords="103,31,192,57"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,35,193,40,192,35,224,30"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="87,34,54,26,55,21,88,29"/>
+</map>

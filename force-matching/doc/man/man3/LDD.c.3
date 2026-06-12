@@ -1,0 +1,303 @@
+.TH "LDD.c" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+LDD.c
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <string\&.h>\fP
+.br
+\fR#include <stdlib\&.h>\fP
+.br
+\fR#include <math\&.h>\fP
+.br
+\fR#include 'mkl_lapacke\&.h'\fP
+.br
+\fR#include 'omp\&.h'\fP
+.br
+\fR#include 'cgff_types\&.h'\fP
+.br
+\fR#include 'safe_mem\&.h'\fP
+.br
+\fR#include 'wnoid_math\&.h'\fP
+.br
+\fR#include 'io_read\&.h'\fP
+.br
+\fR#include 'LDD\&.h'\fP
+.br
+\fR#include 'gromacs_topology\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "double \fBget_w_shell\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "double \fBget_w_1_shell\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "double \fBget_w_2_shell\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "void \fBpop_coeffs_shell\fP (struct \fBtW_indicator_function\fP *ind)"
+.br
+.ti -1c
+.RI "double \fBget_w_sphere\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "double \fBget_w_1_sphere\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "double \fBget_w_2_sphere\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "void \fBpop_coeffs_sphere\fP (struct \fBtW_indicator_function\fP *ind)"
+.br
+.ti -1c
+.RI "double \fBget_w_smooth\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "double \fBget_w_1_smooth\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "double \fBget_w_2_smooth\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "void \fBpop_coeffs_smooth\fP (struct \fBtW_indicator_function\fP *ind)"
+.br
+.ti -1c
+.RI "double \fBget_w_lucy\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "double \fBget_w_1_lucy\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "double \fBget_w_2_lucy\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "void \fBpop_coeffs_lucy\fP (struct \fBtW_indicator_function\fP *ind)"
+.br
+.ti -1c
+.RI "double \fBget_w_dpd\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "double \fBget_w_1_dpd\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "double \fBget_w_2_dpd\fP (struct \fBtW_indicator_function\fP *ind, double r)"
+.br
+.ti -1c
+.RI "void \fBpop_coeffs_dpd\fP (struct \fBtW_indicator_function\fP *ind)"
+.br
+.ti -1c
+.RI "char * \fBget_indicator_type\fP (struct \fBtW_indicator_function\fP *ind)"
+.br
+.ti -1c
+.RI "int \fBwtype_str_to_int\fP (\fBtW_word\fP type)"
+.br
+.ti -1c
+.RI "void \fBpop_indicator\fP (struct \fBtW_indicator_function\fP *ind, \fBtW_word\fP strwtype, double r0, double rc)"
+.br
+.ti -1c
+.RI "\fBtW_indicator_function\fP * \fBinit_indicator_function\fP ()"
+.br
+.ti -1c
+.RI "void \fBget_dx\fP (\fBdvec\fP xi, \fBdvec\fP xj, \fBtW_matrix\fP box, \fBdvec\fP dx)"
+.br
+.ti -1c
+.RI "void \fBcalculate_local_densities\fP (\fBtW_gmx_topology\fP *top, \fBtW_gmx_trxframe\fP *fr, \fBbool\fP bSelf, double **hiLDs, double **loLDs)"
+.br
+.ti -1c
+.RI "void \fBinit_LD_info\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_gmx_topology\fP *top, \fBtW_word\fP fnm)"
+.br
+.ti -1c
+.RI "double \fBld_tally_impl\fP (\fBtW_gmx_trxframe\fP *fr, int atomidx, int typidx)"
+.br
+.RI "ld_tally_impl: returns the local density of particles of type j (typeidx) around atom i (atomidx) "
+.ti -1c
+.RI "double \fBsg_tally_impl\fP (\fBtW_gmx_trxframe\fP *fr, int atomidx, int typeidx)"
+.br
+.RI "sg_tally_impl: returns the SG from particles of type j (typeidx) around atom i (atomidx) "
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void calculate_local_densities (\fBtW_gmx_topology\fP * top, \fBtW_gmx_trxframe\fP * fr, \fBbool\fP bSelf, double ** hiLDs, double ** loLDs)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void get_dx (\fBdvec\fP xi, \fBdvec\fP xj, \fBtW_matrix\fP box, \fBdvec\fP dx)"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP\&.
+.SS "char * get_indicator_type (struct \fBtW_indicator_function\fP * ind)"
+
+.PP
+Referenced by \fBsummarize_input_pair_inter()\fP\&.
+.SS "double get_w_1_dpd (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_1_lucy (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_1_shell (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_1_smooth (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_1_sphere (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_2_dpd (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_2_lucy (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_2_shell (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_2_smooth (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_2_sphere (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_dpd (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_lucy (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_shell (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_smooth (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "double get_w_sphere (struct \fBtW_indicator_function\fP * ind, double r)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "\fBtW_indicator_function\fP * init_indicator_function ()"
+
+.PP
+Referenced by \fBget_local_density_extra_params()\fP, and \fBinit_LD_info()\fP\&.
+.SS "void init_LD_info (\fBtW_gmx_trxframe\fP * fr, \fBtW_gmx_topology\fP * top, \fBtW_word\fP fnm)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "double ld_tally_impl (\fBtW_gmx_trxframe\fP * fr, int atomidx, int typidx)"
+
+.PP
+ld_tally_impl: returns the local density of particles of type j (typeidx) around atom i (atomidx) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIfr\fP The trajectory frame read (Must contain LD Info) 
+.br
+\fIatomidx\fP the index of the atom to read 
+.br
+\fItypeidx\fP the index of the surrounding type to read 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+SG, the square of the gradient vector around i due to j 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBmake_LDPDF\&.c\fP 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This is an impl function, calls to it are via macro definitions 
+.RE
+.PP
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void pop_coeffs_dpd (struct \fBtW_indicator_function\fP * ind)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "void pop_coeffs_lucy (struct \fBtW_indicator_function\fP * ind)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "void pop_coeffs_shell (struct \fBtW_indicator_function\fP * ind)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "void pop_coeffs_smooth (struct \fBtW_indicator_function\fP * ind)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "void pop_coeffs_sphere (struct \fBtW_indicator_function\fP * ind)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SS "void pop_indicator (struct \fBtW_indicator_function\fP * ind, \fBtW_word\fP strwtype, double r0, double rc)"
+
+.PP
+Referenced by \fBget_local_density_extra_params()\fP, and \fBinit_LD_info()\fP\&.
+.SS "double sg_tally_impl (\fBtW_gmx_trxframe\fP * fr, int atomidx, int typeidx)"
+
+.PP
+sg_tally_impl: returns the SG from particles of type j (typeidx) around atom i (atomidx) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIfr\fP The trajectory frame read (Must contain Gradient Info) 
+.br
+\fIatomidx\fP the index of the atom to read 
+.br
+\fItypeidx\fP the index of the surrounding type to read 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+SG, the square of the gradient vector around i due to j 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBmake_LDPDF\&.c\fP 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This is an impl function, calls to it are via macro definitions 
+.RE
+.PP
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int wtype_str_to_int (\fBtW_word\fP type)"
+
+.PP
+Referenced by \fBpop_indicator()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

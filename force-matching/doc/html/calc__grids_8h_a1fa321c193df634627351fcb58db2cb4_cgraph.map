@@ -1,0 +1,13 @@
+<map id="get_b_soln_err" name="get_b_soln_err">
+<area shape="rect" id="Node000001" title="get_b_soln_err(): multiply the obtained forces with the original matrix to obtain the solns,..." alt="" coords="5,56,112,83"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="165,31,263,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,58,149,52,150,57,112,63"/>
+<area shape="rect" id="Node000006" href="$wnoid__math_8c.html#aeabe54d7c475d74f71a949ba78a84247" title="index_Lpacked(): Calculate the index of element aij in an NxN matrix in Lower&#45;packed storage form." alt="" coords="160,81,268,108"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="112,75,144,81,144,86,112,81"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="316,5,420,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="263,33,300,27,301,32,264,39"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="333,56,403,83"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="264,49,319,59,318,64,263,55"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="468,5,601,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="421,16,453,16,453,21,421,21"/>
+</map>

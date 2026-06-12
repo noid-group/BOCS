@@ -1,0 +1,25 @@
+<map id="eval_external_basis_vectors" name="eval_external_basis_vectors">
+<area shape="rect" id="Node000001" title="eval_external_basis_vectors():" alt="" coords="5,128,142,171"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#a158ff68c97a5f7bbf34552884bb2c73c" title="eval_Bspline_basis_vectors_ext(): MRD &#45; 06.18.2020" alt="" coords="221,128,354,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,147,206,147,206,152,142,152"/>
+<area shape="rect" id="Node000007" href="$calc__grids_8c.html#ab6a13119fd8251953c2136baeb535c2a" title=" " alt="" coords="191,267,384,293"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="112,169,253,256,250,260,109,173"/>
+<area shape="rect" id="Node000010" href="$calc__grids_8c.html#a5f46f6fbd889dc1c3380e29e01d62a8d" title=" " alt="" coords="190,56,386,83"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="132,125,235,86,237,91,134,130"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#a48726d58a1b9dfc1502f9efea032c099" title="calc_Bspline(): JFR &#45; 07.16.12: This is the De Boor iterative method for calculating normalized Bspli..." alt="" coords="456,107,552,133"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="355,138,441,126,441,131,355,143"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#ac827b2055c7c1e64a2388bb8b97cf8c9" title="calc_Bspline_deriv: Uses the De Boor iterative method for calculating derivatives of normalized Bspli..." alt="" coords="439,157,569,184"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="355,153,424,160,423,165,355,159"/>
+<area shape="rect" id="Node000005" href="$calc__grids_8c.html#ace1ee15830bc3d158e0437f3dea91b65" title="get_grid_index_for_linear_basis():" alt="" coords="622,99,750,141"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="340,169,390,185,449,199,512,203,543,200,573,193,614,174,649,149,652,154,617,179,575,199,544,206,512,208,448,204,388,190,338,174"/>
+<area shape="rect" id="Node000006" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="446,56,562,83"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="346,125,433,92,450,86,452,91,435,97,348,130"/>
+<area shape="rect" id="Node000008" href="$wnoid__math_8c.html#abe60d7580b13d8226cb3bd124e760b92" title="copy_vector(): Copies source into dest." alt="" coords="458,325,550,352"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="341,291,444,320,443,325,339,296"/>
+<area shape="rect" id="Node000009" href="$calc__grids_8c.html#a0716f00ea9ff31cbfb4c329249846597" title="get_grid_index_for_delta_basis():" alt="" coords="440,259,568,301"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="385,277,425,277,425,283,385,283"/>
+<area shape="poly" id="edge12_Node000010_Node000006" title=" " alt="" coords="387,67,431,67,431,72,387,72"/>
+<area shape="rect" id="Node000011" href="$calc__grids_8c.html#ae8375fd538f510ba6aa27438e9620043" title="calc_linear_spline_A():" alt="" coords="434,5,574,32"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="348,53,429,34,430,39,349,58"/>
+<area shape="poly" id="edge11_Node000011_Node000005" title=" " alt="" coords="550,30,576,42,647,87,644,92,573,46,547,35"/>
+</map>

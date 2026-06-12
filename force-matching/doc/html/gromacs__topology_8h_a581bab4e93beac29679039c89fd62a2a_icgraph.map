@@ -1,0 +1,78 @@
+<map id="get_word_count_delim" name="get_word_count_delim">
+<area shape="rect" id="Node000001" title="get_word_count_delim(): Gets the number of words separated by chars in delims in a line" alt="" coords="1734,269,1885,296"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a40563bcc7a3e5dc4a1d8c5b9606ba7b5" title="dfill_14nb_from_gmx_IMNB_headers" alt="" coords="1356,189,1497,232"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1719,268,1497,226,1498,221,1720,263"/>
+<area shape="rect" id="Node000015" href="$gromacs__topology_8c.html#aff84460640e722b830313fbc78cc115e" title="dfill_angles_from_gmx_angletype_headers:" alt="" coords="1351,256,1502,299"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="1718,284,1502,281,1502,276,1718,279"/>
+<area shape="rect" id="Node000016" href="$gromacs__topology_8c.html#a31dc368d007253914825891731324e8f" title="dfill_bigdihedrals_from_gmx_bigdihedraltype_headers:" alt="" coords="1336,323,1517,381"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="1769,305,1730,322,1686,336,1600,350,1517,355,1517,350,1599,345,1685,331,1728,317,1767,301"/>
+<area shape="rect" id="Node000017" href="$gromacs__topology_8c.html#ad26a3e1e726bb9a1264d766919c25e3b" title="dfill_bonds_from_gmx_bondtype_headers:" alt="" coords="1352,5,1501,48"/>
+<area shape="poly" id="edge19_Node000001_Node000017" title=" " alt="" coords="1787,259,1742,206,1684,151,1641,121,1605,101,1517,62,1490,51,1492,46,1519,58,1607,96,1644,116,1687,147,1746,203,1791,255"/>
+<area shape="rect" id="Node000018" href="$gromacs__topology_8c.html#ae0fad570f452568b6e37c396b77fd5b0" title="dfill_dihedrals_from_gmx_dihedraltype_headers:" alt="" coords="1335,72,1518,115"/>
+<area shape="poly" id="edge21_Node000001_Node000018" title=" " alt="" coords="1779,261,1736,228,1684,194,1639,172,1603,158,1517,129,1487,118,1489,113,1519,124,1605,153,1642,167,1687,190,1739,223,1783,257"/>
+<area shape="rect" id="Node000019" href="$gromacs__topology_8c.html#a26c5825606311551c7465d159ed03e8d" title="dproc_other_headers" alt="" coords="1356,139,1498,165"/>
+<area shape="poly" id="edge23_Node000001_Node000019" title=" " alt="" coords="1763,265,1685,233,1602,205,1518,180,1478,168,1479,163,1519,175,1603,200,1687,228,1765,260"/>
+<area shape="rect" id="Node000020" href="$gromacs__topology_8c.html#a3f6ef7a52af42aeade6f168e9e4670b5" title="get_words_delim(): supposed to be like python&#39;s string.split()" alt="" coords="1566,295,1686,321"/>
+<area shape="poly" id="edge25_Node000001_Node000020" title=" " alt="" coords="1719,298,1687,302,1686,297,1718,293"/>
+<area shape="rect" id="Node000021" href="$gromacs__topology_8c.html#a3ccb4ce8d5a6dc664bfa8cfd215e786e" title=" " alt="" coords="1374,405,1480,432"/>
+<area shape="poly" id="edge46_Node000001_Node000021" title=" " alt="" coords="1778,307,1736,334,1687,358,1633,378,1578,393,1481,413,1480,408,1577,388,1631,373,1685,354,1733,329,1775,303"/>
+<area shape="rect" id="Node000022" href="$gromacs__topology_8c.html#a25f55ee6d12172b00bc914460103497c" title="read_first_lammps_frame(): reads the first frame from a lammps custom dump file." alt="" coords="1342,456,1511,483"/>
+<area shape="poly" id="edge47_Node000001_Node000022" title=" " alt="" coords="1790,310,1746,356,1718,380,1687,401,1644,422,1599,438,1512,460,1511,455,1597,433,1642,417,1684,396,1714,376,1742,353,1786,306"/>
+<area shape="rect" id="Node000025" href="$gromacs__topology_8c.html#a7e79e6402914c848a3ad9b518ac6e085" title=" " alt="" coords="1341,507,1512,533"/>
+<area shape="poly" id="edge48_Node000001_Node000025" title=" " alt="" coords="1798,311,1755,382,1724,419,1687,452,1646,475,1601,493,1514,514,1512,509,1599,488,1643,470,1684,447,1720,416,1751,378,1793,308"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8c.html#a68a630918e6c2baac3376e3e301af3c9" title="dparse_Bonded_int_lists_per_molecule:" alt="" coords="1126,189,1287,232"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1341,213,1287,213,1287,208,1341,208"/>
+<area shape="rect" id="Node000004" href="$gromacs__topology_8c.html#aaf387faf43167e053c62e4de7214e6d1" title="dfind_all_molinfo:" alt="" coords="959,212,1078,239"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1111,221,1078,223,1078,218,1110,216"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8c.html#a38e555c8823ca9f5fcd9d7fd4127ddd5" title="read_tpr_dump(): Function to read a text file that contains a dumped tpr file" alt="" coords="804,213,911,240"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="943,229,912,229,912,224,943,223"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#a28129082088fdb20ced15c5836c70331" title=" " alt="" coords="647,268,750,295"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="803,248,740,270,739,265,801,243"/>
+<area shape="rect" id="Node000007" href="$gromacs__topology_8c.html#a6adc6cfb4d975faaa56c2b048d9b6802" title="get_top(): Opens GROMACS topology (tpr) file and stores topology information in the data structure to..." alt="" coords="503,369,568,396"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="670,306,594,360,569,372,567,367,591,355,667,302"/>
+<area shape="rect" id="Node000010" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,445,55,472"/>
+<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="632,276,524,270,458,271,387,276,314,286,241,302,170,326,104,360,81,378,63,402,39,446,34,443,58,399,77,375,101,355,168,321,239,297,313,280,387,270,458,266,524,265,632,271"/>
+<area shape="rect" id="Node000011" href="$ematch__func_8c.html#a0be6568551e24a12bd3a8905d18c8a86" title=" " alt="" coords="481,217,590,244"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="638,265,580,247,582,242,639,260"/>
+<area shape="rect" id="Node000008" href="$gromacs__topology_8c.html#aabab592246f8b7942e8e26c4134bfe0a" title="get_site_info(): Stores information from top into sys and CG_struct." alt="" coords="324,369,419,396"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="488,385,419,385,419,380,488,380"/>
+<area shape="rect" id="Node000009" href="$cgff__fn_8c.html#a9e513ad59f589f2c9b4bbac849a6897b" title="setup_CG_struct(): Stores the information in top into sys and CG_struct." alt="" coords="123,369,244,396"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="308,385,244,385,244,380,308,380"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="131,405,104,417,53,447,50,443,101,412,129,400"/>
+<area shape="rect" id="Node000012" href="$ematch__func_8c.html#a50fde680e0e4d1d4cf85f50ef237534d" title=" " alt="" coords="332,217,410,244"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="465,233,411,233,411,228,465,228"/>
+<area shape="rect" id="Node000013" href="$ematch__func_8c.html#a6f63c009a254311f16cf558e12b7a45a" title=" " alt="" coords="118,217,249,244"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="316,233,250,233,250,228,316,228"/>
+<area shape="rect" id="Node000014" href="$ematch_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,217,55,244"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="102,233,55,233,55,228,102,228"/>
+<area shape="poly" id="edge16_Node000015_Node000003" title=" " alt="" coords="1339,254,1279,235,1280,230,1341,249"/>
+<area shape="poly" id="edge18_Node000016_Node000003" title=" " alt="" coords="1339,317,1333,313,1309,289,1285,265,1243,235,1246,230,1289,261,1312,285,1337,309,1342,312"/>
+<area shape="poly" id="edge20_Node000017_Node000003" title=" " alt="" coords="1343,58,1337,62,1300,93,1268,128,1223,191,1218,188,1264,124,1297,89,1333,58,1340,53"/>
+<area shape="poly" id="edge22_Node000018_Node000003" title=" " alt="" coords="1348,124,1336,129,1283,160,1238,191,1235,187,1280,155,1334,124,1346,119"/>
+<area shape="poly" id="edge24_Node000019_Node000003" title=" " alt="" coords="1360,172,1288,192,1287,187,1359,167"/>
+<area shape="poly" id="edge26_Node000020_Node000002" title=" " alt="" coords="1590,288,1517,246,1491,235,1493,230,1520,242,1593,284"/>
+<area shape="poly" id="edge27_Node000020_Node000015" title=" " alt="" coords="1551,299,1502,292,1503,286,1552,294"/>
+<area shape="poly" id="edge28_Node000020_Node000016" title=" " alt="" coords="1552,327,1518,335,1517,329,1551,322"/>
+<area shape="poly" id="edge29_Node000020_Node000017" title=" " alt="" coords="1617,280,1606,232,1587,174,1558,114,1539,87,1517,62,1500,50,1503,45,1520,58,1543,83,1562,111,1592,172,1612,231,1623,278"/>
+<area shape="poly" id="edge30_Node000020_Node000018" title=" " alt="" coords="1613,281,1598,246,1578,205,1550,164,1517,129,1500,118,1503,113,1520,125,1555,161,1582,203,1603,244,1618,279"/>
+<area shape="poly" id="edge31_Node000020_Node000019" title=" " alt="" coords="1608,283,1571,230,1545,203,1517,180,1494,168,1497,164,1520,175,1549,199,1575,226,1612,280"/>
+<area shape="poly" id="edge32_Node000020_Node000021" title=" " alt="" coords="1603,334,1565,366,1520,396,1481,410,1480,405,1517,391,1562,362,1599,330"/>
+<area shape="poly" id="edge34_Node000020_Node000022" title=" " alt="" coords="1613,337,1576,392,1550,421,1520,446,1497,458,1495,453,1517,442,1546,418,1571,389,1608,334"/>
+<area shape="poly" id="edge39_Node000020_Node000025" title=" " alt="" coords="1619,337,1605,373,1584,416,1556,460,1520,497,1500,508,1497,504,1517,493,1552,456,1580,414,1600,371,1614,335"/>
+<area shape="poly" id="edge33_Node000021_Node000006" title=" " alt="" coords="1358,409,749,293,750,288,1359,403"/>
+<area shape="rect" id="Node000023" href="$gromacs__topology_8c.html#aad9aa7cf97628a42ece2ecdc21a231c0" title="these next functions are basically wrappers that call the appropriate function to do the requested op..." alt="" coords="641,420,756,447"/>
+<area shape="poly" id="edge35_Node000022_Node000023" title=" " alt="" coords="1327,467,756,439,757,433,1327,462"/>
+<area shape="poly" id="edge36_Node000023_Node000010" title=" " alt="" coords="625,439,55,460,55,455,625,433"/>
+<area shape="rect" id="Node000024" href="$ematch__func_8c.html#a17d07c6f77c45a8148fb4ff8268271b5" title=" " alt="" coords="478,319,593,345"/>
+<area shape="poly" id="edge37_Node000023_Node000024" title=" " alt="" coords="667,413,591,360,569,348,572,344,594,355,670,408"/>
+<area shape="poly" id="edge38_Node000024_Node000012" title=" " alt="" coords="498,312,393,247,396,242,501,308"/>
+<area shape="rect" id="Node000026" href="$gromacs__topology_8c.html#a43f9f5481bedfb32ca9352c1c3c15abe" title=" " alt="" coords="312,521,430,548"/>
+<area shape="poly" id="edge40_Node000025_Node000026" title=" " alt="" coords="1326,528,1181,533,1020,536,697,536,431,537,431,532,697,531,1020,531,1181,528,1326,522"/>
+<area shape="poly" id="edge41_Node000026_Node000010" title=" " alt="" coords="324,556,275,571,218,581,159,580,129,574,101,562,77,544,57,519,34,474,39,471,62,516,80,540,104,558,131,568,159,574,218,575,274,566,322,551"/>
+<area shape="rect" id="Node000027" href="$gromacs__topology_8c.html#a98e797f71ed51e4cc6bd05c3443c4742" title="read_trr_2_CGstruct(): Tries to read another frame from trr file." alt="" coords="114,471,253,497"/>
+<area shape="poly" id="edge42_Node000026_Node000027" title=" " alt="" coords="304,519,235,501,236,495,305,514"/>
+<area shape="rect" id="Node000028" href="$gromacs__topology_8c.html#ae7a2c03ec2dfdcc14593f523d14f002e" title="read_trr_2_CGstruct_ref(): JFR &#45; 07.16.12: for reading in reference forces from a trr file" alt="" coords="103,521,264,548"/>
+<area shape="poly" id="edge44_Node000026_Node000028" title=" " alt="" coords="297,537,265,537,265,532,297,532"/>
+<area shape="poly" id="edge43_Node000027_Node000010" title=" " alt="" coords="98,473,55,465,56,460,99,467"/>
+<area shape="poly" id="edge45_Node000028_Node000010" title=" " alt="" coords="115,518,101,512,71,493,46,474,49,470,74,489,104,507,117,513"/>
+</map>

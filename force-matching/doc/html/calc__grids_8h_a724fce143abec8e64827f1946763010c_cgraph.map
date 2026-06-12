@@ -1,0 +1,15 @@
+<map id="trim_Mb" name="trim_Mb">
+<area shape="rect" id="Node000001" title="trim_Mb(): Eliminates rows from sys&#45;&gt;M that contain only zeros (i.e." alt="" coords="5,107,74,133"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#ab22afc0dc4d9d3d0014406c026a0722a" title="get_Zero_list(): Determine Zero_list, N_zero, and N_coeff." alt="" coords="157,5,254,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="50,104,80,73,120,42,142,32,144,36,123,46,83,77,54,108"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#ae949a45035f5f4a814e2fc9120b6d053" title="initialize_Zero_list(): Initialize elements of Zero_list to &#45;1." alt="" coords="143,56,268,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="73,107,121,92,143,85,145,90,122,97,75,112"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#aa904fddcf0eea9aca8e767d07097e4bf" title="‍*****************************************************************************************" alt="" coords="122,107,289,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="74,117,106,117,106,123,74,123"/>
+<area shape="rect" id="Node000006" href="$calc__grids_8c.html#aa438454653c6a5e1a3eed14d147ac206" title="resize_arrays_trim_Mb(): erealloc arrays to proper size after trimming." alt="" coords="129,157,282,184"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="75,128,122,143,145,150,143,155,121,148,73,133"/>
+<area shape="rect" id="Node000007" href="$calc__grids_8c.html#a2194d8d85f60fdd849be6db9fce0141c" title="‍*****************************************************************************************" alt="" coords="132,208,278,235"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="54,132,83,163,123,194,134,199,131,204,120,198,80,167,50,136"/>
+<area shape="rect" id="Node000005" href="$wnoid__math_8c.html#aeabe54d7c475d74f71a949ba78a84247" title="index_Lpacked(): Calculate the index of element aij in an NxN matrix in Lower&#45;packed storage form." alt="" coords="337,107,445,133"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="289,117,322,117,322,123,289,123"/>
+</map>

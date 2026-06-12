@@ -1,0 +1,5 @@
+<map id="mapping_op" name="mapping_op">
+<area shape="rect" id="Node000001" title="Defines the mapping operator for a system of fixed composition." alt="" coords="11,96,102,123"/>
+<area shape="rect" id="Node000002" href="$cgff__types_8h.html#structmapping__type" title="Defines the mapping operator for a single molecule type." alt="" coords="5,5,108,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="59,48,59,95,54,95,54,48"/>
+</map>

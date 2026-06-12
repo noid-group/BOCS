@@ -1,0 +1,5 @@
+<map id="read_REF_interpol_type" name="read_REF_interpol_type">
+<area shape="rect" id="Node000001" title="read_REF_interpol_type(): Reads the interpolation type used for the reference potential." alt="" coords="5,5,167,32"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#a82ce76176a7d54124727802c8cfe7cc5" title="get_interpolation_index(): Returns the interpolation index or stops execution if the specified interp..." alt="" coords="215,5,369,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,16,199,16,199,21,167,21"/>
+</map>

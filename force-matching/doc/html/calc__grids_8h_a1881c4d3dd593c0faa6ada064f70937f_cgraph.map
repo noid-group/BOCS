@@ -1,0 +1,11 @@
+<map id="get_TOY_dihedral_basis_vector" name="get_TOY_dihedral_basis_vector">
+<area shape="rect" id="Node000001" title="get_TOY_dihedral_basis_vector():" alt="" coords="5,48,169,91"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#abe60d7580b13d8226cb3bd124e760b92" title="copy_vector(): Copies source into dest." alt="" coords="242,5,334,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,46,226,31,228,37,170,51"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#a0f31b58f21b9c44885bf1643c3c72e84" title="get_g_dihedral_angle():" alt="" coords="217,56,360,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,67,201,67,201,72,169,72"/>
+<area shape="rect" id="Node000005" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="230,107,346,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="170,87,218,100,217,105,168,93"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="408,56,479,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="361,67,392,67,392,72,361,72"/>
+</map>

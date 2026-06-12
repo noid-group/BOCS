@@ -1,0 +1,5 @@
+<map id="check_answer" name="check_answer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,111,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a5aa8df5077291896b83782e74ab17317" title="open_file(): Opens a file named &quot;file_name&quot; with option &quot;mode.&quot; Returns the pointer to the file." alt="" coords="159,5,232,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,16,143,16,143,21,111,21"/>
+</map>

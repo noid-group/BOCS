@@ -1,0 +1,91 @@
+<map id="vect_diff" name="vect_diff">
+<area shape="rect" id="Node000001" title="vect_diff(): Calculates diff = v1 &#45; v2." alt="" coords="1351,291,1421,318"/>
+<area shape="rect" id="Node000002" href="$calc__ref__potential_8c.html#a3955939e6709c062689b041a16512ab6" title="calc_ref_BondStretch_forces(): Calculates the forces due to bond stretching." alt="" coords="906,123,1052,166"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1362,281,1334,254,1301,231,1256,213,1191,194,1052,161,1053,156,1193,189,1258,207,1304,226,1338,250,1365,277"/>
+<area shape="rect" id="Node000005" href="$calc__ref__potential_8c.html#a60054637049b6655a7577ed4360a8ea6" title="calc_ref_IntraMolecPairs_forces(): Calculate forces due to intramolecular pair forces." alt="" coords="896,6,1061,48"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1382,276,1378,226,1366,166,1356,135,1342,105,1324,78,1301,56,1275,38,1246,26,1183,11,1120,9,1062,13,1062,8,1120,3,1184,6,1247,21,1277,34,1304,52,1328,75,1347,103,1361,133,1372,164,1384,226,1387,275"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#a4091bd8c94f03b6bebd6577e4a985bb3" title=" " alt="" coords="1155,750,1270,776"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="1385,333,1377,423,1362,542,1339,656,1323,701,1305,733,1289,746,1271,755,1269,750,1286,742,1301,729,1318,699,1334,655,1357,541,1372,423,1380,333"/>
+<area shape="rect" id="Node000007" href="$calc__grids_8c.html#ab10b377244fec6cc3f32ace1d2fb7ae1" title="eval_grad_B(): Code adopted from pages 278&#45;283 of Rapaport&#39;s &quot;The Art of MD Sim.&quot; This gives the same..." alt="" coords="1166,240,1259,267"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="1335,292,1302,282,1259,269,1260,264,1303,276,1337,287"/>
+<area shape="rect" id="Node000014" href="$ematch__func_8c.html#a4db64a3eece35afb989bbfe561fe3e14" title=" " alt="" coords="1174,800,1251,827"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="1386,334,1381,435,1367,571,1357,640,1343,703,1326,754,1305,790,1280,807,1252,815,1251,809,1278,802,1301,787,1321,752,1338,701,1351,639,1362,570,1375,434,1381,333"/>
+<area shape="rect" id="Node000017" href="$calc__ref__potential_8c.html#a0d0ceefe8ad8ec63a791281c849c2b61" title="get_angle_vector_forces(): Calculate the forces due to the angle beding reference potential." alt="" coords="1131,291,1294,318"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="1335,307,1294,307,1294,302,1335,302"/>
+<area shape="rect" id="Node000019" href="$calc__ref__potential_8c.html#a3ccad20aea65378c17769881a2e85f25" title="get_central_pair_vector_forces(): Calculates the force between two pairs of site." alt="" coords="1134,66,1291,108"/>
+<area shape="poly" id="edge23_Node000001_Node000019" title=" " alt="" coords="1376,276,1367,241,1352,201,1330,160,1301,124,1284,111,1287,107,1305,120,1334,157,1356,199,1372,240,1381,275"/>
+<area shape="rect" id="Node000021" href="$wnoid__math_8c.html#a4ec3dc2dbb208811be33fdc94163836e" title="get_difference_unit_vector(): From x_i and x_j, calculates the differenc vector, the unit difference ..." alt="" coords="1147,398,1278,440"/>
+<area shape="poly" id="edge28_Node000001_Node000021" title=" " alt="" coords="1365,331,1337,358,1304,384,1275,400,1273,395,1301,379,1334,354,1361,327"/>
+<area shape="rect" id="Node000033" href="$calc__ref__potential_8c.html#abd7d2b3619ea07974f7ab38a25dbd0ba" title="get_difference_vector_PBC(): If periodic boundary conditions are present, then applies the minimum im..." alt="" coords="1122,134,1303,160"/>
+<area shape="poly" id="edge47_Node000001_Node000033" title=" " alt="" coords="1370,278,1343,229,1323,204,1301,183,1266,163,1269,159,1304,178,1327,201,1347,226,1375,275"/>
+<area shape="rect" id="Node000034" href="$calc__grids_8c.html#aa7d8eb252c0ba695df318b75920a2901" title="get_L2_L3_angles():" alt="" coords="1149,343,1276,370"/>
+<area shape="poly" id="edge49_Node000001_Node000034" title=" " alt="" coords="1337,322,1303,332,1261,345,1260,340,1302,327,1335,317"/>
+<area shape="rect" id="Node000035" href="$calc__grids_8c.html#a22aa16541b3fd919f1e155c1cbef467a" title="get_nb_pair_info: For positions x_i and x_j, determine the pair distance and displacement under PBC i..." alt="" coords="264,558,380,584"/>
+<area shape="poly" id="edge52_Node000001_Node000035" title=" " alt="" coords="1376,333,1328,431,1291,494,1245,558,1191,618,1128,668,1094,687,1058,702,1020,712,980,715,751,715,666,717,599,716,533,706,453,679,416,659,382,633,334,587,337,583,386,629,419,654,455,674,534,701,599,711,666,711,751,710,980,710,1019,706,1056,697,1092,683,1125,664,1187,614,1241,555,1286,491,1324,429,1371,331"/>
+<area shape="rect" id="Node000003" href="$calc__ref__potential_8c.html#ae7be9c817dc9816635b89d346f4f2ed4" title="get_ref_forces(): Calculate the forces due to the reference potential." alt="" coords="486,154,590,180"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="890,152,591,167,590,162,890,146"/>
+<area shape="rect" id="Node000004" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,507,55,534"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="506,192,53,509,49,504,503,187"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="882,49,779,73,671,107,613,131,565,156,563,151,611,126,669,102,777,68,880,43"/>
+<area shape="rect" id="Node000008" href="$calc__grids_8c.html#ada107de8de2c7e6767cdbe070af6af93" title="get_Dihedral_basis_vectors():" alt="" coords="472,318,604,360"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="1150,249,1056,242,936,239,802,247,735,257,670,271,617,293,571,319,568,315,614,288,669,266,734,251,802,242,935,234,1056,236,1151,244"/>
+<area shape="rect" id="Node000012" href="$calc__ref__potential_8c.html#a4b659623e5b6e82ea077ccd47e9d29f6" title="get_ref_Dihedral_info(): Copies information for a dihedral interactions into the variable dihedral." alt="" coords="906,190,1051,216"/>
+<area shape="poly" id="edge14_Node000007_Node000012" title=" " alt="" coords="1150,243,1043,220,1044,214,1152,238"/>
+<area shape="rect" id="Node000009" href="$calc__grids_8c.html#a05584288f36cea4b4192998d2543b5c6" title="eval_bond_basis_vectors: Evaluates the basis vectors for bonded interactions for site i_site." alt="" coords="238,507,406,534"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="501,372,341,509,338,505,498,368"/>
+<area shape="rect" id="Node000010" href="$calc__grids_8c.html#a96846b6bba2ec2fb420b5f640d6998e7" title="calc_grids2(): The fast loops." alt="" coords="103,558,190,584"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="259,541,191,561,190,556,258,536"/>
+<area shape="rect" id="Node000011" href="$calc__grids_8c.html#a4ef17206f80a98140cdd4d5034e6c577" title="calc_grids3(): Eliminating the 3 particle loop" alt="" coords="103,507,190,534"/>
+<area shape="poly" id="edge12_Node000009_Node000011" title=" " alt="" coords="223,523,191,523,191,518,223,518"/>
+<area shape="poly" id="edge11_Node000010_Node000004" title=" " alt="" coords="99,554,54,533,56,529,101,549"/>
+<area shape="poly" id="edge13_Node000011_Node000004" title=" " alt="" coords="87,523,55,523,55,518,87,518"/>
+<area shape="rect" id="Node000013" href="$calc__ref__potential_8c.html#a8a106dbcfdcc72c188daa315897819dc" title="calc_ref_Dihedral_forces(): Calculate the forces due to the reference dihedral potential." alt="" coords="670,179,835,206"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="891,202,836,199,836,194,891,196"/>
+<area shape="poly" id="edge16_Node000013_Node000003" title=" " alt="" coords="654,183,590,176,591,170,654,178"/>
+<area shape="rect" id="Node000015" href="$ematch__func_8c.html#a0018a589853ba15edf68f032b6d0d63c" title=" " alt="" coords="914,800,1044,827"/>
+<area shape="poly" id="edge18_Node000014_Node000015" title=" " alt="" coords="1158,816,1044,816,1044,811,1158,811"/>
+<area shape="rect" id="Node000016" href="$ematch_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="728,800,777,827"/>
+<area shape="poly" id="edge19_Node000015_Node000016" title=" " alt="" coords="898,816,777,816,777,811,898,811"/>
+<area shape="rect" id="Node000018" href="$calc__ref__potential_8c.html#a1c6089fde66d61ef80d61a12e6c02cd6" title="calc_ref_Angle_forces():" alt="" coords="677,280,828,307"/>
+<area shape="poly" id="edge21_Node000017_Node000018" title=" " alt="" coords="1115,305,828,298,828,293,1116,299"/>
+<area shape="poly" id="edge22_Node000018_Node000003" title=" " alt="" coords="713,274,561,183,564,179,716,270"/>
+<area shape="poly" id="edge24_Node000019_Node000002" title=" " alt="" coords="1120,112,1053,129,1052,124,1119,107"/>
+<area shape="poly" id="edge25_Node000019_Node000005" title=" " alt="" coords="1119,66,1061,51,1062,46,1120,61"/>
+<area shape="rect" id="Node000020" href="$calc__ref__potential_8c.html#a8ae41292d9a3977fa5c29e0dbcbb9f8c" title="calc_ref_nb_pair_forces(): Evaluate the pair forces over all pairs due to the reference potential." alt="" coords="899,72,1058,99"/>
+<area shape="poly" id="edge26_Node000019_Node000020" title=" " alt="" coords="1119,89,1059,89,1059,83,1119,84"/>
+<area shape="poly" id="edge27_Node000020_Node000003" title=" " alt="" coords="884,103,670,140,591,157,590,152,669,135,883,98"/>
+<area shape="rect" id="Node000022" href="$calc__grids_8c.html#afaa61c6900fdbb1dbb42e0eee0567360" title="get_Angle_info: gets theta/vectors required to figure out dPsi/dR_I for an angle site_I takes place i..." alt="" coords="925,406,1032,432"/>
+<area shape="poly" id="edge29_Node000021_Node000022" title=" " alt="" coords="1132,422,1033,422,1033,416,1132,416"/>
+<area shape="rect" id="Node000028" href="$calc__grids_8c.html#a5e48fa18cce6f3464154eebea8d7823c" title="get_BondStretch_info: Calculates and stores data needed to calculated the BondStretch basis vectors." alt="" coords="906,491,1052,518"/>
+<area shape="poly" id="edge39_Node000021_Node000028" title=" " alt="" coords="1138,449,1019,493,1017,488,1136,444"/>
+<area shape="rect" id="Node000030" href="$calc__grids_8c.html#af0d9cbd309344479925ba63fb47297bf" title="get_IntrarMolec_NB_Pair_info():" alt="" coords="883,612,1074,639"/>
+<area shape="poly" id="edge42_Node000021_Node000030" title=" " alt="" coords="1178,452,997,614,993,610,1174,448"/>
+<area shape="rect" id="Node000032" href="$calc__ref__potential_8c.html#a27bc94b493f15044999850f9c3cbda63" title="get_ref_Angle_info(): Calculates the forces on the sites for the angle defined as &lt;213." alt="" coords="914,343,1043,370"/>
+<area shape="poly" id="edge45_Node000021_Node000032" title=" " alt="" coords="1132,400,1031,373,1032,368,1133,395"/>
+<area shape="rect" id="Node000023" href="$calc__grids_8c.html#af536f354b8e2bb65ad61fe15c9dc1566" title="get_Bspline_angle_basis_vector(): JFR &#45; 07.23.12" alt="" coords="670,464,835,507"/>
+<area shape="poly" id="edge30_Node000022_Node000023" title=" " alt="" coords="917,440,828,466,827,461,915,435"/>
+<area shape="rect" id="Node000025" href="$calc__grids_8c.html#acffdba3d10c1ba35e2287986ffac37ef" title="get_delta_angle_basis_vector():" alt="" coords="677,531,828,574"/>
+<area shape="poly" id="edge33_Node000022_Node000025" title=" " alt="" coords="942,443,885,481,861,502,836,521,815,533,812,528,834,517,858,498,881,477,939,439"/>
+<area shape="rect" id="Node000026" href="$calc__grids_8c.html#a66db1e8cd418b3da3017fd804a2125f3" title="get_harmonic_angle_basis_vector():" alt="" coords="684,331,821,374"/>
+<area shape="poly" id="edge35_Node000022_Node000026" title=" " alt="" coords="915,403,821,375,822,370,917,398"/>
+<area shape="rect" id="Node000027" href="$calc__grids_8c.html#af72e60feac003edae12f29d43e9fce9b" title="get_linear_angle_basis_vector():" alt="" coords="676,398,829,440"/>
+<area shape="poly" id="edge37_Node000022_Node000027" title=" " alt="" coords="910,422,830,422,830,416,910,416"/>
+<area shape="rect" id="Node000024" href="$calc__grids_8c.html#aad463cf44b20bdf0efe4eb27793c990a" title="get_Angle_basis_vectors: Associates the angle that CG_struct[i] is involved in with a corresponding v..." alt="" coords="454,472,622,499"/>
+<area shape="poly" id="edge31_Node000023_Node000024" title=" " alt="" coords="654,488,622,488,622,483,654,483"/>
+<area shape="poly" id="edge32_Node000024_Node000009" title=" " alt="" coords="440,504,407,509,406,504,439,499"/>
+<area shape="poly" id="edge34_Node000025_Node000024" title=" " alt="" coords="667,529,583,502,584,497,668,523"/>
+<area shape="poly" id="edge36_Node000026_Node000024" title=" " alt="" coords="680,383,671,388,606,433,556,474,553,470,602,429,668,383,677,378"/>
+<area shape="poly" id="edge38_Node000027_Node000024" title=" " alt="" coords="668,448,584,474,583,469,667,443"/>
+<area shape="rect" id="Node000029" href="$calc__grids_8c.html#a058ee5dcba0c5649d1a1d5751685fa8c" title="get_BondStretch_basis_vectors: Associates a Bonded interaction instance (index i_inter) with halfG in..." alt="" coords="460,534,616,576"/>
+<area shape="poly" id="edge40_Node000028_Node000029" title=" " alt="" coords="950,529,899,562,868,577,836,588,778,597,718,597,662,590,612,580,613,574,663,585,719,592,777,592,834,583,866,572,896,557,947,525"/>
+<area shape="poly" id="edge41_Node000029_Node000009" title=" " alt="" coords="444,543,406,537,407,531,445,537"/>
+<area shape="rect" id="Node000031" href="$calc__grids_8c.html#a97ba35573b889284cd0c89f108d33e5c" title="get_IntraMolec_NB_Pair_basis_vectors():" alt="" coords="456,622,620,664"/>
+<area shape="poly" id="edge43_Node000030_Node000031" title=" " alt="" coords="868,633,620,643,620,637,868,627"/>
+<area shape="poly" id="edge44_Node000031_Node000009" title=" " alt="" coords="487,615,453,590,429,568,405,548,379,537,382,532,408,543,433,564,456,586,490,611"/>
+<area shape="poly" id="edge46_Node000032_Node000018" title=" " alt="" coords="913,341,803,310,804,305,914,336"/>
+<area shape="poly" id="edge48_Node000033_Node000020" title=" " alt="" coords="1143,132,1032,102,1033,97,1145,127"/>
+<area shape="poly" id="edge50_Node000034_Node000022" title=" " alt="" coords="1146,377,1032,408,1031,402,1145,372"/>
+<area shape="poly" id="edge51_Node000034_Node000032" title=" " alt="" coords="1134,359,1044,359,1044,354,1134,354"/>
+<area shape="poly" id="edge53_Node000035_Node000010" title=" " alt="" coords="249,574,191,574,191,568,249,568"/>
+<area shape="poly" id="edge54_Node000035_Node000011" title=" " alt="" coords="258,555,190,535,191,530,259,550"/>
+</map>

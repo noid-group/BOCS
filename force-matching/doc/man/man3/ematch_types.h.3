@@ -1,0 +1,428 @@
+.TH "ematch_types.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ematch_types.h
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <stdint\&.h>\fP
+.br
+\fR#include 'cgff_types\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBtW_epar_flags\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_esystem\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBeKEY_TRAJ\fP   'Trajectory'"
+.br
+.ti -1c
+.RI "#define \fBeKEY_TOP\fP   'Topology'"
+.br
+.ti -1c
+.RI "#define \fBeKEY_EFILE\fP   'Energy_File'"
+.br
+.ti -1c
+.RI "#define \fBeKEY_SITE_TYPES\fP   'Site_Types'"
+.br
+.ti -1c
+.RI "#define \fBeKEY_NB_INTS\fP   'Pair_Interactions'"
+.br
+.ti -1c
+.RI "#define \fBeKEY_BOND_INTS\fP   'Bond_Interactions'"
+.br
+.ti -1c
+.RI "#define \fBeKEY_ANGLE_INTS\fP   'Angle_Interactions'"
+.br
+.ti -1c
+.RI "#define \fBeKEY_DIH_INTS\fP   'Dihedral_Interactions'"
+.br
+.ti -1c
+.RI "#define \fBeKEY_RCOND\fP   'Condition_Number'"
+.br
+.ti -1c
+.RI "#define \fBeKEY_CALCMODE\fP   'Calculation_Mode'"
+.br
+.ti -1c
+.RI "#define \fBeCM_WHOLE\fP   'Whole'"
+.br
+.ti -1c
+.RI "#define \fBeCM_SECONDHALF\fP   'Second_Half'"
+.br
+.ti -1c
+.RI "#define \fBeDELTA_PAD\fP   1"
+.br
+.ti -1c
+.RI "#define \fBeLINEAR_PAD\fP   2"
+.br
+.ti -1c
+.RI "#define \fBeBSPLINE_PAD\fP   4"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum { \fBeEM_DELTA\fP, \fBeEM_LINEAR\fP, \fBeEM_BSPLINE\fP }"
+.br
+.in -1c
+.SH "Data Structure Documentation"
+.PP 
+.SH "struct tW_epar_flags"
+.PP 
+\fBData Fields:\fP
+.RS 4
+\fBbool\fP \fIbfAngles\fP 
+.br
+.PP
+\fBbool\fP \fIbfBonds\fP 
+.br
+.PP
+\fBbool\fP \fIbfCalcmode\fP 
+.br
+.PP
+\fBbool\fP \fIbfDihedrals\fP 
+.br
+.PP
+\fBbool\fP \fIbfEfile\fP 
+.br
+.PP
+\fBbool\fP \fIbfPairs\fP 
+.br
+.PP
+\fBbool\fP \fIbfRcond\fP 
+.br
+.PP
+\fBbool\fP \fIbfSiteTypes\fP 
+.br
+.PP
+\fBbool\fP \fIbfTop\fP 
+.br
+.PP
+\fBbool\fP \fIbfTraj\fP 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_esystem"
+.PP 
+\fBData Fields:\fP
+.RS 4
+double ** \fIA\fP 
+.br
+.PP
+double * \fIA_lin\fP 
+.br
+.PP
+double * \fIa_max\fP 
+.br
+.PP
+double * \fIa_min\fP 
+.br
+.PP
+double ** \fIA_trim\fP 
+.br
+.PP
+double * \fIA_trim_lin\fP 
+.br
+.PP
+double * \fIA_trim_lin_colmajor\fP 
+.br
+.PP
+\fBtW_word\fP ** \fIangle_atom_types\fP 
+.br
+.PP
+int * \fIangle_basis\fP 
+.br
+.PP
+int * \fIangle_i0s\fP 
+.br
+.PP
+int * \fIangle_list\fP 
+.br
+.PP
+int * \fIangle_types\fP 
+.br
+.PP
+double * \fIb_max\fP 
+.br
+.PP
+double * \fIb_min\fP 
+.br
+.PP
+\fBbool\fP \fIbCalcMode_SecondHalf\fP 
+.br
+.PP
+\fBbool\fP \fIbCalcMode_Whole\fP 
+.br
+.PP
+\fBbool\fP \fIbfAngles\fP 
+.br
+.PP
+\fBbool\fP \fIbfBonds\fP 
+.br
+.PP
+\fBbool\fP \fIbfDihedrals\fP 
+.br
+.PP
+\fBbool\fP \fIbfPairs\fP 
+.br
+.PP
+\fBtW_word\fP ** \fIbond_atom_types\fP 
+.br
+.PP
+int * \fIbond_basis\fP 
+.br
+.PP
+int * \fIbond_i0s\fP 
+.br
+.PP
+int * \fIbond_list\fP 
+.br
+.PP
+int * \fIbond_types\fP 
+.br
+.PP
+\fBtW_word\fP \fIcalc_mode\fP 
+.br
+.PP
+double * \fId_max\fP 
+.br
+.PP
+double * \fId_min\fP 
+.br
+.PP
+double * \fIda\fP 
+.br
+.PP
+double * \fIdb\fP 
+.br
+.PP
+double * \fIdd\fP 
+.br
+.PP
+\fBtW_word\fP ** \fIdihedral_atom_types\fP 
+.br
+.PP
+int * \fIdihedral_basis\fP 
+.br
+.PP
+int * \fIdihedral_i0s\fP 
+.br
+.PP
+int * \fIdihedral_list\fP 
+.br
+.PP
+int * \fIdihedral_types\fP 
+.br
+.PP
+double * \fIdr\fP 
+.br
+.PP
+double * \fIE_times\fP 
+.br
+.PP
+\fBtW_word\fP \fIefile_name\fP 
+.br
+.PP
+double * \fIEv\fP 
+.br
+.PP
+int ** \fIexcl_list\fP 
+.br
+.PP
+\fBtW_epar_flags\fP \fIflags\fP 
+.br
+.PP
+\fBtW_gmx_trxframe\fP * \fIfr\fP 
+.br
+.PP
+int * \fIn_angle_bins\fP 
+.br
+.PP
+int \fIn_angle_types\fP 
+.br
+.PP
+int \fIn_angles\fP 
+.br
+.PP
+int * \fIn_bond_bins\fP 
+.br
+.PP
+int \fIn_bond_types\fP 
+.br
+.PP
+int \fIn_bonds\fP 
+.br
+.PP
+int * \fIn_dihedral_bins\fP 
+.br
+.PP
+int \fIn_dihedral_types\fP 
+.br
+.PP
+int \fIn_dihedrals\fP 
+.br
+.PP
+int \fIn_frames\fP 
+.br
+.PP
+int * \fIn_nb_bins\fP 
+.br
+.PP
+int * \fIn_nb_pad\fP 
+.br
+.PP
+int \fIn_pair_types\fP 
+.br
+.PP
+int \fIn_particles\fP 
+.br
+.PP
+int \fIN_Site_Types\fP 
+.br
+.PP
+int \fIn_total_bins\fP 
+.br
+.PP
+int \fIn_total_bins_trim\fP 
+.br
+.PP
+int \fIn_zero_cols\fP 
+.br
+.PP
+int * \fInb_basis\fP 
+.br
+.PP
+\fBbool\fP * \fInb_end_pad\fP 
+.br
+.PP
+int * \fInb_i0s\fP 
+.br
+.PP
+\fBbool\fP * \fInb_start_pad\fP 
+.br
+.PP
+int * \fInexcla\fP 
+.br
+.PP
+\fBtW_word\fP ** \fIpair_atom_types\fP 
+.br
+.PP
+int ** \fIpair_types\fP 
+.br
+.PP
+double * \fIphi\fP 
+.br
+.PP
+double * \fIr_max\fP 
+.br
+.PP
+double * \fIr_min\fP 
+.br
+.PP
+double \fIrcond\fP 
+.br
+.PP
+\fBtW_word\fP * \fISite_Types\fP 
+.br
+.PP
+\fBtW_gmx_topology\fP * \fItop\fP 
+.br
+.PP
+\fBbool\fP * \fItrim_cols\fP 
+.br
+.PP
+.RE
+.PP
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define eBSPLINE_PAD   4"
+
+.PP
+Referenced by \fBread_epairs()\fP\&.
+.SS "#define eCM_SECONDHALF   'Second_Half'"
+
+.PP
+Referenced by \fBsetup_lists()\fP\&.
+.SS "#define eCM_WHOLE   'Whole'"
+
+.PP
+Referenced by \fBinitialize_esystem()\fP, and \fBsetup_lists()\fP\&.
+.SS "#define eDELTA_PAD   1"
+
+.PP
+Referenced by \fBread_epairs()\fP\&.
+.SS "#define eKEY_ANGLE_INTS   'Angle_Interactions'"
+
+.PP
+Referenced by \fBcheck_mandatory_directives()\fP, \fBread_eangles()\fP, and \fBread_epar()\fP\&.
+.SS "#define eKEY_BOND_INTS   'Bond_Interactions'"
+
+.PP
+Referenced by \fBcheck_mandatory_directives()\fP, \fBread_ebonds()\fP, and \fBread_epar()\fP\&.
+.SS "#define eKEY_CALCMODE   'Calculation_Mode'"
+
+.PP
+Referenced by \fBread_ecalcmode()\fP, and \fBread_epar()\fP\&.
+.SS "#define eKEY_DIH_INTS   'Dihedral_Interactions'"
+
+.PP
+Referenced by \fBcheck_mandatory_directives()\fP, \fBread_edihedrals()\fP, and \fBread_epar()\fP\&.
+.SS "#define eKEY_EFILE   'Energy_File'"
+
+.PP
+Referenced by \fBcheck_mandatory_directives()\fP, \fBread_eenergy()\fP, and \fBread_epar()\fP\&.
+.SS "#define eKEY_NB_INTS   'Pair_Interactions'"
+
+.PP
+Referenced by \fBcheck_mandatory_directives()\fP, \fBread_epairs()\fP, and \fBread_epar()\fP\&.
+.SS "#define eKEY_RCOND   'Condition_Number'"
+
+.PP
+Referenced by \fBread_epar()\fP, and \fBread_ercond()\fP\&.
+.SS "#define eKEY_SITE_TYPES   'Site_Types'"
+
+.PP
+Referenced by \fBcheck_mandatory_directives()\fP, \fBread_epar()\fP, and \fBread_esites()\fP\&.
+.SS "#define eKEY_TOP   'Topology'"
+
+.PP
+Referenced by \fBcheck_mandatory_directives()\fP, \fBread_epar()\fP, and \fBread_etopology()\fP\&.
+.SS "#define eKEY_TRAJ   'Trajectory'"
+
+.PP
+Referenced by \fBcheck_mandatory_directives()\fP, \fBread_epar()\fP, and \fBread_etrajectory()\fP\&.
+.SS "#define eLINEAR_PAD   2"
+
+.PP
+Referenced by \fBread_epairs()\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "anonymous enum"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIeEM_DELTA \fP\fP
+.TP
+\fB\fIeEM_LINEAR \fP\fP
+.TP
+\fB\fIeEM_BSPLINE \fP\fP
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

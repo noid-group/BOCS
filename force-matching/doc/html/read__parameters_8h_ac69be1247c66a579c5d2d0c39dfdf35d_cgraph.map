@@ -1,0 +1,7 @@
+<map id="check_Bonded_Inter_Types" name="check_Bonded_Inter_Types">
+<area shape="rect" id="Node000001" title="check_Bonded_Inter_Types(): Makes sure information for the intramolecular interaction is consistent." alt="" coords="5,23,146,65"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#a74ff3fee708a34436cc782f8c19b9043" title="check_inter_sites(): Makes sure interaction was not listed more than once." alt="" coords="194,5,317,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="145,31,178,27,179,32,146,37"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#a8f3a3abbf69d7638fab4419aee46552d" title="check_site_list(): Makes sure that sites were listed under [Site_Types]." alt="" coords="201,56,310,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="146,51,186,57,185,62,145,57"/>
+</map>

@@ -1,0 +1,317 @@
+.TH "table_functions.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+table_functions.h
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <math\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBget_inter_type\fP (char *argv[], int argc)"
+.br
+.ti -1c
+.RI "int \fBget_basis_type\fP (char *argv[])"
+.br
+.ti -1c
+.RI "void \fBget_table_parameters\fP (\fBInput\fP *input, char *argv[])"
+.br
+.ti -1c
+.RI "void \fBread_input_forces\fP (int n_pts, \fBArrays\fP *arrays, FILE *fp_in)"
+.br
+.ti -1c
+.RI "int \fBget_potential\fP (\fBInput\fP *input, \fBArrays\fP *arrays)"
+.br
+.ti -1c
+.RI "int \fBget_nb_potential\fP (\fBInput\fP *input, \fBArrays\fP *arrays)"
+.br
+.ti -1c
+.RI "int \fBget_bond_potential\fP (\fBInput\fP *input, \fBArrays\fP *arrays)"
+.br
+.ti -1c
+.RI "int \fBget_angle_potential\fP (\fBInput\fP *input, \fBArrays\fP *arrays)"
+.br
+.ti -1c
+.RI "int \fBget_dihedral_potential\fP (\fBInput\fP *input, \fBArrays\fP *arrays)"
+.br
+.ti -1c
+.RI "int \fBget_total_n_pts\fP (int n_pts, double *r, int *total_n_pts, double *r_min)"
+.br
+.ti -1c
+.RI "void \fBcopy_array\fP (int n_pts, double *array, double *copy)"
+.br
+.ti -1c
+.RI "void \fBfill_r_nb\fP (int total_n_pts, int flag, double *r, double *r_temp, double dr, double r_min)"
+.br
+.ti -1c
+.RI "void \fBfill_f_nb\fP (int total_n_pts, int flag, double *f, double *f_temp, double slope, double dr)"
+.br
+.ti -1c
+.RI "void \fBscal_vect_mult\fP (int total_n_pts, double scalar, double original[], double *result)"
+.br
+.ti -1c
+.RI "int \fBintegrate_trapezoid\fP (double x[], double *int_y, double y[], int no_of_points)"
+.br
+.ti -1c
+.RI "void \fBshift_potential\fP (int total_n_pts, double *u)"
+.br
+.ti -1c
+.RI "void \fBfill_r_bond\fP (int total_n_pts, double *r, double *r_temp, \fBInput\fP *input)"
+.br
+.ti -1c
+.RI "int \fBget_total_n_pts_bond\fP (int n_pts, double *r_min, double *r_max, double dr, double *r)"
+.br
+.ti -1c
+.RI "void \fBfill_f_bond\fP (int total_n_pts, double *f, double *f_temp, double *r_temp, double dr, \fBInput\fP *input)"
+.br
+.ti -1c
+.RI "void \fBshift_potential_bond\fP (int total_n_pts, double *u)"
+.br
+.ti -1c
+.RI "void \fBcheck_angle_min_max\fP (double r_min, double r_max)"
+.br
+.ti -1c
+.RI "void \fBprint_table\fP (\fBInput\fP input, \fBArrays\fP arrays, FILE *fp_out)"
+.br
+.ti -1c
+.RI "void \fBprint_nb_table\fP (\fBInput\fP input, \fBArrays\fP arrays, FILE *fp_out)"
+.br
+.ti -1c
+.RI "void \fBprint_bond_table\fP (\fBInput\fP input, \fBArrays\fP arrays, FILE *fp_out)"
+.br
+.ti -1c
+.RI "void \fBcheck_dihedral_endpoints\fP (int n_pts, double *r)"
+.br
+.ti -1c
+.RI "void \fBprint_type_error_message\fP (char *inter_name)"
+.br
+.ti -1c
+.RI "void \fBprint_type_index_error\fP (int type_index)"
+.br
+.ti -1c
+.RI "void \fBprint_read_input_error1\fP (int i)"
+.br
+.ti -1c
+.RI "void \fBprint_read_input_error2\fP (int i)"
+.br
+.ti -1c
+.RI "void \fBprint_error_fill_r\fP (double r_test, double r_temp)"
+.br
+.ti -1c
+.RI "void \fBprint_fill_r_bond_error\fP (double r_test, double r_max, int total_n_pts)"
+.br
+.ti -1c
+.RI "void \fBprint_check_angle_min_max_error\fP (double r_test, double r_exact, char *r_test_name)"
+.br
+.ti -1c
+.RI "void \fBprint_check_dihedral_endpoints_error\fP (double r_test, double r_exact, char *r_test_name)"
+.br
+.ti -1c
+.RI "int \fBedit_forces\fP (\fBInput\fP *input, \fBArrays\fP *arrays, \fBArrays\fP *smarrays)"
+.br
+.ti -1c
+.RI "int \fBedit_nb_force\fP (\fBInput\fP *input, \fBArrays\fP *arrays, \fBArrays\fP *smarrays)"
+.br
+.ti -1c
+.RI "int \fBedit_bond_force\fP (\fBInput\fP *input, \fBArrays\fP *arrays, \fBArrays\fP *smarrays)"
+.br
+.ti -1c
+.RI "int \fBedit_angle_force\fP (\fBInput\fP *input, \fBArrays\fP *arrays, \fBArrays\fP *tmparrays)"
+.br
+.ti -1c
+.RI "int \fBsmooth_forces\fP (int n_pts, \fBInput\fP *input, \fBArrays\fP *arrays)"
+.br
+.ti -1c
+.RI "int \fBsmooth_forces_periodic\fP (int n_pts, \fBInput\fP *input, \fBArrays\fP *arrays)"
+.br
+.ti -1c
+.RI "int \fBinterpolate_forces\fP (\fBInput\fP *input, \fBArrays\fP *arrays, \fBArrays\fP *tmparrays)"
+.br
+.ti -1c
+.RI "int \fBedit_intra_nb_force\fP (\fBInput\fP *input, \fBArrays\fP *arrays, \fBArrays\fP *tmparrays)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "void check_angle_min_max (double r_min, double r_max)"
+
+.PP
+Referenced by \fBget_angle_potential()\fP\&.
+.SS "void check_dihedral_endpoints (int n_pts, double * r)"
+
+.PP
+Referenced by \fBget_dihedral_potential()\fP\&.
+.SS "void copy_array (int n_pts, double * array, double * copy)"
+
+.PP
+Referenced by \fBget_angle_potential()\fP, \fBget_bond_potential()\fP, and \fBget_nb_potential()\fP\&.
+.SS "int edit_angle_force (\fBInput\fP * input, \fBArrays\fP * arrays, \fBArrays\fP * tmparrays)"
+
+.PP
+Referenced by \fBedit_forces()\fP\&.
+.SS "int edit_bond_force (\fBInput\fP * input, \fBArrays\fP * arrays, \fBArrays\fP * smarrays)"
+
+.PP
+Referenced by \fBedit_forces()\fP\&.
+.SS "int edit_forces (\fBInput\fP * input, \fBArrays\fP * arrays, \fBArrays\fP * smarrays)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int edit_intra_nb_force (\fBInput\fP * input, \fBArrays\fP * arrays, \fBArrays\fP * tmparrays)"
+
+.PP
+Referenced by \fBedit_forces()\fP\&.
+.SS "int edit_nb_force (\fBInput\fP * input, \fBArrays\fP * arrays, \fBArrays\fP * smarrays)"
+
+.PP
+Referenced by \fBedit_forces()\fP\&.
+.SS "void fill_f_bond (int total_n_pts, double * f, double * f_temp, double * r_temp, double dr, \fBInput\fP * input)"
+
+.PP
+Referenced by \fBget_angle_potential()\fP, and \fBget_bond_potential()\fP\&.
+.SS "void fill_f_nb (int total_n_pts, int flag, double * f, double * f_temp, double slope, double dr)"
+
+.PP
+Referenced by \fBget_nb_potential()\fP\&.
+.SS "void fill_r_bond (int total_n_pts, double * r, double * r_temp, \fBInput\fP * input)"
+
+.PP
+Referenced by \fBget_angle_potential()\fP, and \fBget_bond_potential()\fP\&.
+.SS "void fill_r_nb (int total_n_pts, int flag, double * r, double * r_temp, double dr, double r_min)"
+
+.PP
+Referenced by \fBget_nb_potential()\fP\&.
+.SS "int get_angle_potential (\fBInput\fP * input, \fBArrays\fP * arrays)"
+
+.PP
+Referenced by \fBget_potential()\fP\&.
+.SS "int get_basis_type (char * argv[])"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int get_bond_potential (\fBInput\fP * input, \fBArrays\fP * arrays)"
+
+.PP
+Referenced by \fBget_potential()\fP\&.
+.SS "int get_dihedral_potential (\fBInput\fP * input, \fBArrays\fP * arrays)"
+
+.PP
+Referenced by \fBget_potential()\fP\&.
+.SS "int get_inter_type (char * argv[], int argc)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int get_nb_potential (\fBInput\fP * input, \fBArrays\fP * arrays)"
+
+.PP
+Referenced by \fBget_potential()\fP\&.
+.SS "int get_potential (\fBInput\fP * input, \fBArrays\fP * arrays)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void get_table_parameters (\fBInput\fP * input, char * argv[])"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int get_total_n_pts (int n_pts, double * r, int * total_n_pts, double * r_min)"
+
+.PP
+Referenced by \fBget_nb_potential()\fP\&.
+.SS "int get_total_n_pts_bond (int n_pts, double * r_min, double * r_max, double dr, double * r)"
+
+.PP
+Referenced by \fBget_angle_potential()\fP, and \fBget_bond_potential()\fP\&.
+.SS "int integrate_trapezoid (double x[], double * int_y, double y[], int no_of_points)"
+
+.PP
+Referenced by \fBget_angle_potential()\fP, \fBget_bond_potential()\fP, \fBget_dihedral_potential()\fP, and \fBget_nb_potential()\fP\&.
+.SS "int interpolate_forces (\fBInput\fP * input, \fBArrays\fP * arrays, \fBArrays\fP * tmparrays)"
+
+.PP
+Referenced by \fBedit_forces()\fP\&.
+.SS "void print_bond_table (\fBInput\fP input, \fBArrays\fP arrays, FILE * fp_out)"
+
+.PP
+Referenced by \fBprint_table()\fP\&.
+.SS "void print_check_angle_min_max_error (double r_test, double r_exact, char * r_test_name)"
+
+.PP
+Referenced by \fBcheck_angle_min_max()\fP\&.
+.SS "void print_check_dihedral_endpoints_error (double r_test, double r_exact, char * r_test_name)"
+
+.PP
+Referenced by \fBcheck_dihedral_endpoints()\fP\&.
+.SS "void print_error_fill_r (double r_test, double r_temp)"
+
+.PP
+Referenced by \fBfill_r_nb()\fP\&.
+.SS "void print_fill_r_bond_error (double r_test, double r_max, int total_n_pts)"
+
+.PP
+Referenced by \fBfill_r_bond()\fP\&.
+.SS "void print_nb_table (\fBInput\fP input, \fBArrays\fP arrays, FILE * fp_out)"
+
+.PP
+Referenced by \fBprint_table()\fP\&.
+.SS "void print_read_input_error1 (int i)"
+
+.PP
+Referenced by \fBread_input_forces()\fP\&.
+.SS "void print_read_input_error2 (int i)"
+
+.PP
+Referenced by \fBread_input_forces()\fP\&.
+.SS "void print_table (\fBInput\fP input, \fBArrays\fP arrays, FILE * fp_out)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void print_type_error_message (char * inter_name)"
+
+.PP
+Referenced by \fBget_inter_type()\fP\&.
+.SS "void print_type_index_error (int type_index)"
+
+.PP
+Referenced by \fBedit_forces()\fP, \fBget_basis_type()\fP, \fBget_potential()\fP, \fBget_table_parameters()\fP, and \fBprint_table()\fP\&.
+.SS "void read_input_forces (int n_pts, \fBArrays\fP * arrays, FILE * fp_in)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void scal_vect_mult (int total_n_pts, double scalar, double original[], double * result)"
+
+.PP
+Referenced by \fBget_angle_potential()\fP, \fBget_bond_potential()\fP, \fBget_dihedral_potential()\fP, and \fBget_nb_potential()\fP\&.
+.SS "void shift_potential (int total_n_pts, double * u)"
+
+.PP
+Referenced by \fBget_nb_potential()\fP\&.
+.SS "void shift_potential_bond (int total_n_pts, double * u)"
+
+.PP
+Referenced by \fBget_angle_potential()\fP, \fBget_bond_potential()\fP, and \fBget_dihedral_potential()\fP\&.
+.SS "int smooth_forces (int n_pts, \fBInput\fP * input, \fBArrays\fP * arrays)"
+
+.PP
+Referenced by \fBget_angle_potential()\fP, \fBget_bond_potential()\fP, and \fBget_nb_potential()\fP\&.
+.SS "int smooth_forces_periodic (int n_pts, \fBInput\fP * input, \fBArrays\fP * arrays)"
+
+.PP
+Referenced by \fBget_dihedral_potential()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

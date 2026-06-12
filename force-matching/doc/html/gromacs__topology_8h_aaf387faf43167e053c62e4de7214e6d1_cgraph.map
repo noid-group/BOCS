@@ -1,0 +1,79 @@
+<map id="dfind_all_molinfo" name="dfind_all_molinfo">
+<area shape="rect" id="Node000001" title="dfind_all_molinfo:" alt="" coords="5,514,124,541"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#af88b58c7cd17cc4737adec3923967023" title="dparse_atom_per_molecule_info:" alt="" coords="381,657,589,683"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,540,114,589,141,615,173,636,219,654,269,665,318,672,366,674,365,680,318,677,268,671,218,659,170,641,138,619,110,592,72,543"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8c.html#a742ca6a5a9d8ab40fd4b92636c71c406" title="elim_char(): Replaces occurrances of char &quot;elim&quot; with &#39;\0&#39; in word." alt="" coords="658,550,736,577"/>
+<area shape="poly" id="edge55_Node000001_Node000003" title=" " alt="" coords="112,539,200,562,318,584,385,593,453,597,522,597,589,591,643,579,644,584,590,597,522,603,453,603,384,598,318,590,199,567,110,544"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="831,322,930,349"/>
+<area shape="poly" id="edge57_Node000001_Node000004" title=" " alt="" coords="71,540,80,580,99,633,130,688,150,713,173,733,251,784,327,823,401,850,474,862,509,863,545,859,580,852,615,840,650,824,685,803,755,746,773,725,786,704,795,684,799,663,798,621,790,577,780,532,775,485,780,436,789,411,802,385,816,368,833,355,836,359,820,372,807,388,794,413,786,437,780,485,786,531,795,576,804,620,804,663,800,685,791,707,778,728,759,749,688,807,652,828,617,845,581,857,545,865,509,868,473,868,400,855,325,828,249,789,170,738,146,717,125,691,94,635,75,581,66,542"/>
+<area shape="rect" id="Node000008" href="$gromacs__topology_8c.html#afeda7d0d3d61f48a28696d39ec7b7b15" title="dparse_atomic_exclusions_per_molecule:" alt="" coords="398,89,573,131"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="65,513,77,437,99,327,130,218,149,176,170,148,193,131,218,118,272,101,329,94,382,94,382,99,329,99,274,106,220,123,196,136,174,152,153,179,135,220,104,328,82,438,70,514"/>
+<area shape="rect" id="Node000009" href="$gromacs__topology_8c.html#a6ec5b0fcfcf8e8378e61b7f09c3bfcdd" title="find_line_in_file():" alt="" coords="642,195,752,222"/>
+<area shape="poly" id="edge56_Node000001_Node000009" title=" " alt="" coords="71,512,109,449,175,357,218,308,267,263,321,223,380,192,412,181,446,174,515,171,580,178,636,189,635,194,579,183,515,177,447,180,414,186,382,197,324,227,270,267,222,312,179,360,113,452,75,515"/>
+<area shape="rect" id="Node000010" href="$gromacs__topology_8c.html#a68a630918e6c2baac3376e3e301af3c9" title="dparse_Bonded_int_lists_per_molecule:" alt="" coords="172,414,333,457"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="93,511,192,462,194,467,95,516"/>
+<area shape="rect" id="Node000019" href="$gromacs__topology_8c.html#a36b1c74a2a5ca4dfcaa2e7b4251bc088" title="dparse_charge_groups_per_molecule:" alt="" coords="409,22,561,65"/>
+<area shape="poly" id="edge49_Node000001_Node000019" title=" " alt="" coords="65,513,75,430,96,306,111,242,128,183,147,135,170,103,194,84,220,68,278,47,337,37,393,34,393,40,338,42,279,53,222,73,197,88,174,107,152,138,133,185,116,243,102,307,81,431,70,514"/>
+<area shape="rect" id="Node000020" href="$gromacs__topology_8c.html#a3f4adb996d832b268447e37b0e5647fc" title="dparse_residue_per_molecule_info:" alt="" coords="418,707,552,750"/>
+<area shape="poly" id="edge52_Node000001_Node000020" title=" " alt="" coords="73,540,86,570,108,608,136,647,173,679,229,705,289,721,348,729,403,731,402,736,348,734,288,726,227,710,170,683,133,651,103,611,82,572,68,542"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="541,654,588,636,630,611,666,585,669,589,633,615,590,641,543,659"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="552,681,602,686,656,684,709,671,733,659,755,643,779,614,789,584,790,554,786,523,782,490,780,457,785,421,802,385,816,368,833,355,837,359,820,372,807,388,790,423,785,457,787,490,792,522,796,554,794,585,783,616,759,647,736,663,711,676,657,689,602,691,552,687"/>
+<area shape="rect" id="Node000005" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="1004,297,1108,323"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="930,326,989,317,990,322,930,331"/>
+<area shape="rect" id="Node000007" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="1021,347,1091,374"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="930,340,1006,351,1005,356,930,345"/>
+<area shape="rect" id="Node000006" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="1156,297,1289,323"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1109,307,1141,307,1141,313,1109,313"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="554,86,588,74,636,56,675,42,695,39,715,40,735,46,758,59,788,83,813,113,833,147,848,182,869,251,879,307,874,307,864,252,843,184,828,149,808,116,784,87,755,63,733,51,714,45,695,44,677,47,638,61,590,79,555,91"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="548,130,590,148,661,185,658,190,588,153,546,135"/>
+<area shape="poly" id="edge9_Node000009_Node000004" title=" " alt="" coords="727,220,758,239,853,310,850,314,755,243,724,225"/>
+<area shape="rect" id="Node000011" href="$gromacs__topology_8c.html#a40563bcc7a3e5dc4a1d8c5b9606ba7b5" title="dfill_14nb_from_gmx_IMNB_headers" alt="" coords="414,273,556,315"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="272,412,319,368,380,325,399,316,402,320,382,330,322,372,276,415"/>
+<area shape="rect" id="Node000014" href="$gromacs__topology_8c.html#aff84460640e722b830313fbc78cc115e" title="dfill_angles_from_gmx_angletype_headers:" alt="" coords="410,339,561,382"/>
+<area shape="poly" id="edge19_Node000010_Node000014" title=" " alt="" coords="320,411,380,392,401,385,403,390,382,397,322,416"/>
+<area shape="rect" id="Node000015" href="$gromacs__topology_8c.html#a31dc368d007253914825891731324e8f" title="dfill_bigdihedrals_from_gmx_bigdihedraltype_headers:" alt="" coords="395,406,575,465"/>
+<area shape="poly" id="edge25_Node000010_Node000015" title=" " alt="" coords="334,433,379,433,379,438,334,438"/>
+<area shape="rect" id="Node000016" href="$gromacs__topology_8c.html#ad26a3e1e726bb9a1264d766919c25e3b" title="dfill_bonds_from_gmx_bondtype_headers:" alt="" coords="411,489,559,531"/>
+<area shape="poly" id="edge31_Node000010_Node000016" title=" " alt="" coords="322,455,382,474,403,481,401,486,380,479,320,460"/>
+<area shape="rect" id="Node000017" href="$gromacs__topology_8c.html#ae0fad570f452568b6e37c396b77fd5b0" title="dfill_dihedrals_from_gmx_dihedraltype_headers:" alt="" coords="394,206,577,249"/>
+<area shape="poly" id="edge37_Node000010_Node000017" title=" " alt="" coords="261,413,279,379,306,337,339,295,379,259,386,254,389,259,383,263,343,299,310,341,284,382,266,415"/>
+<area shape="rect" id="Node000018" href="$gromacs__topology_8c.html#a26c5825606311551c7465d159ed03e8d" title="dproc_other_headers" alt="" coords="414,555,556,582"/>
+<area shape="poly" id="edge43_Node000010_Node000018" title=" " alt="" coords="275,455,321,499,351,522,382,541,401,549,398,554,380,546,348,526,318,503,271,459"/>
+<area shape="poly" id="edge13_Node000011_Node000003" title=" " alt="" coords="557,306,591,325,613,351,622,377,629,404,640,436,685,535,680,537,635,438,624,405,617,378,608,354,588,329,555,310"/>
+<area shape="poly" id="edge15_Node000011_Node000004" title=" " alt="" coords="555,277,588,259,603,240,610,219,617,199,636,181,668,167,696,163,725,168,758,181,796,207,827,240,851,275,869,306,864,309,847,278,823,243,792,211,755,186,724,173,696,168,670,172,639,186,622,202,615,221,608,242,591,263,558,281"/>
+<area shape="poly" id="edge14_Node000011_Node000009" title=" " alt="" coords="555,271,588,258,655,227,658,232,590,263,557,276"/>
+<area shape="rect" id="Node000012" href="$gromacs__topology_8c.html#a581bab4e93beac29679039c89fd62a2a" title="get_word_count_delim(): Gets the number of words separated by chars in delims in a line" alt="" coords="805,398,956,425"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="557,306,653,328,758,358,837,389,835,394,756,363,651,333,556,311"/>
+<area shape="rect" id="Node000013" href="$gromacs__topology_8c.html#a3f6ef7a52af42aeade6f168e9e4670b5" title="get_words_delim(): supposed to be like python&#39;s string.split()" alt="" coords="637,398,757,425"/>
+<area shape="poly" id="edge17_Node000011_Node000013" title=" " alt="" coords="558,311,591,325,635,355,673,386,669,390,632,359,588,330,555,316"/>
+<area shape="poly" id="edge18_Node000013_Node000012" title=" " alt="" coords="757,409,789,409,789,414,757,414"/>
+<area shape="poly" id="edge20_Node000014_Node000003" title=" " alt="" coords="562,376,591,392,625,425,652,464,688,534,683,537,647,466,621,429,588,396,560,380"/>
+<area shape="poly" id="edge22_Node000014_Node000004" title=" " alt="" coords="561,347,637,339,816,333,816,338,638,345,561,353"/>
+<area shape="poly" id="edge21_Node000014_Node000009" title=" " alt="" coords="560,339,588,325,615,305,639,280,676,234,680,237,643,284,618,309,591,330,562,344"/>
+<area shape="poly" id="edge23_Node000014_Node000012" title=" " alt="" coords="562,363,655,371,757,383,804,392,803,397,756,389,654,376,561,368"/>
+<area shape="poly" id="edge24_Node000014_Node000013" title=" " alt="" coords="562,376,624,391,623,397,561,382"/>
+<area shape="poly" id="edge26_Node000015_Node000003" title=" " alt="" coords="572,463,591,475,606,489,616,502,625,515,639,529,654,540,651,544,636,534,621,519,612,505,602,492,588,479,569,468"/>
+<area shape="poly" id="edge28_Node000015_Node000004" title=" " alt="" coords="576,451,619,454,665,454,712,448,756,434,771,425,780,413,789,399,803,384,842,355,845,360,806,388,793,402,785,416,775,429,758,439,713,453,666,459,619,460,576,456"/>
+<area shape="poly" id="edge27_Node000015_Node000009" title=" " alt="" coords="572,403,588,392,622,355,649,313,670,271,684,235,689,237,675,273,654,315,626,358,591,396,575,408"/>
+<area shape="poly" id="edge29_Node000015_Node000012" title=" " alt="" coords="564,463,608,475,656,483,707,485,756,478,806,458,848,432,851,436,808,463,757,483,707,491,656,489,607,480,562,468"/>
+<area shape="poly" id="edge30_Node000015_Node000013" title=" " alt="" coords="576,423,621,417,622,423,576,428"/>
+<area shape="poly" id="edge32_Node000016_Node000003" title=" " alt="" coords="560,526,644,548,643,553,559,531"/>
+<area shape="poly" id="edge34_Node000016_Node000004" title=" " alt="" coords="561,527,591,541,606,554,615,566,624,577,639,586,672,599,700,606,727,603,755,587,775,565,785,543,787,520,786,495,783,442,788,414,802,385,817,368,834,355,837,359,821,372,807,388,793,415,788,442,791,494,793,520,790,544,780,568,758,591,728,608,700,611,670,604,636,591,620,581,610,569,602,557,588,546,558,532"/>
+<area shape="poly" id="edge33_Node000016_Node000009" title=" " alt="" coords="558,493,587,475,607,440,634,374,684,236,689,238,639,376,611,442,591,479,561,498"/>
+<area shape="poly" id="edge35_Node000016_Node000012" title=" " alt="" coords="561,524,591,541,602,553,608,565,614,590,621,612,628,622,639,631,670,646,697,650,724,645,755,631,780,612,801,590,835,538,857,484,870,439,876,441,862,486,840,540,805,593,784,616,758,635,726,651,697,656,668,651,636,635,624,625,616,614,609,591,603,567,598,556,588,546,558,528"/>
+<area shape="poly" id="edge36_Node000016_Node000013" title=" " alt="" coords="559,486,588,474,663,431,665,436,591,479,561,491"/>
+<area shape="poly" id="edge38_Node000017_Node000003" title=" " alt="" coords="577,247,591,259,609,281,619,301,627,342,629,385,632,409,640,436,684,535,679,537,635,438,627,410,623,386,621,343,614,303,604,284,587,263,574,251"/>
+<area shape="poly" id="edge40_Node000017_Node000004" title=" " alt="" coords="514,203,587,142,600,126,609,111,619,98,636,86,669,73,698,67,727,71,758,87,786,108,809,134,828,163,844,195,866,256,877,306,872,307,860,257,839,197,823,166,805,137,782,112,755,91,725,76,698,73,671,78,639,91,623,102,613,114,605,129,591,145,518,208"/>
+<area shape="poly" id="edge39_Node000017_Node000009" title=" " alt="" coords="577,217,626,212,626,218,577,222"/>
+<area shape="poly" id="edge41_Node000017_Node000012" title=" " alt="" coords="522,203,573,180,635,161,667,157,699,158,730,166,758,181,778,201,787,222,791,244,790,266,789,312,794,335,807,359,821,375,838,388,834,392,817,379,802,362,789,337,784,312,785,266,785,244,782,224,773,204,755,186,728,171,699,163,668,162,636,166,575,185,525,208"/>
+<area shape="poly" id="edge42_Node000017_Node000013" title=" " alt="" coords="572,247,591,259,622,287,649,320,685,382,681,385,644,323,618,291,588,263,569,252"/>
+<area shape="poly" id="edge44_Node000018_Node000003" title=" " alt="" coords="557,564,643,562,643,567,557,570"/>
+<area shape="poly" id="edge46_Node000018_Node000004" title=" " alt="" coords="510,580,559,606,624,630,659,636,693,636,726,629,755,612,777,588,787,562,789,536,787,508,782,449,787,417,802,385,817,368,834,355,837,359,820,372,807,388,792,419,787,449,792,508,795,536,793,564,782,591,758,616,728,634,694,641,659,641,623,635,557,611,507,585"/>
+<area shape="poly" id="edge45_Node000018_Node000009" title=" " alt="" coords="556,559,573,552,588,541,604,524,614,506,622,472,625,433,635,385,684,236,689,238,640,387,631,433,628,473,619,508,608,527,591,545,575,557,558,564"/>
+<area shape="poly" id="edge47_Node000018_Node000012" title=" " alt="" coords="512,580,552,607,591,643,606,669,612,693,620,714,639,732,670,747,698,753,725,748,755,732,788,703,815,667,835,628,851,586,869,504,876,440,881,441,874,505,856,587,840,630,819,670,792,706,758,736,727,753,698,758,668,752,636,736,615,717,607,694,601,671,587,646,548,611,509,585"/>
+<area shape="poly" id="edge48_Node000018_Node000013" title=" " alt="" coords="555,556,588,541,617,518,642,491,679,437,683,440,646,494,621,522,591,546,558,561"/>
+<area shape="poly" id="edge51_Node000019_Node000004" title=" " alt="" coords="548,19,597,8,652,3,707,9,734,17,758,31,790,58,817,92,837,130,853,169,872,246,880,306,875,307,867,247,848,171,832,132,812,95,787,62,755,35,731,22,706,14,652,8,598,13,549,24"/>
+<area shape="poly" id="edge50_Node000019_Node000009" title=" " alt="" coords="563,60,591,75,620,99,645,127,683,180,678,184,641,130,616,103,588,79,561,65"/>
+<area shape="poly" id="edge53_Node000020_Node000003" title=" " alt="" coords="552,711,588,693,616,670,641,642,678,589,683,592,645,645,620,673,591,698,554,716"/>
+<area shape="poly" id="edge54_Node000020_Node000004" title=" " alt="" coords="553,738,603,741,657,737,710,722,734,709,755,692,782,657,793,621,793,585,788,548,780,510,777,470,783,428,802,385,816,368,833,355,836,359,820,372,807,388,788,430,783,470,786,509,793,547,799,585,798,622,787,659,759,696,737,713,712,727,658,742,603,746,552,743"/>
+</map>

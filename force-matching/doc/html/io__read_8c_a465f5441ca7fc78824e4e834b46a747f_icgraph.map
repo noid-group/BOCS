@@ -1,0 +1,44 @@
+<map id="file_exists" name="file_exists">
+<area shape="rect" id="Node000001" title="file_exists(): Checks whether the supplied filename can be opened for reading." alt="" coords="795,200,875,227"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#a41efd8d8bf8ab23525874097a94ffc7d" title="get_REF():" alt="" coords="452,48,526,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="821,187,792,135,771,110,746,89,719,76,690,67,630,57,573,55,526,59,526,54,573,50,630,51,691,61,721,71,748,85,775,106,797,132,826,185"/>
+<area shape="rect" id="Node000006" href="$calc__grids_8c.html#a7d1f81fde08821aebf1b645466f849a4" title="get_results(): (1) Calculate and store b_forces and b_struct." alt="" coords="284,36,369,63"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="825,186,815,153,799,117,776,81,745,53,699,30,649,16,597,9,544,9,494,13,446,20,370,39,369,34,445,15,493,8,544,3,597,4,650,10,701,25,749,49,780,78,804,114,820,151,830,184"/>
+<area shape="rect" id="Node000007" href="$read__parameters_8c.html#ae5d06088756e63f85d49a86d4a250310" title="get_structures(): Saves all the file names that contain structures from the list of files names read ..." alt="" coords="619,150,724,176"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="779,199,716,179,718,174,781,194"/>
+<area shape="rect" id="Node000009" href="$gromacs__topology_8c.html#a6adc6cfb4d975faaa56c2b048d9b6802" title="get_top(): Opens GROMACS topology (tpr) file and stores topology information in the data structure to..." alt="" coords="639,251,704,278"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="781,233,705,257,703,252,779,228"/>
+<area shape="rect" id="Node000012" href="$cgmap__legacy_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="647,200,696,227"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="779,216,696,216,696,211,779,211"/>
+<area shape="rect" id="Node000013" href="$read__parameters_8c.html#a1db6df3d8dc530dc916c213f026e1fd8" title="open_ref_potential_file(): Opens the file that contains the reference potential information." alt="" coords="596,99,747,126"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="809,191,780,165,746,140,721,129,723,124,748,135,783,160,813,187"/>
+<area shape="rect" id="Node000015" href="$io__output_8c.html#a3c343c047ea718270238a924ac8a1c27" title="print_Chi2(): Calc the CG&#45;dependent part of Chi2 and then print the final result." alt="" coords="631,352,712,379"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="824,243,794,293,773,320,749,343,713,360,711,355,745,338,769,316,790,290,819,240"/>
+<area shape="rect" id="Node000017" href="$io__output_8c.html#ab7f135550370fe0786607ca770aadacb" title="print_decomp_Chi2(): Calc the CG&#45;dependent part of Chi2 and then print the final result." alt="" coords="605,302,738,328"/>
+<area shape="poly" id="edge21_Node000001_Node000017" title=" " alt="" coords="813,240,783,267,748,292,723,304,721,299,746,287,780,263,809,236"/>
+<area shape="rect" id="Node000018" href="$read__parameters_8c.html#a2740e08d234a0a5f043363991e72469a" title="read_save_state(): for resuming a calculation after the loop over particles." alt="" coords="104,378,222,404"/>
+<area shape="poly" id="edge23_Node000001_Node000018" title=" " alt="" coords="832,243,823,279,807,321,783,361,767,379,748,393,714,412,679,427,604,446,526,454,449,453,376,446,309,434,206,408,207,402,310,429,377,440,450,448,526,449,603,441,677,422,712,407,746,389,763,375,779,358,802,319,818,278,827,242"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#ad59ee67290b65b03bcfa5766b31cd49b" title="get_parameters(): Reads a line from the parameter file passed from read_par()." alt="" coords="271,124,382,151"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="443,84,431,89,356,126,354,121,429,85,441,79"/>
+<area shape="rect" id="Node000004" href="$read__parameters_8c.html#a05efae93beb41e2b0d8cbe4581086bd1" title="read_par(): Reads the information from the parameter file and files listed in the param&#45; eter file." alt="" coords="127,150,198,176"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="256,151,199,160,199,155,256,146"/>
+<area shape="rect" id="Node000005" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,251,55,278"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="134,188,51,253,47,249,130,184"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="270,63,230,75,187,91,143,112,104,140,80,167,61,198,38,252,33,250,56,195,76,164,101,136,141,108,185,86,229,69,268,58"/>
+<area shape="rect" id="Node000008" href="$read__parameters_8c.html#ad9ee6b752ced82b2353be504663215d3" title="read_structures(): Reads in the file names that contain structures." alt="" coords="433,150,545,176"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="603,166,545,166,545,160,603,160"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="418,155,382,149,383,144,418,149"/>
+<area shape="rect" id="Node000010" href="$gromacs__topology_8c.html#aabab592246f8b7942e8e26c4134bfe0a" title="get_site_info(): Stores information from top into sys and CG_struct." alt="" coords="441,251,537,278"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="624,267,537,267,537,262,624,262"/>
+<area shape="rect" id="Node000011" href="$cgff__fn_8c.html#a9e513ad59f589f2c9b4bbac849a6897b" title="setup_CG_struct(): Stores the information in top into sys and CG_struct." alt="" coords="103,251,223,278"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="426,267,223,267,223,262,426,262"/>
+<area shape="poly" id="edge13_Node000011_Node000005" title=" " alt="" coords="87,267,55,267,55,262,87,262"/>
+<area shape="rect" id="Node000014" href="$read__parameters_8c.html#ad5ab07944494d7bfa6d7122321bb1d98" title="get_ref_potential(): Reads and stores the information for a reference potential." alt="" coords="430,99,548,126"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="580,115,548,115,548,110,580,110"/>
+<area shape="poly" id="edge17_Node000014_Node000003" title=" " alt="" coords="415,127,383,132,382,126,415,121"/>
+<area shape="rect" id="Node000016" href="$io__output_8c.html#aaf03153665ceaee1b8cb5fab8b1c1acb" title="print_output(): Print the results." alt="" coords="444,302,534,328"/>
+<area shape="poly" id="edge19_Node000015_Node000016" title=" " alt="" coords="615,353,533,330,535,325,617,348"/>
+<area shape="poly" id="edge20_Node000016_Node000005" title=" " alt="" coords="428,319,279,315,190,306,102,292,54,277,56,272,103,287,191,301,280,309,429,314"/>
+<area shape="poly" id="edge22_Node000017_Node000016" title=" " alt="" coords="589,318,534,318,534,312,589,312"/>
+<area shape="poly" id="edge24_Node000018_Node000005" title=" " alt="" coords="135,369,44,280,47,276,139,365"/>
+</map>

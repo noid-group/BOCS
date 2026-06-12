@@ -1,0 +1,5 @@
+<map id="get_vel_of" name="get_vel_of">
+<area shape="rect" id="Node000001" title="get_vel_of(): copies the dvec containing the velocity of the ith atom in the frame to v" alt="" coords="5,5,87,32"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#abe60d7580b13d8226cb3bd124e760b92" title="copy_vector(): Copies source into dest." alt="" coords="135,5,227,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,16,119,16,119,21,87,21"/>
+</map>

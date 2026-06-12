@@ -1,0 +1,12 @@
+<map id="clear_sys_arrays" name="clear_sys_arrays">
+<area shape="rect" id="Node000001" title="clear_sys_arrays(): Zeros the arrays that are not pointing to NULL." alt="" coords="407,31,528,57"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#a20589ce6e3db851e976637985e217991" title="copy_arrays(): Allocates memory for arrays in sys_copy and makes sure they are zeroed." alt="" coords="267,5,359,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="392,34,359,29,360,24,393,29"/>
+<area shape="rect" id="Node000005" href="$read__parameters_8c.html#abae344e50672cd4bed35bab9f10f4572" title="setup_tables(): Allocates memories for the grids." alt="" coords="113,56,208,83"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="392,53,209,68,209,63,391,48"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#a5d4a8af1d42c7297a973c0984093c00b" title="setup_sys_copy(): Copies the information from sys_orig to sys_copy." alt="" coords="103,5,219,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="251,21,220,21,220,16,251,16"/>
+<area shape="rect" id="Node000004" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,31,55,57"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="88,36,56,42,55,37,87,30"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="97,60,55,51,56,46,98,54"/>
+</map>

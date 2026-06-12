@@ -1,0 +1,42 @@
+<map id="cgff_fn.c" name="cgff_fn.c">
+<area shape="rect" id="Node000001" title="Helper functions for the cgff calculation." alt="" coords="738,5,809,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="431,379,492,405"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="787,31,806,54,828,87,845,125,852,166,852,244,850,264,843,280,833,292,820,302,750,333,687,358,621,375,559,385,507,391,507,386,558,380,620,370,685,353,748,328,818,297,830,288,839,277,845,263,847,244,847,167,840,127,823,89,802,58,783,34"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="674,304,737,331"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="776,32,773,127,764,192,747,257,727,293,722,290,742,255,759,191,768,127,771,32"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="887,80,951,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="800,30,881,70,879,75,797,35"/>
+<area shape="rect" id="Node000005" href="$cgff__types_8h.html" title="Defines properties and structures of the cgff and cgmap calculations." alt="" coords="114,304,206,331"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="737,23,579,28,471,35,358,46,246,63,147,87,104,101,68,117,39,136,18,156,9,176,10,195,19,214,34,233,76,268,121,294,118,299,73,272,30,237,14,217,5,196,4,175,14,153,35,132,65,113,102,96,145,81,245,58,357,41,471,30,578,23,737,18"/>
+<area shape="rect" id="Node000007" href="$gromacs__topology_8h.html" title=" " alt="" coords="371,80,509,107"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="738,30,514,79,513,74,736,25"/>
+<area shape="rect" id="Node000011" href="$safe__mem_8h.html" title="Functions related to safe memory management." alt="" coords="617,229,711,256"/>
+<area shape="poly" id="edge24_Node000001_Node000011" title=" " alt="" coords="770,34,679,217,674,214,765,31"/>
+<area shape="rect" id="Node000013" href="$cgff__fn_8h.html" title="Helper functions for the cgff calculation." alt="" coords="975,80,1046,107"/>
+<area shape="poly" id="edge23_Node000001_Node000013" title=" " alt="" coords="810,28,961,74,959,79,809,33"/>
+<area shape="rect" id="Node000014" href="$io__read_8h.html" title=" " alt="" coords="28,155,103,181"/>
+<area shape="poly" id="edge25_Node000001_Node000014" title=" " alt="" coords="737,26,573,46,467,62,361,83,228,117,117,152,116,147,227,112,359,77,466,57,573,41,737,21"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="207,327,417,377,416,382,206,332"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="128,379,192,405"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="163,331,163,363,157,363,157,331"/>
+<area shape="poly" id="edge9_Node000007_Node000002" title=" " alt="" coords="490,105,527,123,544,137,557,153,568,182,570,212,565,243,553,273,520,327,486,369,482,366,516,324,548,271,560,241,565,212,563,183,552,156,540,140,524,128,488,110"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="510,102,566,117,626,141,656,158,682,178,706,201,725,228,730,244,731,260,722,291,717,289,725,259,725,245,720,231,702,204,679,182,653,162,624,146,564,122,508,107"/>
+<area shape="poly" id="edge11_Node000007_Node000005" title=" " alt="" coords="372,106,313,121,249,144,218,161,190,180,165,204,144,231,139,245,138,259,148,289,143,291,133,260,133,244,139,228,161,200,186,176,216,156,247,140,311,115,371,101"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="441,155,543,181"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="451,106,476,141,472,144,447,109"/>
+<area shape="rect" id="Node000009" href="$wnoid__math_8h.html" title=" " alt="" coords="153,229,255,256"/>
+<area shape="poly" id="edge12_Node000007_Node000009" title=" " alt="" coords="421,109,238,223,235,219,419,105"/>
+<area shape="rect" id="Node000010" href="$_l_d_d_8h.html" title=" " alt="" coords="358,155,418,181"/>
+<area shape="poly" id="edge14_Node000007_Node000010" title=" " alt="" coords="426,109,400,143,396,140,422,106"/>
+<area shape="poly" id="edge13_Node000009_Node000005" title=" " alt="" coords="199,258,178,292,173,289,194,255"/>
+<area shape="poly" id="edge16_Node000010_Node000002" title=" " alt="" coords="384,183,371,216,368,236,371,255,384,287,402,317,440,365,436,369,397,320,379,290,365,257,363,236,366,215,379,181"/>
+<area shape="poly" id="edge15_Node000010_Node000003" title=" " alt="" coords="416,179,666,295,663,300,414,184"/>
+<area shape="poly" id="edge17_Node000010_Node000005" title=" " alt="" coords="373,184,268,258,199,298,196,294,265,254,370,180"/>
+<area shape="poly" id="edge21_Node000010_Node000007" title=" " alt="" coords="402,153,428,119,432,122,406,156"/>
+<area shape="poly" id="edge18_Node000010_Node000009" title=" " alt="" coords="359,184,251,226,249,221,357,179"/>
+<area shape="poly" id="edge19_Node000010_Node000011" title=" " alt="" coords="419,176,430,179,603,223,601,229,429,184,418,181"/>
+<area shape="rect" id="Node000012" href="$solv__lin__eqns_8h.html" title=" " alt="" coords="380,229,492,256"/>
+<area shape="poly" id="edge22_Node000010_Node000012" title=" " alt="" coords="399,180,422,215,417,218,394,183"/>
+<area shape="poly" id="edge20_Node000011_Node000003" title=" " alt="" coords="674,255,693,289,689,292,669,258"/>
+<area shape="poly" id="edge26_Node000014_Node000005" title=" " alt="" coords="71,181,81,216,100,255,133,292,129,295,95,257,76,218,66,183"/>
+</map>

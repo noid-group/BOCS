@@ -1,0 +1,282 @@
+.TH "table_types.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+table_types.h
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBArrays\fP"
+.br
+.ti -1c
+.RI "struct \fBInput\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBNB_INDEX\fP   2"
+.br
+.ti -1c
+.RI "#define \fBBOND_INDEX\fP   3"
+.br
+.ti -1c
+.RI "#define \fBANGLE_INDEX\fP   4"
+.br
+.ti -1c
+.RI "#define \fBDIHED_INDEX\fP   5"
+.br
+.ti -1c
+.RI "#define \fBINTRA_INDEX\fP   6"
+.br
+.ti -1c
+.RI "#define \fBDELTA_INDEX\fP   7"
+.br
+.ti -1c
+.RI "#define \fBLINEAR_INDEX\fP   8"
+.br
+.ti -1c
+.RI "#define \fBBSPLINE_INDEX\fP   9"
+.br
+.ti -1c
+.RI "#define \fBNB_NAME\fP   'nb'"
+.br
+.ti -1c
+.RI "#define \fBBOND_NAME\fP   'bond'"
+.br
+.ti -1c
+.RI "#define \fBANGLE_NAME\fP   'angle'"
+.br
+.ti -1c
+.RI "#define \fBDIHED_NAME\fP   'dihedral'"
+.br
+.ti -1c
+.RI "#define \fBINTRA_NAME\fP   'intra'"
+.br
+.ti -1c
+.RI "#define \fBDELTA_BASIS\fP   'delta'"
+.br
+.ti -1c
+.RI "#define \fBLINEAR_BASIS\fP   'linear'"
+.br
+.ti -1c
+.RI "#define \fBBSPLINE_BASIS\fP   'Bspline'"
+.br
+.ti -1c
+.RI "#define \fBDELTA_SM\fP   3"
+.br
+.ti -1c
+.RI "#define \fBLINEAR_SM\fP   3"
+.br
+.ti -1c
+.RI "#define \fBBSPLINE_SM\fP   5"
+.br
+.ti -1c
+.RI "#define \fBDELTA_INTERP_FACT\fP   2"
+.br
+.ti -1c
+.RI "#define \fBLINEAR_INTERP_FACT\fP   2"
+.br
+.ti -1c
+.RI "#define \fBBSPLINE_INTERP_FACT\fP   1"
+.br
+.ti -1c
+.RI "#define \fBBOND_SLOPE\fP   \-200000"
+.br
+.ti -1c
+.RI "#define \fBANGLE_SLOPE\fP   \-0\&.5"
+.br
+.ti -1c
+.RI "#define \fBNB_SLOPE\fP   \-10000"
+.br
+.ti -1c
+.RI "#define \fBINTRA_SLOPE\fP   \-10000"
+.br
+.ti -1c
+.RI "#define \fBSWITCH_TOL\fP   10"
+.br
+.ti -1c
+.RI "#define \fBMAX_PTS\fP   10000"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn 
+.RE
+.PP
+
+.SH "Data Structure Documentation"
+.PP 
+.SH "struct Arrays"
+.PP 
+\fBData Fields:\fP
+.RS 4
+\fBdouble\fP * \fIf\fP 
+.br
+.PP
+double * \fIr\fP 
+.br
+.PP
+\fBdouble\fP * \fIu\fP 
+.br
+.PP
+.RE
+.PP
+.SH "struct Input"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIinterp_fact\fP 
+.br
+.PP
+int \fIn_pts\fP 
+.br
+.PP
+double \fIr_max\fP 
+.br
+.PP
+double \fIr_min\fP 
+.br
+.PP
+double \fIslopel\fP 
+.br
+.PP
+double \fIsloper\fP 
+.br
+.PP
+int \fIsm\fP 
+.br
+.PP
+int \fIsmn_pts\fP 
+.br
+.PP
+int \fItype_basis\fP 
+.br
+.PP
+int \fItype_index\fP 
+.br
+.PP
+.RE
+.PP
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ANGLE_INDEX   4"
+
+.PP
+Referenced by \fBedit_forces()\fP, \fBget_inter_type()\fP, \fBget_potential()\fP, \fBget_table_parameters()\fP, and \fBprint_table()\fP\&.
+.SS "#define ANGLE_NAME   'angle'"
+
+.PP
+Referenced by \fBget_inter_type()\fP, and \fBprint_type_error_message()\fP\&.
+.SS "#define ANGLE_SLOPE   \-0\&.5"
+
+.PP
+Referenced by \fBedit_angle_force()\fP\&.
+.SS "#define BOND_INDEX   3"
+
+.PP
+Referenced by \fBedit_forces()\fP, \fBget_inter_type()\fP, \fBget_potential()\fP, \fBget_table_parameters()\fP, and \fBprint_table()\fP\&.
+.SS "#define BOND_NAME   'bond'"
+
+.PP
+Referenced by \fBget_inter_type()\fP, and \fBprint_type_error_message()\fP\&.
+.SS "#define BOND_SLOPE   \-200000"
+
+.PP
+Referenced by \fBedit_bond_force()\fP\&.
+.SS "#define BSPLINE_BASIS   'Bspline'"
+
+.PP
+Referenced by \fBget_basis_type()\fP, and \fBprint_type_index_error()\fP\&.
+.SS "#define BSPLINE_INDEX   9"
+
+.PP
+Referenced by \fBget_basis_type()\fP, and \fBmain()\fP\&.
+.SS "#define BSPLINE_INTERP_FACT   1"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "#define BSPLINE_SM   5"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "#define DELTA_BASIS   'delta'"
+
+.PP
+Referenced by \fBget_basis_type()\fP, and \fBprint_type_index_error()\fP\&.
+.SS "#define DELTA_INDEX   7"
+
+.PP
+Referenced by \fBget_basis_type()\fP, and \fBmain()\fP\&.
+.SS "#define DELTA_INTERP_FACT   2"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "#define DELTA_SM   3"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "#define DIHED_INDEX   5"
+
+.PP
+Referenced by \fBedit_forces()\fP, \fBget_inter_type()\fP, \fBget_potential()\fP, \fBget_table_parameters()\fP, and \fBprint_table()\fP\&.
+.SS "#define DIHED_NAME   'dihedral'"
+
+.PP
+Referenced by \fBget_inter_type()\fP, and \fBprint_type_error_message()\fP\&.
+.SS "#define INTRA_INDEX   6"
+
+.PP
+Referenced by \fBedit_forces()\fP, \fBget_inter_type()\fP, \fBget_potential()\fP, \fBget_table_parameters()\fP, and \fBprint_table()\fP\&.
+.SS "#define INTRA_NAME   'intra'"
+
+.PP
+Referenced by \fBget_inter_type()\fP, and \fBprint_type_error_message()\fP\&.
+.SS "#define INTRA_SLOPE   \-10000"
+
+.SS "#define LINEAR_BASIS   'linear'"
+
+.PP
+Referenced by \fBget_basis_type()\fP, and \fBprint_type_index_error()\fP\&.
+.SS "#define LINEAR_INDEX   8"
+
+.PP
+Referenced by \fBget_basis_type()\fP, and \fBmain()\fP\&.
+.SS "#define LINEAR_INTERP_FACT   2"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "#define LINEAR_SM   3"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "#define MAX_PTS   10000"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "#define NB_INDEX   2"
+
+.PP
+Referenced by \fBedit_forces()\fP, \fBget_inter_type()\fP, \fBget_potential()\fP, \fBget_table_parameters()\fP, and \fBprint_table()\fP\&.
+.SS "#define NB_NAME   'nb'"
+
+.PP
+Referenced by \fBget_inter_type()\fP, and \fBprint_type_error_message()\fP\&.
+.SS "#define NB_SLOPE   \-10000"
+
+.PP
+Referenced by \fBedit_intra_nb_force()\fP, and \fBedit_nb_force()\fP\&.
+.SS "#define SWITCH_TOL   10"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

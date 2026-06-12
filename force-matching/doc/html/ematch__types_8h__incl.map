@@ -1,0 +1,11 @@
+<map id="ematch_types.h" name="ematch_types.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="22,5,137,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,155,66,181"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="63,34,41,54,23,81,20,96,20,111,27,140,21,141,14,111,14,95,18,79,37,51,60,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="110,155,174,181"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="99,30,122,51,141,79,148,110,148,139,143,139,143,110,136,81,118,55,96,34"/>
+<area shape="rect" id="Node000004" href="$cgff__types_8h.html" title="Defines properties and structures of the cgff and cgmap calculations." alt="" coords="33,80,126,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="82,33,82,64,77,64,77,33"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="74,109,53,143,49,140,70,106"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="92,105,123,141,119,145,88,109"/>
+</map>

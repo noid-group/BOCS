@@ -1,0 +1,27 @@
+<map id="read_REF_forces" name="read_REF_forces">
+<area shape="rect" id="Node000001" title="read_REF_forces(): Read in the reference forces listed in input." alt="" coords="5,75,129,102"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="576,101,675,127"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,72,129,52,176,35,275,14,354,3,393,4,433,9,529,35,571,59,604,87,601,92,568,63,527,40,432,14,392,9,355,9,276,19,177,40,131,57,92,77"/>
+<area shape="rect" id="Node000006" href="$read__parameters_8c.html#a7dc95985b8b4f176c4e8734604ac4f8a" title="get_no_inter_type(s): Returns the number of interactions listed after a directive in&#45; dicated by keyw..." alt="" coords="177,50,308,77"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="129,77,161,72,162,78,130,82"/>
+<area shape="rect" id="Node000008" href="$read__parameters_8c.html#ae4945e2c859577ee265322bb3e807d5c" title="read_ref_potential(): Stores information for a interaction in the reference potential." alt="" coords="180,101,304,127"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="130,95,165,100,164,105,129,100"/>
+<area shape="rect" id="Node000012" href="$io__read_8c.html#a7b47f18d3649b2d4b9383a5aa3ddee38" title="test_end_directive(): Test to make sure the ending directive is found." alt="" coords="179,151,306,178"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="98,100,178,137,192,143,189,147,176,142,96,105"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="723,75,827,102"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="675,103,707,97,708,103,676,108"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="740,126,810,153"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="676,120,724,128,724,133,675,125"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="875,75,1007,102"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="828,86,860,86,860,91,828,91"/>
+<area shape="rect" id="Node000007" href="$io__read_8c.html#aa58790fe8cbcf89bdbad529d8e038d77" title="delete_directive_from_line(): For lines that contain a directive marked by [...], the ending brace is..." alt="" coords="356,50,528,77"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="308,61,341,61,341,66,308,66"/>
+<area shape="rect" id="Node000009" href="$read__parameters_8c.html#a8edca8213975469a05af99405bfc3b37" title="get_force(): Reads the force for a given interaction for the reference potential." alt="" coords="404,101,480,127"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="305,111,389,111,389,117,305,117"/>
+<area shape="rect" id="Node000010" href="$read__parameters_8c.html#a320a09504affa1057a608ce15b3b9fda" title="get_no_points(): Returns the number of lines in a file before the first blank line." alt="" coords="391,151,493,178"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="299,125,377,145,375,150,297,130"/>
+<area shape="rect" id="Node000011" href="$io__read_8c.html#a5aa8df5077291896b83782e74ab17317" title="open_file(): Opens a file named &quot;file_name&quot; with option &quot;mode.&quot; Returns the pointer to the file." alt="" coords="406,202,479,229"/>
+<area shape="poly" id="edge12_Node000008_Node000011" title=" " alt="" coords="288,126,310,137,325,150,334,163,343,176,357,188,391,202,389,207,355,192,339,179,330,167,321,154,306,141,286,130"/>
+<area shape="poly" id="edge9_Node000009_Node000002" title=" " alt="" coords="480,111,561,111,561,117,480,117"/>
+<area shape="poly" id="edge11_Node000010_Node000002" title=" " alt="" coords="493,148,561,129,562,134,494,153"/>
+</map>

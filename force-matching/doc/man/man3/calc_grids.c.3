@@ -1,0 +1,1424 @@
+.TH "calc_grids.c" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+calc_grids.c \- Main driver of the cgff calculation\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <stdlib\&.h>\fP
+.br
+\fR#include <string\&.h>\fP
+.br
+\fR#include <math\&.h>\fP
+.br
+\fR#include 'safe_mem\&.h'\fP
+.br
+\fR#include 'cgff_types\&.h'\fP
+.br
+\fR#include 'wnoid_math\&.h'\fP
+.br
+\fR#include 'calc_grids\&.h'\fP
+.br
+\fR#include 'solv_lin_eqns\&.h'\fP
+.br
+\fR#include 'io_read\&.h'\fP
+.br
+\fR#include 'io_output\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBDEBUG_eval_bond_basis\fP   \fBFALSE\fP"
+.br
+.ti -1c
+.RI "#define \fBDEBUG_calc_grids\fP   \fBFALSE\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBbool\fP \fBsetup_box_dimensions\fP (\fBdvec\fP box, double \fBmatrix\fP[\fBDIM\fP][\fBDIM\fP])"
+.br
+.RI "\fBsetup_box_dimensions()\fP: Stores the box vectors for a cubic box from the diagonal elements of matrix\&. "
+.ti -1c
+.RI "void \fBget_all_iList\fP (\fBtW_system\fP *sys, \fBbool\fP bSpeak)"
+.br
+.RI "get_all_ilist: For each site_type i, obtains lists of pair interaction partner types for Inter_Map/iMap[i] "
+.ti -1c
+.RI "int \fBget_iList\fP (\fBtW_word\fP name, int N_Inter_Types, \fBtW_type_inter2\fP InterList[], int *i1_list, \fBtW_word\fP *n1_list)"
+.br
+.RI "\fBget_iList()\fP: "
+.ti -1c
+.RI "int \fBdet_min_image\fP (\fBdvec\fP box, \fBdvec\fP Origin, \fBdvec\fP x)"
+.br
+.RI "det_min_image: detemines image of prtcl at R closest to the particle at Origin\&. "
+.ti -1c
+.RI "int \fBnormalize_arrays_top\fP (int N_sites, int N_frames, \fBtW_system\fP *sys_top)"
+.br
+.RI "\fBnormalize_arrays_top()\fP: Normalizes the arrays\&. "
+.ti -1c
+.RI "int \fBupdate_N_instances_nb\fP (\fBtW_system\fP sys_top_global, \fBtW_system\fP *sys_global)"
+.br
+.RI "\fBupdate_N_instances_nb()\fP: Currently, this function is not used\&. "
+.ti -1c
+.RI "int \fBupdate_total_arrays\fP (\fBtW_system\fP sys_top, double pr_top, \fBtW_system\fP *sys)"
+.br
+.RI "\fBupdate_total_arrays()\fP: Update the master grids with the data from the current topology\&. "
+.ti -1c
+.RI "int \fBget_results\fP (FILE *fp_log, \fBtW_system\fP *sys, int forces, \fBtW_word\fP tag)"
+.br
+.RI "\fBget_results()\fP: (1) Calculate and store b_forces and b_struct\&. "
+.ti -1c
+.RI "int \fBget_b_struct_and_b_forces\fP (FILE *fp_log, \fBtW_system\fP *sys, \fBtW_word\fP tag)"
+.br
+.RI "\fBget_b_struct_and_b_forces()\fP: (1) Allocates memory for sys->b_forces and sys->b_struct\&. "
+.ti -1c
+.RI "void \fBcalc_dg_dz\fP (\fBtW_Inter_Types\fP *inter, double *dg_dz, double *sm_dg_dz, \fBtW_word\fP tag)"
+.br
+.RI "\fBcalc_dg_dz()\fP: Calculates the derivative of g and stores it into sm_dg_dz\&. "
+.ti -1c
+.RI "int \fBcalc_b_struct\fP (\fBtW_system\fP *sys, double temperature, \fBtW_word\fP tag)"
+.br
+.RI "\fBcalc_b_struct()\fP: Calculate b_struct from g and L\&. "
+.ti -1c
+.RI "int \fBtrim_Mb\fP (FILE *fp, \fBtW_system\fP *sys)"
+.br
+.RI "\fBtrim_Mb()\fP: Eliminates rows from sys->M that contain only zeros (i\&.e\&. "
+.ti -1c
+.RI "void \fBinitialize_Zero_list\fP (int N_coeff0, int *Zero_list)"
+.br
+.RI "\fBinitialize_Zero_list()\fP: Initialize elements of Zero_list to -1\&. "
+.ti -1c
+.RI "int \fBget_Zero_list\fP (int *Zero_list, int *N_coeff, double *g_cnt, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_Zero_list()\fP: Determine Zero_list, N_zero, and N_coeff\&. "
+.ti -1c
+.RI "int \fBremove_zero_rows_mem\fP (FILE *fp, int N_coeff0, int N_zero, int *Zero_list, \fBtW_system\fP *sys)"
+.br
+.RI "***************************************************************************************** "
+.ti -1c
+.RI "int \fBresize_arrays_trim_Mb\fP (\fBtW_system\fP *sys, int N_coeff)"
+.br
+.RI "\fBresize_arrays_trim_Mb()\fP: erealloc arrays to proper size after trimming\&. "
+.ti -1c
+.RI "int \fBset_pointers_trim_Mb\fP (\fBtW_system\fP *sys)"
+.br
+.RI "***************************************************************************************** "
+.ti -1c
+.RI "int \fBget_phi_struct_and_phi_forces\fP (FILE *fp_log, \fBtW_system\fP *sys, int forces)"
+.br
+.RI "\fBget_phi_struct_and_phi_forces()\fP: Calculates the coefficients using b_forces if forces were available and b_struct in all cases\&. "
+.ti -1c
+.RI "int \fBget_phi_forces\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_phi_forces()\fP: Calculates the coefficients when forces are available\&. "
+.ti -1c
+.RI "int \fBget_phi_struct\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_phi_struct()\fP: Calculates the coefficients using b_struct\&. "
+.ti -1c
+.RI "int \fBdirect_solve_lin_eqns\fP (FILE *fp_log, \fBtW_system\fP *sys, \fBtW_word\fP info)"
+.br
+.RI "\fBdirect_solve_lin_eqns()\fP: JFR - 12\&.20\&.13: takes care of deciding which matrix inversion routine to use for both the force and struct calc "
+.ti -1c
+.RI "int \fBeval_bond_basis_vectors\fP (FILE *fp, \fBtW_CG_site\fP *CG_struct, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, int i_site, int *D_b, \fBdvec\fP *calG_b, \fBbool\fP i_flag, int *D_b_inter_index)"
+.br
+.RI "eval_bond_basis_vectors: Evaluates the basis vectors for bonded interactions for site i_site\&. "
+.ti -1c
+.RI "int \fBget_IntraMolec_NB_Pair_basis_vectors\fP (int i_site, int i_inter, int bond_coeff_ctr, \fBtW_CG_site\fP *i_site_ptr, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, int *D_b, \fBdvec\fP *calG_b, \fBtW_CG_site\fP *CG_struct, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_IntraMolec_NB_Pair_basis_vectors()\fP: "
+.ti -1c
+.RI "int \fBget_delta_IntraMolec_NB_Pair_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_delta_IntraMolec_NB_Pair_basis_vector()\fP: "
+.ti -1c
+.RI "int \fBget_linear_IntraMolec_NB_Pair_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_linear_IntraMolec_NB_Pair_basis_vector()\fP: "
+.ti -1c
+.RI "int \fBget_Bspline_IntraMolec_NB_Pair_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_Bspline_IntraMolec_NB_Pair_basis_vector()\fP: JFR - 07\&.23\&.12: Bspline "
+.ti -1c
+.RI "double \fBget_IntraMolec_NB_Pair_info\fP (int i_site, int *sites, \fBtW_CG_site\fP *CG_struct, \fBdvec\fP u_ij)"
+.br
+.RI "get_IntrarMolec_NB_Pair_info(): "
+.ti -1c
+.RI "int \fBget_Dihedral_basis_vectors\fP (int i_site, int i_inter, int bond_coeff_ctr, \fBtW_CG_site\fP *i_site_ptr, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, int *D_b, \fBdvec\fP *calG_b, \fBtW_CG_site\fP *CG_struct, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_Dihedral_basis_vectors()\fP: "
+.ti -1c
+.RI "void \fBeval_grad_B\fP (\fBtW_dihedral\fP *dihedral, \fBtW_CG_site\fP *CG_struct)"
+.br
+.RI "\fBeval_grad_B()\fP: Code adopted from pages 278-283 of Rapaport's 'The Art of MD Sim\&.' This gives the same result as Noid's notes, but this implementation is more concise\&. "
+.ti -1c
+.RI "int \fBget_TOY_dihedral_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, \fBtW_dihedral\fP dihedral, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_TOY_dihedral_basis_vector()\fP: "
+.ti -1c
+.RI "int \fBget_RB_dihedral_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, \fBtW_dihedral\fP dihedral, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_RB_dihedral_basis_vector()\fP: "
+.ti -1c
+.RI "int \fBget_delta_dihedral_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, \fBtW_dihedral\fP dihedral, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_delta_dihedral_basis_vector()\fP: Range is not checked since the R_min and R_max are assumed to be -180 and 180\&. "
+.ti -1c
+.RI "int \fBget_linear_dihedral_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, \fBtW_dihedral\fP dihedral, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_linear_dihedral_basis_vector()\fP: Range is not checked since the R_min and R_max are assumed to be -180 and 180\&. "
+.ti -1c
+.RI "int \fBget_Bspline_dihedral_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, \fBtW_dihedral\fP dihedral, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_Bspline_dihedral_basis_vector()\fP: Range is not checked since the R_min and R_max are assumed to be -180 and 180\&. "
+.ti -1c
+.RI "int \fBget_Angle_basis_vectors\fP (int i_site, int i_inter, int bond_coeff_ctr, \fBtW_CG_site\fP *i_site_ptr, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, int *D_b, \fBdvec\fP *calG_b, \fBtW_CG_site\fP *CG_struct, \fBbool\fP i_flag)"
+.br
+.RI "get_Angle_basis_vectors: Associates the angle that CG_struct[i] is involved in with a corresponding value of dPsi/dR_I and its entry index D_b Does this based on the basis type for the angle by calling get_X_angle_basis_vector where X is the basis "
+.ti -1c
+.RI "int \fBget_Angle_info\fP (int i_site, int *sites, \fBtW_CG_site\fP *CG_struct, \fBdvec\fP L_2, \fBdvec\fP L_3, double *cos_theta, double *sin_theta, double *theta, double *norm_12, double *norm_13)"
+.br
+.RI "get_Angle_info: gets theta/vectors required to figure out dPsi/dR_I for an angle site_I takes place in "
+.ti -1c
+.RI "int \fBget_harmonic_angle_basis_vector\fP (int i_site, int bond_coeff_ctr, int i_bond_type, int *sites, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, \fBtW_CG_site\fP *CG_struct, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_harmonic_angle_basis_vector()\fP: "
+.ti -1c
+.RI "int \fBget_delta_angle_basis_vector\fP (int i_site, int bond_coeff_ctr, int i_bond_type, int *sites, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, \fBtW_CG_site\fP *CG_struct, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_delta_angle_basis_vector()\fP: "
+.ti -1c
+.RI "int \fBget_linear_angle_basis_vector\fP (int i_site, int bond_coeff_ctr, int i_bond_type, int *sites, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, \fBtW_CG_site\fP *CG_struct, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_linear_angle_basis_vector()\fP: "
+.ti -1c
+.RI "int \fBget_Bspline_angle_basis_vector\fP (int i_site, int bond_coeff_ctr, int i_bond_type, int *sites, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, \fBtW_CG_site\fP *CG_struct, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_Bspline_angle_basis_vector()\fP: JFR - 07\&.23\&.12 "
+.ti -1c
+.RI "double \fBget_laplacian_theta_angle\fP (double cos_theta, double sin_theta, double r_12, double r_13)"
+.br
+.RI "\fBget_laplacian_theta_angle()\fP: "
+.ti -1c
+.RI "double \fBget_g_theta_angle\fP (double cos_theta, double r_12, double r_13)"
+.br
+.RI "\fBget_g_theta_angle()\fP: "
+.ti -1c
+.RI "int \fBget_L2_L3_angles\fP (\fBdvec\fP u_12, \fBdvec\fP u_13, double cos_theta, double norm_12, double norm_13, \fBdvec\fP L_2, \fBdvec\fP L_3)"
+.br
+.RI "\fBget_L2_L3_angles()\fP: "
+.ti -1c
+.RI "int \fBget_BondStretch_basis_vectors\fP (int i_site, int i_inter, int bond_coeff_ctr, \fBtW_CG_site\fP *i_site_ptr, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, int *D_b, \fBdvec\fP *calG_b, \fBtW_CG_site\fP *CG_struct, \fBbool\fP i_flag)"
+.br
+.RI "get_BondStretch_basis_vectors: Associates a Bonded interaction instance (index i_inter) with halfG indices D_b and contributions dPsi_dR_I "
+.ti -1c
+.RI "double \fBget_BondStretch_info\fP (int i_site, int *sites, \fBtW_CG_site\fP *CG_struct, \fBdvec\fP u_ij)"
+.br
+.RI "get_BondStretch_info: Calculates and stores data needed to calculated the BondStretch basis vectors\&. "
+.ti -1c
+.RI "int \fBget_delta_bond_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_delta_bond_basis_vector()\fP: "
+.ti -1c
+.RI "int \fBget_linear_bond_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+.br
+.RI "get_linear_bond_basis_vector: Based on a passed bond length (norm_ij) determine the dPsi/dR_I contributions to surrounding knot points Will filter out bond if not in cutoff "
+.ti -1c
+.RI "double \fBcalc_linear_spline_A\fP (int bond_coeff_ctr, int *D_b, double dr, double R_0, int i_0, int N_pts, double R, double *Ap, double *Bp, int periodic)"
+.br
+.RI "\fBcalc_linear_spline_A()\fP: "
+.ti -1c
+.RI "int \fBget_Bspline_bond_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_Bspline_bond_basis_vector()\fP: "
+.ti -1c
+.RI "void \fBcalc_cubic_Bspline\fP (double dr, double R, double R_0, int i, int k, double *B, double *Bp)"
+.br
+.ti -1c
+.RI "void \fBcalc_fifth_Bspline\fP (double dr, double R, double R_0, int i, int k, double *B, double *Bp)"
+.br
+.ti -1c
+.RI "double \fBcalc_Bspline\fP (double dr, double R_0, int i_0, int N_pts, double R, int i, int k, double *Nik, double *Npik)"
+.br
+.RI "\fBcalc_Bspline()\fP: JFR - 07\&.16\&.12: This is the De Boor iterative method for calculating normalized Bsplines\&. "
+.ti -1c
+.RI "double \fBcalc_Bspline_deriv\fP (double dr, double R_0, int i_0, int N_pts, double R, int i, int j, int k, double *Nik, double *Npik)"
+.br
+.RI "calc_Bspline_deriv: Uses the De Boor iterative method for calculating derivatives of normalized Bsplines\&. "
+.ti -1c
+.RI "int \fBget_harmonic_bond_basis_vector\fP (int bond_coeff_ctr, int i_bond_type, int *D_b, \fBdvec\fP *calG_b, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+.br
+.RI "\fBget_harmonic_bond_basis_vector()\fP: "
+.ti -1c
+.RI "void \fBprint_debug_eval_bond_basis\fP (\fBtW_CG_site\fP *i_site_ptr, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types, int i, FILE *fp)"
+.br
+.RI "\fBprint_debug_eval_bond_basis()\fP: "
+.ti -1c
+.RI "int \fBget_grid_index_for_delta_basis\fP (double r, int i_0, double dr, double R_0)"
+.br
+.RI "\fBget_grid_index_for_delta_basis()\fP: "
+.ti -1c
+.RI "int \fBget_grid_index_for_linear_basis\fP (double r, int i_0, double dr, double R_0)"
+.br
+.RI "\fBget_grid_index_for_linear_basis()\fP: "
+.ti -1c
+.RI "int \fBget_atom_position_angle\fP (int angle_triple[], int i_site)"
+.br
+.RI "get_atom_position_angle: Determines the position of site_i (i_site) in the angle_triple passed "
+.ti -1c
+.RI "int \fBget_atom_position_dihedral\fP (int dihedral_quartet[], int i_site)"
+.br
+.RI "\fBget_atom_position_dihedral()\fP: "
+.ti -1c
+.RI "double \fBget_g_dihedral_angle\fP (\fBdvec\fP basis)"
+.br
+.RI "\fBget_g_dihedral_angle()\fP: "
+.ti -1c
+.RI "int \fBeval_bonds_M_b\fP (\fBtW_system\fP *sys, int nr_bond_coeff, int D_b[], \fBdvec\fP calG_b[], \fBbool\fP b_F, \fBdvec\fP f_i, \fBdvec\fP f_i_ref, int *D_b_inter_index)"
+.br
+.RI "\fBeval_bonds_M_b()\fP: This function increments the bond-bond part (intramolec-intramolec) part of the G matrix "
+.ti -1c
+.RI "int \fBeval_M_nbPair_bonds\fP (\fBtW_system\fP *sys, int n_basis_ij, int ij_index[], \fBdvec\fP ij_basis[], int nr_i_bond_coeff, int D_b[], \fBdvec\fP calG_b[])"
+.br
+.RI "\fBeval_M_nbPair_bonds()\fP: "
+.ti -1c
+.RI "void \fBget_nb_pair_info\fP (double *r_ij, \fBdvec\fP x_i, \fBdvec\fP x_j, \fBdvec\fP x_ij, int b_PBC, \fBdvec\fP box)"
+.br
+.RI "get_nb_pair_info: For positions x_i and x_j, determine the pair distance and displacement under PBC if req\&. "
+.ti -1c
+.RI "\fBtW_type_inter2\fP * \fBget_nb_pair_inter_ptr\fP (\fBtW_CG_site\fP *j_site, \fBtW_system\fP *sys, int N_i1, \fBtW_word\fP *nList1, int *iList1)"
+.br
+.RI "get_nb_pair_inter_ptr: Determines if j_site\&.name is contained in the partner list passed for site_i (nList) i\&.e\&. "
+.ti -1c
+.RI "int \fBget_nb_pair_inter_ptr_n\fP (\fBtW_CG_site\fP *j_site, \fBtW_system\fP *sys, int N_i1, \fBtW_word\fP *nList1, int *iList1, \fBtW_type_inter2\fP **the_inter2s)"
+.br
+.RI "\fBget_nb_pair_inter_ptr_n()\fP: Does the same thing as the above function, but instead puts the pointers into the_inter2s, and returns the number of pair interactions that i and j are involved in\&. "
+.ti -1c
+.RI "int \fBcheck_inter_range\fP (double r_ij, double R_0, double R_max, double dr)"
+.br
+.RI "\fBcheck_inter_range()\fP: "
+.ti -1c
+.RI "int \fBcheck_linear_inter_range\fP (double r_ij, double R_0, double R_max, double dr)"
+.br
+.RI "\fBcheck_linear_inter_range()\fP: Changed r_ij > R_max + 0\&.5*dr to r_ij > R_max "
+.ti -1c
+.RI "int \fBcheck_Bspline_inter_range\fP (double r_ij, double R_0, double R_max, double dr)"
+.br
+.RI "\fBcheck_Bspline_inter_range()\fP: JFR - 07\&.22\&.12: same as linear right now MCL - 03\&.26\&.26: now its not, this one checks for r=0 and removes nan cases "
+.ti -1c
+.RI "void \fBupdate_nb_pair_grids\fP (int n_basis_ij, int ij_index[], \fBdvec\fP ij_basis[], \fBbool\fP b_F, double r_ij, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBtW_type_inter2\fP *ij_inter)"
+.br
+.RI "\fBupdate_nb_pair_grids()\fP: Currently, not using L for this basis\&. "
+.ti -1c
+.RI "int \fBget_b_harmonic_bond\fP (\fBtW_Inter_Types\fP *inter, double kT)"
+.br
+.RI "\fBget_b_harmonic_bond()\fP: "
+.ti -1c
+.RI "int \fBget_b_rb_dihedral\fP (\fBtW_Inter_Types\fP *inter, double kT)"
+.br
+.RI "\fBget_b_rb_dihedral()\fP: "
+.ti -1c
+.RI "void \fBsubtract_ref_forces\fP (int N_sites, \fBtW_CG_site\fP *CG_struct)"
+.br
+.RI "\fBsubtract_ref_forces()\fP: Subtracts the force calculated from a reference potential from the force read from the trajectory\&. "
+.ti -1c
+.RI "void \fBget_b_TOY_dihedral\fP (\fBtW_Inter_Types\fP *inter, double kT)"
+.br
+.RI "\fBget_b_TOY_dihedral()\fP: "
+.ti -1c
+.RI "int \fBeval_delta_basis_vectors\fP (\fBtW_type_inter2\fP *ij_inter, double n_basis_ij, \fBdvec\fP u_ij, \fBdvec\fP *ij_basis, double r_ij, int *ij_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F)"
+.br
+.RI "\fBeval_delta_basis_vectors()\fP: "
+.ti -1c
+.RI "int \fBeval_delta_basis_vectors_LD\fP (\fBtW_type_inter2\fP *ij_inter, \fBdvec\fP u_ij, \fBdvec\fP *ij_basis, double r_ij, double LD, int *ij_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, \fBbool\fP bSelf, \fBdvec\fP A_ij)"
+.br
+.RI "\fBeval_delta_basis_vectors_LD()\fP: "
+.ti -1c
+.RI "int \fBeval_linear_basis_vectors\fP (\fBtW_type_inter2\fP *ij_inter, double n_basis_ij, \fBdvec\fP u_ij, \fBdvec\fP *ij_basis, double r_ij, int *ij_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+.br
+.RI "\fBeval_linear_basis_vectors()\fP: "
+.ti -1c
+.RI "int \fBeval_linear_basis_vectors_LD\fP (\fBtW_type_inter2\fP *ij_inter, \fBdvec\fP u_ij, \fBdvec\fP *ij_basis, double r_ij, int *ij_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids, double LD, \fBbool\fP bSelf, \fBdvec\fP A_ij)"
+.br
+.ti -1c
+.RI "int \fBeval_linear_basis_vectors_LDGRAD\fP (\fBtW_type_inter2\fP *ij_inter, \fBdvec\fP u_ij, \fBdvec\fP *ij_basis, double r_ij, int *ij_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids, double LD, \fBdvec\fP grad_rho_i_t_j, \fBbool\fP bSelf)"
+.br
+.RI "eval_linear_basis_vectors_LDGRAD: "
+.ti -1c
+.RI "int \fBeval_Bspline_basis_vectors\fP (\fBtW_type_inter2\fP *ij_inter, \fBdvec\fP u_ij, \fBdvec\fP *ij_basis, double r_ij, int *ij_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+.br
+.RI "eval_Bspline_basis_vectors: Weights the contributions from a given pair distance (Psi = R_IJ = X) to the surrounding knot points according to Bspline order k\&. "
+.ti -1c
+.RI "int \fBeval_Bspline_basis_vectors_LD\fP (\fBtW_type_inter2\fP *ij_inter, \fBdvec\fP u_ij, \fBdvec\fP *ij_basis, double r_ij, int *ij_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids, double LD, \fBbool\fP bSelf, \fBdvec\fP A_ii)"
+.br
+.ti -1c
+.RI "int \fBeval_Bspline_basis_vectors_LDGRAD\fP (\fBtW_type_inter2\fP *ij_inter, \fBdvec\fP u_ij, \fBdvec\fP *ij_basis, double r_ij, int *ij_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids, double LD, \fBdvec\fP grad_rho_i_t_j, \fBbool\fP bSelf)"
+.br
+.ti -1c
+.RI "int \fBeval_delta_basis_vectors_ext\fP (\fBtW_type_inter_external\fP *ext_inter, \fBdvec\fP *ext_basis, double z_i, int *ext_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+.br
+.ti -1c
+.RI "int \fBeval_linear_basis_vectors_ext\fP (\fBtW_type_inter_external\fP *ext_inter, \fBdvec\fP *ext_basis, double z_i, int *ext_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+.br
+.ti -1c
+.RI "int \fBeval_Bspline_basis_vectors_ext\fP (\fBtW_type_inter_external\fP *ext_inter, \fBdvec\fP *ext_basis, double z_i, int *ext_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+.br
+.RI "\fBeval_Bspline_basis_vectors_ext()\fP: MRD - 06\&.18\&.2020 "
+.ti -1c
+.RI "int \fBeval_power_basis_vectors\fP (\fBtW_type_inter2\fP *ij_inter, \fBdvec\fP u_ij, \fBdvec\fP *power_ij_basis, double r_ij, int *ij_index, \fBtW_system\fP *sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+.br
+.RI "\fBeval_power_basis_vectors()\fP: "
+.ti -1c
+.RI "void \fBeval_M_nb_pair_inter\fP (int n_basis_ij, int ij_index[], \fBdvec\fP ij_basis[], int n_basis_ik, int ik_index[], \fBdvec\fP ik_basis[], \fBtW_system\fP *sys, int flag_M2)"
+.br
+.RI "\fBeval_M_nb_pair_inter()\fP: "
+.ti -1c
+.RI "void \fBget_b_power\fP (\fBtW_Inter_Types\fP *inter, double kT)"
+.br
+.RI "\fBget_b_power()\fP: "
+.ti -1c
+.RI "int \fBeval_external_basis_vectors\fP (FILE *fp, \fBtW_CG_site\fP CG_struct[], int n_ext_inter, \fBtW_type_inter_external\fP *Inter_Ext_Type_List, int idx_i, int *ext_idxes, \fBdvec\fP *ext_basis, \fBtW_system\fP *sys, \fBbool\fP b_F, \fBtW_type_inter_external\fP *theExtInt)"
+.br
+.RI "\fBeval_external_basis_vectors()\fP: "
+.ti -1c
+.RI "int \fBcalc_grids2\fP (FILE *fp, \fBtW_gmx_info\fP info, int N_sites, \fBtW_CG_site\fP CG_struct[], \fBtW_system\fP *sys)"
+.br
+.RI "\fBcalc_grids2()\fP: The fast loops\&. "
+.ti -1c
+.RI "int \fBcalc_grids3\fP (int counter, FILE *fp, \fBtW_gmx_info\fP info, int N_sites, \fBtW_CG_site\fP CG_struct[], \fBtW_system\fP *sys)"
+.br
+.RI "\fBcalc_grids3()\fP: Eliminating the 3 particle loop "
+.ti -1c
+.RI "void \fBprocess_G_matrix\fP (\fBtW_system\fP *sys)"
+.br
+.ti -1c
+.RI "int \fBweight_local_top\fP (\fBtW_system\fP *sys_top, double w_local, int N_coeff)"
+.br
+.RI "\fBweight_local_top()\fP: Weight the sums from each local proc\&. "
+.ti -1c
+.RI "int \fBget_b_soln\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_b_soln()\fP: multiply the obtained forces with the original matrix to obtain the solns, b "
+.ti -1c
+.RI "int \fBget_b_soln_err\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_b_soln_err()\fP: multiply the obtained forces with the original matrix to obtain the solns, b "
+.ti -1c
+.RI "int \fBget_b_soln_errAA\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "\fBget_b_soln_errAA()\fP: multiply the obtained forces with the original matrix to obtain the solns, b "
+.ti -1c
+.RI "int \fBcalc_d2b\fP (\fBtW_system\fP *sys)"
+.br
+.RI "\fBcalc_d2b()\fP: calculate the variance of b "
+.ti -1c
+.RI "int \fBcalc_d2M\fP (\fBtW_system\fP *sys)"
+.br
+.RI "\fBcalc_d2M()\fP: calculate the variance of M "
+.ti -1c
+.RI "int \fBget_rescale\fP (\fBtW_system\fP *sys)"
+.br
+.RI "\fBget_rescale()\fP: copy g_cnt to rescale "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Main driver of the cgff calculation\&. 
+
+
+.PP
+\fBAuthors\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser 
+.RE
+.PP
+
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define DEBUG_calc_grids   \fBFALSE\fP"
+
+.SS "#define DEBUG_eval_bond_basis   \fBFALSE\fP"
+
+.PP
+Referenced by \fBeval_bond_basis_vectors()\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int calc_b_struct (\fBtW_system\fP * sys, double temperature, \fBtW_word\fP tag)"
+
+.PP
+\fBcalc_b_struct()\fP: Calculate b_struct from g and L\&. 
+.PP
+Referenced by \fBget_b_struct_and_b_forces()\fP\&.
+.SS "double calc_Bspline (double dr, double R_0, int i_0, int N_pts, double R, int i, int k, double * Nik, double * Npik)"
+
+.PP
+\fBcalc_Bspline()\fP: JFR - 07\&.16\&.12: This is the De Boor iterative method for calculating normalized Bsplines\&. 
+.PP
+Referenced by \fBeval_Bspline_basis_vectors()\fP, \fBeval_Bspline_basis_vectors_ext()\fP, \fBeval_Bspline_basis_vectors_LD()\fP, \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBget_Bspline_angle_basis_vector()\fP, \fBget_Bspline_bond_basis_vector()\fP, \fBget_Bspline_dihedral_basis_vector()\fP, \fBprint_Bspline_basis_forces()\fP, and \fBprint_Bspline_basis_output()\fP\&.
+.SS "double calc_Bspline_deriv (double dr, double R_0, int i_0, int N_pts, double R, int i, int j, int k, double * Nik, double * Npik)"
+
+.PP
+calc_Bspline_deriv: Uses the De Boor iterative method for calculating derivatives of normalized Bsplines\&. Originally written by JFR 07\&.16\&.12, changed by MRD in 2019, changed again by MCL in 2025 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdr\fP the mesh spacing for the regularly spaced knots points 
+.br
+\fIR_0\fP the value of the first R in the knots defined for the interaction 
+.br
+\fIi_0\fP the G matrix index of the value of the first R in knots defined 
+.br
+\fIN_pts\fP the number of knots defined for the interaction 
+.br
+\fIR\fP the sampled value of the order parameter 
+.br
+\fIi\fP the index of the central bin R will affect 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBget_grid_index_for_delta_basis()\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIj\fP the index of the nonzero spline weight defining the spline at R\&. [usually spline of order k means k coeffs] 
+.br
+\fIk\fP the order of the spline (4 for cubic, 3 for quadratic, 2 for linear, 1 for delta) 
+.br
+\fINik\fP the nonzero spline weight associated with R\&. Legacy versions of the code require this arg, new versions can pass it blank 
+.br
+\fINpik\fP the nonzero derivatives of the spline weight associated with R\&. Calculated by this function\&. Not really stored anywhere [you can pass it blank] 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Bp the j'th nonzero derivative of the spline weight associated with R [N' in the MTU doc] 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBcalc_Bspline()\fP 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+Versions of this function prior to 2025 required that Nik be filled in first by calc_Bspline\&. The function as is no longer requires this\&. 
+.RE
+.PP
+
+.PP
+Referenced by \fBeval_Bspline_basis_vectors()\fP, \fBeval_Bspline_basis_vectors_ext()\fP, \fBeval_Bspline_basis_vectors_LD()\fP, \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBget_Bspline_angle_basis_vector()\fP, \fBget_Bspline_bond_basis_vector()\fP, and \fBget_Bspline_dihedral_basis_vector()\fP\&.
+.SS "void calc_cubic_Bspline (double dr, double R, double R_0, int i, int k, double * B, double * Bp)"
+
+.SS "int calc_d2b (\fBtW_system\fP * sys)"
+
+.PP
+\fBcalc_d2b()\fP: calculate the variance of b 
+.PP
+Referenced by \fBget_results()\fP\&.
+.SS "int calc_d2M (\fBtW_system\fP * sys)"
+
+.PP
+\fBcalc_d2M()\fP: calculate the variance of M 
+.PP
+Referenced by \fBget_results()\fP\&.
+.SS "void calc_dg_dz (\fBtW_Inter_Types\fP * inter, double * dg_dz, double * sm_dg_dz, \fBtW_word\fP tag)"
+
+.PP
+\fBcalc_dg_dz()\fP: Calculates the derivative of g and stores it into sm_dg_dz\&. Prints g, g_cnt dg_dz, and sm_dg_dz\&. Special treatment for dihedral interaction to make sure the -180 and 180 grid points are the same and to account for the periodic nature of this coordinate\&. Currently, the last grid point for dihedrals are cleared since it duplicates the first grid point\&. Smoothing of dg_dz is only performed if set in par\&.txt\&. 
+.PP
+Referenced by \fBcalc_b_struct()\fP\&.
+.SS "void calc_fifth_Bspline (double dr, double R, double R_0, int i, int k, double * B, double * Bp)"
+
+.SS "int calc_grids2 (FILE * fp, \fBtW_gmx_info\fP info, int N_sites, \fBtW_CG_site\fP CG_struct[], \fBtW_system\fP * sys)"
+
+.PP
+\fBcalc_grids2()\fP: The fast loops\&. This part of the forcematching algorithm is called every frame of the trajectory Its primary purpose is to increment the Gbar matrix (M) and the corresponding gbar entries (M2) So that the sum of these two structures is G\&. 'fast loops' is a reference to the series of if statements implemented to fill out the G matrix section by section without double processing interactions (Bond-Bond, Bond-NB, NB-NB) 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int calc_grids3 (int counter, FILE * fp, \fBtW_gmx_info\fP info, int N_sites, \fBtW_CG_site\fP CG_struct[], \fBtW_system\fP * sys)"
+
+.PP
+\fBcalc_grids3()\fP: Eliminating the 3 particle loop 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "double calc_linear_spline_A (int bond_coeff_ctr, int * D_b, double dr, double R_0, int i_0, int N_pts, double R, double * Ap, double * Bp, int periodic)"
+
+.PP
+\fBcalc_linear_spline_A()\fP: 
+.PP
+Referenced by \fBeval_linear_basis_vectors()\fP, \fBeval_linear_basis_vectors_ext()\fP, \fBeval_linear_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LDGRAD()\fP, \fBget_linear_angle_basis_vector()\fP, \fBget_linear_bond_basis_vector()\fP, \fBget_linear_dihedral_basis_vector()\fP, and \fBupdate_nb_pair_grids()\fP\&.
+.SS "int check_Bspline_inter_range (double r_ij, double R_0, double R_max, double dr)"
+
+.PP
+\fBcheck_Bspline_inter_range()\fP: JFR - 07\&.22\&.12: same as linear right now MCL - 03\&.26\&.26: now its not, this one checks for r=0 and removes nan cases 
+.PP
+Referenced by \fBcalc_grids2()\fP, and \fBcalc_grids3()\fP\&.
+.SS "int check_inter_range (double r_ij, double R_0, double R_max, double dr)"
+
+.PP
+\fBcheck_inter_range()\fP: 
+.PP
+Referenced by \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBcalc_ref_Angle_forces()\fP, \fBcalc_ref_BondStretch_forces()\fP, \fBcalc_ref_Dihedral_forces()\fP, and \fBcalc_ref_IntraMolecPairs_forces()\fP\&.
+.SS "int check_linear_inter_range (double r_ij, double R_0, double R_max, double dr)"
+
+.PP
+\fBcheck_linear_inter_range()\fP: Changed r_ij > R_max + 0\&.5*dr to r_ij > R_max 
+.PP
+Referenced by \fBcalc_grids2()\fP, and \fBcalc_grids3()\fP\&.
+.SS "int det_min_image (\fBdvec\fP box, \fBdvec\fP Origin, \fBdvec\fP x)"
+
+.PP
+det_min_image: detemines image of prtcl at R closest to the particle at Origin\&. \\
+.PP
+\fBParameters\fP
+.RS 4
+\fIbox\fP The vector representing the dimensions of the box for pbc 
+.br
+\fIOrigin\fP The coordinates of the particle at origin 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+No\&. of transformations 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+this function ASSSUMES rectangular box, s\&.t\&. box_j = L_j 
+.RE
+.PP
+
+.PP
+Referenced by \fBget_difference_vector_PBC()\fP, and \fBget_nb_pair_info()\fP\&.
+.SS "int direct_solve_lin_eqns (FILE * fp_log, \fBtW_system\fP * sys, \fBtW_word\fP info)"
+
+.PP
+\fBdirect_solve_lin_eqns()\fP: JFR - 12\&.20\&.13: takes care of deciding which matrix inversion routine to use for both the force and struct calc 
+.PP
+Referenced by \fBget_phi_forces()\fP, and \fBget_phi_struct()\fP\&.
+.SS "int eval_bond_basis_vectors (FILE * fp, \fBtW_CG_site\fP * CG_struct, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, int i_site, int * D_b, \fBdvec\fP * calG_b, \fBbool\fP i_flag, int * D_b_inter_index)"
+
+.PP
+eval_bond_basis_vectors: Evaluates the basis vectors for bonded interactions for site i_site\&. Indices for each basis vector are stored in D_b[] and each vector is stored in calcG_b[]\&. The functions g, g_cnt, and L are also evaluated for each interaction\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfp\fP Pointer to the log file where errors are printed 
+.br
+\fICG_struct\fP The list of superatoms found in the topology 
+.br
+\fIBonded_Inter_Types\fP List of the intramolecular interactions in order passed from par\&.txt 
+.br
+\fIi_site\fP The index of the current superatom we are evaluating bonded vectors for 
+.br
+\fID_b\fP The list if half G matrix indices that site i will contribute to [filled by this func] 
+.br
+\fIcalG_b\fP dPsi/dR_I weighted for each knotpoint in D_b [filled by this func] 
+.br
+\fIi_flag\fP Indicates whether or not to evaluate g, g_cnt, and L [true in calc_grids3 
+.br
+\fID_b_inter_index\fP The lambda index for a particular interaction index [filled by this func] 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bonded coefficients that CG_struct[i_site] affects for incrementing G_matrix 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+For \fBcalc_grids2()\fP, this function gets called twice, but g, g_cnt, and L should only be evaluated once\&. Therefore, i_flag was added to indicate if these functions should be evaluated\&. 
+.RE
+.PP
+
+.PP
+Referenced by \fBcalc_grids2()\fP, and \fBcalc_grids3()\fP\&.
+.SS "int eval_bonds_M_b (\fBtW_system\fP * sys, int nr_bond_coeff, int D_b[], \fBdvec\fP calG_b[], \fBbool\fP b_F, \fBdvec\fP f_i, \fBdvec\fP f_i_ref, int * D_b_inter_index)"
+
+.PP
+\fBeval_bonds_M_b()\fP: This function increments the bond-bond part (intramolec-intramolec) part of the G matrix 
+.PP
+Referenced by \fBcalc_grids2()\fP\&.
+.SS "int eval_Bspline_basis_vectors (\fBtW_type_inter2\fP * ij_inter, \fBdvec\fP u_ij, \fBdvec\fP * ij_basis, double r_ij, int * ij_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+
+.PP
+eval_Bspline_basis_vectors: Weights the contributions from a given pair distance (Psi = R_IJ = X) to the surrounding knot points according to Bspline order k\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIij_inter\fP The pointer to the pair interaction parameters site_i and site_j take part in 
+.br
+\fIu_ij\fP The unit vector for the displacement R_i - R_j 
+.br
+\fIij_basis\fP A list that will hold resultant dPsi/dR_I * weights for each knot point 
+.br
+\fIr_ij\fP the pair distance between R_i and R_j 
+.br
+\fIsys\fP The structure that holds all top, par, and trr frame info for each site 
+.br
+\fIsite_i\fP atom_i in the system [the instance, not the type] 
+.br
+\fIb_F\fP TRUE if the trajectory has forces, FALSE if not 
+.br
+\fIflag_grids\fP TRUE in calcgrids3, determines whether to increment g and L structures 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of knot points affected by the pair distance 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This is one in a family of functions that do something similar for the NB pair interactions 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBeval_delta_basis_vectors()\fP \fBeval_linear_basis_vectors()\fP 
+.RE
+.PP
+
+.PP
+Referenced by \fBcalc_grids2()\fP, and \fBcalc_grids3()\fP\&.
+.SS "int eval_Bspline_basis_vectors_ext (\fBtW_type_inter_external\fP * ext_inter, \fBdvec\fP * ext_basis, double z_i, int * ext_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+
+.PP
+\fBeval_Bspline_basis_vectors_ext()\fP: MRD - 06\&.18\&.2020 
+.PP
+Referenced by \fBeval_external_basis_vectors()\fP\&.
+.SS "int eval_Bspline_basis_vectors_LD (\fBtW_type_inter2\fP * ij_inter, \fBdvec\fP u_ij, \fBdvec\fP * ij_basis, double r_ij, int * ij_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids, double LD, \fBbool\fP bSelf, \fBdvec\fP A_ii)"
+
+.IP "\(bu" 2
+\fBeval_Bspline_basis_vectors_LD()\fP: copying the above function and tweaking it 
+.PP
+
+.PP
+Referenced by \fBcalc_grids3()\fP\&.
+.SS "int eval_Bspline_basis_vectors_LDGRAD (\fBtW_type_inter2\fP * ij_inter, \fBdvec\fP u_ij, \fBdvec\fP * ij_basis, double r_ij, int * ij_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids, double LD, \fBdvec\fP grad_rho_i_t_j, \fBbool\fP bSelf)"
+
+.PP
+Referenced by \fBcalc_grids3()\fP\&.
+.SS "int eval_delta_basis_vectors (\fBtW_type_inter2\fP * ij_inter, double n_basis_ij, \fBdvec\fP u_ij, \fBdvec\fP * ij_basis, double r_ij, int * ij_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F)"
+
+.PP
+\fBeval_delta_basis_vectors()\fP: 
+.PP
+Referenced by \fBcalc_grids2()\fP, and \fBcalc_grids3()\fP\&.
+.SS "int eval_delta_basis_vectors_ext (\fBtW_type_inter_external\fP * ext_inter, \fBdvec\fP * ext_basis, double z_i, int * ext_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+
+.PP
+Referenced by \fBeval_external_basis_vectors()\fP\&.
+.SS "int eval_delta_basis_vectors_LD (\fBtW_type_inter2\fP * ij_inter, \fBdvec\fP u_ij, \fBdvec\fP * ij_basis, double r_ij, double LD, int * ij_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, \fBbool\fP bSelf, \fBdvec\fP A_ij)"
+
+.PP
+\fBeval_delta_basis_vectors_LD()\fP: 
+.PP
+Referenced by \fBcalc_grids3()\fP\&.
+.SS "int eval_external_basis_vectors (FILE * fp, \fBtW_CG_site\fP CG_struct[], int n_ext_inter, \fBtW_type_inter_external\fP * Inter_Ext_Type_List, int idx_i, int * ext_idxes, \fBdvec\fP * ext_basis, \fBtW_system\fP * sys, \fBbool\fP b_F, \fBtW_type_inter_external\fP * theExtInt)"
+
+.PP
+\fBeval_external_basis_vectors()\fP: 
+.PP
+Referenced by \fBcalc_grids3()\fP\&.
+.SS "void eval_grad_B (\fBtW_dihedral\fP * dihedral, \fBtW_CG_site\fP * CG_struct)"
+
+.PP
+\fBeval_grad_B()\fP: Code adopted from pages 278-283 of Rapaport's 'The Art of MD Sim\&.' This gives the same result as Noid's notes, but this implementation is more concise\&. 
+.PP
+Referenced by \fBget_Dihedral_basis_vectors()\fP, and \fBget_ref_Dihedral_info()\fP\&.
+.SS "int eval_linear_basis_vectors (\fBtW_type_inter2\fP * ij_inter, double n_basis_ij, \fBdvec\fP u_ij, \fBdvec\fP * ij_basis, double r_ij, int * ij_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+
+.PP
+\fBeval_linear_basis_vectors()\fP: 
+.PP
+Referenced by \fBcalc_grids2()\fP, and \fBcalc_grids3()\fP\&.
+.SS "int eval_linear_basis_vectors_ext (\fBtW_type_inter_external\fP * ext_inter, \fBdvec\fP * ext_basis, double z_i, int * ext_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+
+.PP
+Referenced by \fBeval_external_basis_vectors()\fP\&.
+.SS "int eval_linear_basis_vectors_LD (\fBtW_type_inter2\fP * ij_inter, \fBdvec\fP u_ij, \fBdvec\fP * ij_basis, double r_ij, int * ij_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids, double LD, \fBbool\fP bSelf, \fBdvec\fP A_ij)"
+
+.PP
+Referenced by \fBcalc_grids3()\fP\&.
+.SS "int eval_linear_basis_vectors_LDGRAD (\fBtW_type_inter2\fP * ij_inter, \fBdvec\fP u_ij, \fBdvec\fP * ij_basis, double r_ij, int * ij_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids, double LD, \fBdvec\fP grad_rho_i_t_j, \fBbool\fP bSelf)"
+
+.PP
+eval_linear_basis_vectors_LDGRAD: 
+.PP
+\fBParameters\fP
+.RS 4
+\fIij_inter\fP The pointer to the pair interaction parameters that sites i and j participate in [e\&.g\&. AB params if i is of type A and j is of type B] 
+.br
+\fIn_basis_ij\fP 
+.br
+\fIu_ij\fP The unit vector for the displacement R_i - R_j 
+.br
+\fIij_basis\fP A list that will hold the resultant ij contributions to mathcal G for each knot point 
+.br
+\fIr_ij\fP The pair (radial) distance between R_i and R_j 
+.br
+\fIij_index\fP A list of knotpoint indices that corresponds the entries in ij_basis to the particular entry of mathcal G 
+.br
+\fIsys\fP The structure that holds all top, par, and trr frame info for each site 
+.br
+\fIsite_i\fP atom_i in the system [The index of the atom itself, not the index of the type 
+.br
+\fIb_F\fP A boolean to indicate if the trajectories has forces (and therefore force info should be used) 
+.br
+\fIflag_grids\fP 
+.br
+\fILD\fP 
+.br
+\fIgrad_rho_i_t_j\fP the gradient from type j surrounding cg_site i 
+.br
+\fIbSelf\fP a boolean read from the par file which indicates if the self term should be used in LDs or not\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 if successful 
+.br
+ 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This is one in a family of 2 functions that do about the same thing for SQGRAD potentials\&. It is one of several functions eval_X_basis_vectors which all do the same thing for various order parameters 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBeval_Bspline_basis_vectors_LDGRAD()\fP 
+.RE
+.PP
+
+.PP
+Referenced by \fBcalc_grids3()\fP\&.
+.SS "void eval_M_nb_pair_inter (int n_basis_ij, int ij_index[], \fBdvec\fP ij_basis[], int n_basis_ik, int ik_index[], \fBdvec\fP ik_basis[], \fBtW_system\fP * sys, int flag_M2)"
+
+.PP
+\fBeval_M_nb_pair_inter()\fP: \fIif ( strcmp( sys->PC_var\&.RPC, 'MTvar' ) == 0 ) {*/ sys->d2M[index] += inner_prod*inner_prod; /\fP}*/
+.PP
+Referenced by \fBcalc_grids2()\fP, and \fBcalc_grids3()\fP\&.
+.SS "int eval_M_nbPair_bonds (\fBtW_system\fP * sys, int n_basis_ij, int ij_index[], \fBdvec\fP ij_basis[], int nr_i_bond_coeff, int D_b[], \fBdvec\fP calG_b[])"
+
+.PP
+\fBeval_M_nbPair_bonds()\fP: 
+.PP
+Referenced by \fBcalc_grids2()\fP\&.
+.SS "int eval_power_basis_vectors (\fBtW_type_inter2\fP * ij_inter, \fBdvec\fP u_ij, \fBdvec\fP * power_ij_basis, double r_ij, int * ij_index, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBbool\fP b_F, int flag_grids)"
+
+.PP
+\fBeval_power_basis_vectors()\fP: 
+.PP
+Referenced by \fBcalc_grids2()\fP, and \fBcalc_grids3()\fP\&.
+.SS "void get_all_iList (\fBtW_system\fP * sys, \fBbool\fP bSpeak)"
+
+.PP
+get_all_ilist: For each site_type i, obtains lists of pair interaction partner types for Inter_Map/iMap[i] By the end of this function, sys->Inter_Map[i] contains the strings that site_type[i] interacts with sys->Inter_iMap[j] contains the corresponding interaction indicies for Inter2_Type_list for the site_i-Inter_Map[j] pair interaction sys->Inter_Map_Len[i] contains the number of interactions partner types for site_type_i [number distinct interactions] which is also the length of each entry in Inter_Map/iMap
+.PP
+\fBParameters\fP
+.RS 4
+\fIsys\fP - the system info we are working on [post load top info] 
+.br
+\fIbspeak\fP - Whether or not to print to the screen [usually processor 0 speaks] 
+.RE
+.PP
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int get_Angle_basis_vectors (int i_site, int i_inter, int bond_coeff_ctr, \fBtW_CG_site\fP * i_site_ptr, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, int * D_b, \fBdvec\fP * calG_b, \fBtW_CG_site\fP * CG_struct, \fBbool\fP i_flag)"
+
+.PP
+get_Angle_basis_vectors: Associates the angle that CG_struct[i] is involved in with a corresponding value of dPsi/dR_I and its entry index D_b Does this based on the basis type for the angle by calling get_X_angle_basis_vector where X is the basis 
+.PP
+\fBParameters\fP
+.RS 4
+\fIi_site\fP the index [I] for the superatom R_I in the above qtys 
+.br
+\fIi_inter\fP the index [lambda] for the interaction index (based on \&.btp file) 
+.br
+\fIbond_coeff_ctr\fP the current number of bonded coefficients that CG_struct[i_site] has effected before this angle [lambda] was counted 
+.br
+\fIi_site_ptr\fP A pointer to CG_struct[i_site] (the address of CG_struct[i_site]) 
+.br
+\fIBonded_Inter_Types\fP The list of bonded interaction structures as determined from reading par\&.txt 
+.br
+\fID_b\fP the list of half matrix indices that will be effected by CG_struct[i] [new entries are added by this function] 
+.br
+\fIcalG_b\fP the list of dPsi/dR_I * weight factor for each D_b in the list above 
+.br
+\fICG_struct\fP the total list of superatoms found in the topology 
+.br
+\fIi_flag\fP a boolean added to indicate whether g and L structures will be evaluated 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the number of coeffections affected by the angle being evaluated (based on the basis type) 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+this is part of a family of functions that do similar things for different bonded Psi types 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBget_BondStretch_basis_vectors()\fP \fBget_Dihedral_basis_vectors()\fP \fBget_IntraMolec_NB_Pair_basis_vectors()\fP 
+.RE
+.PP
+
+.PP
+Referenced by \fBeval_bond_basis_vectors()\fP\&.
+.SS "int get_Angle_info (int i_site, int * sites, \fBtW_CG_site\fP * CG_struct, \fBdvec\fP L_2, \fBdvec\fP L_3, double * cos_theta, double * sin_theta, double * theta, double * norm_12, double * norm_13)"
+
+.PP
+get_Angle_info: gets theta/vectors required to figure out dPsi/dR_I for an angle site_I takes place in 
+.PP
+\fBParameters\fP
+.RS 4
+\fIi_site\fP The superatom we are taking angle data for 
+.br
+\fIsites\fP The triplet of superatoms involved in the angle we are taking data for 
+.br
+\fICG_struct\fP The list of all superatoms in the system 
+.br
+\fIL_2\fP The component of the Jacobian obtained from -d(theta)/dR_2 for an angle 1-2-3 [filled by this func] 
+.br
+\fIL_3\fP The component of the Jacobian obtained from -d(theta)/dR_3 for an angle 1-2-3 [filled by this func] 
+.br
+\fIcos_theta\fP A pointer to a double that will store cos(theta), passed by address [filled by this func] 
+.br
+\fIsin_theta\fP A pointer to a double that will store sin(theta), passed by address [filled by this func] 
+.br
+\fItheta\fP A pointer to the angle (theta, between atoms 0-1-2 ), passed by address [filled by this func] 
+.br
+\fInorm_12\fP The distance between sites 0 and 1 in an angle 0-1-2, passed by address [filled by this func] 
+.br
+\fInorm_13\fP The distance between sites 1 and 2 in an anggle 0-1-2, passed by address [filled by this func] 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Index position of i_site in angle 0-1-2 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This function is one in a family of functions that get the required info for deciphering dPsi/dR_I for different types of zeta order parameters 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBget_BondStretch_info\fP 
+.RE
+.PP
+
+.PP
+Referenced by \fBget_Bspline_angle_basis_vector()\fP, \fBget_delta_angle_basis_vector()\fP, \fBget_harmonic_angle_basis_vector()\fP, and \fBget_linear_angle_basis_vector()\fP\&.
+.SS "int get_atom_position_angle (int angle_triple[], int i_site)"
+
+.PP
+get_atom_position_angle: Determines the position of site_i (i_site) in the angle_triple passed 
+.PP
+\fBParameters\fP
+.RS 4
+\fIangle_triple\fP the list of site indices involved in the angle 
+.br
+\fIi_site\fP the index of the site I want the position of 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+if successful, returns 0 1 or 2 for an angle 0-1-2, exits if not found 
+.RE
+.PP
+
+.PP
+Referenced by \fBget_Angle_info()\fP\&.
+.SS "int get_atom_position_dihedral (int dihedral_quartet[], int i_site)"
+
+.PP
+\fBget_atom_position_dihedral()\fP: 
+.PP
+Referenced by \fBget_Dihedral_basis_vectors()\fP\&.
+.SS "int get_b_harmonic_bond (\fBtW_Inter_Types\fP * inter, double kT)"
+
+.PP
+\fBget_b_harmonic_bond()\fP: 
+.PP
+Referenced by \fBcalc_b_struct()\fP\&.
+.SS "void get_b_power (\fBtW_Inter_Types\fP * inter, double kT)"
+
+.PP
+\fBget_b_power()\fP: 
+.PP
+Referenced by \fBcalc_b_struct()\fP\&.
+.SS "int get_b_rb_dihedral (\fBtW_Inter_Types\fP * inter, double kT)"
+
+.PP
+\fBget_b_rb_dihedral()\fP: 
+.PP
+Referenced by \fBcalc_b_struct()\fP\&.
+.SS "int get_b_soln (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_b_soln()\fP: multiply the obtained forces with the original matrix to obtain the solns, b 
+.PP
+Referenced by \fBget_results()\fP\&.
+.SS "int get_b_soln_err (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_b_soln_err()\fP: multiply the obtained forces with the original matrix to obtain the solns, b 
+.PP
+Referenced by \fBget_results()\fP\&.
+.SS "int get_b_soln_errAA (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_b_soln_errAA()\fP: multiply the obtained forces with the original matrix to obtain the solns, b 
+.SS "int get_b_struct_and_b_forces (FILE * fp_log, \fBtW_system\fP * sys, \fBtW_word\fP tag)"
+
+.PP
+\fBget_b_struct_and_b_forces()\fP: (1) Allocates memory for sys->b_forces and sys->b_struct\&. (2) Copies sys->b to sys->b_forces\&. (3) Calculates b_struct and stores it in sys->b_struct\&. (4) If present, subtracts sys->b_ref from sys->b_struct\&. (5) Clears sys->b\&. 
+.PP
+Referenced by \fBget_results()\fP\&.
+.SS "void get_b_TOY_dihedral (\fBtW_Inter_Types\fP * inter, double kT)"
+
+.PP
+\fBget_b_TOY_dihedral()\fP: 
+.PP
+Referenced by \fBcalc_b_struct()\fP\&.
+.SS "int get_BondStretch_basis_vectors (int i_site, int i_inter, int bond_coeff_ctr, \fBtW_CG_site\fP * i_site_ptr, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, int * D_b, \fBdvec\fP * calG_b, \fBtW_CG_site\fP * CG_struct, \fBbool\fP i_flag)"
+
+.PP
+get_BondStretch_basis_vectors: Associates a Bonded interaction instance (index i_inter) with halfG indices D_b and contributions dPsi_dR_I We determine the pair distance between i_site and its interaction partner obtained from i_inter Then we weight its contribution to L, b, and g at each knot point according to the basis type selected 
+.PP
+\fBParameters\fP
+.RS 4
+\fIi_site\fP The index for CG_struct[i_site] 
+.br
+\fIi_inter\fP The lambda index for the bond instance 
+.br
+\fIi_site_ptr\fP The address of CG_struct[i_site] 
+.br
+\fIbond_coeff_ctr\fP The number of coefficients site_i was involved in before this interaction was evaluated 
+.br
+\fIBonded_Inter_Types\fP The list of bonded interaction structures as obtained from par\&.txt 
+.br
+\fID_b\fP The list of coefficients site_i has contributed to so far [added on to by this func] 
+.br
+\fIcalG_b\fP The list of dPsi/dR_I site_i will contribute so so far [added on to by this func] 
+.br
+\fICG_struct\fP The list of superatoms involved in the topology for the system 
+.br
+\fIi_flag\fP a boolean added to indicate whether we evaluate L and g 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+number of coefficients (knot points) associated with this instance 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+this is one in a family of functions that do similar things for different zeta interaction types 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBget_Angle_basis_vectors()\fP \fBget_IntraMolec_NB_Pair_basis_vectors()\fP \fBget_Dihedral_basis_vectors()\fP 
+.RE
+.PP
+
+.PP
+Referenced by \fBeval_bond_basis_vectors()\fP\&.
+.SS "double get_BondStretch_info (int i_site, int * sites, \fBtW_CG_site\fP * CG_struct, \fBdvec\fP u_ij)"
+
+.PP
+get_BondStretch_info: Calculates and stores data needed to calculated the BondStretch basis vectors\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIi_site\fP the index of the CG_struct we are looking at BondStretch info for 
+.br
+\fIsites\fP the list of CG_struct indices involved in the bond we are looking at 
+.br
+\fICG_struct\fP the list of superatoms involved in the system as read in from the top 
+.br
+\fIu_ij\fP the unit vector pointing between sites i and j [filled by this func] 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The pair distance [bond length] between CG_struct[i_site] and its partner listed in sites 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+no pbc is considered by this function, so user may get weird results from an untreated trajectory 
+.RE
+.PP
+
+.PP
+Referenced by \fBget_BondStretch_basis_vectors()\fP\&.
+.SS "int get_Bspline_angle_basis_vector (int i_site, int bond_coeff_ctr, int i_bond_type, int * sites, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, \fBtW_CG_site\fP * CG_struct, \fBbool\fP i_flag)"
+
+.PP
+\fBget_Bspline_angle_basis_vector()\fP: JFR - 07\&.23\&.12 
+.PP
+Referenced by \fBget_Angle_basis_vectors()\fP\&.
+.SS "int get_Bspline_bond_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+
+.PP
+\fBget_Bspline_bond_basis_vector()\fP: 
+.PP
+Referenced by \fBget_BondStretch_basis_vectors()\fP, and \fBget_Bspline_IntraMolec_NB_Pair_basis_vector()\fP\&.
+.SS "int get_Bspline_dihedral_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, \fBtW_dihedral\fP dihedral, \fBbool\fP i_flag)"
+
+.PP
+\fBget_Bspline_dihedral_basis_vector()\fP: Range is not checked since the R_min and R_max are assumed to be -180 and 180\&. For now, everyting is set to zero if sin(phi) gets too close to 0\&. When the 180 grid point is updated, then the index is switched to the -180 grid point since these are the same point\&. 
+.PP
+Referenced by \fBget_Dihedral_basis_vectors()\fP\&.
+.SS "int get_Bspline_IntraMolec_NB_Pair_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+
+.PP
+\fBget_Bspline_IntraMolec_NB_Pair_basis_vector()\fP: JFR - 07\&.23\&.12: Bspline 
+.PP
+Referenced by \fBget_IntraMolec_NB_Pair_basis_vectors()\fP\&.
+.SS "int get_delta_angle_basis_vector (int i_site, int bond_coeff_ctr, int i_bond_type, int * sites, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, \fBtW_CG_site\fP * CG_struct, \fBbool\fP i_flag)"
+
+.PP
+\fBget_delta_angle_basis_vector()\fP: 
+.PP
+Referenced by \fBget_Angle_basis_vectors()\fP\&.
+.SS "int get_delta_bond_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+
+.PP
+\fBget_delta_bond_basis_vector()\fP: 
+.PP
+Referenced by \fBget_BondStretch_basis_vectors()\fP\&.
+.SS "int get_delta_dihedral_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, \fBtW_dihedral\fP dihedral, \fBbool\fP i_flag)"
+
+.PP
+\fBget_delta_dihedral_basis_vector()\fP: Range is not checked since the R_min and R_max are assumed to be -180 and 180\&. For now, everyting is set to zero if sin(phi) gets too close to 0\&. When the 180 grid point is updated, then the index is switched to the -180 grid point since these are the same point\&. 
+.PP
+Referenced by \fBget_Dihedral_basis_vectors()\fP\&.
+.SS "int get_delta_IntraMolec_NB_Pair_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+
+.PP
+\fBget_delta_IntraMolec_NB_Pair_basis_vector()\fP: 
+.PP
+Referenced by \fBget_IntraMolec_NB_Pair_basis_vectors()\fP\&.
+.SS "int get_Dihedral_basis_vectors (int i_site, int i_inter, int bond_coeff_ctr, \fBtW_CG_site\fP * i_site_ptr, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, int * D_b, \fBdvec\fP * calG_b, \fBtW_CG_site\fP * CG_struct, \fBbool\fP i_flag)"
+
+.PP
+\fBget_Dihedral_basis_vectors()\fP: 
+.PP
+Referenced by \fBeval_bond_basis_vectors()\fP\&.
+.SS "double get_g_dihedral_angle (\fBdvec\fP basis)"
+
+.PP
+\fBget_g_dihedral_angle()\fP: 
+.PP
+Referenced by \fBget_Bspline_dihedral_basis_vector()\fP, \fBget_delta_dihedral_basis_vector()\fP, \fBget_linear_dihedral_basis_vector()\fP, \fBget_RB_dihedral_basis_vector()\fP, and \fBget_TOY_dihedral_basis_vector()\fP\&.
+.SS "double get_g_theta_angle (double cos_theta, double r_12, double r_13)"
+
+.PP
+\fBget_g_theta_angle()\fP: 
+.PP
+Referenced by \fBget_Bspline_angle_basis_vector()\fP, \fBget_delta_angle_basis_vector()\fP, \fBget_harmonic_angle_basis_vector()\fP, and \fBget_linear_angle_basis_vector()\fP\&.
+.SS "int get_grid_index_for_delta_basis (double r, int i_0, double dr, double R_0)"
+
+.PP
+\fBget_grid_index_for_delta_basis()\fP: 
+.PP
+Referenced by \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBeval_delta_basis_vectors_ext()\fP, \fBget_delta_angle_basis_vector()\fP, \fBget_delta_bond_basis_vector()\fP, \fBget_delta_dihedral_basis_vector()\fP, and \fBget_delta_IntraMolec_NB_Pair_basis_vector()\fP\&.
+.SS "int get_grid_index_for_linear_basis (double r, int i_0, double dr, double R_0)"
+
+.PP
+\fBget_grid_index_for_linear_basis()\fP: 
+.PP
+Referenced by \fBcalc_linear_spline_A()\fP, \fBeval_Bspline_basis_vectors()\fP, \fBeval_Bspline_basis_vectors_ext()\fP, \fBeval_Bspline_basis_vectors_LD()\fP, \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBget_Bspline_angle_basis_vector()\fP, \fBget_Bspline_bond_basis_vector()\fP, \fBget_Bspline_dihedral_basis_vector()\fP, \fBprint_Bspline_basis_forces()\fP, and \fBprint_Bspline_basis_output()\fP\&.
+.SS "int get_harmonic_angle_basis_vector (int i_site, int bond_coeff_ctr, int i_bond_type, int * sites, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, \fBtW_CG_site\fP * CG_struct, \fBbool\fP i_flag)"
+
+.PP
+\fBget_harmonic_angle_basis_vector()\fP: 
+.PP
+Referenced by \fBget_Angle_basis_vectors()\fP\&.
+.SS "int get_harmonic_bond_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+
+.PP
+\fBget_harmonic_bond_basis_vector()\fP: 
+.PP
+Referenced by \fBget_BondStretch_basis_vectors()\fP\&.
+.SS "int get_iList (\fBtW_word\fP name, int N_Inter_Types, \fBtW_type_inter2\fP InterList[], int * i1_list, \fBtW_word\fP * n1_list)"
+
+.PP
+\fBget_iList()\fP: 
+.SS "int get_IntraMolec_NB_Pair_basis_vectors (int i_site, int i_inter, int bond_coeff_ctr, \fBtW_CG_site\fP * i_site_ptr, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, int * D_b, \fBdvec\fP * calG_b, \fBtW_CG_site\fP * CG_struct, \fBbool\fP i_flag)"
+
+.PP
+\fBget_IntraMolec_NB_Pair_basis_vectors()\fP: 
+.PP
+Referenced by \fBeval_bond_basis_vectors()\fP\&.
+.SS "double get_IntraMolec_NB_Pair_info (int i_site, int * sites, \fBtW_CG_site\fP * CG_struct, \fBdvec\fP u_ij)"
+
+.PP
+get_IntrarMolec_NB_Pair_info(): 
+.PP
+Referenced by \fBget_IntraMolec_NB_Pair_basis_vectors()\fP\&.
+.SS "int get_L2_L3_angles (\fBdvec\fP u_12, \fBdvec\fP u_13, double cos_theta, double norm_12, double norm_13, \fBdvec\fP L_2, \fBdvec\fP L_3)"
+
+.PP
+\fBget_L2_L3_angles()\fP: 
+.PP
+Referenced by \fBget_Angle_info()\fP, and \fBget_ref_Angle_info()\fP\&.
+.SS "double get_laplacian_theta_angle (double cos_theta, double sin_theta, double r_12, double r_13)"
+
+.PP
+\fBget_laplacian_theta_angle()\fP: 
+.PP
+Referenced by \fBget_Bspline_angle_basis_vector()\fP, \fBget_delta_angle_basis_vector()\fP, \fBget_harmonic_angle_basis_vector()\fP, and \fBget_linear_angle_basis_vector()\fP\&.
+.SS "int get_linear_angle_basis_vector (int i_site, int bond_coeff_ctr, int i_bond_type, int * sites, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, \fBtW_CG_site\fP * CG_struct, \fBbool\fP i_flag)"
+
+.PP
+\fBget_linear_angle_basis_vector()\fP: 
+.PP
+Referenced by \fBget_Angle_basis_vectors()\fP\&.
+.SS "int get_linear_bond_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+
+.PP
+get_linear_bond_basis_vector: Based on a passed bond length (norm_ij) determine the dPsi/dR_I contributions to surrounding knot points Will filter out bond if not in cutoff 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbond_coeff_ctr\fP current no\&. of knotpoints affected by site_i 
+.br
+\fIi_bond_type\fP zeta index for the bond we are evaluating 
+.br
+\fID_b\fP the list of knot point indices affected by site_i so far [added to by this func] 
+.br
+\fIcalG_b\fP the list of dPsi/dR_I weighted to contribute to each knotpoint in D_b [added to by this func] 
+.br
+\fIBonded_Inter_Types\fP The list of bonded interactions user requested as obtained from reading par\&.txt 
+.br
+\fInorm_ij\fP the bondlength to be evaluated 
+.br
+\fIdvec\fP u_ij The unit vector that orients the bond 
+.br
+\fIi_flag\fP TRUE for incrementing g and L, FALSE for not 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+2, if the bond will contribute to G or 0 if its not in the cutoff 
+.RE
+.PP
+
+.PP
+Referenced by \fBget_BondStretch_basis_vectors()\fP, and \fBget_linear_IntraMolec_NB_Pair_basis_vector()\fP\&.
+.SS "int get_linear_dihedral_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, \fBtW_dihedral\fP dihedral, \fBbool\fP i_flag)"
+
+.PP
+\fBget_linear_dihedral_basis_vector()\fP: Range is not checked since the R_min and R_max are assumed to be -180 and 180\&. For now, everyting is set to zero if sin(phi) gets too close to 0\&. When the 180 grid point is updated, then the index is switched to the -180 grid point since these are the same point\&. 
+.PP
+Referenced by \fBget_Dihedral_basis_vectors()\fP\&.
+.SS "int get_linear_IntraMolec_NB_Pair_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, double norm_ij, \fBdvec\fP u_ij, \fBbool\fP i_flag)"
+
+.PP
+\fBget_linear_IntraMolec_NB_Pair_basis_vector()\fP: 
+.PP
+Referenced by \fBget_IntraMolec_NB_Pair_basis_vectors()\fP\&.
+.SS "void get_nb_pair_info (double * r_ij, \fBdvec\fP x_i, \fBdvec\fP x_j, \fBdvec\fP x_ij, int b_PBC, \fBdvec\fP box)"
+
+.PP
+get_nb_pair_info: For positions x_i and x_j, determine the pair distance and displacement under PBC if req\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIr_ij\fP place to store distance between particle i and j [filled by this func] 
+.br
+\fIx_i\fP position of particle i 
+.br
+\fIx_j\fP position of particle j 
+.br
+\fIx_ij\fP place to store pair displacement vector [filled by this func] 
+.br
+\fIbox\fP vector representing box dimensions for pbc calculation 
+.RE
+.PP
+
+.PP
+Referenced by \fBcalc_grids2()\fP, and \fBcalc_grids3()\fP\&.
+.SS "\fBtW_type_inter2\fP * get_nb_pair_inter_ptr (\fBtW_CG_site\fP * j_site, \fBtW_system\fP * sys, int N_i1, \fBtW_word\fP * nList1, int * iList1)"
+
+.PP
+get_nb_pair_inter_ptr: Determines if j_site\&.name is contained in the partner list passed for site_i (nList) i\&.e\&. Do site j and i interaction? Which pair interaction?
+.PP
+\fBParameters\fP
+.RS 4
+\fIj_site\fP the atom [site] that we are checking is in site_type i's interaction list 
+.br
+\fIsys\fP the structure that stores all top, par, and frame info 
+.br
+\fIN_i1\fP The number of pair interactions the site_type i is involved in, usually sys->Inter_Map_Len[site_type_i_idx] 
+.br
+\fInList1\fP List of site_type_i's pair interaction partner type names, usually sys->Inter_Map[site_type_i_idx] 
+.br
+\fIiList1\fP List of site_type_i's pair interaction partner site_type indices, usually sys->Inter_iMap[site_type_i_idx] 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+NULL if site_type_i and site_type_j do not interact, OR a pointer to the pair interaction parameters if they do 
+.RE
+.PP
+
+.PP
+Referenced by \fBcalc_grids2()\fP\&.
+.SS "int get_nb_pair_inter_ptr_n (\fBtW_CG_site\fP * j_site, \fBtW_system\fP * sys, int N_i1, \fBtW_word\fP * nList1, int * iList1, \fBtW_type_inter2\fP ** the_inter2s)"
+
+.PP
+\fBget_nb_pair_inter_ptr_n()\fP: Does the same thing as the above function, but instead puts the pointers into the_inter2s, and returns the number of pair interactions that i and j are involved in\&. MRD 06\&.18\&.2020 
+.PP
+Referenced by \fBcalc_grids3()\fP\&.
+.SS "int get_phi_forces (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_phi_forces()\fP: Calculates the coefficients when forces are available\&. 
+.PP
+Referenced by \fBget_phi_struct_and_phi_forces()\fP\&.
+.SS "int get_phi_struct (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_phi_struct()\fP: Calculates the coefficients using b_struct\&. 
+.PP
+Referenced by \fBget_phi_struct_and_phi_forces()\fP\&.
+.SS "int get_phi_struct_and_phi_forces (FILE * fp_log, \fBtW_system\fP * sys, int forces)"
+
+.PP
+\fBget_phi_struct_and_phi_forces()\fP: Calculates the coefficients using b_forces if forces were available and b_struct in all cases\&. 
+.PP
+Referenced by \fBget_results()\fP\&.
+.SS "int get_RB_dihedral_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, \fBtW_dihedral\fP dihedral, \fBbool\fP i_flag)"
+
+.PP
+\fBget_RB_dihedral_basis_vector()\fP: 
+.PP
+Referenced by \fBget_Dihedral_basis_vectors()\fP\&.
+.SS "int get_rescale (\fBtW_system\fP * sys)"
+
+.PP
+\fBget_rescale()\fP: copy g_cnt to rescale 
+.PP
+Referenced by \fBget_results()\fP\&.
+.SS "int get_results (FILE * fp_log, \fBtW_system\fP * sys, int forces, \fBtW_word\fP tag)"
+
+.PP
+\fBget_results()\fP: (1) Calculate and store b_forces and b_struct\&. (2) Remove rows of zero from the matrix M\&. (3) Calculate the coeff\&. phi\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int get_TOY_dihedral_basis_vector (int bond_coeff_ctr, int i_bond_type, int * D_b, \fBdvec\fP * calG_b, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, \fBtW_dihedral\fP dihedral, \fBbool\fP i_flag)"
+
+.PP
+\fBget_TOY_dihedral_basis_vector()\fP: 
+.PP
+Referenced by \fBget_Dihedral_basis_vectors()\fP\&.
+.SS "int get_Zero_list (int * Zero_list, int * N_coeff, double * g_cnt, \fBtW_system\fP * sys)"
+
+.PP
+\fBget_Zero_list()\fP: Determine Zero_list, N_zero, and N_coeff\&. (1) Zero_list[] contains the indices to elements of g_cnt that are zero\&. (2) N_zero is the number of indices stored in Zero_list\&. (3) N_coeff is the number of coeff\&. to be determined after removing those corresponding to the Zero_list\&. 
+.PP
+Referenced by \fBtrim_Mb()\fP\&.
+.SS "void initialize_Zero_list (int N_coeff0, int * Zero_list)"
+
+.PP
+\fBinitialize_Zero_list()\fP: Initialize elements of Zero_list to -1\&. 
+.PP
+Referenced by \fBtrim_Mb()\fP\&.
+.SS "int normalize_arrays_top (int N_sites, int N_frames, \fBtW_system\fP * sys_top)"
+
+.PP
+\fBnormalize_arrays_top()\fP: Normalizes the arrays\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void print_debug_eval_bond_basis (\fBtW_CG_site\fP * i_site_ptr, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types, int i, FILE * fp)"
+
+.PP
+\fBprint_debug_eval_bond_basis()\fP: 
+.PP
+Referenced by \fBeval_bond_basis_vectors()\fP\&.
+.SS "void process_G_matrix (\fBtW_system\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int remove_zero_rows_mem (FILE * fp, int N_coeff0, int N_zero, int * Zero_list, \fBtW_system\fP * sys)"
+
+.PP
+***************************************************************************************** ***************************************************************************************** ***************************************************************************************** \fBremove_zero_rows_mem()\fP: Removes rows of zero from matrix M and the corresponding elements in the other arrays by moving the elements that correspond to the non-zero g_cnt into the lowest available spots in the array\&. This function is tricky and hard to read, so I've tried to put extensive comments below\&. - JFR 04\&.13\&.12 
+.PP
+Referenced by \fBtrim_Mb()\fP\&.
+.SS "int resize_arrays_trim_Mb (\fBtW_system\fP * sys, int N_coeff)"
+
+.PP
+\fBresize_arrays_trim_Mb()\fP: erealloc arrays to proper size after trimming\&. 
+.PP
+Referenced by \fBtrim_Mb()\fP\&.
+.SS "int set_pointers_trim_Mb (\fBtW_system\fP * sys)"
+
+.PP
+***************************************************************************************** \fBset_pointers_trim_Mb()\fP: Set pointers to master array\&. 
+.PP
+Referenced by \fBtrim_Mb()\fP\&.
+.SS "\fBbool\fP setup_box_dimensions (\fBdvec\fP box, double matrix[DIM][DIM])"
+
+.PP
+\fBsetup_box_dimensions()\fP: Stores the box vectors for a cubic box from the diagonal elements of matrix\&. Returns False if the box is not cubic\&. 
+.PP
+Referenced by \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, and \fBcalc_ref_nb_pair_forces()\fP\&.
+.SS "void subtract_ref_forces (int N_sites, \fBtW_CG_site\fP * CG_struct)"
+
+.PP
+\fBsubtract_ref_forces()\fP: Subtracts the force calculated from a reference potential from the force read from the trajectory\&. 
+.SS "int trim_Mb (FILE * fp, \fBtW_system\fP * sys)"
+
+.PP
+\fBtrim_Mb()\fP: Eliminates rows from sys->M that contain only zeros (i\&.e\&. the basis functions were not sampled in the configurations\&. (1) Compile the Zero_list by finding which basis functions were not sampled during the calculation\&. (2) 
+.PP
+Referenced by \fBget_results()\fP\&.
+.SS "int update_N_instances_nb (\fBtW_system\fP sys_top_global, \fBtW_system\fP * sys_global)"
+
+.PP
+\fBupdate_N_instances_nb()\fP: Currently, this function is not used\&. 
+.SS "void update_nb_pair_grids (int n_basis_ij, int ij_index[], \fBdvec\fP ij_basis[], \fBbool\fP b_F, double r_ij, \fBtW_system\fP * sys, \fBtW_CG_site\fP site_i, \fBtW_type_inter2\fP * ij_inter)"
+
+.PP
+\fBupdate_nb_pair_grids()\fP: Currently, not using L for this basis\&. 
+.SS "int update_total_arrays (\fBtW_system\fP sys_top, double pr_top, \fBtW_system\fP * sys)"
+
+.PP
+\fBupdate_total_arrays()\fP: Update the master grids with the data from the current topology\&. \fIif ( strcmp( sys->PC_var\&.LPC, 'bvar' ) == 0 ) {*/ sys->d2b[i] += pr_top * sys_top\&.d2b[i]; /\fP}*/
+.PP
+\fIif ( strcmp( sys->PC_var\&.RPC, 'MTvar' ) == 0 ) {*/ sys->d2M[i] += pr_top * sys_top\&.d2M[i]; /\fP}*/
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int weight_local_top (\fBtW_system\fP * sys_top, double w_local, int N_coeff)"
+
+.PP
+\fBweight_local_top()\fP: Weight the sums from each local proc\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.
