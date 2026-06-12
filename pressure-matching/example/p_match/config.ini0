@@ -1,0 +1,32 @@
+#Calculation settings
+N_atoms: 15000
+N_sites: 5000
+N_pres_coeff: 2
+Pressure_units: bar
+Volume_units: nm3
+Energy_units: kj_per_mol
+Basis_type: das_andersen
+vmax: 154
+vmin: 148
+dv: 0.1
+Iterative: 0
+frac_cutoff: 0.1
+Error_estimate: 1
+Use_ref_Fv: 0
+
+#Input Files 
+AA_pressures: ../aa_pressures.xvg
+CG_pressures: CG_press.xvg
+AA_volumes: ../aa_volumes.xvg
+CG_volumes: CG_vols.xvg
+
+#Output Files
+pres_decompose: decompose.xvg
+log_file: log.txt
+psi_output: psi.dat
+Q_output: Q.dat
+CG_Q_output: CG_Q.dat
+AA_Q_output: AA_Q.dat
+g_cnt_output: g_cnt.dat
+AA_g_cnt_output: AA_g_cnt.dat
+CG_g_cnt_output: CG_g_cnt.dat
