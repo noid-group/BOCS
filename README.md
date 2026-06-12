@@ -37,7 +37,9 @@ version of BOCS.
 ## BOCS v5 
 BOCS v5 implements local density, square gradient, and external potentials into the force-matching equations. 
 New tools introduced include: 
+
 ldcalc - calculates local densities and gradients of local densities for a given w(r) selected by the user (5 options available) 
+
 LDPDF - calculates sampled distributions for local density and square magnitude of the local density gradients for each particle
 
 These potentials can be simulated using a modified version of PKG-BOCS, which is currently distributed in the lammps/lammps:develop branch
