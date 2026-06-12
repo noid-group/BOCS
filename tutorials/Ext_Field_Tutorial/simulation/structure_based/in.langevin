@@ -1,0 +1,64 @@
+units		real # E=kcal, r = Angstrom, t = fs
+dimension	3 # 3D
+boundary	p p p # Periodic in all 3 is easiest. We've put a strong potential in such that particles will not leave
+atom_style	full # BOCS reads full or ldd atom info formatted as below in dump 
+newton		on # f_ij = -f_ji
+timestep	1 # 1 fs md step
+
+region my_box block  0.000000 100.0 0.000000 100.0 0.000000 200.0 # set up region
+create_box 3 my_box # set sim box = region
+
+region my_box1 block 0.000 100.000 0.000 100.000 11.2 15.0 # Create different slices of region for dif particle types
+region my_box2 block 0.000 100.000 0.000 100.000 3.4  5.5
+region my_box3 block 0.000 100.000 0.000 100.000 11.5 15.0 
+
+create_atoms 1 random 400 13423 my_box1 # Fill particles in slices
+create_atoms 2 random 400 13423 my_box2
+create_atoms 3 random 400 13423 my_box3
+
+group gr1 type 1 # set up groups for external fields to act on
+group gr2 type 2
+group gr3 type 3
+
+mass * 32.042   # Set mass of all particles
+
+velocity	all create 270 22345 dist gaussian # init temperature / velocities
+
+pair_style      none # These are ideal gas particles #lj/cut 14.0 
+
+neigh_modify	delay 1000 every 10 check yes one 10000 #Bad neighbor settings because ideal gas
+neighbor	1.0 bin # Ideal gas
+thermo          500 # How often to save PV/T data 
+
+# Converting lammps real units to gmx/bocs units
+variable STEP equal step
+variable TEMP equal temp
+variable VOL equal vol/1000.0
+variable PRESS equal press*1.01325
+
+## Set various fixes
+fix  type1ext gr1 wall/lj126 zlo EDGE 100 10 35 pbc yes
+fix  type2ext gr2 wall/lj126 zlo EDGE 100 3 35 pbc yes
+fix  type3ext gr3 wall/lj126 zlo EDGE 100 10 35 pbc yes
+
+fix             1  all      langevin       270.0  270.0 100 342780 # Add in Langevin Thermostat (Does not propagate EOM on its own)
+fix             2 all nve # Newton's EOM (with Langevin -> NVT)
+
+run_style       verlet
+
+# Printing various stats in gmx/bocs units
+ fix             print_temp all print 500 "${STEP} ${TEMP}" file temp.dat screen no
+ fix             print_vol all print 500 "${STEP} ${VOL}" file vol.dat screen no
+ fix             print_press all print 500 "${STEP} ${PRESS}" file press.dat screen no
+ fix		print_pv  all print 500 "${VOL} ${PRESS}" file PV.dat screen no
+
+## Prints a ldd file format, for use in BOCS / to view ldd qtys.
+ dump           2 all custom 100 bocs_traj.lmp id type x y z vx vy vz fx fy fz # c_ldd
+ dump_modify    2 sort id
+
+
+# Write restart files to continue simulations
+# restart 100000 state1.restart state2.restart
+
+## Run for this many steps
+run 100000000

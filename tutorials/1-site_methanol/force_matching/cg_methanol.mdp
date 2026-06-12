@@ -1,0 +1,44 @@
+; System: 
+
+; Run Control
+integrator = md						; most widely applicable integrator
+dt = 0.001						; time step for simulation in ps
+nsteps = 5000000						; nsteps * dt = duration on simulation
+comm-mode = linear					; removal of the center of mass translational velocity
+nstcomm = 1						; frequency of COM translational velocity removal
+
+; Output Control
+nstxout                  = 1000				; output frequency for coordinates
+nstvout                  = 1000				; output frequency for velocities
+nstfout                  = 1000				; output frequency for forces
+nstcheckpoint            = 1000				; output frequency for checkpoints
+nstlog                   = 1000				; output frequency of energies to log file
+nstenergy                = 1000				; output frequency of energies to energy file
+energygrps		 = MEO				; Allows you to run tabulated nb interactions for all atoms in group MEO, MEO must be in the index file 
+energygrp_table		 = MEO MEO			; Tells gromacs what the table file will be called for MEO MEO interaction (table_MEO_MEO.xvg)
+							; Energy groups that are listed without an entry in energygrp_table will run from table.xvg (if it exists)
+
+; Neighbor Searching
+cutoff-scheme = group					; only scheme to use except when user specified potential
+nstlist = 1						; frequency to update NL
+ns-type = grid						; use grid to chick NL
+pbc = xyz						; PBC in use
+rlist = 1.5						; NL cutoff distance
+
+; Nonbonded Interactions (Electrostatics and VDW)
+coulombtype = user					; Particle Mesh Ewald Method	
+rcoulomb = 1.5 						; Cut-off for explicit electrostatics treatment
+
+vdwtype = user						; Indicated vdw cut-off scheme which will be modified 
+rvdw = 1.5						; Cut-off for vdw interactions
+
+; Temperature Coupling
+tcoupl = v-rescale					; Bussi stochastic velocity rescaling method
+tc_grps = System					; Groups to couple to temperature bath
+tau_t = 0.5						; Coulpling constant to temperature bath
+ref_t = 270						; Simulation temperature
+
+; Velocity Generation
+gen_vel = no						; Whether or not new velocities should be chosen
+gen_temp = 270						; Reference temperature to choose velocities from
+gen_seed = -1						; Random number generator seed

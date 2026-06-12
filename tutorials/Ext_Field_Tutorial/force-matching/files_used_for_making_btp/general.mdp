@@ -1,0 +1,54 @@
+; System: 
+
+; Run Control
+integrator = md						; most widely applicable integrator
+dt = 0.002						; time step for simulation in ps
+nsteps = 17000000 					; nsteps * dt = duration on simulation
+comm-mode = linear					; removal of the center of mass translational velocity
+nstcomm = 1						; frequency of COM translational velocity removal
+
+; Output Control
+nstxout                  = 500				; output frequency for coordinates
+nstvout                  = 500				; output frequency for velocities
+nstfout                  = 500				; output frequency for forces
+nstcheckpoint            = 500				; output frequency for checkpoints
+nstlog                   = 500				; output frequency of energies to log file
+nstenergy                = 500				; output frequency of energies to energy file
+
+; Neighbor Searching
+cutoff-scheme = Verlet					; only scheme to use except when user specified potential
+nstlist = 1						; frequency to update NL
+ns-type = grid						; use grid to chick NL
+pbc = xyz						; PBC in use
+verlet-buffer-tolerance = -1				; pair list interaction error, set to -1 to enforce rlist
+rlist = 1.55						; NL cutoff distance
+
+; Nonbonded Interactions (Electrostatics and VDW)
+coulombtype = PME					; Particle Mesh Ewald Method	
+rcoulomb = 1.55						; Cut-off for explicit electrostatics treatment
+fourierspacing = 0.1 					; Maximum grid spacing for FFT
+pme-order = 6						; Interpolation order for PME, increase to 6 for parallization 
+ewald-rtol = 1e-06					; Relative strength for shifted potential at cut-off
+
+vdwtype = Cut-off					; Indicated vdw cut-off scheme which will be modified 
+vdw-modifier = None				; Modifies vdw cutt-off to force switch at cut-off
+rvdw = 1.55						; Cut-off for vdw interactions
+;DispCorr = EnerPres					; Treat on case by case Options(no, EnerPres, Ener)
+
+; Temperature Coupling
+tcoupl = v-rescale					; Bussi stochastic velocity rescaling method
+tc_grps = System					; Groups to couple to temperature bath
+tau_t = 0.5						; Coulpling constant to temperature bath
+ref_t = 300					; Simulation temperature
+
+; Pressure Coupling
+pcoupl = Parrinello-Rahman				; PR barostat
+pcoupltype = isotropic					; Modify box vectors equally in all directions
+tau_p = 5.0						; Only free parameter in pressure coupling
+compressibility = 4.5e-5				; Water compressibility
+ref-p = 1.0 					; Reference Pressure
+
+; Velocity Generation
+gen_vel = no						; Whether or not new velocities should be chosen
+gen_temp = 300					; Reference temperature to choose velocities from
+gen_seed = -1						; Random number generator seed
