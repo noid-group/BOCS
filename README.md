@@ -23,19 +23,10 @@ distributed with the official LAMMPS distribution. Installation instructions can
 Manual in the /docs folder. Briefly, the force-matching and pressure-matching components both utilize 
 CMake. The force-matching component NO LONGER relies on an existing GROMACS installation.
 
-## Important Change for BOCS3
-BOCS v3 implements a new (faster) algorithm for calculating the G matrix. However, the default behavior is
-still to use the original algorithm. To use the new algorithm, simply include [Skip_Triple_Loop] in your
-par.txt file. See the new manual for more information.
-
-## BOCS v4 
-BOCS v4 slightly modified the format of .btp files. Any .btp file created with an earlier version of BOCS
-will cause errors with the newer BOCS format. If you try to use an old .btp file with a newer version of
-BOCS, BOCS will print a message saying that you need to re-translate the dumped .tpr file with the new
-version of BOCS. 
-
 ## BOCS v5 
-BOCS v5 implements local density, square gradient, and external potentials into the force-matching equations. 
+BOCS v5 is a major update to the overall code and implements a variety of features. 
+In particular it implements local density, square gradient, and external potentials into the force-matching equations. 
+
 New tools introduced include: 
 
 ldcalc - calculates local densities and gradients of local densities for a given w(r) selected by the user (5 options available) 
@@ -58,3 +49,17 @@ This version also makes the faster algorith default.
 
 More details are available in the 2nd release manuscript (Lesniewski, DeLyser, Noid "Progress toward a better BOCS: systematic coarse-grainiong with local density potentials" (2026))
 which validates the implementation and distributes data/test cases. 
+
+
+
+## BOCS v4 
+BOCS v4 slightly modified the format of .btp files. Any .btp file created with an earlier version of BOCS
+will cause errors with the newer BOCS format. If you try to use an old .btp file with a newer version of
+BOCS, BOCS will print a message saying that you need to re-translate the dumped .tpr file with the new
+version of BOCS. 
+
+
+## Important Change for BOCS3
+BOCS v3 implements a new (faster) algorithm for calculating the G matrix. However, the default behavior is
+still to use the original algorithm. To use the new algorithm, simply include [Skip_Triple_Loop] in your
+par.txt file. See the new manual for more information.
