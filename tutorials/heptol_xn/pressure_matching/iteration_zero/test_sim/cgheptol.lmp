@@ -37,7 +37,7 @@ velocity 	all create 303.0 123456 dist gaussian
 
 ## Neighbor list settings
 neigh_modify 	delay 0 every 1 check yes one 10000
-neighbor 	14.0 bin
+#neighbor 	14.0 bin
 
 ## Integrator
 timestep 	1.0

@@ -24,8 +24,8 @@ pair_coeff 1 1 lammps_nb_SOLSOL.dat LJLJ 14.0
 velocity 	all create 300 1 dist gaussian
 
 ## Neighbor list settings
-neigh_modify 	delay 0 every 1 check yes one 10000
-neighbor 	14.0 bin
+neigh_modify 	delay 5 every 1 check yes one 10000
+neighbor 	2.0 bin
 
 ## Integrator
 timestep 	1.0
