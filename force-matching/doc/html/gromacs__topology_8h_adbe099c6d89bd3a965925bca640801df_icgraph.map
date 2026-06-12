@@ -1,0 +1,15 @@
+<map id="read_first_lammps_frame" name="read_first_lammps_frame">
+<area shape="rect" id="Node000001" title="read_first_lammps_frame(): reads the first frame from a lammps custom dump file." alt="" coords="734,31,902,57"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#aad9aa7cf97628a42ece2ecdc21a231c0" title="these next functions are basically wrappers that call the appropriate function to do the requested op..." alt="" coords="571,31,686,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="719,47,686,47,686,41,719,41"/>
+<area shape="rect" id="Node000003" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="441,5,490,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="555,35,490,25,491,20,555,30"/>
+<area shape="rect" id="Node000004" href="$ematch__func_8c.html#a17d07c6f77c45a8148fb4ff8268271b5" title=" " alt="" coords="408,56,523,83"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="556,58,523,63,523,58,555,53"/>
+<area shape="rect" id="Node000005" href="$ematch__func_8c.html#a50fde680e0e4d1d4cf85f50ef237534d" title=" " alt="" coords="282,56,360,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="392,72,361,72,361,67,392,67"/>
+<area shape="rect" id="Node000006" href="$ematch__func_8c.html#a6f63c009a254311f16cf558e12b7a45a" title=" " alt="" coords="103,56,234,83"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="266,72,234,72,234,67,266,67"/>
+<area shape="rect" id="Node000007" href="$ematch_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,56,55,83"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="87,72,55,72,55,67,87,67"/>
+</map>

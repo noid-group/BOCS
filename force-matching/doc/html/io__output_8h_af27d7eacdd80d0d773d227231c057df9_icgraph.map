@@ -1,0 +1,7 @@
+<map id="was_inter_present" name="was_inter_present">
+<area shape="rect" id="Node000001" title="was_inter_sampled(): Returns FALSE if the interaction was not present in calculation and TRUE otherwi..." alt="" coords="240,5,367,32"/>
+<area shape="rect" id="Node000002" href="$io__output_8c.html#aaf03153665ceaee1b8cb5fab8b1c1acb" title="print_output(): Print the results." alt="" coords="103,5,192,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,21,192,21,192,16,224,16"/>
+<area shape="rect" id="Node000003" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="88,21,55,21,55,16,88,16"/>
+</map>

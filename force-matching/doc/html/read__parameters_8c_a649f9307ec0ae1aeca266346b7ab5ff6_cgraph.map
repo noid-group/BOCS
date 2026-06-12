@@ -1,0 +1,5 @@
+<map id="read_temperature" name="read_temperature">
+<area shape="rect" id="Node000001" title="read_temperature(): Reads the temperature from the parameter file." alt="" coords="5,5,128,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#aa58790fe8cbcf89bdbad529d8e038d77" title="delete_directive_from_line(): For lines that contain a directive marked by [...], the ending brace is..." alt="" coords="176,5,348,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,16,160,16,160,21,128,21"/>
+</map>

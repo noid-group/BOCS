@@ -1,0 +1,29 @@
+<map id="write_frame" name="write_frame">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,183,95,209"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a43d1ed9864557390d32f2d27f074af7c" title=" " alt="" coords="154,5,299,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="53,181,83,115,108,76,141,42,147,37,151,42,144,46,112,79,87,117,58,183"/>
+<area shape="rect" id="Node000004" href="$gromacs__topology_8c.html#a9c59548554ee5183d777be95dc6fc940" title=" " alt="" coords="143,56,310,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="58,180,91,137,115,113,141,92,151,87,153,92,144,97,118,117,95,141,62,184"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#a1e5596577d0515e180e19c9e18e90a50" title=" " alt="" coords="143,107,310,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="72,180,142,143,159,136,161,141,144,148,74,185"/>
+<area shape="rect" id="Node000008" href="$gromacs__topology_8c.html#a33409b4c26aec471367e4569e78bd422" title=" " alt="" coords="164,157,288,184"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="95,187,149,179,150,184,96,192"/>
+<area shape="rect" id="Node000009" href="$gromacs__topology_8c.html#abf9960447a1f5dcb37c2a5880664a8ad" title=" " alt="" coords="162,208,290,235"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="96,200,147,207,146,213,95,205"/>
+<area shape="rect" id="Node000010" href="$gromacs__topology_8c.html#a2eeafeb70d6d79aab24cee2caa56c03f" title=" " alt="" coords="169,259,284,285"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="74,207,144,244,161,251,159,256,142,249,72,212"/>
+<area shape="rect" id="Node000011" href="$gromacs__topology_8c.html#aeecad2f3787ee1a8a7c31275caab1f5e" title=" " alt="" coords="159,309,294,336"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="62,208,95,251,118,275,144,295,153,300,151,305,141,300,115,279,91,255,58,212"/>
+<area shape="rect" id="Node000013" href="$gromacs__topology_8c.html#ad98072d3c789c1092aa699c5bd8ffbd5" title=" " alt="" coords="155,360,298,387"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="58,209,87,275,112,313,144,346,151,350,147,355,141,350,108,316,83,277,53,211"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a5aa8df5077291896b83782e74ab17317" title="open_file(): Opens a file named &quot;file_name&quot; with option &quot;mode.&quot; Returns the pointer to the file." alt="" coords="392,5,465,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="300,16,376,16,376,21,300,21"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8c.html#a23925c8cf10122d7fdbd19e555313c73" title=" " alt="" coords="362,56,494,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="310,67,347,67,347,72,310,72"/>
+<area shape="rect" id="Node000007" href="$gromacs__topology_8c.html#a6d69f47d6bcbfe259dfde66e44e077c8" title=" " alt="" coords="362,107,494,133"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="310,117,346,117,346,123,310,123"/>
+<area shape="rect" id="Node000012" href="$gromacs__topology_8c.html#a8fb5f1aebc19c6b64d28477a0fdcf73e" title="dump_molecule_info(): Prints some basic info for each molecule type from the tW_molecule struct." alt="" coords="358,309,498,336"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="294,320,342,320,342,325,294,325"/>
+<area shape="rect" id="Node000014" href="$gromacs__topology_8c.html#a1b2722b503422a6f7805f6355d8c9b5f" title=" " alt="" coords="392,360,464,387"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="298,371,377,371,377,376,298,376"/>
+</map>

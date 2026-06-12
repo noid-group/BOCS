@@ -1,0 +1,22 @@
+<map id="read_first_lammps_frame" name="read_first_lammps_frame">
+<area shape="rect" id="Node000001" title="read_first_lammps_frame(): reads the first frame from a lammps custom dump file." alt="" coords="5,132,174,159"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a742ca6a5a9d8ab40fd4b92636c71c406" title="elim_char(): Replaces occurrances of char &quot;elim&quot; with &#39;\0&#39; in word." alt="" coords="243,5,320,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,129,154,88,220,42,229,37,232,41,223,46,157,92,108,134"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="232,56,330,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="125,129,231,86,233,91,127,134"/>
+<area shape="rect" id="Node000007" href="$gromacs__topology_8c.html#a581bab4e93beac29679039c89fd62a2a" title="get_word_count_delim(): Gets the number of words separated by chars in delims in a line" alt="" coords="389,132,540,159"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="174,143,374,143,374,148,174,148"/>
+<area shape="rect" id="Node000008" href="$gromacs__topology_8c.html#a3f6ef7a52af42aeade6f168e9e4670b5" title="get_words_delim(): supposed to be like python&#39;s string.split()" alt="" coords="222,157,341,184"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="174,154,207,158,206,163,173,159"/>
+<area shape="rect" id="Node000009" href="$io__read_8c.html#a5aa8df5077291896b83782e74ab17317" title="open_file(): Opens a file named &quot;file_name&quot; with option &quot;mode.&quot; Returns the pointer to the file." alt="" coords="245,208,318,235"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="127,157,233,199,231,204,125,162"/>
+<area shape="rect" id="Node000010" href="$gromacs__topology_8c.html#a7e3813472aef3ea0800c4f8843906f1a" title="set_natoms(): sets the number of atoms in the frame self to natoms, and allocates memory for those ar..." alt="" coords="237,259,326,285"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="108,157,157,199,223,244,232,249,229,254,220,249,154,203,104,161"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="412,31,517,57"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="331,60,397,51,398,56,331,65"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="430,81,500,108"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="331,73,415,85,414,90,331,79"/>
+<area shape="rect" id="Node000005" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="588,31,721,57"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="517,41,573,41,573,47,517,47"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="341,160,373,155,374,161,342,165"/>
+</map>

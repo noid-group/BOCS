@@ -1,0 +1,7 @@
+<map id="get_dihedral_vector_forces" name="get_dihedral_vector_forces">
+<area shape="rect" id="Node000001" title="get_dihedral_vector_forces(): Calculates the forces due to the dihedral reference potential." alt="" coords="5,23,140,65"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="188,5,304,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,31,172,27,173,32,141,37"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#af6e6af9e1403c9a1a78c91a688a3f38f" title="vect_sum(): Calculates sum = v1 + v2." alt="" coords="207,56,285,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="141,51,192,59,191,64,140,57"/>
+</map>

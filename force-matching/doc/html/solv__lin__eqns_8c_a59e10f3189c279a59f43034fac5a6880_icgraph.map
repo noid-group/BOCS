@@ -1,0 +1,16 @@
+<map id="solv_lin_eqns_constrain_tabdih_regularize" name="solv_lin_eqns_constrain_tabdih_regularize">
+<area shape="rect" id="Node000001" title="solv_lin_eqns_constrain_tabdih_regularize():" alt="" coords="764,23,924,65"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#a77e0198687daf9ae5d7552b0e9d846c8" title="direct_solve_lin_eqns(): JFR &#45; 12.20.13: takes care of deciding which matrix inversion routine to use..." alt="" coords="570,31,716,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="749,47,717,47,717,41,749,41"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#a12d971fb783c7e9422f4003259198a34" title="get_phi_forces(): Calculates the coefficients when forces are available." alt="" coords="415,5,522,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="554,34,522,29,523,24,555,28"/>
+<area shape="rect" id="Node000007" href="$calc__grids_8c.html#a848758fbee5a06201f914b2de1efcacf" title="get_phi_struct(): Calculates the coefficients using b_struct." alt="" coords="417,56,520,83"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="555,60,521,64,520,59,554,54"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#a9668198003b2ac7edf32c26546d86bfb" title="get_phi_struct_and_phi_forces(): Calculates the coefficients using b_forces if forces were available ..." alt="" coords="236,23,367,65"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="400,32,368,37,367,31,400,26"/>
+<area shape="rect" id="Node000005" href="$calc__grids_8c.html#a7d1f81fde08821aebf1b645466f849a4" title="get_results(): (1) Calculate and store b_forces and b_struct." alt="" coords="103,31,188,57"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="221,47,189,47,189,41,221,41"/>
+<area shape="rect" id="Node000006" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,31,55,57"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="87,47,55,47,55,41,87,41"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="401,62,367,57,368,51,402,57"/>
+</map>

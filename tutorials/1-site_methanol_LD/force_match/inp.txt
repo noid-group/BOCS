@@ -1,0 +1,5 @@
+! comment line
+[Struct_Files]   1
+/path/to/cg_methanol_traj_w_LDs.btj   1.0
+[End Struct_Files]
+

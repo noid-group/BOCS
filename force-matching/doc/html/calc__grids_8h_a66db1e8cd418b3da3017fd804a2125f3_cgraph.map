@@ -1,0 +1,29 @@
+<map id="get_harmonic_angle_basis_vector" name="get_harmonic_angle_basis_vector">
+<area shape="rect" id="Node000001" title="get_harmonic_angle_basis_vector():" alt="" coords="5,253,143,296"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#afaa61c6900fdbb1dbb42e0eee0567360" title="get_Angle_info: gets theta/vectors required to figure out dPsi/dR_I for an angle site_I takes place i..." alt="" coords="204,101,311,128"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,251,228,136,231,140,102,255"/>
+<area shape="rect" id="Node000007" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="585,160,702,187"/>
+<area shape="poly" id="edge14_Node000001_Node000007" title=" " alt="" coords="142,256,190,247,288,231,364,222,440,213,537,196,573,188,575,193,538,201,441,218,364,227,288,236,191,252,143,262"/>
+<area shape="rect" id="Node000010" href="$calc__grids_8c.html#ad24bd48bf2573a22036e521a3793da91" title="get_g_theta_angle():" alt="" coords="194,261,321,288"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="143,272,178,272,178,277,143,277"/>
+<area shape="rect" id="Node000011" href="$calc__grids_8c.html#a4cf0a630770b70f674e4c317c6bd0d5b" title="get_laplacian_theta_angle():" alt="" coords="191,312,324,355"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="143,294,177,305,175,310,142,299"/>
+<area shape="rect" id="Node000012" href="$wnoid__math_8c.html#af6e6af9e1403c9a1a78c91a688a3f38f" title="vect_sum(): Calculates sum = v1 + v2." alt="" coords="218,379,296,405"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="100,294,141,329,192,364,205,371,203,376,189,369,138,334,96,298"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="750,20,821,47"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="269,99,311,62,340,42,371,28,420,15,470,7,571,3,662,10,735,20,734,26,662,15,571,9,471,13,421,21,373,33,342,47,314,66,273,103"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#af9c226fc952c36ac1ca615019b75057d" title="get_atom_position_angle: Determines the position of site_i (i_site) in the angle_triple passed" alt="" coords="372,43,537,69"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="304,98,392,72,394,77,306,103"/>
+<area shape="rect" id="Node000005" href="$wnoid__math_8c.html#a4ec3dc2dbb208811be33fdc94163836e" title="get_difference_unit_vector(): From x_i and x_j, calculates the differenc vector, the unit difference ..." alt="" coords="390,93,520,136"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="311,112,374,112,374,117,311,117"/>
+<area shape="rect" id="Node000009" href="$calc__grids_8c.html#aa7d8eb252c0ba695df318b75920a2901" title="get_L2_L3_angles():" alt="" coords="392,160,518,187"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="306,126,394,153,392,158,304,131"/>
+<area shape="rect" id="Node000006" href="$wnoid__math_8c.html#aed00bac3dd87333226ee1d7cb19700af" title="calc_norm(): Returns the norm of an dvec." alt="" coords="603,48,684,75"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="519,94,588,74,589,79,521,99"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="521,132,585,152,583,157,519,137"/>
+<area shape="rect" id="Node000008" href="$wnoid__math_8c.html#a1f483015ac47277c71a1e600b42befd8" title="vect_diff(): Calculates diff = v1 &#45; v2." alt="" coords="608,105,679,132"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="520,113,593,115,592,120,520,119"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="684,51,734,41,735,46,685,56"/>
+<area shape="poly" id="edge10_Node000009_Node000007" title=" " alt="" coords="518,171,570,171,570,176,518,176"/>
+<area shape="poly" id="edge11_Node000009_Node000008" title=" " alt="" coords="503,157,592,131,594,136,504,162"/>
+</map>

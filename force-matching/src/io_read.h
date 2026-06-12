@@ -15,15 +15,19 @@ extern "C"
 
 /* MRD mimicking Gromacs' command line input */
 enum {etINT, etBOOL, etSTRING, etREAL};
-
+/**
+ * \struct t_pargs
+ * This is a structure to store arguments from the command line for each executable in BOCS
+ * It contains relevent info for troubleshooting user input
+ */
 typedef struct t_pargs
 {
-  char *flag;
-  bool bSet;
-  int type;
-  tW_word value;
-  char *desc;
-  bool bMandatory;
+  char *flag; /*!< identifier expected ahead of the string passed. e.g. -p for a top file*/
+  bool bSet;  /*!< whether or not this argument was found after checking the command line*/
+  int type;  /*!< What kind of argument [what data structurer do we store this in?] @see enum */
+  tW_word value; /*!< The place to store the word the user typed in*/
+  char *desc; /*!< The place to store what the help menu says when we print about this param*/
+  bool bMandatory; /*!< Whether we should crash the program if we can't find this arg */
 } t_pargs;
 
 /****************************************************************************************/
@@ -54,6 +58,11 @@ void print_line_stars(FILE * fp);
 int check_word_list(int n_words, tW_word list_1[], tW_word list_2[]);
 
 int match_word(int N_words, tW_word word, tW_word * word_list);
+
+/* MRD 06.18.2020 */
+int match_word_1(int N_words, tW_word word, tW_word * word_list);
+
+int match_word_n(int N_words, tW_word word, tW_word * word_list, int *idxes);
 
 /* Gromacs-esque command line args */
 

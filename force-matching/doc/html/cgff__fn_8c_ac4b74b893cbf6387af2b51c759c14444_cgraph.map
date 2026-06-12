@@ -1,0 +1,7 @@
+<map id="check_pairs" name="check_pairs">
+<area shape="rect" id="Node000001" title="check_pairs():" alt="" coords="5,5,97,32"/>
+<area shape="rect" id="Node000002" href="$cgff__fn_8c.html#ab8dd5699919a1bbcbeeaa572c491f267" title="determine_pair_type():" alt="" coords="145,5,283,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,16,129,16,129,21,97,21"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a5a715a0635053d2135ccef36af1599f7" title="check_word_list(): Checks to see if the n_words words in list1[] occur in list_2[] in any order." alt="" coords="331,5,446,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="283,16,316,16,316,21,283,21"/>
+</map>

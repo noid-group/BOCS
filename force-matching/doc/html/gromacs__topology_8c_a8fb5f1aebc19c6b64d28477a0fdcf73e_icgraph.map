@@ -1,0 +1,32 @@
+<map id="dump_molecule_info" name="dump_molecule_info">
+<area shape="rect" id="Node000001" title="dump_molecule_info(): Prints some basic info for each molecule type from the tW_molecule struct." alt="" coords="915,81,1056,108"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a3ccb4ce8d5a6dc664bfa8cfd215e786e" title=" " alt="" coords="747,56,853,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="900,86,853,79,854,74,900,80"/>
+<area shape="rect" id="Node000012" href="$gromacs__topology_8c.html#aeecad2f3787ee1a8a7c31275caab1f5e" title=" " alt="" coords="733,107,867,133"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="900,109,868,113,867,108,900,104"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8c.html#a28129082088fdb20ced15c5836c70331" title=" " alt="" coords="583,56,685,83"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="731,72,685,72,685,67,731,67"/>
+<area shape="rect" id="Node000004" href="$gromacs__topology_8c.html#a6adc6cfb4d975faaa56c2b048d9b6802" title="get_top(): Opens GROMACS topology (tpr) file and stores topology information in the data structure to..." alt="" coords="448,5,512,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="575,53,512,32,513,27,577,48"/>
+<area shape="rect" id="Node000007" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,31,55,57"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="567,69,55,48,55,42,567,64"/>
+<area shape="rect" id="Node000008" href="$ematch__func_8c.html#a0be6568551e24a12bd3a8905d18c8a86" title=" " alt="" coords="425,107,535,133"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="577,91,524,109,522,104,576,86"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8c.html#aabab592246f8b7942e8e26c4134bfe0a" title="get_site_info(): Stores information from top into sys and CG_struct." alt="" coords="282,5,377,32"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="432,21,378,21,378,16,432,16"/>
+<area shape="rect" id="Node000006" href="$cgff__fn_8c.html#a9e513ad59f589f2c9b4bbac849a6897b" title="setup_CG_struct(): Stores the information in top into sys and CG_struct." alt="" coords="108,5,228,32"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="266,21,229,21,229,16,266,16"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="94,35,56,42,55,37,93,30"/>
+<area shape="rect" id="Node000009" href="$ematch__func_8c.html#a50fde680e0e4d1d4cf85f50ef237534d" title=" " alt="" coords="290,107,369,133"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="410,123,369,123,369,117,410,117"/>
+<area shape="rect" id="Node000010" href="$ematch__func_8c.html#a6f63c009a254311f16cf558e12b7a45a" title=" " alt="" coords="103,107,234,133"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="275,123,234,123,234,117,275,117"/>
+<area shape="rect" id="Node000011" href="$ematch_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,107,55,133"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="87,123,55,123,55,117,87,117"/>
+<area shape="rect" id="Node000013" href="$translator_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="609,107,658,133"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="718,123,659,123,659,117,718,117"/>
+<area shape="rect" id="Node000014" href="$gromacs__topology_8c.html#ae44b88ddec9f6686b574c14376e472eb" title=" " alt="" coords="589,157,678,184"/>
+<area shape="poly" id="edge14_Node000012_Node000014" title=" " alt="" coords="740,141,680,160,678,155,739,136"/>
+<area shape="rect" id="Node000015" href="$cgmap_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="455,157,505,184"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="574,173,505,173,505,168,574,168"/>
+</map>

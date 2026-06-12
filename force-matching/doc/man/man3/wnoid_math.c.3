@@ -1,0 +1,193 @@
+.TH "wnoid_math.c" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+wnoid_math.c \- Functions for basic math operations not basic enough to be in the standard c math library\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <math\&.h>\fP
+.br
+\fR#include 'wnoid_math\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBcopy_vector\fP (\fBdvec\fP source, \fBdvec\fP dest)"
+.br
+.RI "\fBcopy_vector()\fP: Copies source into dest\&. "
+.ti -1c
+.RI "int \fBcopy_matrix\fP (\fBmatrix\fP source, \fBmatrix\fP dest)"
+.br
+.RI "\fBcopy_vector()\fP: Copies source into dest\&. "
+.ti -1c
+.RI "double \fBdot_prod\fP (\fBdvec\fP v1, \fBdvec\fP v2)"
+.br
+.RI "\fBdot_prod()\fP: Returns the dot product of two dvec's\&. "
+.ti -1c
+.RI "double \fBcalc_norm\fP (\fBdvec\fP v)"
+.br
+.RI "\fBcalc_norm()\fP: Returns the norm of an dvec\&. "
+.ti -1c
+.RI "int \fBvect_diff\fP (\fBdvec\fP v1, \fBdvec\fP v2, \fBdvec\fP diff)"
+.br
+.RI "\fBvect_diff()\fP: Calculates diff = v1 - v2\&. "
+.ti -1c
+.RI "int \fBvect_sum\fP (\fBdvec\fP v1, \fBdvec\fP v2, \fBdvec\fP sum)"
+.br
+.RI "\fBvect_sum()\fP: Calculates sum = v1 + v2\&. "
+.ti -1c
+.RI "void \fBvect_inc\fP (\fBdvec\fP v1, \fBdvec\fP v2)"
+.br
+.RI "\fBvect_inc()\fP: Calculates v1 = v1 + v2 in place (by incrementing v1) "
+.ti -1c
+.RI "int \fBscal_times_vect\fP (double sc, \fBdvec\fP vect, \fBdvec\fP result)"
+.br
+.RI "\fBscal_times_vect()\fP: Stores results from scalar-vector multiplication into the variable result\&. "
+.ti -1c
+.RI "int \fBcross_product\fP (\fBdvec\fP v1, \fBdvec\fP v2, \fBdvec\fP v_cross)"
+.br
+.RI "\fBcross_product()\fP: Calculates v_cross = v1 x v2\&. "
+.ti -1c
+.RI "int \fBcalc_centered_diff\fP (int Nmax, double dx, double *X, double *dX_dx)"
+.br
+.RI "\fBcalc_centered_diff()\fP: Calculate the centered difference\&. "
+.ti -1c
+.RI "int \fBcalc_running_avg\fP (int Nmax, int Nlength, double *X, double *smX)"
+.br
+.RI "\fBcalc_running_avg()\fP: Calculates a running average\&. "
+.ti -1c
+.RI "int \fBget_difference_unit_vector\fP (\fBdvec\fP x_i, \fBdvec\fP x_j, \fBdvec\fP x_ij, \fBdvec\fP u_ij, double *r_ij)"
+.br
+.RI "\fBget_difference_unit_vector()\fP: From x_i and x_j, calculates the differenc vector, the unit difference vector, and the norm of the difference vector\&. "
+.ti -1c
+.RI "int \fBfind_max_int\fP (int i, int j)"
+.br
+.RI "\fBfind_max_int()\fP: Returns the maximum of the set {i,j}\&. "
+.ti -1c
+.RI "int \fBcompare_ints\fP (const void *p, const void *q)"
+.br
+.RI "\fBcompare_ints()\fP: "
+.ti -1c
+.RI "int \fBcalc_running_avg_periodic\fP (int Nmax, int Nlength, double *X, double *smX)"
+.br
+.RI "\fBcalc_running_avg_periodic()\fP: Calculate running averages for periodic functions\&. "
+.ti -1c
+.RI "int \fBindex_Lpacked\fP (int i, int j, int N)"
+.br
+.RI "\fBindex_Lpacked()\fP: Calculate the index of element aij in an NxN matrix in Lower-packed storage form\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Functions for basic math operations not basic enough to be in the standard c math library\&. 
+
+
+.PP
+\fBAuthors\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "int calc_centered_diff (int Nmax, double dx, double * X, double * dX_dx)"
+
+.PP
+\fBcalc_centered_diff()\fP: Calculate the centered difference\&. 
+.PP
+Referenced by \fBcalc_dg_dz()\fP, \fBget_angle_potential()\fP, \fBget_bond_potential()\fP, \fBget_dihedral_potential()\fP, and \fBget_nb_potential()\fP\&.
+.SS "double calc_norm (\fBdvec\fP v)"
+
+.PP
+\fBcalc_norm()\fP: Returns the norm of an dvec\&. 
+.PP
+Referenced by \fBcalc_ref_BondStretch_forces()\fP, \fBcalc_ref_IntraMolecPairs_forces()\fP, \fBcalculate_local_densities()\fP, \fBget_angle()\fP, \fBget_difference_unit_vector()\fP, \fBget_difference_vector_PBC()\fP, \fBget_dihedral()\fP, and \fBget_nb_pair_info()\fP\&.
+.SS "int calc_running_avg (int Nmax, int Nlength, double * X, double * smX)"
+
+.PP
+\fBcalc_running_avg()\fP: Calculates a running average\&. 
+.PP
+Referenced by \fBcalc_b_struct()\fP, and \fBcalc_dg_dz()\fP\&.
+.SS "int calc_running_avg_periodic (int Nmax, int Nlength, double * X, double * smX)"
+
+.PP
+\fBcalc_running_avg_periodic()\fP: Calculate running averages for periodic functions\&. 
+.PP
+Referenced by \fBcalc_b_struct()\fP, and \fBcalc_dg_dz()\fP\&.
+.SS "int compare_ints (const void * p, const void * q)"
+
+.PP
+\fBcompare_ints()\fP: 
+.SS "int copy_matrix (\fBmatrix\fP source, \fBmatrix\fP dest)"
+
+.PP
+\fBcopy_vector()\fP: Copies source into dest\&. Assumes matrix is DIMxDIM elements\&. 
+.PP
+Referenced by \fBcopy_trxframe_info()\fP, \fBget_box()\fP, and \fBmain()\fP\&.
+.SS "int copy_vector (\fBdvec\fP source, \fBdvec\fP dest)"
+
+.PP
+\fBcopy_vector()\fP: Copies source into dest\&. Assumes dvec is an array of DIM elements\&. 
+.PP
+Referenced by \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBcalculate_local_densities()\fP, \fBcopy_matrix()\fP, \fBcopy_trr_2_CGstruct()\fP, \fBcopy_trr_2_CGstruct_ref()\fP, \fBcopy_xvf()\fP, \fBeval_delta_basis_vectors_ext()\fP, \fBeval_grad_B()\fP, \fBget_Bspline_bond_basis_vector()\fP, \fBget_Bspline_dihedral_basis_vector()\fP, \fBget_delta_bond_basis_vector()\fP, \fBget_delta_dihedral_basis_vector()\fP, \fBget_delta_IntraMolec_NB_Pair_basis_vector()\fP, \fBget_difference_vector_PBC()\fP, \fBget_harmonic_bond_basis_vector()\fP, \fBget_linear_bond_basis_vector()\fP, \fBget_linear_dihedral_basis_vector()\fP, \fBget_pos_of()\fP, \fBget_RB_dihedral_basis_vector()\fP, \fBget_ref_Dihedral_info()\fP, \fBget_TOY_dihedral_basis_vector()\fP, \fBget_vel_of()\fP, and \fBmap_trxframe()\fP\&.
+.SS "int cross_product (\fBdvec\fP v1, \fBdvec\fP v2, \fBdvec\fP v_cross)"
+
+.PP
+\fBcross_product()\fP: Calculates v_cross = v1 x v2\&. 
+.PP
+Referenced by \fBeval_grad_B()\fP, and \fBget_dihedral()\fP\&.
+.SS "double dot_prod (\fBdvec\fP v1, \fBdvec\fP v2)"
+
+.PP
+\fBdot_prod()\fP: Returns the dot product of two dvec's\&. 
+.PP
+Referenced by \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBcalc_norm()\fP, \fBeval_bonds_M_b()\fP, \fBeval_Bspline_basis_vectors()\fP, \fBeval_Bspline_basis_vectors_LD()\fP, \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBeval_delta_basis_vectors()\fP, \fBeval_delta_basis_vectors_LD()\fP, \fBeval_grad_B()\fP, \fBeval_linear_basis_vectors()\fP, \fBeval_linear_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LDGRAD()\fP, \fBeval_M_nb_pair_inter()\fP, \fBeval_M_nbPair_bonds()\fP, \fBeval_power_basis_vectors()\fP, \fBget_angle()\fP, \fBget_Angle_info()\fP, \fBget_dihedral()\fP, \fBget_g_dihedral_angle()\fP, \fBget_ref_Angle_info()\fP, and \fBupdate_nb_pair_grids()\fP\&.
+.SS "int find_max_int (int i, int j)"
+
+.PP
+\fBfind_max_int()\fP: Returns the maximum of the set {i,j}\&. 
+.SS "int get_difference_unit_vector (\fBdvec\fP x_i, \fBdvec\fP x_j, \fBdvec\fP x_ij, \fBdvec\fP u_ij, double * r_ij)"
+
+.PP
+\fBget_difference_unit_vector()\fP: From x_i and x_j, calculates the differenc vector, the unit difference vector, and the norm of the difference vector\&. 
+.PP
+Referenced by \fBget_Angle_info()\fP, \fBget_BondStretch_info()\fP, \fBget_IntraMolec_NB_Pair_info()\fP, and \fBget_ref_Angle_info()\fP\&.
+.SS "int index_Lpacked (int i, int j, int N)"
+
+.PP
+\fBindex_Lpacked()\fP: Calculate the index of element aij in an NxN matrix in Lower-packed storage form\&. 
+.PP
+Referenced by \fBcalc_Chi2()\fP, \fBcalc_grids3()\fP, \fBeigen()\fP, \fBeval_bonds_M_b()\fP, \fBeval_M_nb_pair_inter()\fP, \fBeval_M_nbPair_bonds()\fP, \fBext_potl_solve_lin_eqns()\fP, \fBget_b_soln()\fP, \fBget_b_soln_err()\fP, \fBget_b_soln_errAA()\fP, \fBget_b_soln_PT()\fP, \fBget_results()\fP, \fBPrecondition()\fP, \fBprint_Chi2()\fP, \fBprint_decomp_Chi2()\fP, \fBprint_M_matrix2()\fP, \fBremove_zero_rows_mem()\fP, \fBsolv_lin_eqns()\fP, \fBsolv_lin_eqns_Bayesian()\fP, \fBsolv_lin_eqns_Bayesian_saveparams()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, \fBsolv_lin_eqns_constrain_tabdih_2()\fP, \fBsolv_lin_eqns_constrain_tabdih_2_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP, \fBsolv_lin_eqns_PT()\fP, \fBsolv_lin_eqns_rescalephi()\fP, \fBsolveSVD()\fP, and \fBSVD()\fP\&.
+.SS "int scal_times_vect (double sc, \fBdvec\fP vect, \fBdvec\fP result)"
+
+.PP
+\fBscal_times_vect()\fP: Stores results from scalar-vector multiplication into the variable result\&. 
+.PP
+Referenced by \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBcalculate_local_densities()\fP, \fBeval_Bspline_basis_vectors()\fP, \fBeval_Bspline_basis_vectors_ext()\fP, \fBeval_Bspline_basis_vectors_LD()\fP, \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBeval_delta_basis_vectors_LD()\fP, \fBeval_grad_B()\fP, \fBeval_linear_basis_vectors()\fP, \fBeval_linear_basis_vectors_ext()\fP, \fBeval_linear_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LDGRAD()\fP, \fBeval_power_basis_vectors()\fP, \fBget_angle_vector_forces()\fP, \fBget_Bspline_angle_basis_vector()\fP, \fBget_Bspline_bond_basis_vector()\fP, \fBget_Bspline_dihedral_basis_vector()\fP, \fBget_central_pair_vector_forces()\fP, \fBget_delta_angle_basis_vector()\fP, \fBget_delta_dihedral_basis_vector()\fP, \fBget_difference_unit_vector()\fP, \fBget_dihedral()\fP, \fBget_dihedral_vector_forces()\fP, \fBget_harmonic_angle_basis_vector()\fP, \fBget_harmonic_bond_basis_vector()\fP, \fBget_IntraMolec_NB_Pair_basis_vectors()\fP, \fBget_L2_L3_angles()\fP, \fBget_linear_angle_basis_vector()\fP, \fBget_linear_bond_basis_vector()\fP, \fBget_linear_dihedral_basis_vector()\fP, \fBget_RB_dihedral_basis_vector()\fP, \fBget_TOY_dihedral_basis_vector()\fP, and \fBmap_trxframe()\fP\&.
+.SS "int vect_diff (\fBdvec\fP v1, \fBdvec\fP v2, \fBdvec\fP diff)"
+
+.PP
+\fBvect_diff()\fP: Calculates diff = v1 - v2\&. 
+.PP
+Referenced by \fBcalc_ref_BondStretch_forces()\fP, \fBcalc_ref_IntraMolecPairs_forces()\fP, \fBcomp_2_frames()\fP, \fBeval_grad_B()\fP, \fBget_angle()\fP, \fBget_angle_vector_forces()\fP, \fBget_central_pair_vector_forces()\fP, \fBget_difference_unit_vector()\fP, \fBget_difference_vector_PBC()\fP, \fBget_L2_L3_angles()\fP, and \fBget_nb_pair_info()\fP\&.
+.SS "void vect_inc (\fBdvec\fP v1, \fBdvec\fP v2)"
+
+.PP
+\fBvect_inc()\fP: Calculates v1 = v1 + v2 in place (by incrementing v1) 
+.PP
+Referenced by \fBcalc_grids3()\fP, and \fBmap_trxframe()\fP\&.
+.SS "int vect_sum (\fBdvec\fP v1, \fBdvec\fP v2, \fBdvec\fP sum)"
+
+.PP
+\fBvect_sum()\fP: Calculates sum = v1 + v2\&. 
+.PP
+Referenced by \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBeval_grad_B()\fP, \fBeval_linear_basis_vectors_LDGRAD()\fP, \fBget_angle_vector_forces()\fP, \fBget_Bspline_angle_basis_vector()\fP, \fBget_central_pair_vector_forces()\fP, \fBget_delta_angle_basis_vector()\fP, \fBget_dihedral_vector_forces()\fP, \fBget_harmonic_angle_basis_vector()\fP, and \fBget_linear_angle_basis_vector()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

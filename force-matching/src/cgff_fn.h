@@ -1,6 +1,6 @@
 /**
 @file cgff_fn.h 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski
 @brief Helper functions for the cgff calculation
 */
 
@@ -102,6 +102,8 @@ void print_Bond_Types(FILE * fp, tW_system sys);
 void dump_tW_system(char *fnm, tW_system * sys);
 
 void dump_tW_CG_struct(char *fnm, tW_CG_site * sites, int n_sites);
+
+void print_bond_warnings(tW_CG_site * CG_struct_list, int numatoms);
 
 #ifdef __cplusplus
 }

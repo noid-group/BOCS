@@ -1,6 +1,6 @@
 /**
 @file calc_grids.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski
 @brief Main driver of the cgff calculation 
 */
 
@@ -56,14 +56,23 @@ bool setup_box_dimensions(dvec box, double matrix[DIM][DIM])
     return TRUE;
 }
 
-/*****************************************************************************************
-get_all_iList():
-*****************************************************************************************/
+/**
+ * get_all_ilist:
+ * For each site_type i, obtains lists of pair interaction partner types for Inter_Map/iMap[i]
+ *
+ * By the end of this function, sys->Inter_Map[i] contains the strings that site_type[i] interacts with
+ * sys->Inter_iMap[j] contains the corresponding interaction indicies for Inter2_Type_list for the site_i-Inter_Map[j] pair interaction
+ * sys->Inter_Map_Len[i] contains the number of interactions partner types for site_type_i [number distinct interactions]
+ * which is also the length of each entry in Inter_Map/iMap
+ *
+ * @param sys - the system info we are working on [post load top info]
+ * @param bspeak - Whether or not to print to the screen [usually processor 0 speaks]
+ */
 void get_all_iList(tW_system *sys, bool bSpeak)
 {
-	int i, j;
-	int k;
-	int N_i;
+	int i, j; // i is the site type index, j will index the pair interaction
+	int k; 
+	int N_i; // Number of interaction partner types site_type i will have
 	int b_Match1, b_Match2;
 
 	sys->Inter_Map = calloc(sys->N_Site_Types, sizeof(tW_word *));
@@ -75,14 +84,14 @@ void get_all_iList(tW_system *sys, bool bSpeak)
 		if (bSpeak) { fprintf(stderr, "Site type %s: ", sys->Site_Types[i]); }
 
 		N_i = 0;
-		for (j=0; j<sys->N_Inter2_Types; j++)
+		for (j=0; j<sys->N_Inter2_Types; j++) // Loop through all nb pair interactions from par
 		{
 			b_Match1 = strcmp(sys->Site_Types[i], sys->Inter2_Type_List[j].name1);
 			b_Match2 = strcmp(sys->Site_Types[i], sys->Inter2_Type_List[j].name2);
 
 			if (b_Match1 == 0 || b_Match2 == 0)
 			{
-				N_i++;
+				N_i++; // Add to site_i's count when we find an interaction with its name
 			}
 		}
 
@@ -106,7 +115,7 @@ void get_all_iList(tW_system *sys, bool bSpeak)
 				if (bSpeak) { fprintf(stderr, "%s %d.%d ", sys->Inter_Map[i][k], j, k); }
 
 				k++;
-			} else if (b_Match2 == 0 )
+			} else if (b_Match2 == 0 ) // We use this elif syntax to avoid incrementing k twice for A-A type interactions 
 			{
 				strcpy(sys->Inter_Map[i][k], sys->Inter2_Type_List[j].name1);
 				sys->Inter_iMap[i][k] = j;
@@ -154,15 +163,16 @@ int get_iList(tW_word name, int N_Inter_Types,
 }
 
 
-/*****************************************************************************************
-det_min_image():
-*****************************************************************************************/
-int det_min_image(dvec box, dvec Origin, dvec x)
-/*
- * routine determines image of prtcl at R closest to the
- * particle at the Origin.  routine returns the no. of transformations
- * NB the function ASSUMES rectangular box, s.t. box_j = L_j
+/**
+ * det_min_image:
+ * detemines image of prtcl at R closest to the particle at Origin.\
+ *
+ * @param box  The vector representing the dimensions of the box for pbc
+ * @param Origin  The coordinates of the particle at origin
+ * @return No. of transformations
+ * @note this function ASSSUMES rectangular box, s.t. box_j = L_j
  */
+int det_min_image(dvec box, dvec Origin, dvec x)
 {
     int j;
     double r_j, d_j, L_j, sign;
@@ -706,9 +716,11 @@ int get_Zero_list(int *Zero_list, int *N_coeff, double *g_cnt,
     int j, l;
 
     /* JFR - 02.06.13:  I have rewritten this entire function */
-    for (j = 0; j < sys->N_Inter_Types; j++) {	/* loop over interaction types */
+    for (j = 0; j < sys->N_Inter_Types; j++) 
+    {	/* loop over interaction types */
 	g_cnt_total = 0.00;
-	for (l = 0; l < sys->Inter_Types[j].N_coeff; l++) {	/* calculate the total number of hits for each interaction */
+	for (l = 0; l < sys->Inter_Types[j].N_coeff; l++) 
+	{	/* calculate the total number of hits for each interaction */
 	    i = sys->Inter_Types[j].i_0 + l;
 	    g_cnt_total += g_cnt[i];
 	}
@@ -717,43 +729,68 @@ int get_Zero_list(int *Zero_list, int *N_coeff, double *g_cnt,
 	    ((sys->Inter_Types[j].dr * g_cnt_total) /
 	     (sys->Inter_Types[j].R_max - sys->Inter_Types[j].R_min));
 
-	for (l = 0; l < sys->Inter_Types[j].N_coeff; l++) {	/* loop over the coefficients in order */
+	for (l = 0; l < sys->Inter_Types[j].N_coeff; l++) 
+	{	/* loop over the coefficients in order */
 	    i = sys->Inter_Types[j].i_0 + l;
 	    /* trim bins that are sampled l.t. a specified fraction (sys->TRIM_var.FE) of the uniform value */
-	    if (g_cnt[i] < (sys->TRIM_var.FE * Nhits_uniform)) {
+	    if (g_cnt[i] < (sys->TRIM_var.FE * Nhits_uniform)) 
+	    {
 		end_flag = TRUE;
 	    }
 	    /* do the same for the sampling of the input atomistic simulation (for iter-FMing) */
-	    else if (sys->rescale[i] < (sys->TRIM_var.FE * Nhits_uniform)) {
+	    else if (sys->rescale[i] < (sys->TRIM_var.FE * Nhits_uniform)) 
+	    {
 		end_flag = TRUE;
 	    }
 	    /* for the linear basis, trim the first and last bins no matter what for proper supports */
-	    else if (sys->Inter_Types[j].i_basis == LINEAR_BASIS_INDEX) {
+	    else if (sys->Inter_Types[j].i_basis == LINEAR_BASIS_INDEX) 
+	    {
 		if (strcmp(sys->Inter_Types[j].inter_type, B_DIHEDRAL) ==
-		    0) {
+		    0) 
+		{
 		    continue;
 		}
-		if ((l == 0) || (l == (sys->Inter_Types[j].N_coeff - 1))) {
+		if ((l == 0) || (l == (sys->Inter_Types[j].N_coeff - 1))) 
+		{
 		    end_flag = TRUE;
 		}
 	    }
 	    /* for the Bspline basis, trim the first and last k/2+1 bins no matter what for proper supports */
-	    else if (sys->Inter_Types[j].i_basis == BSPLINE_BASIS_INDEX) {
-		if (l == (sys->Inter_Types[j].N_coeff - 1)) {
+	    else if (sys->Inter_Types[j].i_basis == BSPLINE_BASIS_INDEX) 
+	    {
+		if (l == (sys->Inter_Types[j].N_coeff - 1)) 
+		{
 		    if (strcmp(sys->Inter_Types[j].inter_type, B_DIHEDRAL)
-			== 0) {
+			== 0) 
+		    {
 			if (fabs
 			    ((sys->Inter_Types[j].R_min +
 			      l * sys->Inter_Types[j].dr) - M_PI) <
-			    FLOAT_EPS) {
+			    FLOAT_EPS) 
+			{
 			    end_flag = TRUE;
 			}
 		    }
 		}
-                if (strcmp(sys->Inter_Types[j].inter_type,NB_PAIR) == 0)
-                {
-		    if( (l <= sys->Inter_Types[j].kspline) || 
-                        (l >= sys->Inter_Types[j].N_coeff - sys->Inter_Types[j].kspline ) ) // MRD 6.11.2019
+                if ( /*MCL 05.05.25 extended trimming to ALL NB types*/
+		    (strcmp(sys->Inter_Types[j].inter_type,NB_PAIR) == 0) ||
+		    (strcmp(sys->Inter_Types[j].inter_type,NB_LOCAL_DENSITY) == 0) ||
+		    (strcmp(sys->Inter_Types[j].inter_type,NB_LD_GRADIENT) == 0)
+		   )
+                {  /*MCL 05.08.25 - The point of this trimming is to solve for only coeffs we need for
+		     the domain [a,b) the user passed in par.txt*/
+		   /*For the lower bound interval [a+dx), we need coeffs from dx interval 
+		    * centered on a - j + k/2 (for even splines with j\in [0,k))*/
+		   /*There are k points left of a, we only want to keep up to (k-1)-k/2 left of a */
+		   /*This means if the index l is in [0,k], we only want it if its greater than> (k)-k/2*/
+		    if( 
+		      (l <= (sys->Inter_Types[j].kspline/2) ) || 
+		      /*For the upper bound of the interval to predict [b-dx,b) correct we need coeffs centered on b-dx - j + k/2 */
+		      /*we added k-1 to the right of b already, (which corresponds to k intervals to the right of b-dx)
+		       *and we want to only keep up to 0 + k/2 to the right of it b-dx*/
+		       /*so if the index is in the range [N_coeff-(k-1), N_coeff), only keep it if < N + k/2 + 1*/
+                      (l >= sys->Inter_Types[j].N_coeff - (sys->Inter_Types[j].kspline/2)) // MRD 6.11.2019 (added k) -> MCL 05.08.25 Changed to k/2
+		      )
                     { 
                         end_flag = TRUE; 
                     }
@@ -761,7 +798,8 @@ int get_Zero_list(int *Zero_list, int *N_coeff, double *g_cnt,
 	    }
 
 	    /* update the trimming variables */
-	    if (end_flag == TRUE) {
+	    if (end_flag == TRUE) 
+	    {
 		Zero_list[N_zero] = i;	/* Record index of zero element of g_cnt.                       */
 		N_zero++;	/* Keep track of the number of zero elements.                   */
 		N_coeff_trim--;	/* For each zero element, there's one less coeff. to determine. */
@@ -1260,7 +1298,8 @@ int get_phi_struct_and_phi_forces(FILE * fp_log, tW_system * sys,
 	get_phi_forces(fp_log, sys);
     }
 
-    get_phi_struct(fp_log, sys);
+    if (!sys->bGradient) {get_phi_struct(fp_log, sys);} // MCL 03.10.26
+    else {fprintf(fp_log, "\n Skipped phi_struct due to SG request\n");}
 
     /* JFR - 12.20.13: evaluate options for calculating the eigenspectrum of MT */
 
@@ -1296,7 +1335,24 @@ int get_phi_forces(FILE * fp_log, tW_system * sys)
 	sys->b[i] = sys->b_forces[i];
     }
 
-    direct_solve_lin_eqns(fp_log, sys, "forces");
+    /* MRD 06.18.2020 */
+    bool ExtForceZero = FALSE;
+    for (i = 0; i < sys->N_Inter_Types; ++i)
+    {
+      if (strcmp(sys->Inter_Types[i].inter_type,EXT_POTL_NAME) == 0)
+      {
+        if (! sys->Inter_Types[i].solveExt) { ExtForceZero = TRUE; }
+      }
+    }
+
+    if (ExtForceZero) // no longer square G matrix.
+    {
+      ext_potl_solve_lin_eqns(fp_log,sys);
+    }
+    else
+    {
+      direct_solve_lin_eqns(fp_log, sys, "forces");
+    }
 
     for (i = 0; i < N_coeff; i++) {
 	sys->phi_forces[i] = sys->phi[i];
@@ -1395,14 +1451,25 @@ int direct_solve_lin_eqns(FILE * fp_log, tW_system * sys, tW_word info)
     return 0;
 }
 
-/*****************************************************************************************
-eval_bond_basis_vectors(): Evaluates the basis vectors for bonded interactions for site
-i_site. Indices for each basis vector are stored in D_b[] and each vector is stored in 
-calcG_b[]. The functions g, g_cnt, and L are also evaluated for each interaction.
-NOTE: For calc_grids2(), this function gets called twice, but g, g_cnt, and L should only
-be evaluated once. Therefore, I add i_flag to indicate if these functions should be
-evaluated.
-*****************************************************************************************/
+/**
+ * eval_bond_basis_vectors:
+ * Evaluates the basis vectors for bonded interactions for site i_site. 
+ * Indices for each basis vector are stored in D_b[] and each vector is stored in 
+ * calcG_b[]. The functions g, g_cnt, and L are also evaluated for each interaction.
+ *
+ * @param fp Pointer to the log file where errors are printed
+ * @param CG_struct The list of superatoms found in the topology
+ * @param Bonded_Inter_Types List of the intramolecular interactions in order passed from par.txt
+ * @param i_site The index of the current superatom we are evaluating bonded vectors for
+ * @param D_b The list if half G matrix indices that site i will contribute to [filled by this func]
+ * @param calG_b dPsi/dR_I weighted for each knotpoint in D_b [filled by this func]
+ * @param i_flag Indicates whether or not to evaluate g, g_cnt, and L [true in calc_grids3
+ * @param D_b_inter_index The lambda index for a particular interaction index [filled by this func]
+ * @returns The number of bonded coefficients that CG_struct[i_site] affects for incrementing G_matrix
+ * @note For calc_grids2(), this function gets called twice, but g, g_cnt, and L should only
+ * be evaluated once. Therefore, i_flag was added to indicate if these functions should be
+ * evaluated.
+ */
 int eval_bond_basis_vectors(FILE * fp, tW_CG_site * CG_struct,
 			    tW_Bonded_Inter * Bonded_Inter_Types,
 			    int i_site, int *D_b, dvec * calG_b,
@@ -1423,74 +1490,58 @@ int eval_bond_basis_vectors(FILE * fp, tW_CG_site * CG_struct,
     }
 
     /* Loop over all bond interactions found in the GROMACS topology. */
-   for (i = 0; i < i_site_ptr->nr_bonds; i++) {
+   for (i = 0; i < i_site_ptr->nr_bonds; i++) 
+   {
 //fprintf(stderr,"i_site_ptr->bond_type[i]: %d  Bonded_Inter_Types[i_site_ptr->bond_type[i]].name: %s\n",i_site_ptr->bond_type[i],Bonded_Inter_Types[i_site_ptr->bond_type[i]].name); // MRD
-	if (strcmp
-	    (B_BOND_STRETCH,
-	     Bonded_Inter_Types[i_site_ptr->bond_type[i]].name) == 0) {
-	    if (DEBUG_eval_bond_basis) {
-		print_debug_eval_bond_basis(i_site_ptr, Bonded_Inter_Types,
-					    i, fp);
-	    }
-	    tmp_coeff_ctr =
-		get_BondStretch_basis_vectors(i_site, i, bond_coeff_ctr,
-					      i_site_ptr,
-					      Bonded_Inter_Types, D_b,
-					      calG_b, CG_struct, i_flag);
-
-	} else
-	    if (strcmp
-		(B_ANGLE,
-		 Bonded_Inter_Types[i_site_ptr->bond_type[i]].name) == 0) {
-	    if (DEBUG_eval_bond_basis) {
-		print_debug_eval_bond_basis(i_site_ptr, Bonded_Inter_Types,
-					    i, fp);
-	    }
-	    tmp_coeff_ctr =
-		get_Angle_basis_vectors(i_site, i, bond_coeff_ctr,
-					i_site_ptr, Bonded_Inter_Types,
-					D_b, calG_b, CG_struct, i_flag);
-	} else
-	    if (strcmp
-		(B_DIHEDRAL,
-		 Bonded_Inter_Types[i_site_ptr->bond_type[i]].name) == 0) {
-	    if (DEBUG_eval_bond_basis) {
-		print_debug_eval_bond_basis(i_site_ptr, Bonded_Inter_Types,
-					    i, fp);
-	    }
-	    tmp_coeff_ctr =
-		get_Dihedral_basis_vectors(i_site, i, bond_coeff_ctr,
-					   i_site_ptr, Bonded_Inter_Types,
-					   D_b, calG_b, CG_struct, i_flag);
-	} else
-	    if (strcmp
-		(B_NB_PAIR_BOND,
-		 Bonded_Inter_Types[i_site_ptr->bond_type[i]].name) == 0) {
-	    if (DEBUG_eval_bond_basis) {
-		print_debug_eval_bond_basis(i_site_ptr, Bonded_Inter_Types,
-					    i, fp);
-	    }
-	    tmp_coeff_ctr =
-		get_IntraMolec_NB_Pair_basis_vectors(i_site, i,
-						     bond_coeff_ctr,
-						     i_site_ptr,
-						     Bonded_Inter_Types,
-						     D_b, calG_b,
-						     CG_struct, i_flag);
-	} else {
-	    printf
-		("\nERROR: Problem reading inter. name in eval_bond_basis_vectors() for Site: %d.\n",
-		 i_site);
-	    exit(EXIT_FAILURE);
+     if (strcmp(B_BOND_STRETCH, Bonded_Inter_Types[i_site_ptr->bond_type[i]].name) == 0)
+     {
+        if (DEBUG_eval_bond_basis) 
+	{
+          print_debug_eval_bond_basis(i_site_ptr, Bonded_Inter_Types, i, fp);
 	}
+	tmp_coeff_ctr = get_BondStretch_basis_vectors(i_site, i, bond_coeff_ctr, i_site_ptr, Bonded_Inter_Types, D_b, calG_b, CG_struct, i_flag);
 
-	for (j = 0; j < tmp_coeff_ctr; j++) {
-	    D_b_inter_index[bond_coeff_ctr + j] = i;	/* JFR - 02.26.13: for sep M2 */
+     }
+     else
+       if (strcmp(B_ANGLE, Bonded_Inter_Types[i_site_ptr->bond_type[i]].name) == 0)
+       {
+         if (DEBUG_eval_bond_basis)
+	 {
+           print_debug_eval_bond_basis(i_site_ptr, Bonded_Inter_Types, i, fp);
+	 }
+	 tmp_coeff_ctr = get_Angle_basis_vectors(i_site, i, bond_coeff_ctr, i_site_ptr, Bonded_Inter_Types, D_b, calG_b, CG_struct, i_flag);
+       } 
+       else
+	 if (strcmp(B_DIHEDRAL,Bonded_Inter_Types[i_site_ptr->bond_type[i]].name) == 0)
+	 {
+	   if (DEBUG_eval_bond_basis)
+	   {
+             print_debug_eval_bond_basis(i_site_ptr, Bonded_Inter_Types,i, fp);
+	   }
+	   tmp_coeff_ctr = get_Dihedral_basis_vectors(i_site, i, bond_coeff_ctr, i_site_ptr, Bonded_Inter_Types, D_b, calG_b, CG_struct, i_flag);
+	 } 
+	 else
+	    if (strcmp(B_NB_PAIR_BOND,Bonded_Inter_Types[i_site_ptr->bond_type[i]].name) == 0) 
+	    {
+	      if (DEBUG_eval_bond_basis)
+	        {
+		  print_debug_eval_bond_basis(i_site_ptr, Bonded_Inter_Types,i, fp);
+	        }
+	      tmp_coeff_ctr = get_IntraMolec_NB_Pair_basis_vectors(i_site, i, bond_coeff_ctr, i_site_ptr, Bonded_Inter_Types, D_b, calG_b, CG_struct, i_flag);
+	    } 
+	    else 
+	    {
+	      printf("\nERROR: Problem reading inter. name in eval_bond_basis_vectors() for Site: %d.\n",i_site);
+	      exit(EXIT_FAILURE);
+	    }
+
+	for (j = 0; j < tmp_coeff_ctr; j++) 
+	{
+	  D_b_inter_index[bond_coeff_ctr + j] = i;	/* JFR - 02.26.13: for sep M2 */
 	}
 	bond_coeff_ctr += tmp_coeff_ctr;
 
     }				/* End loop over total_no_bonds for i_site. */
-
     return bond_coeff_ctr;
 }
 
@@ -2243,9 +2294,24 @@ int get_Bspline_dihedral_basis_vector(int bond_coeff_ctr, int i_bond_type,
 
 }
 
-/*****************************************************************************************
-get_Angle_basis_vectors(): 
-*****************************************************************************************/
+/**
+ * get_Angle_basis_vectors:
+ * Associates the angle that CG_struct[i] is involved in with a corresponding value of dPsi/dR_I and its entry index D_b
+ * Does this based on the basis type for the angle by calling get_X_angle_basis_vector where X is the basis
+ *
+ * @param i_site the index [I] for the superatom R_I in the above qtys
+ * @param i_inter the index [lambda] for the interaction index (based on .btp file)
+ * @param bond_coeff_ctr the current number of bonded coefficients that CG_struct[i_site] has effected before this angle [lambda] was counted
+ * @param i_site_ptr A pointer to CG_struct[i_site] (the address of CG_struct[i_site])
+ * @param Bonded_Inter_Types The list of bonded interaction structures as determined from reading par.txt
+ * @param D_b the list of half matrix indices that will be effected by CG_struct[i] [new entries are added by this function]
+ * @param calG_b the list of dPsi/dR_I * weight factor for each D_b in the list above
+ * @param CG_struct the total list of superatoms found in the topology
+ * @param i_flag a boolean added to indicate whether g and L structures will be evaluated
+ * @returns the number of coeffections affected by the angle being evaluated (based on the basis type)
+ * @note this is part of a family of functions that do similar things for different bonded Psi types 
+ * @see get_BondStretch_basis_vectors() get_Dihedral_basis_vectors() get_IntraMolec_NB_Pair_basis_vectors()
+ */
 int get_Angle_basis_vectors(int i_site, int i_inter, int bond_coeff_ctr,
 			    tW_CG_site * i_site_ptr,
 			    tW_Bonded_Inter * Bonded_Inter_Types, int *D_b,
@@ -2253,9 +2319,9 @@ int get_Angle_basis_vectors(int i_site, int i_inter, int bond_coeff_ctr,
 			    bool i_flag)
 {
     int n_coeff;
-    int i_bond_type;
-    int i_basis_type;
-    int *sites;
+    int i_bond_type; // index of interaction from par.txt
+    int i_basis_type; // the index that IDs the basis set we asked for in par.txt
+    int *sites; // The list of atom indices involved in lambda [for this function, its 3 atoms long]
 
     i_bond_type = i_site_ptr->bond_type[i_inter];
     i_basis_type = Bonded_Inter_Types[i_bond_type].i_basis;
@@ -2301,9 +2367,24 @@ int get_Angle_basis_vectors(int i_site, int i_inter, int bond_coeff_ctr,
 }
 
 
-/*****************************************************************************************
-get_Angle_info():
-*****************************************************************************************/
+/**
+ * get_Angle_info:
+ * gets theta/vectors required to figure out dPsi/dR_I for an angle site_I takes place in
+ * @param i_site The superatom we are taking angle data for
+ * @param sites The triplet of superatoms involved in the angle we are taking data for
+ * @param CG_struct The list of all superatoms in the system
+ * @param L_2 The component of the Jacobian obtained from -d(theta)/dR_2 for an angle 1-2-3 [filled by this func]
+ * @param L_3 The component of the Jacobian obtained from -d(theta)/dR_3 for an angle 1-2-3 [filled by this func]
+ * @param cos_theta A pointer to a double that will store cos(theta), passed by address [filled by this func]
+ * @param sin_theta A pointer to a double that will store sin(theta), passed by address [filled by this func]
+ * @param theta A pointer to the angle (theta, between atoms 0-1-2 ), passed by address [filled by this func]
+ * @param norm_12 The distance between sites 0 and 1 in an angle 0-1-2, passed by address [filled by this func]
+ * @param norm_13 The distance between sites 1 and 2 in an anggle 0-1-2, passed by address [filled by this func]
+ * @return Index position of i_site in angle 0-1-2
+ * @note This function is one in a family of functions that get the required info for deciphering dPsi/dR_I for different
+ *       types of zeta order parameters
+ * @see get_BondStretch_info
+ */
 int get_Angle_info(int i_site, int *sites, tW_CG_site * CG_struct,
 		   dvec L_2, dvec L_3, double *cos_theta,
 		   double *sin_theta, double *theta, double *norm_12,
@@ -2352,7 +2433,7 @@ int get_harmonic_angle_basis_vector(int i_site, int bond_coeff_ctr,
 
     /* avoid dividing by zero when sin_theta = 0: JFR -> I added this 08.24.10 */
     if (fabs(sin_theta) < FLOAT_EPS) {
-	if (sin_theta > 0.0) {
+	if (sin_theta >= 0.0) {
 	    sin_theta += FLOAT_EPS;
 	}
 	if (sin_theta < 0.0) {
@@ -2434,7 +2515,7 @@ int get_delta_angle_basis_vector(int i_site, int bond_coeff_ctr,
 
     /* avoid dividing by zero when sin_theta = 0: JFR -> I added this 08.24.10 */
     if (fabs(sin_theta) < FLOAT_EPS) {
-	if (sin_theta > 0.0) {
+	if (sin_theta >= 0.0) {
 	    sin_theta += FLOAT_EPS;
 	}
 	if (sin_theta < 0.0) {
@@ -2512,7 +2593,7 @@ int get_linear_angle_basis_vector(int i_site, int bond_coeff_ctr,
 
     /* avoid dividing by zero when sin_theta = 0: JFR -> I added this 08.24.10 */
     if (fabs(sin_theta) < FLOAT_EPS) {
-	if (sin_theta > 0.0) {
+	if (sin_theta >= 0.0) {
 	    sin_theta += FLOAT_EPS;
 	}
 	if (sin_theta < 0.0) {
@@ -2528,18 +2609,18 @@ int get_linear_angle_basis_vector(int i_site, int bond_coeff_ctr,
 	/* A and B are weighting factors which depend on where the angle is relative to the two nearest gridpoints */
 
 	if (atom_position == 0) {	/* end atom (-L_2) */
-	    scal_times_vect(A / (sin(theta)), L_2, calG_b[bond_coeff_ctr]);
-	    scal_times_vect(B / (sin(theta)), L_2,
+	    scal_times_vect(A / (sin_theta), L_2, calG_b[bond_coeff_ctr]);
+	    scal_times_vect(B / (sin_theta), L_2,
 			    calG_b[bond_coeff_ctr + 1]);
 	} else if (atom_position == 1) {	/* central atom (L_2 + L_3) */
 	    vect_sum(L_2, L_3, sum);
-	    scal_times_vect(-A / (sin(theta)), sum,
+	    scal_times_vect(-A / (sin_theta), sum, //MCL 08.06.25 for Joe's fix to work, need sin_theta
 			    calG_b[bond_coeff_ctr]);
-	    scal_times_vect(-B / (sin(theta)), sum,
+	    scal_times_vect(-B / (sin_theta), sum,
 			    calG_b[bond_coeff_ctr + 1]);
 	} else if (atom_position == 2) {	/* end atom (-L_3) */
-	    scal_times_vect(A / (sin(theta)), L_3, calG_b[bond_coeff_ctr]);
-	    scal_times_vect(B / (sin(theta)), L_3,
+	    scal_times_vect(A / (sin_theta), L_3, calG_b[bond_coeff_ctr]);
+	    scal_times_vect(B / (sin_theta), L_3,
 			    calG_b[bond_coeff_ctr + 1]);
 	} else {
 	    printf("ERROR: atom position not valid!");
@@ -2631,7 +2712,7 @@ int get_Bspline_angle_basis_vector(int i_site, int bond_coeff_ctr,
 
     /* avoid dividing by zero when sin_theta = 0: JFR -> I added this 08.24.10 */
     if (fabs(sin_theta) < FLOAT_EPS) {
-	if (sin_theta > 0.0) {
+	if (sin_theta >= 0.0) {
 	    sin_theta += FLOAT_EPS;
 	}
 	if (sin_theta < 0.0) {
@@ -2658,14 +2739,14 @@ int get_Bspline_angle_basis_vector(int i_site, int bond_coeff_ctr,
 
 	    /* A and B are weighting factors which depend on where the angle is relative to the two nearest gridpoints */
 	    if (atom_position == 0) {	/* end atom (-L_2) */
-		scal_times_vect(B / (sin(theta)), L_2,
+		scal_times_vect(B / (sin_theta), L_2, // MCL JOE fix 08.6.25
 				calG_b[bond_coeff_ctr + coeff_ctr]);
 	    } else if (atom_position == 1) {	/* central atom (L_2 + L_3) */
 		vect_sum(L_2, L_3, sum);
-		scal_times_vect(-B / (sin(theta)), sum,
+		scal_times_vect(-B / (sin_theta), sum,
 				calG_b[bond_coeff_ctr + coeff_ctr]);
 	    } else if (atom_position == 2) {	/* end atom (-L_3) */
-		scal_times_vect(B / (sin(theta)), L_3,
+		scal_times_vect(B / (sin_theta), L_3,
 				calG_b[bond_coeff_ctr + coeff_ctr]);
 	    } else {
 		printf("ERROR: atom position not valid!");
@@ -2748,9 +2829,25 @@ int get_L2_L3_angles(dvec u_12, dvec u_13, double cos_theta,
 }
 
 
-/*****************************************************************************************
-get_BondStretch_basis_vectors():
-*****************************************************************************************/
+/**
+ * get_BondStretch_basis_vectors:
+ * Associates a Bonded interaction instance (index i_inter) with halfG indices D_b and contributions dPsi_dR_I
+ *
+ * We determine the pair distance between i_site and its interaction partner obtained from i_inter
+ * Then we weight its contribution to L, b, and g at each knot point according to the basis type selected
+ * @param i_site The index for CG_struct[i_site]
+ * @param i_inter The lambda index for the bond instance
+ * @param i_site_ptr The address of CG_struct[i_site]
+ * @param bond_coeff_ctr The number of coefficients site_i was involved in before this interaction was evaluated
+ * @param Bonded_Inter_Types The list of bonded interaction structures as obtained from par.txt
+ * @param D_b The list of coefficients site_i has contributed to so far [added on to by this func]
+ * @param calG_b The list of dPsi/dR_I site_i will contribute so so far [added on to by this func]
+ * @param CG_struct The list of superatoms involved in the topology for the system
+ * @param i_flag a boolean added to indicate whether we evaluate L and g
+ * @return number of coefficients (knot points) associated with this instance
+ * @note this is one in a family of functions that do similar things for different zeta interaction types 
+ * @see get_Angle_basis_vectors() get_IntraMolec_NB_Pair_basis_vectors() get_Dihedral_basis_vectors()
+ */
 int get_BondStretch_basis_vectors(int i_site, int i_inter,
 				  int bond_coeff_ctr,
 				  tW_CG_site * i_site_ptr,
@@ -2806,10 +2903,17 @@ int get_BondStretch_basis_vectors(int i_site, int i_inter,
 }
 
 
-/*****************************************************************************************
-get_BondStretch_info(): Calculates and stores data needed to calculated the BondStretch
-basis vectors.
-*****************************************************************************************/
+/**
+ * get_BondStretch_info: 
+ * Calculates and stores data needed to calculated the BondStretch basis vectors.
+ *
+ * @param i_site the index of the CG_struct we are looking at BondStretch info for
+ * @param sites the list of CG_struct indices involved in the bond we are looking at
+ * @param CG_struct the list of superatoms involved in the system as read in from the top
+ * @param u_ij the unit vector pointing between sites i and j [filled by this func]
+ * @return The pair distance [bond length] between CG_struct[i_site] and its partner listed in sites
+ * @note no pbc is considered by this function, so user may get weird results from an untreated trajectory
+ */
 double get_BondStretch_info(int i_site, int *sites, tW_CG_site * CG_struct,
 			    dvec u_ij)
 {
@@ -2872,9 +2976,21 @@ int get_delta_bond_basis_vector(int bond_coeff_ctr, int i_bond_type,
 }
 
 /* START JFR */
-/*****************************************************************************************
-get_linear_bond_basis_vector(): 
-*****************************************************************************************/
+/**
+ * get_linear_bond_basis_vector:
+ * Based on a passed bond length (norm_ij) determine the dPsi/dR_I contributions to surrounding knot points
+ * Will filter out bond if not in cutoff
+ *
+ * @param bond_coeff_ctr current no. of knotpoints affected by site_i
+ * @param i_bond_type zeta index for the bond we are evaluating
+ * @param D_b the list of knot point indices affected by site_i so far [added to by this func]
+ * @param calG_b the list of dPsi/dR_I weighted to contribute to each knotpoint in D_b [added to by this func]
+ * @param Bonded_Inter_Types The list of bonded interactions user requested as obtained from reading par.txt
+ * @param norm_ij the bondlength to be evaluated
+ * @param dvec u_ij The unit vector that orients the bond
+ * @param i_flag TRUE for incrementing g and L, FALSE for not
+ * @return 2, if the bond will contribute to G or 0 if its not in the cutoff
+ **/
 int get_linear_bond_basis_vector(int bond_coeff_ctr, int i_bond_type,
 				 int *D_b, dvec * calG_b,
 				 tW_Bonded_Inter * Bonded_Inter_Types,
@@ -2965,7 +3081,7 @@ double calc_linear_spline_A(int bond_coeff_ctr, int *D_b, double dr,
     /* A and B are weighting factors which depend on where the distance 
        is relative to the two nearest gridpoints */
 
-    *Bp = 1.0 / (r2 - r1);
+    *Bp = 1.0 / (r2 - r1); // 1/dr 
     *Ap = -1.0 * (*Bp);
     /* Ap and Bp are the derivatives of A and B */
 
@@ -3057,6 +3173,59 @@ int get_Bspline_bond_basis_vector(int bond_coeff_ctr, int i_bond_type,
 
 }
 
+/*
+ * calc_cubic_Bspline(): MRD 07.29.2019: Cubic spline values are taken from a piecewise function
+ * composed of four cubic polynomials. This should be faster than the iterative method.
+ */
+void calc_cubic_Bspline(double dr, double R, double R_0, int i, int k, double *B, double *Bp)
+{
+  if (k != 4)
+  {
+    fprintf(stderr,"ERROR: in calc_cubic_Bspline, but k = %d (it should be 4)!\n",k);
+    exit(1);
+  }
+
+  double s = ((R-R_0) / dr) - (double) i;
+
+  B[0] = s*s*s / 6.0;
+  Bp[0] = (s*s/2.0) / dr;
+  B[1] = (1.0 + 3.0 * (s + s * s - s * s * s))/6.0;
+  Bp[1] = (0.5 + s - 1.5 * s * s) / dr;
+  B[2] = 2.0/3.0 - s * s + 0.5 * s * s * s;
+  Bp[2] = (-2.0 * s + 1.5 * s * s) / dr;
+  B[3] = (1.0 - 3.0 * s + 3.0 * s * s - s * s * s) / (6.0);
+  Bp[3] = (-1.0 + 2.0 * s - s * s) / (2.0 * dr);
+}
+
+/*
+ * calc_fifth_Bspline(): MRD 07.29.2019: Fifth order spline values are taken from a piecewise function
+ * composed of six fifth order polynomials. This should be faster than the iterative method.
+ */
+void calc_fifth_Bspline(double dr, double R, double R_0, int i, int k, double *B, double *Bp)
+{
+  if (k != 6)
+  {
+    fprintf(stderr,"ERROR: in calc_fifth_Bspline, but k = %d (it should be 6)!\n",k);
+    exit(1);
+  }
+
+  double s = ((R-R_0)/dr) - (double) i;
+
+  B[0] = 1.0 / 120.0 * s * s * s * s * s;
+  Bp[0] = (1.0 / 24.0 * s * s * s * s) / dr;
+  B[1] = (1.0 + 5.0 * s + 10.0 * s * s + 10.0 * s * s * s + 5.0 * s * s * s * s - 5.0 * s * s * s * s * s) / 120.0;
+  Bp[1] = (1.0 + 4.0 * s + 6.0 * s * s + 4.0 * s * s * s - 5.0 * s * s * s * s) / (24.0 * dr);
+  B[2] = (13.0 + 25.0 * s + 10.0 * s * s - 10.0 * s * s * s - 10.0 * s * s * s * s + 5.0 * s * s * s * s * s) / 60.0;
+  Bp[2] = (5.0 + 4.0 * s - 6.0 * s * s - 8.0 * s * s * s + 5.0 * s * s * s * s) / (12.0 * dr);
+  B[3] = (33.0 - 30.0 * s * s + 15.0 * s * s * s * s - 5.0 * s * s * s * s * s) / (60.0);
+  Bp[3] = (-12.0 * s + 12.0 * s * s * s - 5.0 * s * s * s * s) / (12.0 * dr);
+  B[4] = (26.0 - 50.0 * s + 20.0 * s * s + 20.0 * s * s * s - 20.0 * s * s * s * s + 5.0 * s * s * s * s * s) / 120.0;
+  Bp[4] = (-10.0 + 8.0 * s + 12.0 * s * s - 16.0 * s * s * s + 5.0 * s * s * s * s) / (24.0 * dr);
+  B[5] = (1.0 - 5.0 * s + 10.0 * s * s - 10.0 * s * s * s + 5.0 * s * s * s * s - s * s * s * s * s) / (120.0);
+  Bp[5] = (-1.0 + 4.0 * s - 6.0 * s * s + 4.0 * s * s * s - s * s * s * s) / (24.0 * dr);
+}
+
+
 /************************************************************************************************************
 calc_Bspline(): JFR - 07.16.12: This is the De Boor iterative method for calculating normalized Bsplines.
 *************************************************************************************************************/
@@ -3098,58 +3267,79 @@ double calc_Bspline(double dr, double R_0, int i_0, int N_pts, double R,
 
 }
 
-/************************************************************************************************************
-calc_Bspline_deriv(): JFR - 07.16.12: This is the De Boor iterative method for calculating normalized Bsplines.
-*************************************************************************************************************/
+/**
+ * calc_Bspline_deriv:
+ * Uses the De Boor iterative method for calculating derivatives of normalized Bsplines. 
+ * Originally written by JFR 07.16.12, changed by MRD in 2019, changed again by MCL in 2025
+ * @param dr the mesh spacing for the regularly spaced knots points 
+ * @param R_0 the value of the first R in the knots defined for the interaction
+ * @param i_0 the G matrix index of the value of the first R in knots defined
+ * @param N_pts the number of knots defined for the interaction
+ * @param R the sampled value of the order parameter
+ * @param i the index of the central bin R will affect @see get_grid_index_for_delta_basis()
+ * @param j the index of the nonzero spline weight defining the spline at R. [usually spline of order k means k coeffs]
+ * @param k the order of the spline (4 for cubic, 3 for quadratic, 2 for linear, 1 for delta)
+ * @param Nik the nonzero spline weight associated with R. Legacy versions of the code require this arg, new versions can pass it blank
+ * @param Npik the nonzero derivatives of the spline weight associated with R. Calculated by this function. Not really stored anywhere [you can pass it blank]
+ * @return Bp the j'th nonzero derivative of the spline weight associated with R [N' in the MTU doc]
+ * @see calc_Bspline()
+ * @note Versions of this function prior to 2025 required that Nik be filled in first by calc_Bspline. The function as is no longer requires this.
+ */
 double calc_Bspline_deriv(double dr, double R_0, int i_0, int N_pts,
 			  double R, int i, int j, int k, double *Nik,
 			  double *Npik)
 {
-    double DP;
+/*** MCL 02.13.25
+ * This is MRD's old algorithm. I am changing it because of dP has an implicit 1/(R-knot) dependence which breaks when a knot point is exactly sampled.
     double Bp = 0.00;
 
-//     Bp = Npik[k-1-j];
-/* Try calculating the derivative here */
-//if ( j == k-1 ) 
-//{ 
-//Bp = (R_0 + (i - j + k/2 + k)*dr - r_ij)*( (1.0-((double)k))*Nik[k-1-j][k-1] ); 
-//printf( "Bp = %lf , Nik[k-1-j][k-1] = %lf \n", Bp, Nik[k-1-j][k-1] );
-//}
-//else 
-//{ 
-//Bp = (R_0 + (i - j + k/2 + k)*dr - r_ij)*( (1.0-((double)k))*Nik[k-1-j][k-1] + ((double)k)*Nik[k-2-j][k-2] ); 
-//printf( "Bp = %lf , Nik[k-1-j][k-1] = %lf, Nik[k-2-j][k-2] = %lf \n", Bp, Nik[k-1-j][k-1], Nik[k-2-j][k-2] );
-//}
-//if ( j == k-1 ) 
-//{
-//Bp = ( ((double)k) / (r_ij - (R_0 + (i - j + k/2 + k)*dr)) )*Nik[k-1-j][k-1];
-//}
-//else 
-//{ 
-//Bp = ( ((double)k) / (r_ij - (R_0 + (i - j + k/2 + k)*dr)) )*Nik[k-1-j][k-1] +  (1.0/dr)*(r_ij - (R_0 + (i - j + k/2 + k)*dr) + ((double)k)*((double)k)*dr)*Nik[k-2-j][k-2]/( (1.0 -((double)k))*(R_0 + (i - j + k/2 + k)*dr - r_ij) ); 
-//}
-//if ( j == k-1 )
-//{
-//Bp = (1.0 / ((R_0 + (i - j + k/2 + k)*dr) - r_ij))*( (1.0-((double)k))*Nik[k-1-j][k-1] );
-//}
-//else
-//{
-//Bp = (1.0 / ((R_0 + (i - j + k/2 + k)*dr) - r_ij))*( (1.0-((double)k))*Nik[k-1-j][k-1] + (2.0*((double)k)-1.0)*Nik[k-2-j][k-2] );
-//}
-    /* MRD 02.05.2019 got rid of the k / 2
-    DP = 1.0 / (R_0 + (i - j + k / 2 + k) * dr - R); */
     DP = 1.0 / (R_0 + (i - j + k) * dr - R);
     if (j == k - 1) {
-//Bp = DP*(1.0-((double)k))*Nik[k-1-j][k-1];
 	Bp = DP * (1.0 - ((double) k)) * Nik[k - 1 - j];
     } else {
-//Bp = DP*( (1.0-((double)k))*Nik[k-1-j][k-1] + ((double)k)*Nik[k-2-j][k-2] );
 	Bp = DP * ((1.0 - ((double) k)) * Nik[k - 1 - j] + ((double) k) * Npik[k - 1 - j]);
-		   /*((double) k) * Npik[k - 2 - j]); MRD 02.05.2019 changed the 2 to a 1*/
     }
 
     return Bp;
+ * Everything here below is my new code with some notes on what its doing
+***/ 
 
+/* MCL Cox-Deboor Alg notes for Kth order splines -> See wiki -> https://en.wikipedia.org/wiki/B-spline
+ * For spline derivatives the algorithm for coefficients becomes N_{i,p}(x) = [p/{(t_{i+p} - t_{i})] N_{i, p-1}(x) - [p / (t_{i + 1 + p} - t_{i+1})]N_{i+1, p-1}(x) }
+   * for a spline with degree p (order k = p + 1) defined by knot points t = {t_1 ... t_i .. t_k}, with N_{i,p}(x) being the weight coefficient for x to knot i defined with degree p
+   * See MTU Notes -> https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-derv.html
+   *
+   * Thus all I do in this new code is 1) Copy Joe's code to get spline values
+   * 				       2) Plug into MTU formula to get derivatives
+   */
+    double Bp = 0.00;
+    double DP, DM; 
+    double M;
+    double Nik_tmp[MAX_BSPLINE_COEFF][MAX_BSPLINE_COEFF];
+
+    // Joe's spline code [see calc_Bspline]
+    Nik_tmp[0][0] = 1.0;
+    for (int s = 0; s < k - 1; s++) {
+        Nik_tmp[0][s + 1] = 0.0;
+        for (int r = 0; r <= s; r++) {
+            DP = R_0 + (i + 1 + r) * dr - R;
+            DM = R - (R_0 + (i - s + r) * dr);
+            M = Nik_tmp[r][s] / (DP + DM);
+            Nik_tmp[r][s + 1] += DP * M;
+            Nik_tmp[r + 1][s + 1] = DM * M;
+        }
+    }
+    // Plug in to MTU formula, but coordinate the return value with what the user asked for
+    double p = k -1;
+    double term1 = p/(dr*p) * Nik_tmp[(int)p-j][k-2]; 
+    //outside algs fill in the furthest right knot point first, usually this means the point that'd have weight in the delta set is stored in Nik_tmp[p][p]
+    double term2 = 0; // Term 2 should be zero when we are at the edge of the spline
+    if (j != p)
+    {
+    term2 = p/(dr*p) * Nik_tmp[(int)p-j-1][k-2];
+    }
+    Bp = term2 - term1;
+    return Bp;
 }
 
 /*****************************************************************************************
@@ -3240,9 +3430,13 @@ int get_grid_index_for_linear_basis(double r, int i_0, double dr,
 
 /* END JFR */
 
-/*****************************************************************************************
-get_atom_position_angle():
-*****************************************************************************************/
+/**
+ * get_atom_position_angle:
+ * Determines the position of site_i (i_site) in the angle_triple passed
+ * @param angle_triple the list of site indices involved in the angle
+ * @param i_site the index of the site I want the position of
+ * @return if successful, returns 0 1 or 2 for an angle 0-1-2, exits if not found
+ */
 int get_atom_position_angle(int angle_triple[], int i_site)
 {
     int i;
@@ -3308,6 +3502,7 @@ double get_g_dihedral_angle(dvec basis)
 
 /*****************************************************************************************
 eval_bonds_M_b():
+This function increments the bond-bond part (intramolec-intramolec) part of the G matrix
 *****************************************************************************************/
 int eval_bonds_M_b(tW_system * sys, int nr_bond_coeff, int D_b[],
 		   dvec calG_b[], bool b_F, dvec f_i, dvec f_i_ref,
@@ -3359,7 +3554,17 @@ int eval_bonds_M_b(tW_system * sys, int nr_bond_coeff, int D_b[],
 		/* JFR - 02.26.13: for sep M2 */ ) {
 		sys->M2[index] += inner_prod;
 	    } else {
-		sys->M[index] += inner_prod;
+		// MCL 06.12.2024 If D = D' and lambda != lambda' we need to increment by 2*inner_product 
+		// because we're incrementing the lower packed triangular version of the G matrix and there is no symmetry
+		// to help the diagnols be counted correctly with this loop style [See MCL and WGN notes where this 
+		// merge was added. 
+		// [added doc at top of calc2 to reflect that now G should be correctly tallied for the frame by end of calc2]
+		// [If speed is a concern, use calcgrids3] 
+		    sys->M[index] += inner_prod;
+		    if (D_i2_bond == D_i1_bond)
+		    {
+		      sys->M[index] += inner_prod; // MCL 06.12.2024 Adding the second part of the inner product for D = D'
+		    }
 	    }
 	    if (sys->M_cnt != NULL) {
 		sys->M_cnt[index] += 1.0;
@@ -3413,9 +3618,15 @@ int eval_M_nbPair_bonds(tW_system * sys, int n_basis_ij, int ij_index[],
 }
 
 
-/*****************************************************************************************
-get_nb_pair_info():
-*****************************************************************************************/
+/**
+ * get_nb_pair_info:
+ * For positions x_i and x_j, determine the pair distance and displacement under PBC if req.
+ * @param r_ij place to store distance between particle i and j [filled by this func]
+ * @param x_i position of particle i
+ * @param x_j position of particle j
+ * @param x_ij place to store pair displacement vector [filled by this func]
+ * @param box vector representing box dimensions for pbc calculation
+ */
 void get_nb_pair_info(double *r_ij, dvec x_i, dvec x_j, dvec x_ij,
 		      int b_PBC, dvec box)
 {
@@ -3428,9 +3639,18 @@ void get_nb_pair_info(double *r_ij, dvec x_i, dvec x_j, dvec x_ij,
 }
 
 
-/*****************************************************************************************
-get_nb_pair_inter_ptr():
-*****************************************************************************************/
+/**
+ * get_nb_pair_inter_ptr:
+ * Determines if j_site.name is contained in the partner list passed for site_i (nList)
+ * i.e. Do site j and i interaction? Which pair interaction?
+ *
+ * @param j_site the atom [site] that we are checking is in site_type i's interaction list
+ * @param sys the structure that stores all top, par, and frame info
+ * @param N_i1 The number of pair interactions the site_type i is involved in, usually sys->Inter_Map_Len[site_type_i_idx]
+ * @param nList1 List of site_type_i's pair interaction partner type names, usually sys->Inter_Map[site_type_i_idx]
+ * @param iList1 List of site_type_i's pair interaction partner site_type indices, usually sys->Inter_iMap[site_type_i_idx]
+ * @return NULL if site_type_i and site_type_j do not interact, OR a pointer to the pair interaction parameters if they do
+ */
 tW_type_inter2 *get_nb_pair_inter_ptr(tW_CG_site * j_site, tW_system * sys,
 				      int N_i1, tW_word *nList1,
 				      int *iList1)
@@ -3440,7 +3660,7 @@ tW_type_inter2 *get_nb_pair_inter_ptr(tW_CG_site * j_site, tW_system * sys,
 
     /* ID interaction between site i and j. */
     /* ASSUMES that no two particles are involved in more than 1 interaction. */
-    j_iList1 = match_word(N_i1, j_site->name, nList1);
+    j_iList1 = match_word(N_i1, j_site->name, nList1); // find the entry for site_type_i's interaction list that contains site_j's type
 
     /* Do i and j interact? */
     if (j_iList1 < 0) {
@@ -3451,6 +3671,29 @@ tW_type_inter2 *get_nb_pair_inter_ptr(tW_CG_site * j_site, tW_system * sys,
     ij_type = iList1[j_iList1];
 
     return &(sys->Inter2_Type_List[ij_type]);
+}
+
+
+/*****************************************************************************************
+get_nb_pair_inter_ptr_n(): Does the same thing as the above function, but instead
+puts the pointers into the_inter2s, and returns the number of pair interactions 
+that i and j are involved in.
+MRD 06.18.2020
+*****************************************************************************************/
+int get_nb_pair_inter_ptr_n(tW_CG_site * j_site, tW_system * sys,
+                            int N_i1, tW_word *nList1, int *iList1,
+                            tW_type_inter2 ** the_inter2s )
+{
+    int *idxes = (int *) ecalloc(10,sizeof(int));
+    int n_inter, ij_type, i;
+    n_inter = match_word_n(N_i1, j_site->name, nList1, idxes);
+    for (i = 0; i < n_inter; ++i)
+    {
+      ij_type = iList1[idxes[i]];
+      the_inter2s[i] = &(sys->Inter2_Type_List[ij_type]);
+    }
+    efree(idxes);
+    return n_inter;
 }
 
 
@@ -3490,6 +3733,7 @@ int check_linear_inter_range(double r_ij, double R_0, double R_max,
 
 /*****************************************************************************************
 check_Bspline_inter_range():  JFR - 07.22.12: same as linear right now
+			      MCL - 03.26.26: now its not, this one checks for r=0 and removes nan cases
 *****************************************************************************************/
 int check_Bspline_inter_range(double r_ij, double R_0, double R_max,
 			      double dr)
@@ -3499,6 +3743,14 @@ int check_Bspline_inter_range(double r_ij, double R_0, double R_max,
     }
     if (r_ij >= R_max) {
 	return -1;
+    }
+    if ((1/r_ij) != (1/r_ij)) // MCL - Checking for stuff that registers as nan (compiler dependent)
+    {
+    	return -1;
+    }
+    if (r_ij == 0) // MCL - Zero will register as nan regardless of nan != nan conventions
+    {
+    	return -1;
     }
 
     return 0;
@@ -3599,24 +3851,6 @@ int get_b_rb_dihedral(tW_Inter_Types * inter, double kT)
     return 0;
 }
 
-
-/*****************************************************************************************
-skip_excl():
-*****************************************************************************************/
-bool skip_excl(int nr_excl, int *excl_list, int j)
-{
-    int i;
-
-    for (i = 0; i < nr_excl; i++) {
-	if (j == excl_list[i]) {
-	    return TRUE;
-	}
-    }
-
-    return FALSE;
-}
-
-
 /*****************************************************************************************
 subtract_ref_forces(): Subtracts the force calculated from a reference potential from 
 the force read from the trajectory.
@@ -3673,6 +3907,55 @@ int eval_delta_basis_vectors(tW_type_inter2 * ij_inter, double n_basis_ij,
     /* end update the grids */
 
     return 0;
+
+}
+
+/* MRD 06.18.2020 */
+/*****************************************************************************************
+eval_delta_basis_vectors_LD():
+*****************************************************************************************/
+int eval_delta_basis_vectors_LD(tW_type_inter2 * ij_inter,
+                               dvec u_ij, dvec * ij_basis, double r_ij, double LD,
+                               int *ij_index, tW_system * sys,
+                               tW_CG_site site_i, bool b_F, bool bSelf, dvec A_ij)
+{
+    if (LD >= (ij_inter->R_max - ij_inter->dr) || (LD < ij_inter->R_0)) //MCL 06.02.25 Added if statement for domain check
+    {
+    return 0; /* This function should return the number of coeffs we update*/
+    }
+    double wp1 = ij_inter->LD_W->get_wp1(ij_inter->LD_W,r_ij);
+    double wp2 = ij_inter->LD_W->get_wp2(ij_inter->LD_W,r_ij);
+    double norm = ij_inter->LD_W->norm;
+
+    if (bSelf)
+    {
+      dvec wpuij;
+      scal_times_vect(wp1/norm,u_ij,wpuij);
+      sys->g[ij_index[0]] += dot_prod(wpuij,A_ij);
+    }
+    else
+    {
+      sys->g[ij_index[0]] += (wp1*wp1/norm/norm);
+    }
+    sys->g_cnt[ij_index[0]] += 1.0;
+    sys->L[ij_index[0]] += (wp2 + 2.0 * wp1 / r_ij) / norm;
+
+    /* If forces are present, update b. */
+    if (b_F) {
+        sys->b[ij_index[0]] += dot_prod(site_i.f, ij_basis[0]);
+    }
+    if (sys->flag_ref_potential) {
+        sys->b_ref[ij_index[0]] += dot_prod(site_i.ref_f, ij_basis[0]);
+    }
+
+    if (b_F) {
+        sys->d2b[ij_index[0]] +=
+            dot_prod(site_i.f, ij_basis[0]) * dot_prod(site_i.f,
+                                                       ij_basis[0]);
+    }
+    /* end update the grids */
+
+    return 1;
 
 }
 
@@ -3742,9 +4025,270 @@ int eval_linear_basis_vectors(tW_type_inter2 * ij_inter, double n_basis_ij,
 
 /* END JFR */
 
-/*****************************************************************************************
-eval_Bspline_basis_vectors(): JFR - 07.22.12
-*****************************************************************************************/
+/*MRD 06.18.2020 */
+/*
+ *  eval_linear_basis_vectors_LD(): MRD - 10.24.2018
+ *   */
+int eval_linear_basis_vectors_LD(tW_type_inter2 * ij_inter, /*double n_basis_ij, We don't use this so I'm rming it 06.02.25*/
+                              dvec u_ij, dvec * ij_basis, double r_ij,
+                              int *ij_index, tW_system * sys,
+                              tW_CG_site site_i, bool b_F, int flag_grids, double LD,
+                              bool bSelf, dvec A_ij)
+{
+    int i;
+    int i_0, N_pts;
+    double dr, A, B, R_0, Ap, Bp;
+    int coeff_ctr = 0;
+	
+    /*MCL 05.12.25 If we don't check if the LD is in the grid, this code will segfault*/
+    if (LD >= (ij_inter->R_max - ij_inter->dr) || (LD < ij_inter->R_0))
+    {
+    return 0; /* We want no entries in G to be updated from this rho*/
+    }
+
+    double wp1 = ij_inter->LD_W->get_wp1(ij_inter->LD_W,r_ij);
+    double wp2 = ij_inter->LD_W->get_wp2(ij_inter->LD_W,r_ij);
+    double norm = ij_inter->LD_W->norm;
+
+//  MRD 9/9/2020 I want LD force, not deriv of LD potl
+//    double LD_factor = - wp1 / norm; //ij_inter->LD_W->get_wp1(ij_inter->LD_W,r_ij) / ij_inter->LD_W->norm;
+    double LD_factor = wp1 / norm;
+
+    dr = ij_inter->dr;
+    R_0 = ij_inter->R_0;
+    i_0 = ij_inter->i_0;
+    N_pts = ij_inter->N_pts;
+
+    A = calc_linear_spline_A(coeff_ctr, ij_index, dr, R_0, i_0, N_pts,
+                             /*r_ij*/LD, &Ap, &Bp, FALSE);
+    B = 1.0 - A;
+
+    scal_times_vect(A*LD_factor, u_ij, ij_basis[0]);
+    scal_times_vect(B*LD_factor, u_ij, ij_basis[1]);
+
+    if (flag_grids == TRUE) 
+    {   /* JFR - 07.23.12: update the grids */
+        if (LINEAR_STRUCT == 0) {
+            if (bSelf)
+            {
+              dvec wpuij;
+              scal_times_vect(A*wp1/norm,u_ij,wpuij);
+              sys->g[ij_index[0]] += dot_prod(wpuij,A_ij);
+              scal_times_vect(B*wp1/norm,u_ij,wpuij);
+              sys->g[ij_index[1]] += dot_prod(wpuij,A_ij);
+            }
+            else
+            {
+              sys->g[ij_index[0]] += A * (wp1 * wp1 / norm / norm); // MRD 01.16.2019 updated this and L
+              sys->g[ij_index[1]] += B * (wp1 * wp1 / norm / norm);
+            }
+        } else {
+          if (bSelf)
+          {
+            dvec wpuij;
+            scal_times_vect(Ap*wp1/norm,u_ij,wpuij);
+            sys->g[ij_index[0]] += dot_prod(wpuij,A_ij);
+            scal_times_vect(Bp*wp1/norm,u_ij,wpuij);
+            sys->g[ij_index[1]] += dot_prod(wpuij,A_ij);
+          }
+          else
+          {
+            sys->g[ij_index[0]] += Ap * (wp1 * wp1 / norm / norm);
+            sys->g[ij_index[1]] += Bp * (wp1 * wp1 / norm / norm);
+          }
+        }
+        sys->g_cnt[ij_index[0]] += 1.0;
+        sys->g_cnt[ij_index[1]] += 1.0;
+        sys->L[ij_index[0]] += (A / norm) * (wp2 + 2.0 * wp1 / r_ij);
+        sys->L[ij_index[1]] += (B / norm) * (wp2 + 2.0 * wp1 / r_ij);
+        /* If forces are present, update b. */
+        if (b_F) {
+            sys->b[ij_index[0]] += dot_prod(site_i.f, ij_basis[0]);
+            sys->b[ij_index[1]] += dot_prod(site_i.f, ij_basis[1]);
+        }
+        if (sys->flag_ref_potential) {
+            sys->b_ref[ij_index[0]] += dot_prod(site_i.ref_f, ij_basis[0]);
+            sys->b_ref[ij_index[1]] += dot_prod(site_i.ref_f, ij_basis[1]);
+        }
+        if (b_F) {
+            sys->d2b[ij_index[0]] +=
+                dot_prod(site_i.f, ij_basis[0]) *
+                dot_prod(site_i.f, ij_basis[0]);
+            sys->d2b[ij_index[1]] +=
+                dot_prod(site_i.f, ij_basis[1]) *
+                dot_prod(site_i.f, ij_basis[1]);
+        }
+
+    }
+    /* end update the grids */
+    return 2; /*MCL 05.13.25 - Updated to reflect no. G entries affected*/
+
+}
+
+/**
+ * eval_linear_basis_vectors_LDGRAD:
+ * 
+ *
+ * @param ij_inter The pointer to the pair interaction parameters that sites i and j participate in [e.g. AB params if i is of type A and j is of type B]
+ * @param n_basis_ij
+ * @param u_ij The unit vector for the displacement R_i - R_j
+ * @param ij_basis A list that will hold the resultant ij contributions to mathcal G for each knot point
+ * @param r_ij The pair (radial) distance between R_i and R_j
+ * @param ij_index A list of knotpoint indices that corresponds the entries in ij_basis to the particular entry of mathcal G 
+ * @param sys The structure that holds all top, par, and trr frame info for each site
+ * @param site_i atom_i in the system [The index of the atom itself, not the index of the type
+ * @param b_F A boolean to indicate if the trajectories has forces (and therefore force info should be used)
+ * @param flag_grids
+ * @param LD 
+ * @param grad_rho_i_t_j the gradient from type j surrounding cg_site i 
+ * @param bSelf a boolean read from the par file which indicates if the self term should be used in LDs or not. 
+ * @returns 0 if successful  
+ * @note This is one in a family of 2 functions that do about the same thing for SQGRAD potentials. It is one of several functions eval_X_basis_vectors which all do the same thing for various order parameters
+ * @see eval_Bspline_basis_vectors_LDGRAD() 
+ */
+int eval_linear_basis_vectors_LDGRAD(tW_type_inter2 * ij_inter, /*double n_basis_ij, 06.02.25 - Deleting these from linear and delta since we don't use them*/
+                              dvec u_ij, dvec * ij_basis, double r_ij,
+                              int *ij_index, tW_system * sys,
+                              tW_CG_site site_i, bool b_F, int flag_grids, double LD,
+                              dvec grad_rho_i_t_j, bool bSelf)
+{
+    int i;
+    int i_0, N_pts;
+    double dr, A, B, R_0, Ap, Bp;
+    int coeff_ctr = 0;
+
+    double wp1 = ij_inter->LD_W->get_wp1(ij_inter->LD_W,r_ij); // wp1 = w'(r) 
+    double wp2 = ij_inter->LD_W->get_wp2(ij_inter->LD_W,r_ij); // wp2 = w''(r)
+    double norm = ij_inter->LD_W->norm; // normalization constrant
+
+    double A_i_j_2 = dot_prod(grad_rho_i_t_j,grad_rho_i_t_j); // A_i^2 , also | d/dR_I \rho_I |^2
+
+    double Grad_factor_1_eij = -2.0 * (wp2 - wp1 / r_ij) / norm * dot_prod(u_ij,grad_rho_i_t_j); // -2 * g(R_IJ) * \hat{R}_IJ A_I (Part of H_IJ;1)
+    double Grad_factor_1_Aij = -2.0 * wp1 / norm / r_ij; // -2 f(R) (part of H_IJ;1)
+
+    double Grad_factor_2 = -A_i_j_2 *  wp1 / norm; // A_I^2 w'(r) (part of G_IJ;1)
+
+    if (!bSelf)
+    {
+      Grad_factor_1_eij *= -1.0;
+      Grad_factor_1_Aij *= -1.0;
+    } // Seems like if there's a self term we flip the components to H_IJ;2 
+
+    dr = ij_inter->dr;
+    R_0 = ij_inter->R_0;
+    i_0 = ij_inter->i_0;
+    N_pts = ij_inter->N_pts;
+
+    /*MCL 05.12.25 If we don't check if the LD is in the grid, this code will segfault*/
+    if (LD >= (ij_inter->R_max - ij_inter->dr) || (LD < ij_inter->R_0))
+    {
+    return 0; /* We want no entries in G to be updated from this rho*/
+    }
+
+    A = calc_linear_spline_A(coeff_ctr, ij_index, dr, R_0, i_0, N_pts, LD, &Ap, &Bp, FALSE);
+    B = 1.0 - A;
+
+    dvec f11, f12, f1, f2;
+    scal_times_vect(Grad_factor_1_eij,u_ij,f11); // f11 holds the first term in H_IJ;x 
+    scal_times_vect(Grad_factor_1_Aij,grad_rho_i_t_j,f12);  //f12 holds the second term in H_IJ;x
+    vect_sum(f11,f12,f1); // Now f1 holds H_IJ;X 
+    scal_times_vect(Grad_factor_2,u_ij,f2); // f2 holds G_IJ;1 
+    /* reuse f11 and f12 */
+    scal_times_vect(A,f1,f11);  // f11 holds f_\nabla H_IJ;x
+    scal_times_vect(Ap,f2,f12); // MRD 12.3.2019 added negative // MCL 11.11.2024 removed negative // f12 hold f' G_IJ;1 
+    vect_sum(f11,f12,ij_basis[0]); // Added part of mathcal G to left knotpoint
+   
+    scal_times_vect(B,f1,f11); // Repeating math for the right knot point 
+    scal_times_vect(Bp,f2,f12); // MRD 12.3.2019 added negative // MCL 11.11.2024 removed negative
+    vect_sum(f11,f12,ij_basis[1]);
+
+    if (flag_grids == TRUE) {
+        /* This whole section needs updated for gradient term
+ *          * If I never got the regular LD potential right, it'll be 
+ *                   * a while before I get b_struct to work for the gradient term */
+
+        if (LINEAR_STRUCT == 0) {
+            if (bSelf)
+            {
+              dvec wpuij;
+              scal_times_vect(A*wp1/norm,u_ij,wpuij);
+              scal_times_vect(B*wp1/norm,u_ij,wpuij);
+              sys->g_cnt[ij_index[0]] += 1.0;
+              sys->g_cnt[ij_index[1]] += 1.0;
+            }
+            else
+            {
+              sys->g[ij_index[0]] += A * (wp1 * wp1 / norm / norm);
+              sys->g[ij_index[1]] += B * (wp1 * wp1 / norm / norm);
+              sys->g_cnt[ij_index[0]] += 1.0;
+              sys->g_cnt[ij_index[1]] += 1.0;
+            }
+        } else {
+          if (bSelf)
+          {
+            dvec wpuij;
+            scal_times_vect(Ap*wp1/norm,u_ij,wpuij);
+            scal_times_vect(Bp*wp1/norm,u_ij,wpuij);
+            sys->g_cnt[ij_index[0]] += 1.0;
+            sys->g_cnt[ij_index[1]] += 1.0;
+          }
+          else
+          {
+            sys->g[ij_index[0]] += Ap * (wp1 * wp1 / norm / norm);
+            sys->g[ij_index[1]] += Bp * (wp1 * wp1 / norm / norm);
+            sys->g_cnt[ij_index[0]] += 1.0;
+            sys->g_cnt[ij_index[1]] += 1.0;
+          }
+        }
+        sys->L[ij_index[0]] += (A / norm) * (wp2 + 2.0 * wp1 / r_ij);
+        sys->L[ij_index[1]] += (B / norm) * (wp2 + 2.0 * wp1 / r_ij);
+        /* End NEEDS UPDATED */
+
+        /* If forces are present, update b. */
+        if (b_F) {
+            sys->b[ij_index[0]] += dot_prod(site_i.f, ij_basis[0]);
+            sys->b[ij_index[1]] += dot_prod(site_i.f, ij_basis[1]);
+        }
+        if (sys->flag_ref_potential) {
+            sys->b_ref[ij_index[0]] += dot_prod(site_i.ref_f, ij_basis[0]);
+            sys->b_ref[ij_index[1]] += dot_prod(site_i.ref_f, ij_basis[1]);
+        }
+        if (b_F) {
+            sys->d2b[ij_index[0]] +=
+                dot_prod(site_i.f, ij_basis[0]) *
+                dot_prod(site_i.f, ij_basis[0]);
+            sys->d2b[ij_index[1]] +=
+                dot_prod(site_i.f, ij_basis[1]) *
+                dot_prod(site_i.f, ij_basis[1]);
+        }
+
+    }
+    /* end update the grids */
+    return 2; /* MCL 05.13.25 - if we got here 2 entries need to be tallied: */
+}
+
+/* End MRD 06.18.2020 */
+
+
+
+/* JFR - 07.22.12 */
+/**
+ * eval_Bspline_basis_vectors:
+ * Weights the contributions from a given pair distance (Psi = R_IJ = X) to the surrounding knot points
+ * according to Bspline order k.
+ *
+ * @param ij_inter The pointer to the pair interaction parameters site_i and site_j take part in
+ * @param u_ij The unit vector for the displacement R_i - R_j
+ * @param ij_basis A list that will hold resultant dPsi/dR_I * weights for each knot point
+ * @param r_ij the pair distance between R_i and R_j
+ * @param sys The structure that holds all top, par, and trr frame info for each site
+ * @param site_i atom_i in the system [the instance, not the type]
+ * @param b_F TRUE if the trajectory has forces, FALSE if not
+ * @param flag_grids TRUE in calcgrids3, determines whether to increment g and L structures
+ * @return The number of knot points affected by the pair distance
+ * @note This is one in a family of functions that do something similar for the NB pair interactions
+ * @see eval_delta_basis_vectors() eval_linear_basis_vectors()
+ */
 int eval_Bspline_basis_vectors(tW_type_inter2 * ij_inter, dvec u_ij,
 			       dvec * ij_basis, double r_ij, int *ij_index,
 			       tW_system * sys, tW_CG_site site_i,
@@ -3811,6 +4355,364 @@ int eval_Bspline_basis_vectors(tW_type_inter2 * ij_inter, dvec u_ij,
 	coeff_ctr++;
     }
 
+    return coeff_ctr;
+}
+
+/* MRD 06.18.2020 */
+/**
+ *  * eval_Bspline_basis_vectors_LD(): copying the above function and tweaking it
+ *   **/
+int eval_Bspline_basis_vectors_LD(tW_type_inter2 * ij_inter, dvec u_ij,
+                               dvec * ij_basis, double r_ij, int *ij_index,
+                               tW_system * sys, tW_CG_site site_i,
+                               bool b_F, int flag_grids, double LD,
+                               bool bSelf, dvec A_ii)
+{
+    int i, j, l;
+    int i_0, N_pts, k;
+    double dr, B, R_0, Bp;
+
+    dr = ij_inter->dr;
+    R_0 = ij_inter->R_0;
+    i_0 = ij_inter->i_0;
+    N_pts = ij_inter->N_pts;
+    k = ij_inter->kspline;
+    int coeff_ctr = 0;
+
+    double wp1 = ij_inter->LD_W->get_wp1(ij_inter->LD_W,r_ij);
+    double wp2 = ij_inter->LD_W->get_wp2(ij_inter->LD_W,r_ij);
+    double norm = ij_inter->LD_W->norm;
+
+//  MRD 9/9/2020 I want LD force, not deriv of potl.
+//    double LD_factor = - wp1 / norm; // -ij_inter->LD_W->get_wp1(ij_inter->LD_W,r_ij) / ij_inter->LD_W->norm;
+    double LD_factor = wp1 / norm;    
+
+    double Nik[MAX_BSPLINE_COEFF];
+    double Npik[MAX_BSPLINE_COEFF];
+
+    i = get_grid_index_for_linear_basis(/*r_ij*/ LD, i_0, dr, R_0) - i_0;
+
+    B = calc_Bspline(dr, R_0, i_0, N_pts, /*r_ij*/ LD, i, k, Nik, Npik);
+    for (j = 0; j < k; j++) {
+        ij_index[coeff_ctr] = i - j + k / 2 + i_0;      /* The k/2 shifts the supports up to the proper place, but this only works for even order Bsplines! */
+
+        if (((i - j + k / 2) < 0) || ((i - j + k / 2) >= N_pts - 1)) {
+            continue;
+        }                       /* You are beyond the grid, there are no supports here */
+        B = Nik[k - 1 - j];
+        Bp = calc_Bspline_deriv(dr, R_0, i_0, N_pts, /*r_ij*/ LD, i, j, k, Nik, Npik);
+
+        scal_times_vect(LD_factor * B, u_ij, ij_basis[coeff_ctr]);
+
+        if (flag_grids == TRUE) {       /* JFR - 07.23.12: update the grids */
+            if (BSPLINE_STRUCT == 0) {
+                if (bSelf)
+                {
+                    dvec wpuij;
+                    scal_times_vect(B*wp1/norm,u_ij,wpuij);
+                    sys->g[ij_index[coeff_ctr]] += dot_prod(wpuij,A_ii);
+                }
+                else
+                {
+                    sys->g[ij_index[coeff_ctr]] += (B * wp1 * wp1 / norm / norm); // MRD 01.16.2019 updated
+                }
+            } else {
+                if (bSelf)
+                {
+                    dvec wpuij;
+                    scal_times_vect(Bp * wp1 / norm,u_ij, wpuij);
+                    sys->g[ij_index[coeff_ctr]] += dot_prod(wpuij,A_ii);
+                }
+                else
+                {
+                    sys->g[ij_index[coeff_ctr]] += (Bp * wp1 * wp1 / norm / norm);
+                }
+            }
+            sys->g_cnt[ij_index[coeff_ctr]] += 1.0;
+            sys->L[ij_index[coeff_ctr]] += (B / norm) * (wp2 + 2.0 * wp1 / r_ij); // MRD 01.16.2019 updated
+            /* If forces are present, update b. */
+            if (b_F) {
+                sys->b[ij_index[coeff_ctr]] +=
+                    dot_prod(site_i.f, ij_basis[coeff_ctr]);
+            }
+            if (sys->flag_ref_potential) {
+                sys->b_ref[ij_index[coeff_ctr]] +=
+                    dot_prod(site_i.ref_f, ij_basis[coeff_ctr]);
+            }
+            if (b_F) {
+                sys->d2b[ij_index[coeff_ctr]] +=
+                    dot_prod(site_i.f, ij_basis[coeff_ctr]) *
+                    dot_prod(site_i.f, ij_basis[coeff_ctr]);
+            }
+        }                       /* end update the grids */
+        coeff_ctr++;
+    }
+    return coeff_ctr;
+}
+
+int eval_Bspline_basis_vectors_LDGRAD(tW_type_inter2 * ij_inter, dvec u_ij,
+                               dvec * ij_basis, double r_ij, int *ij_index,
+                               tW_system * sys, tW_CG_site site_i,
+                               bool b_F, int flag_grids, double LD,
+                               dvec grad_rho_i_t_j, bool bSelf)
+{
+    int i, j, l;
+    int i_0, N_pts, k;
+    double dr, B, R_0, Bp;
+
+    dr = ij_inter->dr;
+    R_0 = ij_inter->R_0;
+    i_0 = ij_inter->i_0;
+    N_pts = ij_inter->N_pts;
+    k = ij_inter->kspline;
+    int coeff_ctr = 0;
+
+    double wp1 = ij_inter->LD_W->get_wp1(ij_inter->LD_W,r_ij); // wp1 = w'(r)
+    double wp2 = ij_inter->LD_W->get_wp2(ij_inter->LD_W,r_ij); // wp2 = w''(r)
+    double norm = ij_inter->LD_W->norm; // normalization constant
+
+    double A_i_j_2 = dot_prod(grad_rho_i_t_j,grad_rho_i_t_j); // A_i ^2 , also |d/dR_I \rho_I|^2 
+
+    double Grad_factor_1_eij = -2.0 * (wp2 - wp1 / r_ij) / norm * dot_prod(u_ij,grad_rho_i_t_j); 
+    double Grad_factor_1_Aij = -2.0 * wp1 / norm / r_ij;
+
+    if (!bSelf)
+    {
+      Grad_factor_1_eij *= -1.0;
+      Grad_factor_1_Aij *= -1.0;
+    }
+
+    double Grad_factor_2 = -A_i_j_2 *  wp1 / norm;
+
+    dvec f11, f12, f1, f2;
+    scal_times_vect(Grad_factor_1_eij,u_ij,f11);
+    scal_times_vect(Grad_factor_1_Aij,grad_rho_i_t_j,f12);
+    vect_sum(f11,f12,f1);
+    scal_times_vect(Grad_factor_2,u_ij,f2);
+
+    double Nik[MAX_BSPLINE_COEFF];
+    double Npik[MAX_BSPLINE_COEFF];
+
+    i = get_grid_index_for_linear_basis(/*r_ij*/ LD, i_0, dr, R_0) - i_0;
+
+    B = calc_Bspline(dr, R_0, i_0, N_pts, /*r_ij*/ LD, i, k, Nik, Npik);
+    for (j = 0; j < k; j++) {
+        ij_index[coeff_ctr] = i - j + k / 2 + i_0;      /* The k/2 shifts the supports up to the proper place, but this only works for even order Bsplines! */
+
+        if (((i - j + k / 2) < 0) || ((i - j + k / 2) >= N_pts - 1)) {
+            continue;
+        }                       /* You are beyond the grid, there are no supports here */
+        B = Nik[k - 1 - j];
+        Bp = calc_Bspline_deriv(dr, R_0, i_0, N_pts, /*r_ij*/ LD, i, j, k, Nik, Npik);
+
+
+        scal_times_vect(B,f1,f11);
+        scal_times_vect(Bp,f2,f12);
+        vect_sum(f11,f12,ij_basis[coeff_ctr]);
+
+        if (flag_grids == TRUE) {       /* JFR - 07.23.12: update the grids */
+            /* THIS NEEDS UPDATED FOR GRAD TERM */
+            if (BSPLINE_STRUCT == 0) {
+                if (bSelf) {
+                    dvec wpuij;
+                    scal_times_vect(B*wp1/norm,u_ij,wpuij);
+                    sys->g_cnt[ij_index[coeff_ctr]] += 1.0;
+                }
+                else {
+                    sys->g[ij_index[coeff_ctr]] += (B * wp1 * wp1 / norm / norm);
+                    sys->g_cnt[ij_index[coeff_ctr]] += 1.0;
+                }
+            } else {
+                if (bSelf) {
+                    dvec wpuij;
+                    scal_times_vect(Bp * wp1 / norm,u_ij, wpuij);
+                    sys->g_cnt[ij_index[coeff_ctr]] += 1.0;
+                }
+                else {
+                    sys->g[ij_index[coeff_ctr]] += (Bp * wp1 * wp1 / norm / norm);
+                    sys->g_cnt[ij_index[coeff_ctr]] += 1.0;
+                }
+            }
+            sys->L[ij_index[coeff_ctr]] += (B / norm) * (wp2 + 2.0 * wp1 / r_ij);
+            /* End NEEDS UPDATED */
+
+            /* If forces are present, update b. */
+            if (b_F) {
+                sys->b[ij_index[coeff_ctr]] +=
+                    dot_prod(site_i.f, ij_basis[coeff_ctr]);
+            }
+            if (sys->flag_ref_potential) {
+                sys->b_ref[ij_index[coeff_ctr]] +=
+                    dot_prod(site_i.ref_f, ij_basis[coeff_ctr]);
+            }
+            if (b_F) {
+                sys->d2b[ij_index[coeff_ctr]] +=
+                    dot_prod(site_i.f, ij_basis[coeff_ctr]) *
+                    dot_prod(site_i.f, ij_basis[coeff_ctr]);
+            }
+        }                       /* end update the grids */
+        coeff_ctr++;
+    }
+    return coeff_ctr;
+}
+
+
+
+
+/* MRD 06.18.2020 External Basis Vectors */
+int eval_delta_basis_vectors_ext(tW_type_inter_external * ext_inter, dvec * ext_basis,
+                                  double z_i, int *ext_index, tW_system *sys, tW_CG_site site_i,
+                                  bool b_F, int flag_grids)
+{
+  int i, i_0, N_pts;
+  double dr, R_0;
+  dvec ez;
+  ez[0] = ez[1] = 0.0;
+  ez[2] = 1.0;
+
+  dr = ext_inter->dr;
+  R_0 = ext_inter->R_0;
+  i_0 = ext_inter->i_0;
+  N_pts = ext_inter->N_pts;
+
+  ext_index[0] = get_grid_index_for_delta_basis(z_i,ext_inter->i_0,ext_inter->dr,ext_inter->R_0);
+  copy_vector(ez,ext_basis[0]);
+  if ((ext_index[0] < ext_inter->i_0) || (ext_index[0] >= ext_inter->i_0 + ext_inter->N_pts))
+  { // Outside of supported range
+
+  }
+  else
+  {
+    ext_inter->ptr_g[ext_index[0]-ext_inter->i_0] += 1.0;
+    ext_inter->ptr_g_cnt[ext_index[0]-ext_inter->i_0] += 1.0;
+  }
+  return 0;
+}
+
+int eval_linear_basis_vectors_ext(tW_type_inter_external * ext_inter, dvec * ext_basis,
+                                   double z_i, int *ext_index, tW_system * sys,
+                                   tW_CG_site site_i, bool b_F, int flag_grids)
+{
+    int i;
+    int i_0, N_pts;
+    double dr, A, B, R_0, Ap, Bp, A2, B2;
+    dvec ez;
+    ez[0] = ez[1] = 0.0;
+    ez[2] = 1.0;
+
+    dr = ext_inter->dr;
+    R_0 = ext_inter->R_0;
+    i_0 = ext_inter->i_0;
+    N_pts = ext_inter->N_pts;
+
+    A = calc_linear_spline_A(0, ext_index, dr, R_0, i_0, N_pts, z_i, &Ap, &Bp, ext_inter->extPBC);
+    B = 1 - A;
+    scal_times_vect(A,ez,ext_basis[0]);
+    scal_times_vect(B,ez,ext_basis[1]);
+
+    if (flag_grids == TRUE)
+    {
+      if (LINEAR_STRUCT == 0)
+      {
+        A2 = A;
+        B2 = B;
+      }
+      else
+      {
+        A2 = Ap;
+        B2 = Bp;
+      }
+      if (ext_inter->extPBC)
+      {
+        sys->g[ext_index[0]] += A2;
+        sys->g[ext_index[1]] += B2;
+        sys->g_cnt[ext_index[0]] += 1.0;
+        sys->g_cnt[ext_index[1]] += 1.0;
+      }
+      else
+      {
+        if ((i_0 <= ext_index[0]) &&  (ext_index[0] < i_0 + N_pts))
+        {
+          sys->g[ext_index[0]] += A2;
+          sys->g_cnt[ext_index[0]] += 1.0;
+        }
+        if ((i_0 <= ext_index[1]) && (ext_index[1] < i_0 + N_pts))
+        {
+          sys->g[ext_index[1]] += B2;
+          sys->g_cnt[ext_index[1]] += 1.0;
+        }
+      }
+    }
+
+    return 0;
+}
+
+/*****************************************************************************************
+eval_Bspline_basis_vectors_ext(): MRD - 06.18.2020
+*****************************************************************************************/
+int eval_Bspline_basis_vectors_ext(tW_type_inter_external * ext_inter, dvec * ext_basis,
+                                   double z_i, int *ext_index, tW_system * sys,
+                                   tW_CG_site site_i, bool b_F, int flag_grids)
+{
+    int i, j, l;
+    int i_0, N_pts, k;
+    double dr, B, R_0, Bp;
+    dvec ez;
+    ez[0] = ez[1] = 0.0;
+    ez[2] = 1.0;
+
+    dr = ext_inter->dr;
+    R_0 = ext_inter->R_0;
+    i_0 = ext_inter->i_0;
+    N_pts = ext_inter->N_pts;
+    k = ext_inter->kspline;
+    int coeff_ctr = 0;
+
+    double Nik[MAX_BSPLINE_COEFF];
+    double Npik[MAX_BSPLINE_COEFF];
+
+    i = get_grid_index_for_linear_basis(z_i, i_0, dr, R_0) - i_0;
+
+    B = calc_Bspline(dr, R_0, i_0, N_pts, z_i, i, k, Nik, Npik);
+    for (j = 0; j < k; j++) {
+        ext_index[j/**/] = i - j + k / 2 + i_0;      /* The k/2 shifts the supports up to the proper place, but this only works for even order Bsplines! */
+
+
+        if (ext_inter->extPBC)
+        {
+          if (ext_index[j/*coeff_ctr*/] < i_0) { ext_index[j/*coeff_ctr*/] += N_pts; }
+          else if (ext_index[j/*coeff_ctr*/] >= i_0 + N_pts) { ext_index[j/*coeff_ctr*/] -= N_pts; }
+        }
+        else
+        {
+          if (((i - j + k / 2) < 0) || ((i - j + k / 2) >= N_pts - 1))
+          {
+            scal_times_vect(0.0,ez,ext_basis[j]); // 09.27.2019
+            continue;
+          }
+          /* You are beyond the grid, there are no supports here */
+        }
+
+
+        B = Nik[k - 1 - j];
+        Bp = calc_Bspline_deriv(dr, R_0, i_0, N_pts, z_i, i, j, k, Nik, Npik);
+
+        scal_times_vect(B, ez, ext_basis[j/*coeff_ctr*/]);
+
+        if (flag_grids == TRUE) {       /* JFR - 07.23.12: update the grids */
+            if (BSPLINE_STRUCT == 0) {
+                sys->g[ext_index[j/*coeff_ctr*/]] += B;
+            } else {
+                sys->g[ext_index[j/*coeff_ctr*/]] += Bp;
+            }
+            sys->g_cnt[ext_index[j/*coeff_ctr*/]] += 1.0;
+            /*
+            sys->L[ext_index[coeff_ctr]] += 0.0;
+            update b later
+            */
+        }                       /* end update the grids */
+        coeff_ctr++;
+    }
     return coeff_ctr;
 }
 
@@ -3914,9 +4816,64 @@ void get_b_power(tW_Inter_Types * inter, double kT)
 
 }
 
+/*****************************************************************************************
+eval_external_basis_vectors(): 
+*****************************************************************************************/
+int eval_external_basis_vectors(FILE *fp, tW_CG_site CG_struct[], int n_ext_inter,
+                                tW_type_inter_external *Inter_Ext_Type_List, int idx_i,
+                                int *ext_idxes, dvec *ext_basis, tW_system *sys, bool b_F,
+                                tW_type_inter_external *theExtInt)
+{
+  int n_ext_basis_vectors = 0;
+  int i = 0, theInt = -1;
+  double A, B, Ap, Bp, z;
+  dvec ez;
+  tW_type_inter_external *inter;
+  ez[0] = ez[1] = 0.0;
+  ez[2] = 1.0;
+  z = CG_struct[idx_i].r[2];
+  for (i = 0; i < n_ext_inter; ++i)
+  {
+    if (strcmp(Inter_Ext_Type_List[i].name1,CG_struct[idx_i].name) == 0)
+    {
+      inter = &(Inter_Ext_Type_List[i]);
+      theInt = i;
+      switch (inter->i_basis)
+      {
+        case (DELTA_BASIS_INDEX):
+          n_ext_basis_vectors = 1;
+          eval_delta_basis_vectors_ext(inter, ext_basis, z, ext_idxes, sys, CG_struct[idx_i], b_F, TRUE);
+          ext_basis[0][0] = 0.0;
+          ext_basis[0][1] = 0.0;
+          ext_basis[0][2] = 1.0;
+          break;
+        case (LINEAR_BASIS_INDEX):
+          n_ext_basis_vectors = 2;
+          eval_linear_basis_vectors_ext(inter, ext_basis, z, ext_idxes, sys,
+                                               CG_struct[idx_i], b_F, TRUE);
+          break;
+        case (BSPLINE_BASIS_INDEX):
+          n_ext_basis_vectors = inter->kspline;
+          eval_Bspline_basis_vectors_ext(inter, ext_basis, z, ext_idxes, sys,
+                                                CG_struct[idx_i],b_F, TRUE);
+          break;
+      }
+      inter->kspline = n_ext_basis_vectors;
+    }
+  }
+
+  return theInt;
+//  return n_ext_basis_vectors;
+}
+  
 
 /*****************************************************************************************
 calc_grids2(): The fast loops.
+This part of the forcematching algorithm is called every frame of the trajectory 
+Its primary purpose is to increment the Gbar matrix (M) and the corresponding gbar entries (M2)
+So that the sum of these two structures is G.
+"fast loops" is a reference to the series of if statements implemented to fill out 
+the G matrix section by section without double processing interactions (Bond-Bond, Bond-NB, NB-NB) 
 *****************************************************************************************/
 int calc_grids2(FILE * fp, tW_gmx_info info, int N_sites, tW_CG_site CG_struct[], tW_system * sys)
 {
@@ -4529,7 +5486,7 @@ int calc_grids2(FILE * fp, tW_gmx_info info, int N_sites, tW_CG_site CG_struct[]
 /*****************************************************************************************
 calc_grids3(): Eliminating the 3 particle loop
 *****************************************************************************************/
-int calc_grids3(FILE *fp, tW_gmx_info info, int N_sites, tW_CG_site CG_struct[], tW_system *sys)
+int calc_grids3(int counter, FILE *fp, tW_gmx_info info, int N_sites, tW_CG_site CG_struct[], tW_system *sys)
 {
   int i, j, k, l;
   int n_basis_ij, n_basis_ji, N_i1, N_j1;
@@ -4537,13 +5494,11 @@ int calc_grids3(FILE *fp, tW_gmx_info info, int N_sites, tW_CG_site CG_struct[],
   int nr_i_bond_coeff, nr_j_bond_coeff;
   int *iList1, *jList1;
   int iSite, jSite;
-  int nb_idx;
   double r_ij;
   bool case1_flag, case2_flag, case3_flag;
   bool b_F = info.b_Forces;
   bool b_PBC = info.b_PBC;
-  bool GO;
-  dvec box;
+  dvec box; 
   tW_word *nList1_i, *nList1_j;
   int D_b_i[MAX_NUM_BOND_COEFF], D_b_j[MAX_NUM_BOND_COEFF], D_b_inter_index[MAX_NUM_BOND_COEFF];
   dvec calG_b_i[MAX_NUM_BOND_COEFF], calG_b_j[MAX_NUM_BOND_COEFF];
@@ -4554,20 +5509,41 @@ int calc_grids3(FILE *fp, tW_gmx_info info, int N_sites, tW_CG_site CG_struct[],
   /* Stuff from other functions we called from calc_grids2 that we don't call any more but need to do */
   int i1_bond_coeff, i2_bond_coeff, D_i1_bond, D_i2_bond, index;
   double inner_prod;
+
+  bool iLD;
+
+  /* MRD 06.18.2020 LD & Extl */
+  tW_type_inter2 **ij_inters;
+  int n_ij_pair_ints;
+  int idx_ijp, nb_idx, nb_idx2;
+  double LD_i_tj, LD_j_ti;
+  bool GO, SAME_LD_TYPE;
+  int ij_index_LD2[MAX_BSPLINE_COEFF], ji_index_LD2[MAX_BSPLINE_COEFF], n_basis_ij_LD2 = 0,n_basis_ji_LD2 = 0;
+  dvec ij_basis_LD2[MAX_BSPLINE_COEFF], ji_basis_LD2[MAX_BSPLINE_COEFF];
   
-//  dvec **half_matrix = (sys->half_matrix);
+/* MRD 09.17.18 I doubt any two site types will end up in more than 5 < 10 pair interactions together. 
+ * normal pair nonbnded, local density ti tj, local density tj ti, grad local density ti tj, 
+ * and grad local density tj ti */
+  ij_inters = (tW_type_inter2 **) ecalloc(10, sizeof(tW_type_inter2 *));
+
+  tW_type_inter_external *external_inters;
+  int n_i_external_ints, nr_ext_basis_coeff, ext_idx, ext_idx2, D_ext_z, D_ext2_z;
+  int ext_idxes[MAX_BSPLINE_COEFF];
+  dvec ext_basis[MAX_BSPLINE_COEFF];
+
   bitMask *bm_half_mat = (sys->bm_half_mat);
+//  dvec **half_matrix = (sys->half_matrix);
   
   /* Reset half matrix to 0 for this frame */
-  for (i = 0; i < N_sites * sys->N_coeff; ++i)
+  for (i = 0; i < N_sites * sys->N_coeff; ++i) // Linear half matrix is 3 x N_sites x N_coeffs [mathcal G_I;D is 3 x N_coeffs, this has N_site columns of mathcal G_I;D]
   {
-    sys->linear_half_matrix[i][0] = 0.0;
+    sys->linear_half_matrix[i][0] = 0.0; // We want to clear the column we are filling now
     sys->linear_half_matrix[i][1] = 0.0;
     sys->linear_half_matrix[i][2] = 0.0;
     //CLEARSPOT2(bm_half_mat,sys->N_coeff, i, j);
   } 
   /* Faster clear than each spot individually*/
-  for (i = 0; i < GET_N_SPOTS(N_sites * sys->N_coeff); ++i)
+  for (i = 0; i < GET_N_SPOTS(N_sites * sys->N_coeff); ++i) // This gives us a 0 or 1 from the bit position that corresponds to the index D
   {
     bm_half_mat[i] = 0ULL;
   }
@@ -4577,7 +5553,7 @@ int calc_grids3(FILE *fp, tW_gmx_info info, int N_sites, tW_CG_site CG_struct[],
   for (i = 0; i < N_sites; ++i)
   {
     sys->Chi2 += dot_prod(CG_struct[i].f, CG_struct[i].f);
-    
+ 
     nr_i_bond_coeff = eval_bond_basis_vectors(fp, CG_struct, sys->Bonded_Inter_Types,
 					        i, D_b_i, calG_b_i, TRUE, D_b_inter_index);
 
@@ -4609,118 +5585,490 @@ int calc_grids3(FILE *fp, tW_gmx_info info, int N_sites, tW_CG_site CG_struct[],
       }
     } /* End eval_bonds_M_b loop */
 
-    iSite = match_word(sys->N_Site_Types, CG_struct[i].name, sys->Site_Types);
-    N_i1 = sys->Inter_Map_Len[iSite];
-    iList1 = sys->Inter_iMap[iSite];
-    nList1_i = sys->Inter_Map[iSite];
+    /* MRD 06.18.2020 */
+    /* We do external interactions before nb pair interactions */
+    int theInt;
+    tW_type_inter_external *theExtInt;
+    theInt = eval_external_basis_vectors(fp,CG_struct, sys->N_Inter_Ext_types, sys->Inter_Ext_Type_List, i, ext_idxes, ext_basis, sys, b_F, theExtInt); // WALDO
+    if (theInt >= 0) // We found one in eval_external_basis_vectors
+    {
+      theExtInt = &(sys->Inter_Ext_Type_List[theInt]);
+      nr_ext_basis_coeff = theExtInt->kspline;
+      for (ext_idx = 0; ext_idx < nr_ext_basis_coeff; ++ext_idx)
+      {
+        D_ext_z = ext_idxes[ext_idx];
+        if ((theExtInt->extPBC) || (( theExtInt->i_0 <= D_ext_z) && (D_ext_z < theExtInt->i_0 + theExtInt->N_pts)))
+        {
+          sys->b[D_ext_z] += dot_prod(CG_struct[i].f, ext_basis[ext_idx]);
+          sys->d2b[D_ext_z] += dot_prod(CG_struct[i].f,ext_basis[ext_idx]) *
+                               dot_prod(CG_struct[i].f,ext_basis[ext_idx]);
+          if (sys->flag_ref_potential)
+          {
+            sys->b_ref[D_ext_z] +=  dot_prod(CG_struct[i].ref_f, ext_basis[ext_idx]);
+          }
+          vect_inc(sys->half_matrix[i][D_ext_z],ext_basis[ext_idx]);
+          SETSPOT2(bm_half_mat,sys->N_coeff, D_ext_z, i);
+          for (ext_idx2 = 0; ext_idx2 <= ext_idx; ++ext_idx2)
+          {
+            D_ext2_z = ext_idxes[ext_idx2];
+            if ((theExtInt->extPBC) || (( theExtInt->i_0 <= D_ext2_z) && (D_ext2_z < theExtInt->i_0 + theExtInt->N_pts)))
+            {
+              inner_prod = dot_prod(ext_basis[ext_idx],ext_basis[ext_idx2]);
+              index = index_Lpacked(D_ext_z,D_ext2_z,sys->N_coeff);
+              sys->M2[index] += inner_prod;
+              sys->d2M[index] += inner_prod * inner_prod;
+            }
+          }
+        }
+      }
+    }
+
+
+    iSite = match_word(sys->N_Site_Types, CG_struct[i].name, sys->Site_Types); // Returns index of the site type that matches particle i
+    N_i1 = sys->Inter_Map_Len[iSite]; // This is number types site_i interacts with in a pair potential
+    iList1 = sys->Inter_iMap[iSite]; // This is the list of type indices site_i interacts with
+    nList1_i = sys->Inter_Map[iSite]; // This is the list of type names for the pair partners around i
 
     for (j = 0; j < i; ++j)
     {
-      if (skip_excl(CG_struct[i].nr_excl, CG_struct[i].excl_list, j)) { continue; }
+      if (skip_excl(CG_struct[i].nr_excl, CG_struct[i].excl_list, j)) 
+      { 
+        continue; //We stop processing i j if j is in the exclusion list for particle i 
+      }
 
-      jSite = match_word(sys->N_Site_Types, CG_struct[j].name, sys->Site_Types);
-      N_j1 = sys->Inter_Map_Len[jSite];
+      jSite = match_word(sys->N_Site_Types, CG_struct[j].name, sys->Site_Types); // This returns the index of the site type that matches the type for particle j
+      N_j1 = sys->Inter_Map_Len[jSite]; // same as iList1 but for j, etc
       jList1 = sys->Inter_iMap[jSite];
       nList1_j = sys->Inter_Map[jSite];
 
-      /* We no longer need to call nr_j_bond_coeff = eval_bond_basis_vectors(...) */
+      /* MRD 06.18.2020 possible for multiple ij interactions */
+      n_ij_pair_ints = get_nb_pair_inter_ptr_n(&(CG_struct[j]), sys, N_i1,
+                                nList1_i, iList1, ij_inters); //Gets total number of pair interactions and stores list in ij_inters
 
-      /* This is the ij_inter and the ji_inter. */
-      ij_inter = get_nb_pair_inter_ptr(&(CG_struct[j]), sys, N_i1, nList1_i, iList1);
-      if (ij_inter == NULL) { continue; }
-
+      if (n_ij_pair_ints == 0) { continue; }
+                      
       /* Get pair info. for the ij and ji pair. */
       copy_vector(CG_struct[i].r, x_i);
       copy_vector(CG_struct[j].r, x_j);
-      get_nb_pair_info(&r_ij, x_i, x_j, x_ij, TRUE, box); // WALDO
+      get_nb_pair_info(&r_ij, x_i, x_j, x_ij, TRUE, box);
       get_nb_pair_info(&r_ij, x_j, x_i, x_ji, TRUE, box);
-     
-      GO = FALSE;
+/* MRD 06.18.2020 */
+      LD_i_tj = CG_struct[i].LDs[CG_struct[j].LD_type_idx];
+      LD_j_ti = CG_struct[j].LDs[CG_struct[i].LD_type_idx]; 
 
-      if (ij_inter->i_basis == DELTA_BASIS_INDEX)
+      SAME_LD_TYPE = FALSE;     
+
+      for (idx_ijp = 0; idx_ijp < n_ij_pair_ints; ++idx_ijp)
       {
-        n_basis_ij = n_basis_ji = 1;
-        if (check_inter_range(r_ij, ij_inter->R_0, ij_inter->R_max, ij_inter->dr) != 0) { continue; }
-        
-        ij_inter->N_inter += 2;
-        ij_index[0] = get_grid_index_for_delta_basis(r_ij, ij_inter->i_0, ij_inter->dr, ij_inter->R_0);
-        ji_index[0] = ij_index[0];
-        
-        scal_times_vect(1.0 / r_ij, x_ij, ij_basis[0]);
-        scal_times_vect(1.0 / r_ij, x_ji, ji_basis[0]);
+        ij_inter = ij_inters[idx_ijp];
+        GO = FALSE;
 
-        eval_delta_basis_vectors(ij_inter, n_basis_ij, u_ij, ij_basis, r_ij, ij_index, sys, CG_struct[i], b_F);
-        eval_delta_basis_vectors(ij_inter, n_basis_ji, u_ji, ji_basis, r_ij, ji_index, sys, CG_struct[j], b_F);
-        GO = TRUE;
-      }
-      else if (ij_inter->i_basis == LINEAR_BASIS_INDEX)
-      {
-        n_basis_ij = n_basis_ji = 2;
-        if (check_linear_inter_range(r_ij, ij_inter->R_0, ij_inter->R_max, ij_inter->dr) != 0) { continue; }
-        
-        ij_inter->N_inter += 2;
-        
-        scal_times_vect(1.0 / r_ij, x_ij, u_ij);
-        scal_times_vect(1.0 / r_ij, x_ji, u_ji);
-        
-        eval_linear_basis_vectors(ij_inter, n_basis_ij, u_ij, ij_basis, r_ij, ij_index, sys, CG_struct[i], b_F, TRUE);
-        eval_linear_basis_vectors(ij_inter, n_basis_ji, u_ji, ji_basis, r_ij, ji_index, sys, CG_struct[j], b_F, TRUE);
-        GO = TRUE;
-      }
-      else if (ij_inter->i_basis == BSPLINE_BASIS_INDEX)
-      {
-        if (check_Bspline_inter_range(r_ij, ij_inter->R_0, ij_inter->R_max, ij_inter->dr) != 0) { continue; }
-
-        ij_inter->N_inter += 2;
-        
-        scal_times_vect(1.0 / r_ij, x_ij, u_ij);
-        scal_times_vect(1.0 / r_ij, x_ji, u_ji);
-
-        n_basis_ij = eval_Bspline_basis_vectors(ij_inter, u_ij, ij_basis, r_ij, ij_index, sys, CG_struct[i], b_F, TRUE);
-        n_basis_ji = eval_Bspline_basis_vectors(ij_inter, u_ji, ji_basis, r_ij, ji_index, sys, CG_struct[j], b_F, TRUE);
-
-        GO = TRUE;
-      }
-      else if (ij_inter->i_basis == POWER_INDEX)
-      {
-        if (r_ij <= ij_inter->R_max)
+        if (strcmp(ij_inter->inter_type,NB_PAIR) == 0)
         {
-          n_basis_ij = n_basis_ji = ij_inter->N_powers;
-          
-          scal_times_vect(1.0 / r_ij, x_ij, u_ij);
-          scal_times_vect(1.0 / r_ij, x_ji, u_ji);
+          if (ij_inter->i_basis == DELTA_BASIS_INDEX)
+          {
+            n_basis_ij = n_basis_ji = 1;
 
-          eval_power_basis_vectors(ij_inter, u_ij, ij_basis, r_ij, ij_index, sys, CG_struct[i], b_F, TRUE);
-          eval_power_basis_vectors(ij_inter, u_ji, ji_basis, r_ij, ji_index, sys, CG_struct[j], b_F, TRUE);
-          GO = TRUE;
+            if (check_inter_range(r_ij, ij_inter->R_0, ij_inter->R_max, ij_inter->dr) != 0) { continue; }
+
+            ij_inter->N_inter += 2;
+
+            ij_index[0] = get_grid_index_for_delta_basis(r_ij, ij_inter->i_0, ij_inter->dr, ij_inter->R_0);
+            ji_index[0] = ij_index[0];
+
+            scal_times_vect(1.0 / r_ij, x_ij, ij_basis[0]);
+            scal_times_vect(1.0 / r_ij, x_ji, ji_basis[0]);
+
+            eval_delta_basis_vectors(ij_inter, n_basis_ij, u_ij,
+                                         ij_basis, r_ij, ij_index, sys,
+                                         CG_struct[i], b_F);
+            eval_delta_basis_vectors(ij_inter, n_basis_ji, u_ji,
+                                         ji_basis, r_ij, ji_index, sys,
+                                         CG_struct[j], b_F);
+            GO = TRUE;
+          }
+          else if (ij_inter->i_basis == LINEAR_BASIS_INDEX)
+          {
+            n_basis_ij = 2;
+            n_basis_ji = 2;
+
+            if (check_linear_inter_range
+                (r_ij, ij_inter->R_0, ij_inter->R_max,
+                 ij_inter->dr) != 0) {
+                continue;
+            }
+
+            ij_inter->N_inter += 2; /* need to check this -> looks good to me JFR 11/29/10 */
+
+            scal_times_vect(1.0 / r_ij, x_ij, u_ij);
+            scal_times_vect(1.0 / r_ij, x_ji, u_ji);
+
+            eval_linear_basis_vectors(ij_inter, n_basis_ij, u_ij,
+                                    ij_basis, r_ij, ij_index, sys,
+                                    CG_struct[i], b_F, TRUE);
+            eval_linear_basis_vectors(ij_inter, n_basis_ji, u_ji,
+                                    ji_basis, r_ij, ji_index, sys,
+                                    CG_struct[j], b_F, TRUE);
+            GO = TRUE;
+          }
+          else if (ij_inter->i_basis == BSPLINE_BASIS_INDEX)
+          {
+            if (check_Bspline_inter_range(r_ij, ij_inter->R_0, ij_inter->R_max,
+                       ij_inter->dr) != 0) { continue; }
+
+
+            ij_inter->N_inter += 2;
+	   
+            scal_times_vect(1.0 / r_ij, x_ij, u_ij);
+            scal_times_vect(1.0 / r_ij, x_ji, u_ji);
+
+            n_basis_ij = eval_Bspline_basis_vectors(ij_inter, u_ij, ij_basis,
+                                               r_ij, ij_index, sys,
+                                               CG_struct[i], b_F, TRUE);
+            n_basis_ji = eval_Bspline_basis_vectors(ij_inter, u_ji, ji_basis,
+                                               r_ij, ji_index, sys,
+                                               CG_struct[j], b_F, TRUE);
+
+            GO = TRUE;
+          }
+          else if (ij_inter->i_basis == POWER_INDEX)
+          {
+            if (r_ij <= ij_inter->R_max)
+            {
+              n_basis_ij = ij_inter->N_powers;
+              n_basis_ji = ij_inter->N_powers;
+
+              scal_times_vect(1.0 / r_ij, x_ij, u_ij);
+              scal_times_vect(1.0 / r_ij, x_ji, u_ji);
+
+              eval_power_basis_vectors(ij_inter, u_ij, ij_basis,
+                                             r_ij, ij_index, sys,
+                                             CG_struct[i], b_F, TRUE);
+              eval_power_basis_vectors(ij_inter, u_ji, ji_basis,
+                                             r_ij, ji_index, sys,
+                                             CG_struct[j], b_F, TRUE);
+              GO = TRUE;
+            }
+            else { continue; }
+          }
+          else
+          {
+            fprintf(stderr,"ERROR: No other basis functions are implemented.\n");
+            exit(EXIT_FAILURE);
+          }
         }
-        else { continue; }
-      }
-      else
-      {
-        fprintf(stderr,"ERROR: No other basis functions are implemented.\n");
-        fprintf(stderr,"       For nonbonded interaction, we checked delta, linear, Bspline, and power\n");
-        exit(EXIT_FAILURE);
-      }
-   
-      if (GO)
-      {   
-        /* Increment the half matrix */
-        for (nb_idx = 0; nb_idx < n_basis_ij; ++nb_idx)
+        else if ((strcmp(ij_inter->inter_type,NB_LOCAL_DENSITY) == 0) ||
+                 ((strcmp(ij_inter->inter_type,NB_LD_GRADIENT)) == 0))
         {
-          vect_inc(sys->linear_half_matrix[i * sys->N_coeff + ij_index[nb_idx]],ij_basis[nb_idx]);
-          vect_inc(sys->linear_half_matrix[j * sys->N_coeff + ji_index[nb_idx]],ji_basis[nb_idx]);
-          SETSPOT2(bm_half_mat,sys->N_coeff,ij_index[nb_idx],i);
-          SETSPOT2(bm_half_mat,sys->N_coeff,ji_index[nb_idx],j);
+          if ((r_ij <= ij_inter->LD_W->r0) || (r_ij >= ij_inter->LD_W->rC)) { continue; }
+          if (CG_struct[i].LD_type_idx == CG_struct[j].LD_type_idx) { SAME_LD_TYPE = TRUE; }
+
+          if (ij_inter->i_basis == DELTA_BASIS_INDEX)
+          {
+            // n_basis_ij = n_basis_ji = 1; MCL 06.02.25 - This will be determined after we check the range
+
+            ij_inter->N_inter += 2;
+
+            if (strcmp(CG_struct[i].name ,ij_inter->name1) == 0)
+            {
+              ij_index[0] = get_grid_index_for_delta_basis(LD_i_tj, ij_inter->i_0, ij_inter->dr, ij_inter->R_0);
+              iLD = TRUE;
+            }
+            else if (strcmp(CG_struct[j].name ,ij_inter->name1) == 0)
+            {
+              ij_index[0] = get_grid_index_for_delta_basis(LD_j_ti, ij_inter->i_0, ij_inter->dr, ij_inter->R_0);
+              iLD = FALSE;
+            }
+            else
+            {
+              fprintf(stderr,"APOCALPYTIC CATASTROPHE: file %s  line %d \n",__FILE__,__LINE__);
+              exit(EXIT_FAILURE);
+            }
+            ji_index[0] = ij_index[0];
+
+//          MRD 9/9/2020 I want the LD force, not the potential derivative..
+//            double factor = -ij_inter->LD_W->get_wp1(ij_inter->LD_W,r_ij) / ij_inter->LD_W->norm;
+            double factor = ij_inter->LD_W->get_wp1(ij_inter->LD_W,r_ij) / ij_inter->LD_W->norm;
+            scal_times_vect(factor / r_ij, x_ij, ij_basis[0]);
+            scal_times_vect(factor / r_ij, x_ji, ji_basis[0]);
+
+            n_basis_ij = eval_delta_basis_vectors_LD(ij_inter, u_ij,
+                                        ij_basis, r_ij, LD_i_tj, ij_index, sys,
+                                        CG_struct[i], b_F, iLD, CG_struct[i].LDGrads[CG_struct[j].LD_type_idx]);
+            n_basis_ji = eval_delta_basis_vectors_LD(ij_inter, u_ji,
+                                        ji_basis, r_ij, LD_i_tj, ji_index, sys,
+                                        CG_struct[j], b_F, (1-iLD),CG_struct[j].LDGrads[CG_struct[i].LD_type_idx]);
+            GO = TRUE;
+            if (SAME_LD_TYPE) // i and j are only in one interaction, but I need both their LDs
+            {
+              // n_basis_ij_LD2 = n_basis_ji_LD2 = 1; MCL 06.02.25
+              ij_inter->N_inter += 2;
+              ij_index_LD2[0] = get_grid_index_for_delta_basis(LD_j_ti, ij_inter->i_0, ij_inter->dr, ij_inter->R_0);
+              ji_index_LD2[0] = ij_index_LD2[0];
+              scal_times_vect(factor / r_ij, x_ij, ij_basis_LD2[0]);
+              scal_times_vect(factor / r_ij, x_ji, ji_basis_LD2[0]);
+
+              n_basis_ij_LD2 = eval_delta_basis_vectors_LD(ij_inter, u_ij, ij_basis_LD2,
+                                          r_ij, LD_j_ti, ij_index_LD2, sys, CG_struct[i], b_F, FALSE,
+                                          CG_struct[j].LDGrads[CG_struct[i].LD_type_idx] );
+              n_basis_ji_LD2 = eval_delta_basis_vectors_LD(ij_inter, u_ji, ji_basis_LD2,
+                                          r_ij, LD_j_ti, ji_index_LD2, sys, CG_struct[j], b_F, TRUE,
+                                          CG_struct[j].LDGrads[CG_struct[i].LD_type_idx] );
+            }
+          }
+          else if (ij_inter->i_basis == LINEAR_BASIS_INDEX)
+          {
+	    /* MCL 05.13.25 - Making this more analagous to the Bspline case where we check 
+	     * what n_basis_ij and ji are based on if the LD sampled is in the grid we set up
+	     * Doing this to avoid segfaulting from incrementing LDs outside of the grid
+	    n_basis_ij = 2;
+            n_basis_ji = 2;
+	    */
+            ij_inter->N_inter += 2;
+
+
+            scal_times_vect(1.0 / r_ij, x_ij, u_ij);
+            scal_times_vect(1.0 / r_ij, x_ji, u_ji);
+
+            if (strcmp(CG_struct[i].name ,ij_inter->name1) == 0)
+            {
+                if (ij_inter->LDGradient == FALSE)
+                {
+                  n_basis_ij = eval_linear_basis_vectors_LD(ij_inter, u_ij,
+                                               ij_basis, r_ij, ij_index, sys,
+                                               CG_struct[i], b_F, TRUE, LD_i_tj,
+                                               TRUE,
+                                               CG_struct[i].LDGrads[CG_struct[j].LD_type_idx]);
+                  n_basis_ji = eval_linear_basis_vectors_LD(ij_inter, u_ji,
+                                               ji_basis, r_ij, ji_index, sys,
+                                               CG_struct[j], b_F, TRUE, LD_i_tj,
+                                               FALSE,
+                                               CG_struct[i].LDGrads[CG_struct[j].LD_type_idx]);
+                }
+                else if (ij_inter->LDGradient == TRUE)
+                {
+                  n_basis_ij = eval_linear_basis_vectors_LDGRAD(ij_inter, u_ij,
+                                               ij_basis, r_ij, ij_index, sys,
+                                               CG_struct[i], b_F, TRUE, LD_i_tj,
+                                               CG_struct[i].LDGrads[CG_struct[j].LD_type_idx],TRUE);
+                  n_basis_ji = eval_linear_basis_vectors_LDGRAD(ij_inter, u_ji,
+                                               ji_basis, r_ij, ji_index, sys,
+                                               CG_struct[j], b_F, TRUE, LD_i_tj,
+                                               CG_struct[i].LDGrads[CG_struct[j].LD_type_idx],FALSE);
+                }
+            }
+            else if (strcmp(CG_struct[j].name ,ij_inter->name1) == 0)
+            {
+              if (ij_inter->LDGradient == FALSE)
+              {
+                n_basis_ij = eval_linear_basis_vectors_LD(ij_inter, u_ij,
+                                             ij_basis, r_ij, ij_index, sys,
+                                             CG_struct[i], b_F, TRUE, LD_j_ti,
+                                             FALSE,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx]);
+                n_basis_ji = eval_linear_basis_vectors_LD(ij_inter, u_ji,
+                                             ji_basis, r_ij, ji_index, sys,
+                                             CG_struct[j], b_F, TRUE, LD_j_ti,
+                                             TRUE,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx]);
+              }
+              else if (ij_inter->LDGradient == TRUE)
+              {
+                n_basis_ij = eval_linear_basis_vectors_LDGRAD(ij_inter, u_ij,
+                                               ij_basis, r_ij, ij_index, sys,
+                                               CG_struct[i], b_F, TRUE, LD_j_ti,
+                                               CG_struct[j].LDGrads[CG_struct[i].LD_type_idx],FALSE);
+                n_basis_ji = eval_linear_basis_vectors_LDGRAD(ij_inter, u_ji,
+                                               ji_basis, r_ij, ji_index, sys,
+                                               CG_struct[j], b_F, TRUE, LD_j_ti,
+                                               CG_struct[j].LDGrads[CG_struct[i].LD_type_idx],TRUE);
+              }
+            }
+            else
+            {
+              fprintf(stderr,"APOCALPYTIC CATASTROPHE: file %s  line %d \n",__FILE__,__LINE__);
+              exit(EXIT_FAILURE);
+            }
+            if (SAME_LD_TYPE) // i and j are only in one interaction, but I need both their LDs
+            {
+              
+              /*n_basis_ij_LD2 = n_basis_ji_LD2 = 2; MCL 05.13.25 - making this more like Bsplines, 
+	       * where we check what n_basis is depending on where we are trying to solve
+	       * so that we don't tally rho outside of the setup grid and segfault
+	       * */
+              ij_inter->N_inter += 2;
+              scal_times_vect(1.0 / r_ij, x_ij, u_ij);
+              scal_times_vect(1.0 / r_ij, x_ji, u_ji);
+              if (ij_inter->LDGradient == FALSE)
+              {
+                n_basis_ij_LD2 = eval_linear_basis_vectors_LD(ij_inter, u_ij,
+                                             ij_basis_LD2, r_ij, ij_index_LD2, sys,
+                                             CG_struct[i], b_F, TRUE, LD_j_ti,
+                                             FALSE,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx]);
+                n_basis_ji_LD2 = eval_linear_basis_vectors_LD(ij_inter, u_ji,
+                                             ji_basis_LD2, r_ij, ji_index_LD2, sys,
+                                             CG_struct[j], b_F, TRUE, LD_j_ti,
+                                             TRUE,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx]);
+              }
+              else if (ij_inter->LDGradient == TRUE)
+              {
+                n_basis_ij_LD2 = eval_linear_basis_vectors_LDGRAD(ij_inter, u_ij,
+                                                 ij_basis_LD2, r_ij, ij_index_LD2, sys,
+                                                 CG_struct[i], b_F, TRUE, LD_j_ti,
+                                                 CG_struct[j].LDGrads[CG_struct[i].LD_type_idx],FALSE);
+                n_basis_ji_LD2 = eval_linear_basis_vectors_LDGRAD(ij_inter, u_ji,
+                                                 ji_basis_LD2, r_ij, ji_index_LD2, sys,
+                                                 CG_struct[j], b_F, TRUE, LD_j_ti,
+                                                 CG_struct[j].LDGrads[CG_struct[i].LD_type_idx],TRUE);
+              }
+            }
+
+            GO = TRUE;
+          }
+          else if (ij_inter->i_basis == BSPLINE_BASIS_INDEX)
+          {
+
+
+            ij_inter->N_inter += 2;
+
+            scal_times_vect(1.0 / r_ij, x_ij, u_ij);
+            scal_times_vect(1.0 / r_ij, x_ji, u_ji);
+            if (strcmp(CG_struct[i].name ,ij_inter->name1) == 0)
+            {
+              if (ij_inter->LDGradient == FALSE)
+              {
+                n_basis_ij = eval_Bspline_basis_vectors_LD(ij_inter, u_ij,
+                                             ij_basis, r_ij, ij_index, sys,
+                                             CG_struct[i], b_F, TRUE, LD_i_tj,
+                                             TRUE,
+                                             CG_struct[i].LDGrads[CG_struct[j].LD_type_idx]);
+                n_basis_ji = eval_Bspline_basis_vectors_LD(ij_inter, u_ji,
+                                             ji_basis, r_ij, ji_index, sys,
+                                             CG_struct[j], b_F, TRUE, LD_i_tj,
+                                             FALSE,
+                                             CG_struct[i].LDGrads[CG_struct[j].LD_type_idx]);
+              }
+              else if (ij_inter->LDGradient == TRUE)
+              {
+                n_basis_ij = eval_Bspline_basis_vectors_LDGRAD(ij_inter, u_ij,
+                                             ij_basis, r_ij, ij_index, sys,
+                                             CG_struct[i], b_F, TRUE, LD_i_tj,
+                                             CG_struct[i].LDGrads[CG_struct[j].LD_type_idx],TRUE);
+                n_basis_ji = eval_Bspline_basis_vectors_LDGRAD(ij_inter, u_ji,
+                                             ji_basis, r_ij, ji_index, sys,
+                                             CG_struct[j], b_F, TRUE, LD_i_tj,
+                                             CG_struct[i].LDGrads[CG_struct[j].LD_type_idx],FALSE);
+              }
+            }
+            else if (strcmp(CG_struct[j].name ,ij_inter->name1) == 0)
+            {
+              if (ij_inter->LDGradient == FALSE)
+              {
+                n_basis_ij = eval_Bspline_basis_vectors_LD(ij_inter, u_ij,
+                                             ij_basis, r_ij, ij_index, sys,
+                                             CG_struct[i], b_F, TRUE, LD_j_ti,
+                                             FALSE,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx]);
+                n_basis_ji = eval_Bspline_basis_vectors_LD(ij_inter, u_ji,
+                                             ji_basis, r_ij, ji_index, sys,
+                                             CG_struct[j], b_F, TRUE, LD_j_ti,
+                                             TRUE,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx]);
+              }
+              else if (ij_inter->LDGradient == TRUE)
+              {
+                n_basis_ij = eval_Bspline_basis_vectors_LDGRAD(ij_inter, u_ij,
+                                             ij_basis, r_ij, ij_index, sys,
+                                             CG_struct[i], b_F, TRUE, LD_j_ti,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx],FALSE);
+                n_basis_ji = eval_Bspline_basis_vectors_LDGRAD(ij_inter, u_ji,
+                                             ji_basis, r_ij, ji_index, sys,
+                                             CG_struct[j], b_F, TRUE, LD_j_ti,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx],TRUE);
+              }
+            }
+            else
+            {
+              fprintf(stderr,"APOCALPYTIC CATASTROPHE: file %s  line %d \n",__FILE__,__LINE__);
+              exit(EXIT_FAILURE);
+            }
+
+            if (SAME_LD_TYPE) // i and j are only in one interaction, but I need both their LDs
+            {
+              ij_inter->N_inter += 2;
+              scal_times_vect(1.0 / r_ij, x_ij, u_ij);
+              scal_times_vect(1.0 / r_ij, x_ji, u_ji);
+              if (ij_inter->LDGradient == FALSE)
+              {
+                n_basis_ij_LD2 = eval_Bspline_basis_vectors_LD(ij_inter, u_ij,
+                                             ij_basis_LD2, r_ij, ij_index_LD2, sys,
+                                             CG_struct[i], b_F, TRUE, LD_j_ti,
+                                             FALSE,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx]);
+                n_basis_ji_LD2 = eval_Bspline_basis_vectors_LD(ij_inter, u_ji,
+                                             ji_basis_LD2, r_ij, ji_index_LD2, sys,
+                                             CG_struct[j], b_F, TRUE, LD_j_ti,
+                                             TRUE,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx]);
+              }
+              else if (ij_inter->LDGradient == TRUE)
+              {
+                n_basis_ij_LD2 = eval_Bspline_basis_vectors_LDGRAD(ij_inter, u_ij,
+                                             ij_basis_LD2, r_ij, ij_index_LD2, sys,
+                                             CG_struct[i], b_F, TRUE, LD_j_ti,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx],FALSE);
+                n_basis_ji_LD2 = eval_Bspline_basis_vectors_LDGRAD(ij_inter, u_ji,
+                                             ji_basis_LD2, r_ij, ji_index_LD2, sys,
+                                             CG_struct[j], b_F, TRUE, LD_j_ti,
+                                             CG_struct[j].LDGrads[CG_struct[i].LD_type_idx],TRUE);
+              }
+            }
+            GO = TRUE;
+          }
+          else
+          {
+            fprintf(stderr,"ERROR: only supported basis types for local density interactions are delta, linear, Bspline\n");
+            exit(EXIT_FAILURE);
+          }
         }
-     
-        /* Increment M2 */
-        eval_M_nb_pair_inter(n_basis_ij, ij_index, ij_basis, n_basis_ij, ij_index, ij_basis, sys, TRUE);
-        eval_M_nb_pair_inter(n_basis_ji, ji_index, ji_basis, n_basis_ji, ji_index, ji_basis, sys, TRUE);
+        /* Increment half matrix */
+        if (GO)
+        {
+          for (nb_idx = 0; nb_idx < n_basis_ij; ++nb_idx)
+          {
+            vect_inc(sys->half_matrix[i][ij_index[nb_idx]],ij_basis[nb_idx]);
+            vect_inc(sys->half_matrix[j][ji_index[nb_idx]],ji_basis[nb_idx]);
+            SETSPOT2(bm_half_mat,sys->N_coeff,ij_index[nb_idx],i);
+            SETSPOT2(bm_half_mat,sys->N_coeff,ji_index[nb_idx],j);
+          }
+          eval_M_nb_pair_inter(n_basis_ij, ij_index, ij_basis,
+                               n_basis_ij, ij_index, ij_basis, sys, TRUE);
+          eval_M_nb_pair_inter(n_basis_ji, ji_index, ji_basis,
+                               n_basis_ji, ji_index, ji_basis, sys, TRUE);
+
+          if (SAME_LD_TYPE)
+          {
+            for (nb_idx = 0; nb_idx < n_basis_ij_LD2; ++nb_idx)
+            {
+              vect_inc(sys->half_matrix[i][ij_index_LD2[nb_idx]],ij_basis_LD2[nb_idx]);
+              vect_inc(sys->half_matrix[j][ji_index_LD2[nb_idx]],ji_basis_LD2[nb_idx]);
+              SETSPOT2(bm_half_mat,sys->N_coeff,ij_index_LD2[nb_idx],i);
+              SETSPOT2(bm_half_mat,sys->N_coeff,ji_index_LD2[nb_idx],j);
+            }
+            eval_M_nb_pair_inter(n_basis_ij_LD2, ij_index_LD2, ij_basis_LD2,
+                                 n_basis_ij_LD2, ij_index_LD2, ij_basis_LD2, sys, TRUE);
+            eval_M_nb_pair_inter(n_basis_ji_LD2, ji_index_LD2, ji_basis_LD2,
+                                 n_basis_ji_LD2, ji_index_LD2, ji_basis_LD2, sys, TRUE);
+          }
+
+        }
       }
-    } // End loop over particle j
-   
-  }// End loop over particle i 
+    }
+  }
+
+/* MRD end 06.18.2020 */
 
   // Increment "G" which is being stored for now in M
   for (i = 0; i < N_sites; ++i)
@@ -4777,38 +6125,37 @@ int calc_grids3(FILE *fp, tW_gmx_info info, int N_sites, tW_CG_site CG_struct[],
 
     }
 
+    efree(ij_inters);
+
     return 0;
 }
 
 /*
- * In eliminating the triple loop, we now have to make two changes to M
- * to get it to be what it would be has we done the old way 
+ * process_G_matrix
+ * Calc_grids3 calculates the full G matrix and stores it in M, but also keeps track of the 
+ * gbar matrix and stores it in M2.
+ * The solver/conditioning functions used later expects M to be the Gbar matrix and M2 to be the 
+ * gbar matrix. 
+ * This function is called when the calc_grids3 workflow of the cgff algorithm is used
+ * Its purpose is to seperate the M2 component from M so that by function's end 
+ * M is Gbar
+ * @arg sys The completely filled out system of requested ffparmams and eq. structures
+ * @ref calc_grids3()
+ * MRD
+ * In eliminating the triple loop, we now have to make changes to M
+ * to get it to be what it would be had we done the old way 
  */
 void process_G_matrix(tW_system *sys)
 {
-  if ((! sys->M_M2_proc) && (sys->SKIP_TRIPLE_LOOP))
+  if ((! sys->M_M2_proc) && (! sys->USE_OLD_ALGORITHM))
   {
     int register i;
-/* 1) M2 is M2, but M is the entire G matrix. We have to subtract out M2 from M */
+/* M2 is M2, but M is the entire G matrix. We have to subtract out M2 from M */
     for (i = 0; i < sys->N_pack; ++i) { sys->M[i] -= sys->M2[i]; }
     int register start;
     int register idx;
     int register j;
     int register N_coeff = sys->N_coeff;
-/*
- * 2) M double counts the diagonal elements of the matrix for bonded interactions
- *    Note, only the contributions to M and not to M2 are double counted, so we 
- *    have to subtract M2 out FIRST, and then do this SECOND
- */
-    for (i = 0; i < sys->N_Bond_Int_Types; ++i)
-    {
-      start = sys->Bonded_Inter_Types[i].i_0;
-      for (j = 0; j < sys->Bonded_Inter_Types[i].N_coeff ; ++j)
-      {
-        idx = index_Lpacked(start+j,start+j,N_coeff);
-        sys->M[idx] /= 2.0;
-      }
-    }
     
     sys->M_M2_proc = TRUE;
   }

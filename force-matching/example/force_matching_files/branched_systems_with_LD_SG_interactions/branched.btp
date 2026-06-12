@@ -1,0 +1,131 @@
+[name] BRANCH
+
+[natoms] 1125
+
+[ffparams] 19
+!ind 	name
+0 	LJ_SR
+1 	BONDS
+2 	BONDS
+3 	BONDS
+4 	BONDS
+5 	ANGLES
+6 	ANGLES
+7 	ANGLES
+8 	ANGLES
+9 	IDIHS
+10 	IDIHS
+11 	IDIHS
+12 	IDIHS
+13 	IDIHS
+14 	IDIHS
+15 	IDIHS
+16 	IDIHS
+17 	IDIHS
+18 	IDIHS
+!atnr  fudgeQQ
+1 0.500000
+
+[molblocks] 1
+!moltype  mol_name  n_mols
+0 	  BRANCH 	  125 
+
+[moltypes] 1
+!ind 	name	n_mols	n_apm	n_res	n_cgs	excls_nr 	excls_nra 	bond_nr 	angle_nr 	dih_nr   	bigdih_nr  	imnb_nr
+0 	BRANCH	125	9	1	9	9		75		24		52		50		0		0	
+  [res]
+  BRAN
+  [cg]
+  !idx  start  end
+     0      0    0
+     1      1    1
+     2      2    2
+     3      3    3
+     4      4    4
+     5      5    5
+     6      6    6
+     7      7    7
+     8      8    8
+  [bond]
+  !idx  type    i    j
+     0     1    0    1
+     1     2    1    2
+     2     3    2    3
+     3     3    2    4
+     4     3    2    5
+     5     1    1    6
+     6     1    1    7
+     7     4    5    8
+  [angle]
+  !idx  type    i    j    k
+     0     5    0    1    2
+     1     6    1    2    3
+     2     7    3    2    5
+     3     7    3    2    4
+     4     7    5    2    4
+     5     8    6    1    7
+     6     8    6    1    0
+     7     8    7    1    0
+     8     7    2    5    8
+     9     5    6    1    2
+    10     5    7    1    2
+    11     6    5    2    1
+    12     6    4    2    1
+  [dih]
+  !idx  type    i    j    k    l
+     0     9    0    1    2    3
+     1    10    6    1    2    3
+     2    11    7    1    2    3
+     3    12    0    1    2    4
+     4    13    6    1    2    4
+     5    14    7    1    2    4
+     6    15    0    1    2    5
+     7    16    6    1    2    5
+     8    17    7    1    2    5
+     9    18    1    2    5    8
+
+[attypes]
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           0       0     0   59.04480  0.00000       0         A          A  8
+  [epa]
+  0  1  2  3  4  5  6  7
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           0       1     0   59.04480  0.00000       0         B          B  9
+  [epa]
+  0  1  2  3  4  5  6  7  8
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           0       2     0   59.04480  0.00000       0         C          C  9
+  [epa]
+  0  1  2  3  4  5  6  7  8
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           0       3     0   59.04480  0.00000       0         D          D  9
+  [epa]
+  0  1  2  3  4  5  6  7  8
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           0       4     0   59.04480  0.00000       0         D          D  9
+  [epa]
+  0  1  2  3  4  5  6  7  8
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           0       5     0   59.04480  0.00000       0         D          D  9
+  [epa]
+  0  1  2  3  4  5  6  7  8
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           0       6     0   59.04480  0.00000       0         A          A  8
+  [epa]
+  0  1  2  3  4  5  6  7
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           0       7     0   59.04480  0.00000       0         A          A  8
+  [epa]
+  0  1  2  3  4  5  6  7
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           0       8     0   59.04480  0.00000       0         A          A  6
+  [epa]
+  1  2  3  4  5  8
+
+
+[Bocs_at_types] 4
+!idx  typename
+   0         A
+   1         B
+   2         C
+   3         D

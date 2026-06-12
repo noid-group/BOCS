@@ -1,0 +1,7 @@
+<map id="check_dihedrals" name="check_dihedrals">
+<area shape="rect" id="Node000001" title="check_dihedrals():" alt="" coords="5,5,121,32"/>
+<area shape="rect" id="Node000002" href="$cgff__fn_8c.html#a0b2d72e92125547d20be711b3f21798c" title="determine_dihedral_type():" alt="" coords="169,5,331,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,16,153,16,153,21,121,21"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#acd760e677364733e6b6c64b5db6d7d2e" title="match_word_list(): Determines if list_1 and list_2 match in either normal or reverse order." alt="" coords="379,5,495,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="332,16,363,16,363,21,332,21"/>
+</map>

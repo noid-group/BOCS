@@ -1,6 +1,6 @@
 /**
 @file io_output.h 
-@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski
 */
 
 #ifndef IO_OUT

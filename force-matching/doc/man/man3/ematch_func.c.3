@@ -1,0 +1,325 @@
+.TH "ematch_func.c" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ematch_func.c
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <stdlib\&.h>\fP
+.br
+\fR#include <string\&.h>\fP
+.br
+\fR#include <math\&.h>\fP
+.br
+\fR#include 'cgff_types\&.h'\fP
+.br
+\fR#include 'gromacs_topology\&.h'\fP
+.br
+\fR#include 'safe_mem\&.h'\fP
+.br
+\fR#include 'io_read\&.h'\fP
+.br
+\fR#include 'wnoid_math\&.h'\fP
+.br
+\fR#include 'LDD\&.h'\fP
+.br
+\fR#include 'ematch_types\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinitialize_esystem\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBread_etrajectory\fP (\fBtW_esystem\fP *sys, \fBtW_line\fP line)"
+.br
+.ti -1c
+.RI "void \fBread_etopology\fP (\fBtW_esystem\fP *sys, \fBtW_line\fP line)"
+.br
+.ti -1c
+.RI "void \fBread_eenergy\fP (\fBtW_esystem\fP *sys, \fBtW_line\fP line)"
+.br
+.ti -1c
+.RI "void \fBread_esites\fP (\fBtW_esystem\fP *sys, \fBtW_line\fP inp_line, FILE *fp)"
+.br
+.ti -1c
+.RI "void \fBread_epairs\fP (\fBtW_esystem\fP *sys, \fBtW_line\fP inp_line, FILE *fp)"
+.br
+.ti -1c
+.RI "void \fBread_ebonds\fP (\fBtW_esystem\fP *sys, \fBtW_line\fP inp_line, FILE *fp)"
+.br
+.ti -1c
+.RI "void \fBallocate_angle_memory\fP (\fBtW_esystem\fP *sys, int nat)"
+.br
+.ti -1c
+.RI "void \fBread_eangles\fP (\fBtW_esystem\fP *sys, \fBtW_line\fP inp_line, FILE *fp)"
+.br
+.ti -1c
+.RI "void \fBread_edihedrals\fP (\fBtW_esystem\fP *sys, \fBtW_line\fP inp_line, FILE *fp)"
+.br
+.ti -1c
+.RI "void \fBread_ercond\fP (\fBtW_esystem\fP *sys, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "void \fBread_ecalcmode\fP (\fBtW_esystem\fP *sys, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "void \fBread_epar\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBcheck_mandatory_directives\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBsetup_lists\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBrun_checks\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBdo_bins_allocate_mem\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBsummarize_esystem\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBsetup_ematch_sys\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBcheck_excl\fP (int nr_excl, int *excl_list, int j)"
+.br
+.ti -1c
+.RI "int \fBget_grid_index_for_delta_basis_em\fP (double r, int i_0, double dr, double R_0)"
+.br
+.ti -1c
+.RI "int \fBget_grid_index_for_linear_basis_em\fP (double r, int i_0, double dr, double R_0)"
+.br
+.ti -1c
+.RI "double \fBcalc_linear_spline_A_em\fP (double r, double r0, double dr, int idx, int i0)"
+.br
+.ti -1c
+.RI "void \fBcalc_cubic_Bspline_em\fP (double dr, double R, double R_0, int i, double *B)"
+.br
+.ti -1c
+.RI "double \fBget_pbc_distance\fP (\fBdvec\fP xi, \fBdvec\fP xj, \fBmatrix\fP box)"
+.br
+.ti -1c
+.RI "double \fBget_angle\fP (\fBdvec\fP xi, \fBdvec\fP xj, \fBdvec\fP xk)"
+.br
+.ti -1c
+.RI "double \fBget_dihedral\fP (\fBdvec\fP xi, \fBdvec\fP xj, \fBdvec\fP xk, \fBdvec\fP xl)"
+.br
+.ti -1c
+.RI "void \fBdo_ematch_bonds\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBdo_ematch_angles\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBdo_ematch_dihedrals\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBdo_ematch_pairs\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBsave_A_matrix\fP (double **A, int nrows, int ncols, char *fnm)"
+.br
+.ti -1c
+.RI "void \fBread_A_matrix\fP (double **A, int nrows, int ncols)"
+.br
+.ti -1c
+.RI "void \fBget_zero_cols\fP (double **A, \fBbool\fP *trim_cols, int nrows, int ncols, int *n_zero_cols, \fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBprint_zero_cols\fP (\fBbool\fP *tc, int nt)"
+.br
+.ti -1c
+.RI "void \fBelim_zero_cols\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBtrim_A\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBget_answer\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBsave_answer\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBcheck_answer\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBtest_stuff\fP ()"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void allocate_angle_memory (\fBtW_esystem\fP * sys, int nat)"
+
+.PP
+Referenced by \fBread_eangles()\fP\&.
+.SS "void calc_cubic_Bspline_em (double dr, double R, double R_0, int i, double * B)"
+
+.PP
+Referenced by \fBdo_ematch_angles()\fP, \fBdo_ematch_bonds()\fP, \fBdo_ematch_dihedrals()\fP, \fBdo_ematch_pairs()\fP, and \fBtest_stuff()\fP\&.
+.SS "double calc_linear_spline_A_em (double r, double r0, double dr, int idx, int i0)"
+
+.PP
+Referenced by \fBdo_ematch_angles()\fP, \fBdo_ematch_bonds()\fP, \fBdo_ematch_dihedrals()\fP, \fBdo_ematch_pairs()\fP, and \fBtest_stuff()\fP\&.
+.SS "void check_answer (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "\fBbool\fP check_excl (int nr_excl, int * excl_list, int j)"
+
+.PP
+Referenced by \fBdo_ematch_pairs()\fP\&.
+.SS "void check_mandatory_directives (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBsetup_ematch_sys()\fP\&.
+.SS "void do_bins_allocate_mem (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBsetup_ematch_sys()\fP\&.
+.SS "void do_ematch_angles (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void do_ematch_bonds (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void do_ematch_dihedrals (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void do_ematch_pairs (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void elim_zero_cols (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBtrim_A()\fP\&.
+.SS "double get_angle (\fBdvec\fP xi, \fBdvec\fP xj, \fBdvec\fP xk)"
+
+.PP
+Referenced by \fBdo_ematch_angles()\fP\&.
+.SS "void get_answer (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "double get_dihedral (\fBdvec\fP xi, \fBdvec\fP xj, \fBdvec\fP xk, \fBdvec\fP xl)"
+
+.PP
+Referenced by \fBdo_ematch_dihedrals()\fP\&.
+.SS "int get_grid_index_for_delta_basis_em (double r, int i_0, double dr, double R_0)"
+
+.PP
+Referenced by \fBdo_ematch_angles()\fP, \fBdo_ematch_bonds()\fP, \fBdo_ematch_dihedrals()\fP, and \fBdo_ematch_pairs()\fP\&.
+.SS "int get_grid_index_for_linear_basis_em (double r, int i_0, double dr, double R_0)"
+
+.PP
+Referenced by \fBdo_ematch_angles()\fP, \fBdo_ematch_bonds()\fP, \fBdo_ematch_dihedrals()\fP, \fBdo_ematch_pairs()\fP, and \fBtest_stuff()\fP\&.
+.SS "double get_pbc_distance (\fBdvec\fP xi, \fBdvec\fP xj, \fBmatrix\fP box)"
+
+.PP
+Referenced by \fBdo_ematch_bonds()\fP, and \fBdo_ematch_pairs()\fP\&.
+.SS "void get_zero_cols (double ** A, \fBbool\fP * trim_cols, int nrows, int ncols, int * n_zero_cols, \fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBtrim_A()\fP\&.
+.SS "void initialize_esystem (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBsetup_ematch_sys()\fP\&.
+.SS "void print_zero_cols (\fBbool\fP * tc, int nt)"
+
+.PP
+Referenced by \fBtrim_A()\fP\&.
+.SS "void read_A_matrix (double ** A, int nrows, int ncols)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void read_eangles (\fBtW_esystem\fP * sys, \fBtW_line\fP inp_line, FILE * fp)"
+
+.PP
+Referenced by \fBread_epar()\fP\&.
+.SS "void read_ebonds (\fBtW_esystem\fP * sys, \fBtW_line\fP inp_line, FILE * fp)"
+
+.PP
+Referenced by \fBread_epar()\fP\&.
+.SS "void read_ecalcmode (\fBtW_esystem\fP * sys, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBread_epar()\fP\&.
+.SS "void read_edihedrals (\fBtW_esystem\fP * sys, \fBtW_line\fP inp_line, FILE * fp)"
+
+.PP
+Referenced by \fBread_epar()\fP\&.
+.SS "void read_eenergy (\fBtW_esystem\fP * sys, \fBtW_line\fP line)"
+
+.PP
+Referenced by \fBread_epar()\fP\&.
+.SS "void read_epairs (\fBtW_esystem\fP * sys, \fBtW_line\fP inp_line, FILE * fp)"
+
+.PP
+Referenced by \fBread_epar()\fP\&.
+.SS "void read_epar (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBsetup_ematch_sys()\fP\&.
+.SS "void read_ercond (\fBtW_esystem\fP * sys, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBread_epar()\fP\&.
+.SS "void read_esites (\fBtW_esystem\fP * sys, \fBtW_line\fP inp_line, FILE * fp)"
+
+.PP
+Referenced by \fBread_epar()\fP\&.
+.SS "void read_etopology (\fBtW_esystem\fP * sys, \fBtW_line\fP line)"
+
+.PP
+Referenced by \fBread_epar()\fP\&.
+.SS "void read_etrajectory (\fBtW_esystem\fP * sys, \fBtW_line\fP line)"
+
+.PP
+Referenced by \fBread_epar()\fP\&.
+.SS "void run_checks (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBsetup_ematch_sys()\fP\&.
+.SS "void save_A_matrix (double ** A, int nrows, int ncols, char * fnm)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void save_answer (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void setup_ematch_sys (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void setup_lists (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBsetup_ematch_sys()\fP\&.
+.SS "void summarize_esystem (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP, and \fBsetup_ematch_sys()\fP\&.
+.SS "void test_stuff ()"
+
+.SS "void trim_A (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

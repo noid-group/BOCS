@@ -1,0 +1,11 @@
+<map id="tW_t_idef" name="tW_t_idef">
+<area shape="rect" id="Node000001" title="The struct t_idef defines all the interactions for the complete simulation." alt="" coords="154,219,231,245"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8h.html#uniont_w__t__iparams" title=" " alt="" coords="5,96,108,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="62,138,70,167,86,193,101,205,118,213,154,224,153,229,116,218,98,209,82,196,65,169,57,139"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8h.html#structt_w__gmx__cmap__t" title=" " alt="" coords="132,96,253,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,138,195,218,190,218,190,138"/>
+<area shape="rect" id="Node000004" href="$gromacs__topology_8h.html#structt_w__gmx__cmapdata__t" title=" " alt="" coords="120,5,265,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="195,48,195,95,190,95,190,48"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8h.html#structt_w__t__ilist" title=" " alt="" coords="277,96,353,123"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="306,138,288,168,264,197,227,220,224,216,260,193,284,165,301,135"/>
+</map>

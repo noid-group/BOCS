@@ -1,6 +1,6 @@
 /**
 @file calc_grids.h 
-@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski
 */
 
 #ifndef CALC_GRIDS
@@ -26,7 +26,7 @@ extern "C"
 int calc_grids2(FILE * fp, tW_gmx_info info, int N_sites,
 		tW_CG_site * CG_struct, tW_system * sys);
 
-int calc_grids3(FILE *fp, tW_gmx_info info, int N_sites,
+int calc_grids3(int counter, FILE *fp, tW_gmx_info info, int N_sites,
 		tW_CG_site * CG_struct, tW_system *sys);
 
 void process_G_matrix(tW_system *sys);
@@ -76,11 +76,15 @@ int get_iList(tW_word name, int N_Inter_Types, tW_type_inter2 InterList[],
 
 void get_all_iList(tW_system *sys, bool bSpeak);
 
-bool skip_excl(int nr_excl, int *excl_list, int j);
-
 tW_type_inter2 *get_nb_pair_inter_ptr(tW_CG_site * j_site, tW_system * sys,
 				      int N_i1, tW_word *nList1,
 				      int *iList1);
+
+/* MRD 06.18.20 */
+int get_nb_pair_inter_ptr_n(tW_CG_site * j_site, tW_system * sys,
+                            int N_i1, tW_word *nList1, int *iList1,
+                            tW_type_inter2 ** the_inter2s );
+
 
 void get_nb_pair_info(double *r_ij, dvec x_i, dvec x_j, dvec x_ij,
 		      int b_PBC, dvec box);
@@ -102,6 +106,13 @@ int eval_delta_basis_vectors(tW_type_inter2 * ij_inter, double n_basis_ij,
 			     int *ij_index, tW_system * sys,
 			     tW_CG_site site_i, bool b_F);
 
+/* MCL 06.02.25 - Putting in prototypes for MRD(2018?) LD and LDgrad functions */
+int eval_delta_basis_vectors_LD(tW_type_inter2 * ij_inter,
+                               dvec u_ij, dvec * ij_basis, double r_ij, double LD,
+                               int *ij_index, tW_system * sys,
+                               tW_CG_site site_i, bool b_F, bool bSelf, dvec A_ij);
+
+
 /* START JFR */
 int eval_linear_basis_vectors(tW_type_inter2 * ij_inter, double n_basis_ij,
 			      dvec u_ij, dvec * ij_basis, double r_ij,
@@ -109,17 +120,48 @@ int eval_linear_basis_vectors(tW_type_inter2 * ij_inter, double n_basis_ij,
 			      tW_CG_site site_i, bool b_F, int flag_grids);
 /* END JFR */
 
+/* MCL 06.02.25 - Putting in prototypes for MRD(2018?) LD and LDgrad functions */
+int eval_linear_basis_vectors_LD(tW_type_inter2 * ij_inter, /*double n_basis_ij,*/
+                              dvec u_ij, dvec * ij_basis, double r_ij,
+                              int *ij_index, tW_system * sys,
+                              tW_CG_site site_i, bool b_F, int flag_grids, double LD,
+                              bool bSelf, dvec A_ij);
+
+int eval_linear_basis_vectors_LDGRAD(tW_type_inter2 * ij_inter, /*double n_basis_ij,*/
+                              dvec u_ij, dvec * ij_basis, double r_ij,
+                              int *ij_index, tW_system * sys,
+                              tW_CG_site site_i, bool b_F, int flag_grids, double LD,
+                              dvec grad_rho_i_t_j, bool bSelf);
+
 /* JFR - 07.22.12 */
 int eval_Bspline_basis_vectors(tW_type_inter2 * ij_inter, dvec u_ij,
 			       dvec * ij_basis, double r_ij, int *ij_index,
 			       tW_system * sys, tW_CG_site site_i,
 			       bool b_F, int flag_grids);
 
+/* MCL 06.02.25 - Putting in prototypes for MRD(2018-2020?) LD/LDgrad functions */
+int eval_Bspline_basis_vectors_LD(tW_type_inter2 * ij_inter, dvec u_ij,
+                               dvec * ij_basis, double r_ij, int *ij_index,
+                               tW_system * sys, tW_CG_site site_i,
+                               bool b_F, int flag_grids, double LD,
+                               bool bSelf, dvec A_ii);
+
+int eval_Bspline_basis_vectors_LDGRAD(tW_type_inter2 * ij_inter, dvec u_ij,
+                               dvec * ij_basis, double r_ij, int *ij_index,
+                               tW_system * sys, tW_CG_site site_i,
+                               bool b_F, int flag_grids, double LD,
+                               dvec grad_rho_i_t_j, bool bSelf);
+
+
 /* START JFR */
 double calc_linear_spline_A(int bond_coeff_ctr, int *D_b, double dr,
 			    double R_0, int i_0, int N_pts, double R,
 			    double *Ap, double *Bp, int periodic);
 /* END JFR */
+
+/* MRD 06.18.2020 - analytical cubic spline */
+void calc_cubic_Bspline(double dr, double R, double R_0, int i, int k, double *B, double *Bp);
+void calc_fifth_Bspline(double dr, double R, double R_0, int i, int k, double *B, double *Bp);
 
 /* JFR - 07.16.12: Bspline basis set */
 double calc_Bspline(double dr, double R_0, int i_0, int N_pts, double R,

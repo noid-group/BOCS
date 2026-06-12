@@ -1,0 +1,13 @@
+<map id="setup_xdr" name="setup_xdr">
+<area shape="rect" id="Node000001" title="setup_xdr(): sets up the XDR data structure for reading/writing trr files MRD 92517" alt="" coords="653,31,731,57"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#ad4cc4341b7f2534966f31decf181d779" title="init_tW_gmx_trxframe(): initializes a tW_gmx_trxframe variable" alt="" coords="455,31,605,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="637,47,605,47,605,41,637,41"/>
+<area shape="rect" id="Node000003" href="$ematch__func_8c.html#a838842c254325c0629ebd6aca3316fd8" title=" " alt="" coords="282,5,407,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="439,34,407,30,408,25,440,29"/>
+<area shape="rect" id="Node000006" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="320,56,369,83"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="440,59,370,69,370,63,439,54"/>
+<area shape="rect" id="Node000004" href="$ematch__func_8c.html#a6f63c009a254311f16cf558e12b7a45a" title=" " alt="" coords="103,5,234,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="267,21,234,21,234,16,267,16"/>
+<area shape="rect" id="Node000005" href="$ematch_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="87,21,55,21,55,16,87,16"/>
+</map>

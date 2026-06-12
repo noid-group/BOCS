@@ -1,0 +1,52 @@
+; OTP CG Top
+
+[defaults]
+;nbfunc   comb-rule  genpairs   fudgeLJ  fudgeQQ
+1          1         no         1.0       1.0
+
+[ atomtypes ]
+;name       mass        charge   ptype       c6           c12
+ CT         77.10600    0.000    A           0            1   ; We will make BR / BL from our BOCS mapping this site type in the force-field
+ CM         76.09800    0.000    A           0            1
+
+[ bondtypes ]
+;  i     j      func    b0              kb
+   CT    CM     8       0               1
+
+[ angletypes ]
+;  i     j     k        func   a0       cth
+   CT    CM    CT       8       0        1
+
+[ nonbond_params ]
+  ; i      j     func          c6           c12
+    CT     CT     1             0           1
+    CM     CM     1             0           1
+    CT     CM     1             0           1
+
+[moleculetype]
+;name nrexcl
+OTP    3
+
+[ atoms ]
+;   nr    type   resnr  residu      atom     cgnr    charge
+    1     CT     1      OTP         BL       1       0.00  ; Note the residu and atom names 
+    2     CM     1      OTP         BM       2       0.00
+    3     CT     1      OTP         BR       3       0.00
+
+[ bonds ]
+;  ai    aj    funct
+   1     2     8
+   2     3     8
+
+[ angles ]
+;  ai    aj    ak    funct
+   1     2     3     8
+
+[system]
+; Name
+800_OTP
+
+[ molecules ]
+; Compound        #mols
+OTP             800
+

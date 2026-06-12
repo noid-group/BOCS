@@ -1,0 +1,9 @@
+<map id="check_dihedral_endpoints" name="check_dihedral_endpoints">
+<area shape="rect" id="Node000001" title=" " alt="" coords="441,5,613,32"/>
+<area shape="rect" id="Node000002" href="$table__functions_8c.html#a213f8eca9734cc6ac5956417eb404ecd" title=" " alt="" coords="246,5,393,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="426,21,393,21,393,16,426,16"/>
+<area shape="rect" id="Node000003" href="$table__functions_8c.html#a3aca3e1f83ad70692c1e9428a4c0791c" title=" " alt="" coords="103,5,198,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="231,21,199,21,199,16,231,16"/>
+<area shape="rect" id="Node000004" href="$tables_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="87,21,55,21,55,16,87,16"/>
+</map>

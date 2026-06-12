@@ -1,0 +1,67 @@
+[ moleculetype ]
+; name    n_atoms
+  HEP     23
+
+[ sitetypes ] 3
+; name   mapping_type  n_atoms
+  CTA    com           7
+  CM     com           9
+  CTB    com           7
+
+[ atomtypes ]
+; number    type    site    mass/weighting
+    1       C       CTA     12.011
+    2       H       CTA     1.008
+    3       H       CTA     1.008
+    4       H       CTA     1.008
+    5       C       CTA     12.011
+    6       H       CTA     1.008
+    7       H       CTA     1.008
+    8       C       CM      12.011
+    9       H       CM      1.008
+    10      H       CM      1.008
+    11      C       CM      12.011
+    12      H       CM      1.008
+    13      H       CM      1.008
+    14      C       CM      12.011
+    15      H       CM      1.008
+    16      H       CM      1.008
+    17      C       CTB     12.011
+    18      H       CTB     1.008
+    19      H       CTB     1.008
+    20      C       CTB     12.011
+    21      H       CTB     1.008
+    22      H       CTB     1.008
+    23      H       CTB     1.008
+
+[ moleculetype ]
+; name    n_atoms
+  TOL    15
+
+[ sitetypes ] 3
+; name   mapping_type  n_atoms
+  CF     com           5
+  CBA    com           1
+  CBB    com           1
+
+[ atomtypes ]
+; number    type    site    mass/weighting
+    1       C       CF      12.011
+    2       H       CF      1.008
+    3       H       CF      1.008
+    4       H       CF      1.008
+    5       C       CF      12.011
+    6       C       none    12.011
+    7       H       none    1.008
+    8       C       none    12.011
+    9       H       none    1.008
+    10      C       CBA     12.011
+    11      H       none    1.008
+    12      C       CBB     12.001
+    13      H       none    1.008
+    14      C       none    12.011
+    15      H       none    1.008
+
+[ molecules ]
+HEP 267
+TOL 267

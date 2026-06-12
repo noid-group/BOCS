@@ -1,6 +1,6 @@
 /*
 @file gromacs_topology.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski
 @brief Functions to interface with the copied Gromacs data structures defined in gromacs_topology.h
 @	as well as read/write various file types
 */
@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "rpc/xdr.h"
+#include <tirpc/rpc/xdr.h>
 
 //local includes
 #include "cgff_types.h"
@@ -17,6 +17,18 @@
 #include "wnoid_math.h"
 #include "io_read.h"
 #include "gromacs_topology.h"
+
+// MCL generic error handler
+#define THROW_TPR_ERROR(msg) do { \
+	fprintf(stderr, "ERROR: Unexpected file format while translating dumped tpr\n"); \
+	fprintf(stderr, "likely this is due to newer gromacs .tpr formats (post 2024.3)\n"); \
+	fprintf(stderr, "please open a PR on github to alert us\n");\
+	fprintf(stderr, "Be sure to copy/paste this error and let us know which version\n");\
+	fprintf(stderr, "of gromacs you were using so that we can update our code\n");\
+	fprintf(stderr, "%s::%d::%s()\nERROR:%s\n",__FILE__, __LINE__, __func__, msg);\
+		exit(1);\
+} while (0)
+
 
 /*****************************************************************************************
 copyright(): Prints the gromacs copyright and credits output
@@ -68,6 +80,36 @@ int get_nbonds(tW_gmx_topology *self)
 }
 
 /*****************************************************************************************
+get_bond_count(): Returns the number of bonds present in topology
+*****************************************************************************************/
+int get_bond_count(tW_gmx_topology *self)
+{
+  int i;
+  int n_bonds = 0;
+  for (i = 0; i < self->contents->mols.nr; ++i)
+  {
+    n_bonds += self->molecules[i].n_bonds * self->molecules[i].n_mols;
+  }
+  return n_bonds;
+}
+
+
+/*****************************************************************************************
+get_n_bond_types(): Returns the number of different bond types
+*****************************************************************************************/
+int get_n_bond_types(tW_gmx_topology *self)
+{
+  int i;
+  int n_bond_types = 0;
+  for (i = 0; i < self->contents->idef.ntypes; ++i)
+  {
+    /* this should capture both BONDS and TABBONDS */
+    if (strstr(self->force_names[i],"BONDS") != NULL) { ++n_bond_types; }
+  }
+  return n_bond_types;
+}
+
+/*****************************************************************************************
 get_nangles(): Returns the number of angles listed in self 
 *****************************************************************************************/
 int get_nangles(tW_gmx_topology *self)
@@ -76,11 +118,68 @@ int get_nangles(tW_gmx_topology *self)
 }
 
 /*****************************************************************************************
+get_angle_count(): Returns the number of angles present in topology
+*****************************************************************************************/
+int get_angle_count(tW_gmx_topology *self)
+{
+  int i;
+  int n_angles = 0;
+  for (i = 0; i < self->contents->mols.nr; ++i)
+  {
+    n_angles += self->molecules[i].n_angles * self->molecules[i].n_mols;
+  } 
+  return n_angles;
+}
+
+/*****************************************************************************************
+get_n_angle_types(): Returns the number of different angle interaction types
+*****************************************************************************************/
+int get_n_angle_types(tW_gmx_topology *self)
+{
+  int i;
+  int n_angle_types = 0;
+  for (i = 0; i < self->contents->idef.ntypes; ++i)
+  {
+    if (strstr(self->force_names[i],"ANGLES") != NULL) { ++n_angle_types; }
+  }
+  return n_angle_types;
+}
+
+/*****************************************************************************************
 get_ndihs(): Returns the number of dihedrals listed in self 
 *****************************************************************************************/
 int get_ndihs(tW_gmx_topology *self)
 {
  return self->contents->idef.il[F_PDIHS].nr; 
+}
+
+
+/*****************************************************************************************
+get_dihedral_count(): Returns the number of dihedrals present in topology
+*****************************************************************************************/
+int get_dihedral_count(tW_gmx_topology *self)
+{
+  int i;
+  int n_dihs = 0;
+  for (i = 0; i < self->contents->mols.nr; ++i)
+  {
+    n_dihs += self->molecules[i].n_dihs * self->molecules[i].n_mols;
+  } 
+  return n_dihs;
+}
+
+/*****************************************************************************************
+get_n_dihedral_types(): Returns the different number of dihedral interaction types
+*****************************************************************************************/
+int get_n_dihedral_types(tW_gmx_topology *self)
+{
+  int i;
+  int n_dihedral_types = 0;
+  for (i = 0; i < self->contents->idef.ntypes; ++i)
+  {
+    if (strstr(self->force_names[i],"DIHS") != NULL) { ++n_dihedral_types; }
+  }
+  return n_dihedral_types;
 }
 
 /*****************************************************************************************
@@ -256,22 +355,37 @@ tW_gmx_topology* init_tW_gmx_topology()
   top->eFileType = -1;
   top->b_tpr = FALSE;
 
-  top->get_natoms = get_natoms;
-  top->get_name = get_name;
-  top->get_resind = get_resind;
-  top->get_atomtype = get_atomtype;
+  top->get_natoms = get_natoms; // Sets the pointer to the function get_natoms(self)
+  top->get_name = get_name; // We use this pointer to function format so that our top structure is flexible to the input
+  top->get_resind = get_resind; // e.g. we have access to the info in tW_t_top * contents through only the address at tW_gmx_top instead of having to pass input directly
+  top->get_atomtype = get_atomtype; // so as long as we fill in tW_t_top the right way based on the input file type, we can use the tW_gmx_top generically for different kinds of topology input files
   top->get_nexcl = get_nexcl;
   top->get_excl_list = get_excl_list;
 
   top->get_nbonds = get_nbonds;
+  top->get_bond_count = get_bond_count;
+  top->get_n_bond_types = get_n_bond_types;
   top->get_nangles = get_nangles;
+  top->get_angle_count = get_angle_count;
+  top->get_n_angle_types = get_n_angle_types;
   top->get_ndihs = get_ndihs;
+  top->get_dihedral_count = get_dihedral_count;
+  top->get_n_dihedral_types = get_n_dihedral_types;
   top->get_npairs = get_npairs;
 
   top->get_bond_list = get_bond_list;
   top->get_angle_list = get_angle_list;
   top->get_dih_list = get_dih_list;
   top->get_pair_list = get_pair_list;
+
+  // MCL 08.06.25 
+  // Cleaning up pointers not yet set to avoid undefined behavior
+  top->int_map = NULL;
+  top->idx_file = NULL;
+  top->bLocalDens = NULL;
+  top->hi_LDs = NULL;
+  top->lo_LDs = NULL;
+  top->indicators = NULL;
 
   return top; 
 }
@@ -493,13 +607,13 @@ void get_site_info(tW_CG_site *CG_struct, tW_system *sys, tW_gmx_topology *top)
 
   n_sites = top->get_natoms(top);
 
-  for (i = 0; i < n_sites; i++) 
+  for (i = 0; i < n_sites; i++) // Loop over every atom [instances of atoms, not types]
   {
     /* Get site name from GROMACS topology for site i. */
     strcpy(CG_struct[i].name, top->get_atomtype(top, i) );
 
     /* Does the site name from top match any site names read from par.txt? */
-    i_type = match_word(sys->N_Site_Types, CG_struct[i].name, sys->Site_Types);
+    i_type = match_word(sys->N_Site_Types, CG_struct[i].name, sys->Site_Types); // returns index of type that matched site_i
     if (i_type == -1) 
     {
       printf("\nERROR: Unknown site type found in GROMACS topology: %s.\n", top->get_name(top) );
@@ -530,6 +644,18 @@ void get_site_info(tW_CG_site *CG_struct, tW_system *sys, tW_gmx_topology *top)
       CG_struct[i].excl_list = top->get_excl_list(top, i);
     }
   }  /* End loop over sites */
+
+  /* MRD 06.18.20 */
+  sys->n_atomtypes = top->n_atomtypes;
+  sys->LD_type_names = (tW_word *) ecalloc(top->n_atomtypes, sizeof(tW_word));
+  for (i = 0; i < n_sites; ++i)
+  {
+    CG_struct[i].LDs = (double *) ecalloc(top->n_atomtypes, sizeof(double));
+    CG_struct[i].LD_type_idx = get_type(*(top->contents->atoms.atomtype[i]),top);
+    strcpy(sys->LD_type_names[CG_struct[i].LD_type_idx],*(top->contents->atoms.atomtype[i])); // MRD 06.18.2020
+    CG_struct[i].LDGrads = (dvec *) ecalloc(top->n_atomtypes, sizeof(dvec)); // MRD 06.18.2020
+  }
+
 }
 
 /*****************************************************************************************
@@ -538,11 +664,36 @@ for those arrays that are flagged as present
 *****************************************************************************************/
 void set_natoms(tW_gmx_trxframe *self, int natoms)
 {
+  int i;
   self->contents->natoms = natoms;
 
   if (self->contents->bX) { self->contents->x = (tW_rvec *) ecalloc(natoms, sizeof(tW_rvec)); }
   if (self->contents->bV) { self->contents->v = (tW_rvec *) ecalloc(natoms, sizeof(tW_rvec)); }
   if (self->contents->bF) { self->contents->f = (tW_rvec *) ecalloc(natoms, sizeof(tW_rvec)); }
+
+/* Local Density Stuff MRD 06.17.2020 */
+  if (self->bLDs)
+  {
+    self->linear_lds = (double *) ecalloc(natoms * (self->n_atomtypes), sizeof(double));
+    self->local_densities = (double **) ecalloc(natoms,sizeof(double *));
+    for (i = 0; i < natoms; ++i)
+    {
+      self->local_densities[i] = &(self->linear_lds[i * (self->n_atomtypes)]);     
+    }
+    
+    if (self->bLD_Grads)
+    {
+      self->linear_ldgs = (dvec *) ecalloc(natoms * (self->n_atomtypes), sizeof(dvec));
+      self->local_density_gradients = (dvec **) ecalloc(natoms, sizeof(dvec *));   
+      for (i = 0; i < natoms; ++i)
+      {
+        self->local_density_gradients[i] = &(self->linear_ldgs[i * (self->n_atomtypes)]);
+      }
+    } 
+  }
+
+
+
 }
 
 /*****************************************************************************************
@@ -666,9 +817,15 @@ setup_xdr(): sets up the XDR data structure for reading/writing trr files MRD 92
 void setup_xdr(tW_gmx_trxframe *self, const char *fnm, bool bRead)
 {
   if (bRead) // MRD 02.11.2019 got rid of  if (!self->fp) { } around the fopen statements
-  {
-    self->fp = fopen(fnm,"rb");
-    self->xdrmode = XDR_DECODE; 
+  { // MCL 05.08.2026 - We still need to check if fp is valid before we try to operate on it.
+    if ( fopen(fnm, "rb") )
+    {
+	    self->fp = fopen(fnm,"rb");
+    	    self->xdrmode = XDR_DECODE; 
+    }
+    else { fprintf(stderr, "ERROR: Unable to open %s for mode 'rb'.\n", fnm);
+   	   fprintf(stderr, "%s::%d::%s()\n",__FILE__, __LINE__, __func__); 
+    	    exit("EXIT_FAILURE");}
   }
   else
   {
@@ -677,8 +834,8 @@ void setup_xdr(tW_gmx_trxframe *self, const char *fnm, bool bRead)
   }
 
   self->xdr = (XDR *) ecalloc(1,sizeof(XDR));
-  xdrstdio_create(self->xdr, self->fp, self->xdrmode);
-
+  xdrstdio_create(self->xdr, self->fp, self->xdrmode); // This associates our xdr stream (self->xdr) with the file for I/O and the appt. translation mode (encoding/decoding)
+						       //We can check if this is successful by checking the bool returned if we want
   if (bRead) // Grab the header and determine the precision here.
   {
     self->bDouble = get_trr_precision(self);    
@@ -701,6 +858,16 @@ tW_gmx_trxframe* init_tW_gmx_trxframe()
   frame->eFileType = -1;
   frame->contents = emalloc(sizeof(tW_t_trxframe)); // MRD 82517
 
+  frame->frame_size = (long) 0;
+  frame->file_size = (long) 0;
+  frame->n_frames = 0;
+  frame->bInput = FALSE;
+  frame->bDouble = TRUE;
+
+/* Local Density Stuff MRD 06.17.2020 */
+  frame->bLDs = FALSE; // assume no local densites, change later if needed
+  frame->bLD_Grads = FALSE; // "
+
   frame->contents->t0 = (tW_real) 0.0;
   frame->contents->tf = (tW_real) 0.0;
   frame->contents->tpf = (tW_real) 0.0;
@@ -715,6 +882,39 @@ tW_gmx_trxframe* init_tW_gmx_trxframe()
   frame->get_pos_of = get_pos_of;
   frame->get_vel_of = get_vel_of;
   frame->get_box = get_box;
+
+  //MCL 09.15.25 added to avoid undefined behavior when we check these variables (compiler dependent)
+  frame->contents->title = NULL;
+  frame->contents->ePBC = epbcXYZ; // Setting default to 3D periodic bounds
+
+  //MCL 09.17.25 In the same spirit I am cleaning up the other non-initialized variables
+  frame->fp= NULL; // Stuff directly in tW_gmx_trx
+  frame->xids = NULL;
+  frame->vids = NULL;
+  frame->fids = NULL;
+
+  frame->ld_id = NULL;
+  frame->ldg_id = NULL;
+  frame->linear_lds = NULL;
+  frame->local_densities = NULL;
+  frame->n_atomtypes = 0;
+  frame->linear_ldgs = NULL;
+  frame->local_density_gradients = NULL;
+
+  //Stuff we use in contents (tW_t_trxframe)
+  frame->contents->bDouble = (tW_gmx_bool) 0;
+  frame->contents->bTitle = (tW_gmx_bool) 0;
+  frame->contents->bStep = (tW_gmx_bool) 0;
+  frame->contents->bX = (tW_gmx_bool) 0;
+  frame->contents->bV = (tW_gmx_bool) 0;
+  frame->contents->bF = (tW_gmx_bool) 0;
+  frame->contents->bBox = (tW_gmx_bool) 0;
+  frame->contents->bPrec = (tW_gmx_bool) 0;
+  frame->contents->bAtoms = (tW_gmx_bool) 0;
+  frame->contents->bBox = (tW_gmx_bool) 0;
+  frame->contents->x = NULL;
+  frame->contents->v = NULL;
+  frame->contents->f = NULL;
 
   return frame;
 }
@@ -1072,13 +1272,37 @@ copy_trr_2_CGstruct(): copies position and force information from one data struc
 *****************************************************************************************/
 bool copy_trr_2_CGstruct(tW_gmx_trxframe *fr, tW_CG_site CG_struct[])
 {
-  int i;
+  int i, j;
   int n_atms = fr->contents->natoms;
 
   for (i = 0; i < n_atms; i++) 
   {
     if (fr->contents->bX) { copy_vector(fr->contents->x[i], CG_struct[i].r); }
     if (fr->contents->bF) { copy_vector(fr->contents->f[i], CG_struct[i].f); }
+  }
+
+  /* MRD 06.18.2020 */
+  if (fr->bLDs)
+  {
+    for (i = 0; i < n_atms; ++i)
+    {
+      for (j = 0; j < fr->n_atomtypes; ++j)
+      {
+        CG_struct[i].LDs[j] = fr->local_densities[i][j];
+      }
+    }
+    if (fr->bLD_Grads)
+    {
+      for (i = 0; i < n_atms; ++i)
+      {
+        for (j = 0; j < fr->n_atomtypes; ++j)
+        {
+          CG_struct[i].LDGrads[j][0] = fr->local_density_gradients[i][j][0]; //MCL i points the site index i, while j points to the type of particle surrounding site i, the third dimension is x y or z
+          CG_struct[i].LDGrads[j][1] = fr->local_density_gradients[i][j][1];
+          CG_struct[i].LDGrads[j][2] = fr->local_density_gradients[i][j][2];
+        }
+      }
+    }
   }
 
   return fr->contents->bF;
@@ -1637,8 +1861,13 @@ void elim_char(tW_word word, char elim)
 }
 
 /*****************************************************************************************
-get_quoted_words(): 
-*****************************************************************************************/
+ * get_quoted_words: 
+ * For an input line of text containing a known number of "", extract an expected number of words from between the quotes
+ * e.g. If line = ' \"opls_136\",nameB=\"opls_135\" ' and expected_words = 2, the opls_13X will be checked
+ * @param line a list of words
+ * @param expected_words the number of quote pairs expected within lines
+ * @return Error if words found != expected_words, OR pointer to list of found words [len = expected_words]
+ ****************************************************************************************/
 char **get_quoted_words(tW_line line, int expected_words)
 {
   char *sst, *sse;
@@ -1646,7 +1875,7 @@ char **get_quoted_words(tW_line line, int expected_words)
   int n_quotes = 0, i;
   sse = &(line[0]);
   --sse;
-  do
+  do // count how many times we find \" in string : [point to begining, find where \", search next part of string, stop when no more quotes]
   {
     ++sse;
     sse = strstr(sse,"\"");
@@ -1672,435 +1901,6 @@ char **get_quoted_words(tW_line line, int expected_words)
     ++sse;
   }
   return the_words; 
-}
-
-
-/*****************************************************************************************
-get_moltype_info(): This function reads the part of the dump_tpr file that contains 
-the moltype info
-*****************************************************************************************/
-void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line)
-{
-  tW_line inp_line;
-  int i, j, k, test_sscanf, inp_int, let_idx;
-
-  // stuff in first atom(X) group
-  int atidx, type, typeB, resind, atnumber;
-  float m, q, mB, qB;
-  tW_word ptype;
-
-  tW_word inp_word;
-
-  strcpy(inp_line,*(ret_inp_line)); // MRD 82917
-
-  while (strstr(inp_line,"name") == NULL) { get_next_line(fp,inp_line);} // MRD 82917
-  get_next_line(fp,inp_line); // "atoms:"
-  get_next_line(fp,inp_line); // "atom (apm):"
-  test_sscanf = sscanf(inp_line," atom (%d) ",&inp_int);
-  mol->n_apm = inp_int;
-
-// MRD 11.05.2019 now we finally have n_apm, allocate memory for stuff
-  mol->type_ids = (int *) ecalloc(mol->n_apm,sizeof(int));
-  mol->atom_names = (tW_word *) ecalloc(mol->n_apm,sizeof(tW_word));
-  mol->atom_types = (tW_word *) ecalloc(mol->n_apm,sizeof(tW_word));
-  mol->atom_Btypes = (tW_word *) ecalloc(mol->n_apm,sizeof(tW_word));
-  mol->m = (double *) ecalloc(mol->n_apm,sizeof(double));
-  mol->q = (double *) ecalloc(mol->n_apm,sizeof(double));
-  mol->residx = (int *) ecalloc(mol->n_apm,sizeof(int));
-
-
-  for (i = 0; i < mol->n_apm; ++i)
-  {
-    get_next_line(fp,inp_line);
-    test_sscanf = sscanf(inp_line," atom[ %d]={type= %d, typeB= %d, ptype= %s m= %f, q= %f, mB= %g, qB= %g, resind= %d, atomnumber= %d} ",&atidx, &type, &typeB, &ptype, &m, &q, &mB, &qB, &resind, &atnumber);
-    if (test_sscanf != 10) 
-    {
-      fprintf(stderr,"ERROR: unable to read expected 10 arguments from line\n");
-      fprintf(stderr,"\tatidx, type, typeB, ptype, m, q, mB, qB, resind, atomnumber\n");
-      fprintf(stderr,"%s",inp_line);
-      exit(1);
-    }
-    mol->type_ids[i] = type;
-    mol->m[i] = (double) m;
-    mol->q[i] = (double) q; 
-    mol->residx[i] = resind;
-  }
-
-  get_next_line(fp,inp_line); // "atom (apm):"
-  for (i = 0; i < mol->n_apm; ++i)
-  {
-    get_next_line(fp,inp_line);
-    test_sscanf = sscanf(inp_line," atom[%d]={name=\"%s\"} ",&inp_int,&inp_word);
-    if (test_sscanf != 2) 
-    { 
-      fprintf(stderr,"ERROR: unable to read expected 2 arguments from line\n");
-      fprintf(stderr,"\tatidx, name\n");
-      fprintf(stderr,"%s",inp_line);
-      exit(1);
-    }
-    elim_char(inp_word,'"');
-    strcpy(mol->atom_names[i],inp_word);
-  }
-
-  get_next_line(fp,inp_line); // "type (apm): "
-  for (i = 0; i < mol->n_apm; ++i)
-  {
-    get_next_line(fp,inp_line);
-    inp_int = -1;
-    strcpy(inp_word,"N/A");
-    strcpy(ptype,"N/A");
-//    test_sscanf = sscanf(inp_line," type[%d]={name=\"%s,nameB=\"%s} ",&inp_int, &inp_word, &ptype); // I swear this used to work and now it doesn't...
-    tW_line line_piece;
-    test_sscanf = sscanf(inp_line," type[%d]=%s ",&inp_int,&line_piece);
-    if (test_sscanf != 2) 
-    {
-      fprintf(stderr,"ERROR: read %d out of expected 2 arguments from line\n",test_sscanf);
-      fprintf(stderr,"\tatidx: %d\n",inp_int);
-      fprintf(stderr,"\t line: %s\n",line_piece);
-      fprintf(stderr,"%s",inp_line);
-      exit(1);
-    }
-    char **words = (char **) ecalloc(2,sizeof(char *));
-    words = get_quoted_words(line_piece, 2); // MRD 10202017
-    strcpy(inp_word,words[0]);
-    strcpy(mol->atom_types[i],inp_word);
-    strcpy(inp_word,words[1]);
-    strcpy(mol->atom_Btypes[i],ptype);
-  }
-
-  get_next_line(fp,inp_line); // "residue (nres)"
-  test_sscanf = sscanf(inp_line," residue (%d): ",&inp_int);
-  mol->resname = (tW_word *) ecalloc(inp_int,sizeof(tW_word));
-  mol->n_res = inp_int;
-  for (i = 0; i < mol->n_res; ++i)
-  {
-    get_next_line(fp,inp_line);
-    test_sscanf = sscanf(inp_line," residue[%d]={name=\"%s\", nr=%d, ic\'%s\'} ",&atidx, &inp_word, &inp_int, &ptype);
-
-    elim_char(inp_word,'"');
-
-    strcpy(mol->resname[i],inp_word);
-  } 
-  get_next_line(fp,inp_line); // cgs:
-  get_next_line(fp,inp_line); // nr=X
-  test_sscanf = sscanf(inp_line," nr=%d ",&inp_int);
-  mol->n_cg = inp_int;
-  mol->cg_start = (int *) ecalloc(inp_int,sizeof(int));
-  mol->cg_end = (int *) ecalloc(inp_int, sizeof(int));
-
-  for (i = 0; i < mol->n_cg; ++i)
-  {
-    get_next_line(fp,inp_line);
-    test_sscanf = sscanf(inp_line," cgs[%d]={%d..%d} ",&inp_int, &type, &typeB); // borrowing vars again..
-    if (test_sscanf != 3) 
-    {
-      fprintf(stderr,"ERROR: unable to read expected 3 arguments from line\n");
-      fprintf(stderr,"\tcgs_idx, cgs_start, cgs_end\n");
-      fprintf(stderr,"%s",inp_line);
-      exit(1);
-    }
-    mol->cg_start[inp_int] = type;
-    mol->cg_end[inp_int] = typeB;
-  }
-  get_next_line(fp,inp_line); // excls:
-  get_next_line(fp,inp_line); // nr=#
-  test_sscanf = sscanf(inp_line," nr=%d ",&inp_int);
-  mol->n_excls = inp_int;
-  get_next_line(fp,inp_line); // nra=#
-  test_sscanf = sscanf(inp_line," nra=%d ",&inp_int);
-  mol->n_exclsa = inp_int;
-  mol->excls = (int **) ecalloc(mol->n_apm,sizeof(int *));
-  mol->n_epa = (int *) ecalloc(mol->n_apm,sizeof(int));
-  for (i = 0; i < mol->n_apm; ++i)
-  {
-    get_next_line(fp,inp_line);
-    int at_idx, ea0, ea1, nae, ex1;
-    test_sscanf = sscanf(inp_line," excls[%d][%d..%d]",&at_idx,&ea0,&ea1);
-    nae = ea1-ea0+1;
-    mol->n_epa[i] = nae;
-    mol->excls[i] = (int *) ecalloc(nae,sizeof(int));
-    int n_found = 0;
-    char *eq = strstr(inp_line,"=");
-    while (n_found < nae)
-    {
-
-      test_sscanf = sscanf(eq,"%d",&ex1);
-      if (test_sscanf == 0) // first character of eq is not an integer. move to next char
-      {
-	eq = (eq+1);
-        if ((strstr(eq,",") == NULL) && (strstr(eq,"}") == NULL) && (n_found < nae))
-	{
-	  get_next_line(fp,inp_line);
-	  eq = &(inp_line[0]);
-	}
-      }
-      else if (test_sscanf == 1)
-      {
-        mol->excls[i][n_found] = ex1;
-	++n_found;
-        eq = strstr(eq,",");
-      }
-    }
-  } 
-
-// This is ugly...
-  int nBondTypes = 10, nAngleTypes = 9, nDihedralTypes = 9, nIMNBTypes = 4, nOtherTypes = 59;
-  const tW_word BondTypes[] = {"Bond:","G96Bond:","Morse:","Cubic Bonds:","Connect Bonds:","Harmonic Pot.:","FENE Bonds:","Tab. Bonds:","Tab. Bonds NC:","Restraint Pot.:"};
-  const tW_word AngleTypes[] = {"Angle:","G96Angle:","Restricted Angles:","Lin. Angle:","Bond-Cross:","BA-Cross:","U-B:","Quartic Angles:","Tab. Angles:"};
-  const tW_word DihedralTypes[] = {"Proper Dih.:","Ryckaert-Bell.:","Restricted Dih.:","CBT Dih.:","Fourier Dih.:","Improper Dih.:","Improper Dih.:","Tab. Dih.:","CMAP Dih.:"};
-  const tW_word IMNBTypes[] = {"LJ-14:","Coulomb-14:","LJC-14 q:","LJC Pairs NB:"};
-  const tW_word OtherTypes[] = {"GB 1-2 Pol. (unused):","GB 1-3 Pol. (unused):","GB 1-4 Pol. (unused):","GB Polarization (unused):","Nonpolar Sol. (unused):","LJ (SR):","Buck.ham (SR):","LJ (unused):","B.ham (unused):","Disper. corr.:","Coulomb (SR):","Coul (unused):","RF excl.:","Coul. recip.:","LJ recip.:","DPD:","Polarization:","Water Pol.:","Thole Pol.:","Anharm. Pol.:","Position Rest.:","Flat-bottom posres:","Dis. Rest.:","D.R.Viol. (nm):","Orient. Rest.:","Ori. R. RMSD:","Angle Rest.:","Angle Rest. Z:","Dih. Rest.:","Dih. Rest. Viol.:","Constraint:","Constr. No Conn.:","Settle:","Virtual site 2:","Virtual site 3:","Virtual site 3fd:","Virtual site 3fad:","Virtual site 3out:","Virtual site 4fd:","Virtual site 4fdn:","Virtual site N:","COM Pull En.:","Quantum En.:","Potential:","Kinetic En.:","Total Energy:","Conserved En.:","Temperature:","Vir. Temp. (not used):","Pres. DC:","Pressure:","dH/dl constr.:","dVremain/dl:","dEkin/dl:","dVcoul/dl:","dVvdw/dl:","dVbonded/dl:","dVrestraint/dl:","dVtemperature/dl:"};
-
-  // initialize stuff to 0
-  mol->bond_nr = mol->n_bonds = mol->angle_nr = mol->n_angles = mol->dih_nr = mol->n_dihs = mol->imnb_nr = mol->n_imnbs = 0;
-  mol->n_other = (int *) ecalloc(nOtherTypes,sizeof(int));
-  mol->other_nr = (int *) ecalloc(nOtherTypes,sizeof(int));
-  mol->other_types = (int **) ecalloc(nOtherTypes,sizeof(int *));
-  mol->other_ijklmn = (int ***) ecalloc(nOtherTypes,sizeof(int **));
-
-
-  get_next_line(fp,inp_line);
-
-  int ret_flag = 1;
-  bool bFound = FALSE;
-  int BIDX = 0, AIDX = 0, DIDX = 0, IMNBIDX = 0;
-  while (ret_flag == 1)
-  {
-    bFound = FALSE;
-    if (strstr(inp_line,"moltype") != NULL) { strcpy((*ret_inp_line),inp_line); return ; }
-    else if (strstr(inp_line,"grp") != NULL) { strcpy((*ret_inp_line),inp_line); return ;}
-    else
-    {
-      for (i = 0; i < nBondTypes; ++i)
-      {
-        if ((strstr(inp_line,BondTypes[i]) != NULL) && (! bFound))
-        {
-          get_next_line(fp,inp_line);// nr: X
-          test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
-          if (inp_int > 0)
-          {
-            get_next_line(fp,inp_line); // iatoms:
-            mol->bond_nr += inp_int;
-            int prev_n_bonds = mol->n_bonds;
-            mol->n_bonds += inp_int/BOND_DIV;
-            int n_new_bonds = inp_int/BOND_DIV;
-            mol->bond_types = (int *) erealloc(mol->bond_types, mol->n_bonds * sizeof(int));
-            mol->bond_type_top_cat = (int *) erealloc(mol->bond_type_top_cat, mol->n_bonds * sizeof(int));
-            mol->bond_ij = (int **) erealloc(mol->bond_ij, mol->n_bonds * sizeof(int *));
-            for (j = prev_n_bonds; j < mol->n_bonds; ++j) { mol->bond_ij[j] = (int *) ecalloc(2,sizeof(int)); }
-            for (j = 0; j < n_new_bonds; ++j)
-            {
-              get_next_line(fp,inp_line);
-
-              elim_char(inp_line,'\n');
-              int n_words = get_word_count_delim(inp_line," ");
-              tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
-              get_words_delim(inp_line," ",word_list);
-
-              test_sscanf = sscanf(word_list[1],"type=%d",&inp_int);
-              mol->bond_types[BIDX] = inp_int;
-              mol->bond_type_top_cat[BIDX] = i;
-              mol->bond_ij[BIDX][0] = atoi(word_list[3]);
-              mol->bond_ij[BIDX][1] = atoi(word_list[4]);
-              ++BIDX;
-              efree(word_list);
-            } 
-          }
-          bFound = TRUE;
-          i = nBondTypes;
-        }
-      }
-      if (! bFound)
-      {
-        for (i = 0; i < nAngleTypes; ++i)
-        {
-          if ((strstr(inp_line,AngleTypes[i]) != NULL) && (! bFound))
-          {
-            get_next_line(fp,inp_line);// nr: X
-            test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
-            if (inp_int > 0)
-            {
-              get_next_line(fp,inp_line); // iatoms:
-              mol->angle_nr += inp_int;
-              int prev_n_angles = mol->n_angles;
-              mol->n_angles += inp_int/ANGLE_DIV;
-              int n_new_angles = inp_int/ANGLE_DIV;
-              mol->angle_types = (int *) erealloc(mol->angle_types, mol->n_angles * sizeof(int));
-              mol->angle_type_top_cat = (int *) erealloc(mol->angle_type_top_cat, mol->n_angles * sizeof(int));
-              mol->angle_ijk = (int **) erealloc(mol->angle_ijk, mol->n_angles * sizeof(int *));
-              for (j = prev_n_angles; j < mol->n_angles; ++j) { mol->angle_ijk[j] = (int *) ecalloc(3,sizeof(int)); }
-              for (j = 0; j < n_new_angles; ++j)
-              {
-                get_next_line(fp,inp_line);
-
-                elim_char(inp_line,'\n');
-                int n_words = get_word_count_delim(inp_line," ");
-                tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
-                get_words_delim(inp_line," ",word_list);
-                
-                test_sscanf = sscanf(word_list[1],"type=%d",&inp_int);
-                mol->angle_types[AIDX] = inp_int;
-                mol->angle_type_top_cat[AIDX] = i;
-                mol->angle_ijk[AIDX][0] = atoi(word_list[3]);
-                mol->angle_ijk[AIDX][1] = atoi(word_list[4]);
-                mol->angle_ijk[AIDX][2] = atoi(word_list[5]);
-                ++AIDX;
-                efree(word_list);
-              }
-            }
-            bFound = TRUE;
-            i = nAngleTypes;
-          }
-        }
-      }
-      if (! bFound)
-      {
-        for (i = 0; i < nDihedralTypes; ++i)
-        {
-          if ((strstr(inp_line,DihedralTypes[i]) != NULL) && (! bFound))
-          {
-            get_next_line(fp,inp_line);// nr: X
-            test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
-            if (inp_int > 0)
-            {
-              get_next_line(fp,inp_line); // iatoms:
-              mol->dih_nr += inp_int;
-              int prev_n_dihs = mol->n_dihs;
-              mol->n_dihs += inp_int/DIH_DIV;
-              int n_new_dihs = inp_int/DIH_DIV;
-              mol->dih_types = (int *) erealloc(mol->dih_types, mol->n_dihs * sizeof(int));
-              mol->dih_type_top_cat = (int *) erealloc(mol->dih_type_top_cat, mol->n_dihs * sizeof(int));
-              mol->dih_ijkl = (int **) erealloc(mol->dih_ijkl, mol->n_dihs * sizeof(int *));
-              for (j = prev_n_dihs; j < mol->n_dihs; ++j) { mol->dih_ijkl[j] = (int *) ecalloc(4,sizeof(int)); }
-              for (j = 0; j < n_new_dihs; ++j)
-              {
-                get_next_line(fp,inp_line);
-
-                elim_char(inp_line,'\n');
-                int n_words = get_word_count_delim(inp_line," ");
-                tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
-                get_words_delim(inp_line," ",word_list);
-
-                test_sscanf = sscanf(word_list[1],"type=%d",&inp_int);
-                mol->dih_types[DIDX] = inp_int;
-                mol->dih_type_top_cat[DIDX] = i;
-                mol->dih_ijkl[DIDX][0] = atoi(word_list[3]);
-                mol->dih_ijkl[DIDX][1] = atoi(word_list[4]);
-                mol->dih_ijkl[DIDX][2] = atoi(word_list[5]);
-                mol->dih_ijkl[DIDX][3] = atoi(word_list[6]);
-                ++DIDX;
-                efree(word_list);
-              }
-            }
-            bFound = TRUE;
-            i = nDihedralTypes;
-          }
-        }
-      }
-      if (! bFound)
-      {
-        for (i = 0; i < nIMNBTypes; ++i)
-        {
-          if ((strstr(inp_line,IMNBTypes[i]) != NULL) && (! bFound))
-          {
-            get_next_line(fp,inp_line);// nr: X
-            test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
-            if (inp_int > 0)
-            {
-              get_next_line(fp,inp_line); // iatoms:
-              mol->imnb_nr += inp_int;
-              int prev_n_imnbs = mol->n_imnbs;
-              mol->n_imnbs += inp_int / IMNB_DIV;
-              int n_new_imnbs = inp_int / IMNB_DIV;
-              mol->imnb_types = (int *) erealloc(mol->imnb_types, mol->n_imnbs * sizeof(int));
-              mol->imnb_type_top_cat = (int *) erealloc(mol->imnb_type_top_cat, mol->n_imnbs * sizeof(int));
-              mol->imnb_ij = (int **) erealloc(mol->imnb_ij, mol->n_imnbs * sizeof(int *));
-              for (j = prev_n_imnbs; j < mol->n_imnbs; ++j) { mol->imnb_ij[j] = (int *) ecalloc(2,sizeof(int)); }
-              for (j = 0; j < n_new_imnbs; ++j)
-              {
-                get_next_line(fp,inp_line);
-                elim_char(inp_line,'\n');
-                int n_words = get_word_count_delim(inp_line," ");
-                tW_word * word_list = (tW_word *) ecalloc(n_words, sizeof(tW_word));
-                get_words_delim(inp_line," ",word_list);
-                
-                test_sscanf = sscanf(word_list[1],"type=%d",&inp_int);
-                mol->imnb_types[IMNBIDX] = inp_int;
-                mol->imnb_type_top_cat[IMNBIDX] = i;
-                mol->imnb_ij[IMNBIDX][0] = atoi(word_list[3]);
-                mol->imnb_ij[IMNBIDX][1] = atoi(word_list[4]);
-                ++IMNBIDX;
-                efree(word_list);
-              }
-            }
-            bFound = TRUE;
-            i = nIMNBTypes;
-          }
-        }
-      }
-      if (! bFound)
-      {
-        for (i = 0; i < nOtherTypes; ++i)
-        {
-          if ((strstr(inp_line,OtherTypes[i]) != NULL) && (! bFound))
-          {
-            get_next_line(fp,inp_line);// nr: X
-            test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
-            mol->other_nr[i] = inp_int;
-            if (mol->other_nr[i] > 0)
-            {           
-              fprintf(stderr,"WARNING: nonzero number of interactions of type %s found\n",OtherTypes[i]);
-              fprintf(stderr,"These types of interactions do not correspond to BondStretch, Angle, Dihedral, nor IntraMolec_NB_Pair types\n");
-              fprintf(stderr,"Accordingly, they will not be used nor transferred to the .btp file\n");
-              get_next_line(fp,inp_line); // iatoms:
-              get_next_line(fp,inp_line); 
-              // split this line up into words. is the number of words minus 2
-              // X type=XX (XXXX) I J K ...
-              elim_char(inp_line,'\n');
-              int n_words = get_word_count_delim(inp_line," ");
-              tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
-              get_words_delim(inp_line," ",word_list);
-
-              mol->n_other[i] = mol->other_nr[i] / (n_words - 2);
-              mol->other_types[i] = (int *) ecalloc(mol->n_other[i], sizeof(int));
-              mol->other_ijklmn[i] = (int **) ecalloc(mol->n_other[i], sizeof(int *));
-              for (j = 0; j < mol->n_other[i]; ++j)
-              {
-                mol->other_ijklmn[i][j] = (int *) ecalloc(n_words-3,sizeof(int));
-              }
-              
-              test_sscanf = sscanf(word_list[1],"type=%d",&inp_int);
-              mol->other_types[i][0] = inp_int;
-              for (j = 3; j < n_words; ++j) { mol->other_ijklmn[i][0][j-3] = atoi(word_list[j]); }
-              efree(word_list);
-              for (j = 1; j < mol->n_other[i]; ++j)
-              {
-                get_next_line(fp,inp_line);
-
-                elim_char(inp_line,'\n');
-                int n_words2 = get_word_count_delim(inp_line," ");
-                tW_word * word_list2 = (tW_word *) ecalloc(n_words2,sizeof(tW_word));
-                get_words_delim(inp_line," ",word_list2);
-
-                mol->other_types[i][j] = inp_int;
-                for (k = 3; k < n_words; ++k) { mol->other_ijklmn[i][j][k-3] = atoi(word_list2[k]); }
-                efree(word_list2);
-              }       
-            }
-            bFound = TRUE;
-            i = nOtherTypes;
-          }
-        }
-      }
-
-      if ( ! bFound)
-      {
-        fprintf(stderr,"WARNING: unknown line: %s",inp_line);
-      }
-      get_next_line(fp,inp_line);
-    }
-  }
-
 }
 
 /*****************************************************************************************
@@ -2220,8 +2020,6 @@ void pop_contents(tW_gmx_topology * top)
 
   tW_molecule *my_mols;
   my_mols = (top->molecules);
-//fprintf(stderr,"top->contents->mols.nr: %d\n",top->contents->mols.nr);
-//  dump_molecule_info(my_mols, top->contents->mols.nr);
 
 
   top->contents->atoms.atom = (tW_t_atom *) ecalloc(n_atoms, sizeof(tW_t_atom));
@@ -2242,11 +2040,8 @@ void pop_contents(tW_gmx_topology * top)
     top->contents->atoms.atomtypeB[i][0] = (char *) ecalloc(10,sizeof(char));
   }
 
-//  top->contents->atoms.atomname = (char ***) ecalloc(1,sizeof(char **));
-//  *(top->contents->atoms.atomname) = (char **) ecalloc(n_atoms,sizeof(char *));
-//  for (i = 0; i < n_atoms; ++i){ *(top->contents->atoms.atomname[i]) = (char *) ecalloc(10,sizeof(char)); }
 
-
+// MRD 01.17.2020 This still works to get the total nres
   top->contents->atoms.nres = 0;
   for (i = 0; i < n_moltypes; ++i)
   {
@@ -2260,60 +2055,52 @@ void pop_contents(tW_gmx_topology * top)
   }
   for (i = 0; i < top->contents->atoms.nres; ++i)
   {
-//    for (j = 0; j < 1; ++j)
-//    {
       *(top->contents->atoms.resinfo[i].name) = (char *) ecalloc(10,sizeof(char));
-//    }
   }
   
   int resnr = 0;
   int it, im, ia, iattype;
+  int molidx;
   int at_idx = 0;
   bool new_type;
 
   top->n_atomtypes = 0;
   char **at_type_names = (char **) calloc(1000,sizeof(char *));
 
-  for (it = 0; it < n_moltypes; ++it)
+  for (im = 0; im < top->n_molblocks; ++im)
   {
-    for (im = 0; im < my_mols[it].n_mols; ++im)
+    molidx = top->molblocks[im].moltype;
+    for (it = 0; it < top->molblocks[im].n_mols; ++it)
     {
-      for (ia = 0; ia < my_mols[it].n_apm; ++ia)
+      for (ia = 0; ia < my_mols[molidx].n_apm; ++ia)
       {
-	top->contents->atoms.atom[at_idx].m = my_mols[it].m[ia];
-	top->contents->atoms.atom[at_idx].q = my_mols[it].q[ia];
-        top->contents->atoms.atom[at_idx].mB = my_mols[it].m[ia]; // we don't care about these two properties 
-        top->contents->atoms.atom[at_idx].qB = my_mols[it].q[ia]; // but i'm setting them anyways
-	top->contents->atoms.atom[at_idx].type = my_mols[it].type_ids[ia];
-	top->contents->atoms.atom[at_idx].resind = resnr; 
-	strcpy(*(top->contents->atoms.atomname[at_idx]),my_mols[it].atom_names[ia]);
-	strcpy(*(top->contents->atoms.atomtype[at_idx]),my_mols[it].atom_types[ia]);
-        strcpy(*(top->contents->atoms.atomtypeB[at_idx]),my_mols[it].atom_Btypes[ia]);
-
-////////////
-	new_type = TRUE;
-	for (iattype = 0; iattype < top->n_atomtypes; ++iattype)
-	{
-	  if (strcmp(my_mols[it].atom_types[ia],at_type_names[iattype]) == 0)
-	  {
-	    new_type = FALSE;
-	  }
-	}
-	if (new_type)
-	{
-	  at_type_names[top->n_atomtypes] = my_mols[it].atom_types[ia];
-	  ++(top->n_atomtypes);
-	}
-////////////
-
+        top->contents->atoms.atom[at_idx].m = my_mols[molidx].m[ia];
+        top->contents->atoms.atom[at_idx].q = my_mols[molidx].q[ia];
+        top->contents->atoms.atom[at_idx].mB = my_mols[molidx].m[ia];
+        top->contents->atoms.atom[at_idx].qB = my_mols[molidx].q[ia];
+        top->contents->atoms.atom[at_idx].type = my_mols[molidx].type_ids[ia];
+        top->contents->atoms.atom[at_idx].resind = resnr + my_mols[molidx].residx[ia];
+        strcpy(*(top->contents->atoms.atomname[at_idx]),my_mols[molidx].atom_names[ia]);
+        strcpy(*(top->contents->atoms.atomtype[at_idx]),my_mols[molidx].atom_types[ia]);
+        strcpy(*(top->contents->atoms.atomtypeB[at_idx]),my_mols[molidx].atom_Btypes[ia]);
+      
+        new_type = TRUE;
+        for (iattype = 0; iattype < top->n_atomtypes; ++iattype)
+        {
+          if (strcmp(my_mols[molidx].atom_types[ia],at_type_names[iattype]) == 0) { new_type = FALSE; }
+        }
+        if (new_type)
+        {
+          at_type_names[top->n_atomtypes] = my_mols[molidx].atom_types[ia];
+          ++(top->n_atomtypes);
+        }
         ++at_idx;
       }
-      top->contents->atoms.resinfo[resnr].nr = resnr+1;
-
-      strcpy(*(top->contents->atoms.resinfo[resnr].name),my_mols[it].molname);      
-      ++resnr;
+      resnr += my_mols[molidx].n_res;
     }
-  }
+  } 
+
+
 
 ////////////
   top->atom_type_names = (tW_word *) calloc(top->n_atomtypes,sizeof(tW_word));
@@ -2326,6 +2113,7 @@ void pop_contents(tW_gmx_topology * top)
 
   // Next we need excls stuff
   
+// MRD 01.21.2020 This should still work for n_moltypes != n_molblocks
   top->contents->excls.nr = 0;
   top->contents->excls.nra = 0;
   for (i = 0; i < n_moltypes; ++i)
@@ -2336,41 +2124,41 @@ void pop_contents(tW_gmx_topology * top)
   top->contents->excls.index = (int *) ecalloc(top->contents->excls.nr + 1,sizeof(int));
   top->contents->excls.index[0] = 0;
   at_idx = 1;
-  for (i = 0; i < n_moltypes; ++i)
+
+// MRD 01.21.2020 
+  for (i = 0; i < top->n_molblocks; ++i)
   {
-    for (j = 0; j < my_mols[i].n_mols; ++j)
+    molidx = top->molblocks[i].moltype;
+    for (j = 0; j < top->molblocks[i].n_mols; ++j)
     {
-      for (k = 0; k < my_mols[i].n_apm; ++k)
+      for (k = 0; k < my_mols[molidx].n_apm; ++k)
       {
-        top->contents->excls.index[at_idx] = top->contents->excls.index[at_idx-1] + my_mols[i].n_epa[k];
+        top->contents->excls.index[at_idx] = top->contents->excls.index[at_idx-1] + my_mols[molidx].n_epa[k];
         ++at_idx;
       }
     }
-  }
+  } 
   top->contents->excls.a = (int *) ecalloc(top->contents->excls.nra,sizeof(int));
   int ea_idx = 0;
-  int prev_moltypes = 0;
-  for (i = 0; i < n_moltypes; ++i)
+  int prev_molblocks = 0;
+  for (i = 0; i < top->n_molblocks; ++i)
   {
-    for (j = 0; j < my_mols[i].n_mols; ++j)
+    molidx = top->molblocks[i].moltype;
+    for (j = 0; j < top->molblocks[i].n_mols; ++j)
     {
-      for (k = 0; k < my_mols[i].n_apm; ++k)
+      for (k = 0; k < my_mols[molidx].n_apm; ++k)
       {
-        for (l = 0; l < my_mols[i].n_epa[k]; ++l)
-	{
-	  top->contents->excls.a[ea_idx] = my_mols[i].excls[k][l] + j * my_mols[i].n_apm + prev_moltypes;
-	  ++ea_idx;
-	}
+        for (l = 0; l < my_mols[molidx].n_epa[k]; ++l)
+        {
+          top->contents->excls.a[ea_idx] = my_mols[molidx].excls[k][l] + j * my_mols[molidx].n_apm + prev_molblocks;
+          ++ea_idx;
+        }
       }
     }
-    prev_moltypes += my_mols[i].n_mols * my_mols[i].n_apm;
+    prev_molblocks += top->molblocks[i].n_mols * my_mols[molidx].n_apm;
   }
 
-// Next we need idef stuff
-//  set these two things when we read thru ffparams:
-//  top->contents->idef.ntypes
-//  top->contents->idef.atnr
-
+// MRD 01.21.2020 This bit is okay still
   top->contents->idef.il[F_BONDS].nr = 0;
   top->contents->idef.il[F_ANGLES].nr = 0;
   top->contents->idef.il[F_PDIHS].nr = 0;
@@ -2387,66 +2175,80 @@ void pop_contents(tW_gmx_topology * top)
   top->contents->idef.il[F_PDIHS].iatoms = (tW_t_iatom *) ecalloc(top->contents->idef.il[F_PDIHS].nr,sizeof(tW_t_iatom));
   top->contents->idef.il[F_LJ14].iatoms = (tW_t_iatom *) ecalloc(top->contents->idef.il[F_LJ14].nr,sizeof(tW_t_iatom));
 
-  prev_moltypes = 0;
+
+// MRD 01.21.2020 
+  prev_molblocks = 0;
   int b_idx = 0, a_idx = 0, pd_idx = 0, imnb_idx = 0;
-  for (i = 0; i < n_moltypes; ++i)
+//  MRD 01.22.2020
+  for (i = 0; i < top->n_molblocks; ++i)
   {
-    for (j = 0; j < my_mols[i].n_mols; ++j)
+    molidx = top->molblocks[i].moltype;
+    for (j = 0; j < top->molblocks[i].n_mols; ++j)
     {
-      for (k = 0; k < my_mols[i].n_bonds; ++k)
+      for (k = 0; k < my_mols[molidx].n_bonds; ++k)
       {
-	top->contents->idef.il[F_BONDS].iatoms[b_idx] = my_mols[i].bond_types[k];
+	top->contents->idef.il[F_BONDS].iatoms[b_idx] = my_mols[molidx].bond_types[k];
 	++b_idx;
-	top->contents->idef.il[F_BONDS].iatoms[b_idx] = my_mols[i].bond_ij[k][0] + j * my_mols[i].n_apm + prev_moltypes;
+	top->contents->idef.il[F_BONDS].iatoms[b_idx] = my_mols[molidx].bond_ij[k][0] + j * my_mols[molidx].n_apm + prev_molblocks;
         ++b_idx;
-        top->contents->idef.il[F_BONDS].iatoms[b_idx] = my_mols[i].bond_ij[k][1] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_BONDS].iatoms[b_idx] = my_mols[molidx].bond_ij[k][1] + j * my_mols[molidx].n_apm + prev_molblocks;
         ++b_idx;
       }
-      for (k = 0; k < my_mols[i].n_angles; ++k)
+      for (k = 0; k < my_mols[molidx].n_angles; ++k)
       {
-        top->contents->idef.il[F_ANGLES].iatoms[a_idx] = my_mols[i].angle_types[k];
+        top->contents->idef.il[F_ANGLES].iatoms[a_idx] = my_mols[molidx].angle_types[k];
         ++a_idx;
-        top->contents->idef.il[F_ANGLES].iatoms[a_idx] = my_mols[i].angle_ijk[k][0] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_ANGLES].iatoms[a_idx] = my_mols[molidx].angle_ijk[k][0] + j * my_mols[molidx].n_apm + prev_molblocks;
         ++a_idx;
-        top->contents->idef.il[F_ANGLES].iatoms[a_idx] = my_mols[i].angle_ijk[k][1] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_ANGLES].iatoms[a_idx] = my_mols[molidx].angle_ijk[k][1] + j * my_mols[molidx].n_apm + prev_molblocks;
         ++a_idx;
-        top->contents->idef.il[F_ANGLES].iatoms[a_idx] = my_mols[i].angle_ijk[k][2] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_ANGLES].iatoms[a_idx] = my_mols[molidx].angle_ijk[k][2] + j * my_mols[molidx].n_apm + prev_molblocks;
         ++a_idx;
       }
-      for (k = 0; k < my_mols[i].n_dihs; ++k)
+      for (k = 0; k < my_mols[molidx].n_dihs; ++k)
       {
-	top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].dih_types[k];
+	top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[molidx].dih_types[k];
 	++pd_idx;
-	top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].dih_ijkl[k][0] + j * my_mols[i].n_apm + prev_moltypes;
+	top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[molidx].dih_ijkl[k][0] + j * my_mols[molidx].n_apm + prev_molblocks;
 	++pd_idx;
-        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].dih_ijkl[k][1] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[molidx].dih_ijkl[k][1] + j * my_mols[molidx].n_apm + prev_molblocks;
         ++pd_idx;
-        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].dih_ijkl[k][2] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[molidx].dih_ijkl[k][2] + j * my_mols[molidx].n_apm + prev_molblocks;
         ++pd_idx;
-        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[i].dih_ijkl[k][3] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_PDIHS].iatoms[pd_idx] = my_mols[molidx].dih_ijkl[k][3] + j * my_mols[molidx].n_apm + prev_molblocks;
         ++pd_idx;
       }
-      for (k = 0; k < my_mols[i].n_imnbs; ++k)
+      for (k = 0; k < my_mols[molidx].n_imnbs; ++k)
       {
-        top->contents->idef.il[F_LJ14].iatoms[imnb_idx] = my_mols[i].imnb_types[k];
+        top->contents->idef.il[F_LJ14].iatoms[imnb_idx] = my_mols[molidx].imnb_types[k];
         ++imnb_idx;
-        top->contents->idef.il[F_LJ14].iatoms[imnb_idx] = my_mols[i].imnb_ij[k][0] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_LJ14].iatoms[imnb_idx] = my_mols[molidx].imnb_ij[k][0] + j * my_mols[molidx].n_apm + prev_molblocks;
         ++imnb_idx;
-        top->contents->idef.il[F_LJ14].iatoms[imnb_idx] = my_mols[i].imnb_ij[k][1] + j * my_mols[i].n_apm + prev_moltypes;
+        top->contents->idef.il[F_LJ14].iatoms[imnb_idx] = my_mols[molidx].imnb_ij[k][1] + j * my_mols[molidx].n_apm + prev_molblocks;
         ++imnb_idx;
       }
     }
-    prev_moltypes = my_mols[i].n_mols * my_mols[i].n_apm;
+    prev_molblocks = top->molblocks[i].n_mols * my_mols[molidx].n_apm;
   }
   top->contents->idef.functype = (tW_t_functype *) ecalloc(top->contents->idef.atnr,sizeof(tW_t_functype));
   for (i = 0; i < top->contents->idef.atnr; ++i)
   {
     top->contents->idef.functype[i] = i;
-//    strcpy(interaction_function[top->contents->idef.functype[i]].name,ftype_names[0][i]);
   }
 }
 
-void find_line_in_file(FILE *fp, const char * target, char * ret_line)
+/*********************************************************************************
+find_line_in_file():
+@arg fp pointer to file we are searching
+@arg target string (char *) for pattern we are searching for
+@arg ret_line string (char *) for storing the line that has the pattern
+Reads a file looking for target pattern, if found, stores line in ret_line and 
+stops file pointer after line containing pattern
+Pass NULL if don't care. 
+@return true if found
+@return false if not
+*********************************************************************************/
+bool find_line_in_file(FILE *fp, const char * target, char * ret_line)
 {
   tW_line inp_line;
   bool rew_flag = FALSE;
@@ -2460,9 +2262,13 @@ void find_line_in_file(FILE *fp, const char * target, char * ret_line)
     {
       if (rew_flag)
       {
-	fprintf(stderr,"ERROR: went through entire file, rewound it, and went through entire file again.\n");
+	if (DEBUG_BUILD)
+	{
+	fprintf(stderr,"WARNING: went through entire file, rewound it, and went through entire file again.\n");
         fprintf(stderr,"\tNever found target: %s\n",target);
-	exit(1);
+	}
+	return FALSE; 
+	//exit(1);
       }
       else
       {
@@ -2473,7 +2279,8 @@ void find_line_in_file(FILE *fp, const char * target, char * ret_line)
       }
     } 
   }
-  strcpy(ret_line,inp_line);
+  if (ret_line != NULL) {strcpy(ret_line,inp_line);}
+  return TRUE;
 }
 
 /*****************************************************************************************
@@ -2482,6 +2289,7 @@ read_tpr_dump(): Function to read a text file that contains a dumped tpr file
 bool read_tpr_dump(tW_word fnm, tW_gmx_topology *top)
 {
 
+  if (DEBUG_BUILD) {fprintf(stderr, "DEBUG BUILD IS SET TO %d\n", DEBUG_BUILD);}
   top->contents = (tW_t_topology *) ecalloc(1,sizeof(tW_t_topology));
 
   FILE *fp = open_file(fnm,'r'); //fopen(fnm,"r");
@@ -2490,194 +2298,57 @@ bool read_tpr_dump(tW_word fnm, tW_gmx_topology *top)
   tW_line *molblock_lines;
   int test_sscanf, inp_int, n_atoms, n_molblocks = 0;
   int i, j, k, l, let_idx;
-  float fudgeQQ;
+  bool bOk;
   tW_word inp_word;
 
-  tW_line *header_lines; // topology: thru ffparams:
-  int n_header_lines = 0;  
-
   // top->contents->name is the first line under topology:
+  bOk = dprocess_sysname_natoms(fp, top, &inp_line);
+  if (!bOk) { THROW_TPR_ERROR("COULD NOT PROCESS TOPOLOGY: SECTION OF TPR\n");}
+  // read ffparams section
+  bOk = dget_top_ff_info(fp, top, &inp_line);
+  if (!bOk) { THROW_TPR_ERROR("UNABLE TO PARSE TOP FF INFO\n"); }
+  // Figure out total different molecule sections (blocks) in file
+  bOk = dprocess_nmolblocks(fp, top, &inp_line);
+  if (!bOk) { THROW_TPR_ERROR("COULD NOT PROCESS MOLTYPES-MOLBLOCKS\n");}
 
-  // skip to topology:
-  while (strstr(inp_line,"topology:")==NULL) { get_next_line(fp,inp_line); }
-  
-  while (strstr(inp_line,"ffparams:")==NULL) { get_next_line(fp,inp_line); ++n_header_lines; }
-  --n_header_lines; // to exclude ffparams:
-  // got number of "header lines"
+  // Have n_molblocks now. So now know the memory req. for storing block info
+  top->molblocks = (tW_molblock *) ecalloc(top->n_molblocks, sizeof(tW_molblock));
+  if (DEBUG_BUILD) {fprintf(stderr, "got %d molblocks \n", top->n_molblocks);}
 
-  header_lines = (tW_line *) ecalloc(n_header_lines, sizeof(tW_line)); 
+  // Search molblocks for distinct type info 
+  // e.g. my_mols[i].molname, my_mols[i].n_mols, n_molecule_types
+  bOk = dget_moltypes_in_molblocks(fp, top, &inp_line);
+  if (!bOk) { THROW_TPR_ERROR("COULD NOT PROCESS MOLBLOCK INFO FOR MOLTYPES\n"); }
 
-  rewind(fp);
-  while(strstr(inp_line,"topology:")==NULL) { get_next_line(fp,inp_line); }
-  
-  for (i = 0; i < n_header_lines; ++i)
-  {
-    get_next_line(fp,header_lines[i]);
-  }
-  
-  int LINE_IDX = 0;
-  // First line is "always" (for now...) name="TOPOLOGY_NAME"
-  if (strstr(header_lines[LINE_IDX],"name=\"") == NULL)
-  {
-    fprintf(stderr,"ERROR: first line following \"topology:\" is no longer name=\n");
-    fprintf(stderr,"\tlikely this is due to a new version of GROMACS.\n");
-    fprintf(stderr,"\tplease open an issue on github to alert us.\n");
-    fprintf(stderr,"\tlet us know which version of gromacs you used to get this issue\n");
-    exit(1);
-  }
-  test_sscanf = sscanf(header_lines[LINE_IDX]," name=\"%s ",&inp_word);
-  if (test_sscanf != 1)
-  {
-    fprintf(stderr,"ERROR: expected name to be first line after topology:\n");
-    fprintf(stderr,"\tline: %s",inp_line);
-    exit(1);  
-  }
-  elim_char(inp_word,'"');
-  strcpy(top->contents->name,inp_word);
-  ++LINE_IDX;
+  //Now we know how many distinct types to collect info for
+  top->molecules = (tW_molecule *) ecalloc(top->n_molecule_types, sizeof(tW_molecule));
+  tW_molecule *my_mols = top->molecules;
+  top->contents->mols.nr = top->n_molecule_types;
 
-  // Second line is "always" #atoms = XXXXX
-  if (strstr(header_lines[LINE_IDX],"#atoms") == NULL)
-  {
-    fprintf(stderr,"ERROR: second line following \"topology:\" is no longer #atoms=\n");
-    fprintf(stderr,"\tlikely this is due to a new version of GROMACS.\n");
-    fprintf(stderr,"\tplease open an issue on github to alert us.\n");
-    fprintf(stderr,"\tlet us know which version of gromacs you used to get this issue\n");
-    exit(1);
-  }
-  test_sscanf = sscanf(header_lines[LINE_IDX]," #atoms = %d ",&n_atoms);
-  if (test_sscanf != 1)
-  {
-    fprintf(stderr,"ERROR: expected #atoms to be second line after topology:\n");
-    fprintf(stderr,"\tline: %s",inp_line);
-    exit(1);
-  }  
-  top->contents->atoms.nr = n_atoms;
-  ++LINE_IDX;
-
-  if (strstr(header_lines[LINE_IDX],"#molblock") != NULL) // this is present in 5.1.4 and later, not in 4.5.3
-  {
-    test_sscanf = sscanf(header_lines[LINE_IDX]," #molblock = %d ",&n_molblocks);
-    if (test_sscanf != 1)
-    {
-      fprintf(stderr,"ERROR: unable to read n_molblocks from line: %s",header_lines[LINE_IDX]);
-      fprintf(stderr,"\tline should be:   #molblock          = X\n");
-      exit(1);
-    }
-  }
-  else // have to get number of molblocks another way. do it based on how many times we find molblock (X):
-  {
-    n_molblocks = 0;
-    for (i = LINE_IDX; i < n_header_lines; ++i)
-    {
-      if (strstr(header_lines[i],"molblock (") != NULL)
-      {
-        ++n_molblocks;
-      }
-    }
-  }
-
-  // Have n_molblocks now.
-  // next I need to get the moltype names and the number of molecules.
-  // I used to get #atoms_mol here as well, but as of 2019.4 (maybe a little earlier)
-  // they don't give that to us here any more.
-  // We'll have to find it a different way for 2019.4, and we might as well find it
-  // the new way for older versions as well.
-
+  // So we'll collect that info now into our mol struct list
+  bOk = dfind_all_molinfo(fp, my_mols, top->n_molecule_types, &inp_line);
 
   top->contents->atoms.nres = 0;
   n_atoms = 0;
-
-  top->molecules = (tW_molecule *) ecalloc(n_molblocks, sizeof(tW_molecule));
-  tW_molecule *my_mols = top->molecules;
-  top->contents->mols.nr = n_molblocks;
-   
-// need to get 
-// my_mols[i].molname, my_mols[i].n_mols, 
-// used to get
-// my_mols[i].n_apm;
-  for (i = 0; i < n_molblocks; ++i)
-  {
-    tW_word mbhead;
-    sprintf(mbhead,"molblock (%d):",i);
-    while (strstr(header_lines[LINE_IDX],mbhead) == NULL) { ++LINE_IDX; }
-    ++LINE_IDX;
-    test_sscanf = sscanf(header_lines[LINE_IDX]," moltype = %d \"%s",&inp_int, &inp_word);
-    elim_char(inp_word,'"');
-    strcpy(my_mols[i].molname,inp_word);
-    ++LINE_IDX;
-    test_sscanf = sscanf(header_lines[LINE_IDX]," #molecules = %d ",&inp_int);
-    my_mols[i].n_mols = inp_int;
-  }
-
-
-  // done with molblock stuff
-  get_next_line(fp,inp_line);
-  if (strstr(inp_line,"ffparams") == NULL) { find_line_in_file(fp,"ffparams",ret_line); strcpy(inp_line,ret_line);}
-
-  get_next_line(fp,inp_line);//atnr
-  if (strstr(inp_line,"atnr") == NULL) { find_line_in_file(fp,"atnr",ret_line); strcpy(inp_line,ret_line); }
-  test_sscanf = sscanf(inp_line," atnr=%d ",&inp_int);
-  top->contents->idef.atnr = inp_int;
-  get_next_line(fp,inp_line); // ntypes
-  if (strstr(inp_line,"ntypes") == NULL) { find_line_in_file(fp,"ntypes",ret_line); strcpy(inp_line,ret_line); }
-  test_sscanf = sscanf(inp_line," ntypes=%d ",&inp_int);
-  top->contents->idef.ntypes = inp_int;
-  top->contents->idef.functype = (tW_t_functype *) ecalloc(top->contents->idef.ntypes,sizeof(tW_t_functype));
-  top->contents->idef.iparams = (tW_t_iparams *) ecalloc(top->contents->idef.ntypes,sizeof(tW_t_iparams));
-  top->force_names = (tW_word *) ecalloc(top->contents->idef.ntypes,sizeof(tW_word));
-  for (i = 0; i < top->contents->idef.ntypes; ++i)
-  {
-    get_next_line(fp,inp_line); //          functype[0]=LJ_SR, c6= 0.00000000e+00, c12= 1.00000000e+00
-    test_sscanf = sscanf(inp_line," functype[%d]=%s ",&inp_int,&inp_word);
-    while (test_sscanf != 2)
-    {
-      get_next_line(fp,inp_line);
-      test_sscanf = sscanf(inp_line," functype[%d]=%s ",&inp_int,&inp_word);
-    }
-    elim_char(inp_word,',');
-    strcpy(top->force_names[i],inp_word); 
-  }
-  get_next_line(fp,inp_line); // reppow
-  get_next_line(fp,inp_line); // fudgeQQ
-  if (strstr(inp_line,"fudgeQQ") == NULL) { find_line_in_file(fp,"fudgeQQ",ret_line); strcpy(inp_line,ret_line); }
-  test_sscanf = sscanf(inp_line," fudgeQQ = %f ",&fudgeQQ);
-  top->contents->idef.fudgeQQ = fudgeQQ;
-  get_next_line(fp,inp_line); // cmap
-  get_next_line(fp,inp_line); // atomtypes:
-  for (i = 0; i < top->contents->idef.atnr; ++i)
-  {
-    get_next_line(fp,inp_line); // atomtype info for type i. I dont think we do anything with this
-  }
-
-  top->contents->atomtypes.nr = top->contents->idef.atnr;
-
-  get_next_line(fp,inp_line); // moltype (#):
-  if (strstr(inp_line,"moltype") == NULL) { find_line_in_file(fp,"moltype",ret_line); strcpy(inp_line,ret_line); }
+ 
   int n_moltypes = 0;
-  while (strstr(inp_line,"moltype") != NULL)
+  // MRD 01.17.2020 I still want to check and make sure we have the correct number of atoms.
+  n_atoms = 0;
+  for (i = 0; i < top->n_molblocks; ++i)
   {
-    ++n_moltypes;
-    get_next_line(fp,inp_line);
-    test_sscanf = sscanf(inp_line," name=\"%s\" ",&inp_word);
-    elim_char(inp_word,'"');
-    get_moltype_info(fp,&(my_mols[n_moltypes-1]),&inp_line);
-    
-    n_atoms += my_mols[n_moltypes-1].n_apm * my_mols[n_moltypes-1].n_mols;
+    n_atoms += top->molblocks[i].n_mols * my_mols[top->molblocks[i].moltype].n_apm;
+    my_mols[top->molblocks[i].moltype].n_mols += top->molblocks[i].n_mols;
   }
 
-  if (n_moltypes != n_molblocks)
-  {
-    fprintf(stderr,"WARNING: n_moltypes = %d   but n_molblocks = %d (they should be equal)\n",n_moltypes, n_molblocks);
-  }
 
   if (n_atoms != top->contents->atoms.nr)
   {
     fprintf(stderr,"WARNING: topology is supposed to contain %d atoms\n",top->contents->atoms.nr);
-    for (i = 0; i < n_molblocks; ++i)
+    for (i = 0; i < top->n_molblocks; ++i)
     {
-      tW_molecule *mol = &(top->molecules[i]);
-      fprintf(stderr,"\ttype %d: %d mol x %d at_per_mol = %d\n",i,mol->n_mols,mol->n_apm,mol->n_mols * mol->n_apm);
+fprintf(stderr,"\tmolblock: %d   moltype: %d  n_mols: %d   n_at_per_mol: %d   = %d atoms\n",i,
+                      top->molblocks[i].moltype, top->molblocks[i].n_mols, my_mols[top->molblocks[i].moltype].n_mols,
+                      top->molblocks[i].n_mols * my_mols[top->molblocks[i].moltype].n_mols);
     }
     fprintf(stderr,"Totals %d atoms from molblocks\n",n_atoms);
   }
@@ -2685,7 +2356,7 @@ bool read_tpr_dump(tW_word fnm, tW_gmx_topology *top)
 
   fclose(fp);
 
-  pop_contents(top);
+  pop_contents(top); // This is just a function that transfers the hard word from get_moletype_info to the topology data structure
 
   return TRUE;
 }
@@ -2831,7 +2502,7 @@ information
 int read_first_bocs_frame(tW_gmx_trxframe *frame, const char *trx_fnm)
 {
   int natoms, test_sscanf, inp_int, i;
-  int bDbl, bTtl, bStp, bTim, bAtm, bPrc, bBox, bX, bV, bF;
+  int bDbl, bTtl, bStp, bTim, bAtm, bPrc, bBox, bX, bV, bF, bLD, bLDG;
   tW_line inp_line;
   tW_word inp_word;
 
@@ -2844,10 +2515,10 @@ int read_first_bocs_frame(tW_gmx_trxframe *frame, const char *trx_fnm)
   test_line(inp_line,"[flags]",TRUE,"expected directive [flags] after [natoms]\n");
   get_next_line(frame->fp,inp_line);
   
-  test_sscanf = sscanf(inp_line," %d %d %d %d %d %d %d %d %d %d ",&bDbl, &bTtl, &bStp, &bTim, &bAtm, &bPrc, &bBox, &bX, &bV, &bF);
-  if (test_sscanf != 10) 
+  test_sscanf = sscanf(inp_line," %d %d %d %d %d %d %d %d %d %d %d %d ",&bDbl, &bTtl, &bStp, &bTim, &bAtm, &bPrc, &bBox, &bX, &bV, &bF, &bLD, &bLDG);
+  if ((test_sscanf < 10) || (test_sscanf > 12)) 
   { 
-    fprintf(stderr,"ERROR: read %d out of expected 10 arguments from line: %s\n",test_sscanf,inp_line);
+    fprintf(stderr,"ERROR: read %d out of expected 10-12 arguments from line: %s\n",test_sscanf,inp_line);
     fprintf(stderr,"\tExpected: bDouble bTotal bStep bTime bAtom bPrecision bBox bX bV bF\n");
     fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__); 
   }
@@ -2862,6 +2533,39 @@ int read_first_bocs_frame(tW_gmx_trxframe *frame, const char *trx_fnm)
   frame->contents->bX = (bX == 1 ? TRUE : FALSE);
   frame->contents->bV = (bV == 1 ? TRUE : FALSE);
   frame->contents->bF = (bF == 1 ? TRUE : FALSE);
+
+  if ((test_sscanf == 11) || (test_sscanf == 12)) { frame->bLDs = (bLD == 1 ? TRUE : FALSE); }
+  if (test_sscanf == 12) { frame->bLD_Grads = (bLDG == 1 ? TRUE : FALSE); }
+
+  if (frame->contents->bBox)
+  {
+    while (strstr(inp_line,"[box]") == NULL) { get_next_line(frame->fp,inp_line); }
+    tW_word b0, b1, b2;
+    for (i = 0; i < 3; ++i)
+    {
+      get_next_line(frame->fp, inp_line);
+      test_sscanf = sscanf(inp_line," %s %s %s ",&b0,&b1,&b2);
+      if (test_sscanf != 3)
+      {
+        fprintf(stderr,"ERROR reading box line %d\n",i+1);
+        fprintf(stderr,"\tline: %s",inp_line);
+        fprintf(stderr,"\ttest_sscanf: %d \n",test_sscanf);
+        fprintf(stderr,"\t\' %s \'  \'  %s \'  \' %s \' \n",b0,b1,b2);
+        exit(1);
+      }
+      frame->contents->box[i][0] = atof(b0);
+      frame->contents->box[i][1] = atof(b1);
+      frame->contents->box[i][2] = atof(b2);
+    }
+  }
+
+  if (frame->bLDs)
+  {
+    while (strstr(inp_line,"[local_densities]") == NULL) { get_next_line(frame->fp,inp_line); }
+    test_sscanf = sscanf(inp_line,"[local_densities] %d ",&inp_int);
+    frame->n_atomtypes = inp_int;
+  }
+
 
   set_natoms(frame,natoms);
 
@@ -3274,12 +2978,21 @@ void write_bocs_top(tW_word fnm, tW_gmx_topology *top)
   }
   fprintf(fp,"!atnr  fudgeQQ\n");
   fprintf(fp,"%d %f\n\n",top->contents->idef.atnr,top->contents->idef.fudgeQQ);
-  
+
+// MRD 01.24.2020  
+  fprintf(fp,"[molblocks] %d\n",top->n_molblocks);
+  fprintf(fp,"!moltype  mol_name  n_mols\n");
+  for (i = 0; i < top->n_molblocks; ++i)
+  {
+    fprintf(fp,"%d \t  %s \t  %d \n",top->molblocks[i].moltype,top->molblocks[i].molname,top->molblocks[i].n_mols);
+  }
+  fprintf(fp,"\n");
+
   fprintf(fp,"[moltypes] %d\n",top->contents->mols.nr);
-  fprintf(fp,"!ind \tname\tn_mols\tn_apm\tn_res\tn_cgs\texcls_nr \texcls_nra \tbond_nr \tangle_nr \tdih_nr   \timnb_nr\n");
   for (i = 0; i < top->contents->mols.nr; ++i)
   {
-    fprintf(fp,"%d \t%s\t%d\t%d\t%d\t%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\n",i,
+    fprintf(fp,"!ind \tname\tn_mols\tn_apm\tn_res\tn_cgs\texcls_nr \texcls_nra \tbond_nr \tangle_nr \tdih_nr   \tbigdih_nr  \timnb_nr\n");
+    fprintf(fp,"%d \t%s\t%d\t%d\t%d\t%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\n",i,
 		top->molecules[i].molname,
 		top->molecules[i].n_mols,
 		top->molecules[i].n_apm,
@@ -3290,6 +3003,7 @@ void write_bocs_top(tW_word fnm, tW_gmx_topology *top)
 		top->molecules[i].bond_nr,
 		top->molecules[i].angle_nr,
 		top->molecules[i].dih_nr,
+		top->molecules[i].bigdih_nr,
                 top->molecules[i].imnb_nr);
     if (top->molecules[i].n_res > 0)
     {
@@ -3329,6 +3043,14 @@ void write_bocs_top(tW_word fnm, tW_gmx_topology *top)
       for (j = 0; j < top->molecules[i].n_dihs; ++j)
       {
 	fprintf(fp,"  %4d  %4d  %3d  %3d  %3d  %3d\n",j,top->molecules[i].dih_types[j],top->molecules[i].dih_ijkl[j][0],top->molecules[i].dih_ijkl[j][1],top->molecules[i].dih_ijkl[j][2],top->molecules[i].dih_ijkl[j][3]);
+      }
+    }
+    if (top->molecules[i].bigdih_nr > 0)
+    {
+      fprintf(fp,"  [bigdih]\n  !%3s  %4s  %3s  %3s  %3s  %3s  %3s\n","idx","type","i","j","k","l","m");
+      for (j = 0; j < top->molecules[i].n_bigdihs; ++j)
+      {
+        fprintf(fp,"  %4d  %4d  %3d  %3d  %3d  %3d  %3d\n",j,top->molecules[i].bigdih_types[j],top->molecules[i].bigdih_ijklm[j][0],top->molecules[i].bigdih_ijklm[j][1],top->molecules[i].bigdih_ijklm[j][2],top->molecules[i].bigdih_ijklm[j][3],top->molecules[i].bigdih_ijklm[j][4]);
       }
     }
     if (top->molecules[i].imnb_nr > 0)
@@ -3386,8 +3108,8 @@ read_bocs_top(): The function that reads a .btp file, and populates top accordin
 
 bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
 {
-  int test_sscanf, i, j, k, inp_int, i1, i2, i3, i4;
-  int n_mt, ind, n_mol, n_apm, n_res, n_cgs, excls_nr, excls_nra, bond_nr, angle_nr, dih_nr, imnb_nr, n_epa;
+  int test_sscanf, i, j, k, inp_int, i1, i2, i3, i4, i5, inp_int2;
+  int n_mt, ind, n_mol, n_apm, n_res, n_cgs, excls_nr, excls_nra, bond_nr, angle_nr, dih_nr, bigdih_nr, imnb_nr, n_epa;
   float inp_flt1, inp_flt2;
   tW_word inp_word, name;
   tW_line inp_line;
@@ -3473,6 +3195,41 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
   top->contents->atomtypes.nr = i1;
   top->contents->idef.fudgeQQ = (double) inp_flt1;
 
+/* MRD 01.24.2020
+~~~~~~~~~~~~~~~~~~ [molblocks] ~~~~~~~~~~~~~~~~~~
+*/
+
+  get_next_line(fp,inp_line);
+  inp_int = -1;
+  test_sscanf = sscanf(inp_line,"[molblocks] %d ",&(inp_int));
+  if (test_sscanf != 1)
+  {
+    fprintf(stderr,"ERROR: expected to find directive \"[molblocks]\" followed by n_molblocks\n");
+    fprintf(stderr,"\tline: %s",inp_line);
+    fprintf(stderr,"\tn_molblocks: %d\n",inp_int);
+    fprintf(stderr,"ERROR: %s %d \n",__FILE__,__LINE__);
+    exit(1);
+  }
+  top->n_molblocks = inp_int;
+  top->molblocks = (tW_molblock *) ecalloc(top->n_molblocks, sizeof(tW_molblock));
+  for (i = 0; i < top->n_molblocks; ++i)
+  {
+    get_next_line(fp,inp_line);
+    test_sscanf = sscanf(inp_line,"%d %s %d ",&(inp_int),&(inp_word),&(inp_int2));
+    if (test_sscanf != 3)
+    {
+      fprintf(stderr,"ERROR: expected to find molblock number %d (out of %d)\n",i+1,top->n_molblocks);
+      fprintf(stderr,"\texpected moltype molname n_mols\n");
+      fprintf(stderr,"\tline: %s",inp_line);
+      fprintf(stderr,"\tmoltype: %d    molname: %s    n_mols: %d \n",inp_int,inp_word,inp_int2);
+      fprintf(stderr,"ERROR: %s %d \n",__FILE__,__LINE__);
+      exit(1);
+    }
+    top->molblocks[i].moltype = inp_int;
+    strcpy(top->molblocks[i].molname,inp_word);
+    top->molblocks[i].n_mols = inp_int2;
+  }
+
 /*
 ~~~~~~~~~~~~~~~~~~ [moltypes] ~~~~~~~~~~~~~~~~~~
 */
@@ -3490,6 +3247,8 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
   n_mt = inp_int;
 
   top->contents->mols.nr = n_mt; 
+  top->n_molecule_types = n_mt;
+
   top->molecules = (tW_molecule *) ecalloc(n_mt, sizeof(tW_molecule));
 
 /* MRD 11.7.2019
@@ -3506,9 +3265,9 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
     MM = &(top->molecules[i]);
     get_next_line(fp,inp_line);
     strcpy(name,"N/A");
-    ind = n_mol = n_apm = n_res = n_cgs = excls_nr = excls_nra = bond_nr = angle_nr = dih_nr = imnb_nr= -1;
+    ind = n_mol = n_apm = n_res = n_cgs = excls_nr = excls_nra = bond_nr = angle_nr = dih_nr = bigdih_nr = imnb_nr= -1;
     int testn1, testn2;
-    test_sscanf = sscanf(inp_line,"%d %s %d %d %d %d %d %d %d %d %d %d %d %d ",&ind,&name,&n_mol,&n_apm,&n_res,&n_cgs,&excls_nr,&excls_nra,&bond_nr,&angle_nr,&dih_nr,&imnb_nr,&testn1,&testn2);
+    test_sscanf = sscanf(inp_line,"%d %s %d %d %d %d %d %d %d %d %d %d %d %d ",&ind,&name,&n_mol,&n_apm,&n_res,&n_cgs,&excls_nr,&excls_nra,&bond_nr,&angle_nr,&dih_nr,&bigdih_nr,&imnb_nr,&testn1);
     if (test_sscanf == 14)
     {
       fprintf(stderr,"WARNING: We read 14 items from a moltypes line.\n");
@@ -3517,9 +3276,9 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
       fprintf(stderr,"\tPlease re-translate the dumped .tpr file into a new .btp file.\n");
       exit(EXIT_FAILURE);
     }
-    if (test_sscanf != 12) 
+    if (test_sscanf != 13) 
     { 
-      fprintf(stderr,"ERROR: Found %d out of expected 12 moltype properties\n",test_sscanf);
+      fprintf(stderr,"ERROR: Found %d out of expected 13 moltype properties\n",test_sscanf);
       fprintf(stderr,"\t%10s: %s\n","line",inp_line);
       fprintf(stderr,"\t%10s: %d\n","ind",ind);
       fprintf(stderr,"\t%10s: %s\n","name",name);
@@ -3532,6 +3291,7 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
       fprintf(stderr,"\t%10s: %d\n","bond_nr",bond_nr);
       fprintf(stderr,"\t%10s: %d\n","angle_nr",angle_nr);
       fprintf(stderr,"\t%10s: %d\n","dih_nr",dih_nr);
+      fprintf(stderr,"\t%10s: %d\n","bigdih_nr",bigdih_nr);
       fprintf(stderr,"\t%10s: %d\n","imnb_nr",imnb_nr);
       fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__); 
       exit(1); 
@@ -3577,6 +3337,13 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
     MM->dih_types = (int *) ecalloc(MM->n_dihs,sizeof(int));
     MM->dih_ijkl = (int **) ecalloc(MM->n_dihs,sizeof(int *));
     for (j = 0; j < MM->n_dihs; ++j) { MM->dih_ijkl[j] = (int *) ecalloc(4,sizeof(int)); }
+
+// MRD 01.24.2020
+    MM->bigdih_nr = bigdih_nr;
+    MM->n_bigdihs = bigdih_nr / BIGDIH_DIV; 
+    MM->bigdih_types = (int *) ecalloc(MM->n_bigdihs,sizeof(int));
+    MM->bigdih_ijklm = (int **) ecalloc(MM->n_bigdihs, sizeof(int *));
+    for (j = 0; j < MM->n_bigdihs; ++j) { MM->bigdih_ijklm[j] = (int *) ecalloc(5,sizeof(int)); }
 
     MM->imnb_nr = imnb_nr;
     MM->n_imnbs = imnb_nr / IMNB_DIV;
@@ -3699,6 +3466,34 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
         MM->dih_ijkl[j][1] = i2;
         MM->dih_ijkl[j][2] = i3;
         MM->dih_ijkl[j][3] = i4;
+      }
+    }
+
+/* If expected, read this molecule type's [bigdih] directive MRD 01.24.2020 */
+    if (bigdih_nr > 0)
+    {
+      get_next_line(fp,inp_line);
+      test_line(inp_line,"[bigdih]",TRUE,"ERROR: unable to find [dih]\n");
+      for (j = 0; j < MM->n_bigdihs; ++j)
+      {
+        get_next_line(fp,inp_line);
+        ind = inp_int = i1 = i2 = i3 = i4 = i5 = -1;
+        test_sscanf = sscanf(inp_line," %d %d %d %d %d %d %d ",&ind, &inp_int, &i1, &i2, &i3, &i4, &i5);
+        if (test_sscanf != 7)
+        {
+          fprintf(stderr,"ERROR: expected to find idx type i j k l m for bigdih %d\n",j+1);
+          fprintf(stderr,"\tline: %s",inp_line);
+          fprintf(stderr,"\t idx: %d\n\ttype: %d\n\t   i: %d\n\t   j: %d\n\t   k: %d\n\t   l: %d\n\t   m: %d\n",
+                                                                        ind,inp_int,i1,i2,i3,i4,i5);
+          fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__);
+          exit(1);
+        }
+        MM->bigdih_types[j] = inp_int;
+        MM->bigdih_ijklm[j][0] = i1;
+        MM->bigdih_ijklm[j][1] = i2;
+        MM->bigdih_ijklm[j][2] = i3;
+        MM->bigdih_ijklm[j][3] = i4;
+        MM->bigdih_ijklm[j][4] = i5;
       }
     }
 
@@ -3842,12 +3637,12 @@ bool read_bocs_top(tW_word fnm, tW_gmx_topology * top)
 
 void write_bocs_frame(tW_gmx_trxframe * fr)
 {
-  int i, j;
+  int i, j, k;
   fprintf(fr->fp,"[FRAME] %d\n\n",fr->counter);
   fprintf(fr->fp,"[natoms] %d\n\n",fr->contents->natoms);
 
-  fprintf(fr->fp,"[flags]\n!double title step time atoms prec box x v f\n");
-  fprintf(fr->fp," %d      %d     %d    %d    %d     %d    %d   %d %d %d\n\n",
+  fprintf(fr->fp,"[flags]\n!double title step time atoms prec box x v f ld ldg\n");
+  fprintf(fr->fp," %d      %d     %d    %d    %d     %d    %d   %d %d %d %d  %d\n\n",
 		(fr->contents->bDouble ? 1 : 0),
 		(fr->contents->bTitle ? 1 : 0),
                 (fr->contents->bStep ? 1 : 0),
@@ -3857,7 +3652,9 @@ void write_bocs_frame(tW_gmx_trxframe * fr)
                 (fr->contents->bBox ? 1 : 0),
                 (fr->contents->bX ? 1 : 0),
                 (fr->contents->bV ? 1 : 0),
-                (fr->contents->bF ? 1 : 0));
+                (fr->contents->bF ? 1 : 0),
+                (fr->bLDs ? 1 : 0),
+                (fr->bLD_Grads ? 1 : 0));
 
   if (fr->contents->bTitle) { fprintf(fr->fp,"[title] %s\n\n",fr->contents->title); }
   if (fr->contents->bStep) { fprintf(fr->fp,"[step] %d\n\n",fr->contents->step); }
@@ -3883,12 +3680,47 @@ void write_bocs_frame(tW_gmx_trxframe * fr)
     fprintf(fr->fp,"[%c%c%c]\n",(fr->contents->bX ? 'x' : '_'),(fr->contents->bV ? 'v' : '_'),(fr->contents->bF ? 'f' : '_'));
     for (i = 0; i < fr->contents->natoms; ++i)
     {
+// TODO: 9.17.2020: find a way to trim a bunch of potential extra 0s off of the end of these numbers
       if (fr->contents->bX) { fprintf(fr->fp,"% 11.9e % 11.9e % 11.9e  ",fr->contents->x[i][0],fr->contents->x[i][1],fr->contents->x[i][2]); }
       if (fr->contents->bV) { fprintf(fr->fp,"% 7.4f % 7.4f % 7.4f  ",fr->contents->v[i][0],fr->contents->v[i][1],fr->contents->v[i][2]); }
       if (fr->contents->bF) { fprintf(fr->fp,"% 11.9e % 11.9e % 11.9e  ",fr->contents->f[i][0],fr->contents->f[i][1],fr->contents->f[i][2]); }
       fprintf(fr->fp,"\n");
     }
+    fprintf(fr->fp,"\n");
   }
+
+  if (fr->bLDs)
+  {
+    fprintf(fr->fp,"[local_densities] %d\n",fr->n_atomtypes);
+    for (i = 0; i < fr->contents->natoms; ++i)
+    {
+      for (j = 0; j < fr->n_atomtypes; ++j)
+      {
+// TODO: 9.17.2020: find a way to trim a bunch of potential extra 0s off of the end of these numbers
+        fprintf(fr->fp," %14.10f ",fr->local_densities[i][j]);
+      }
+      fprintf(fr->fp,"\n");
+    }
+    fprintf(fr->fp,"\n");
+    if (fr->bLD_Grads)
+    {
+      fprintf(fr->fp,"[local_density_gradients] \n");
+      for (i = 0; i < fr->contents->natoms; ++i)
+      {
+        for (j = 0; j < fr->n_atomtypes; ++j)
+        {
+          for (k = 0; k < DIM; ++k)
+          {
+// TODO: 9.17.2020: find a way to trim a bunch of potential extra 0s off of the end of these numbers
+            fprintf(fr->fp," %14.10f ",fr->local_density_gradients[i][j][k]);
+          }
+        }
+        fprintf(fr->fp,"\n");
+      }
+      fprintf(fr->fp,"\n");
+    } 
+  }
+ 
   fprintf(fr->fp,"[END_FRAME]\n\n");
 }
 
@@ -3952,7 +3784,6 @@ bool read_bocs_frame_dir_frame(tW_gmx_trxframe *fr, tW_line inp_line)
     fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__);
     exit(1);
   }
-  fr->counter = frnr;
   get_next_line(fr->fp,inp_line);
   return TRUE;
 }
@@ -4125,78 +3956,81 @@ bool read_bocs_frame_dir_xvf(tW_gmx_trxframe *fr, tW_line inp_line)
 {
   int test_sscanf, i;
   int nprops = 0;
-  float props[9];
-  char *next_prop;
-  
-  if (fr->contents->bX) { nprops += 3; }
-  if (fr->contents->bV) { nprops += 3; }
-  if (fr->contents->bF) { nprops += 3; }  
+  int pidx;
+  tW_word props[9];
+  tW_line orig_line;
+  strcpy(orig_line,inp_line);
+
+  if (strstr(inp_line,"x") != NULL) { nprops += 3; }
+  if (strstr(inp_line,"v") != NULL) { nprops += 3; }
+  if (strstr(inp_line,"f") != NULL) { nprops += 3; }
 
   for (i = 0; i < fr->contents->natoms; ++i)
   {
-// Would using get_words_delim be a simpler way to do this???
     get_next_line(fr->fp, inp_line);
-    next_prop = &(inp_line[0]);
-    int prop_idx = 0;
-    while ((*(next_prop)) != '\n')
-    {
-      if (*(next_prop) == ' ') { ++next_prop; }
-      else
-      {
-        test_sscanf = sscanf(next_prop,"%f",&(props[prop_idx]));
-	if (test_sscanf != 1)
-	{
-	  fprintf(stderr,"ERROR: expected to read the %d'th float from line\n",prop_idx+1);
-	  fprintf(stderr,"\tline: %s",inp_line);
-	  fprintf(stderr,"\tprop: %f\n",props[prop_idx]);
-	  fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__);
-	  exit(1); 
-	}
-	++prop_idx;
-	next_prop = strstr(next_prop," ");
-      }
+    test_sscanf = sscanf(inp_line," %s %s %s %s %s %s %s %s %s ",
+                                    &(props[0]), &(props[1]), &(props[2]),
+                                    &(props[3]), &(props[4]), &(props[5]),
+                                    &(props[6]), &(props[7]), &(props[8]));
+    if (test_sscanf != nprops) 
+    { 
+      fprintf(stderr,"ERROR: expected %d properties per atom under directive %s\n",nprops,orig_line);
+      fprintf(stderr,"       However, we found %s properties.\n",test_sscanf);
+      exit(EXIT_FAILURE); 
     }
-    if (prop_idx != nprops)
-    {
-      fprintf(stderr,"ERROR: expected to read %d properties for particle %d, but I actually read %d\n",nprops,i+1,prop_idx);
-      fprintf(stderr,"\tline: %s",inp_line);
-      fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__);
-      return 1;
-    }
-    prop_idx = 0;
+    pidx = 0;
     if (fr->contents->bX)
     {
-      fr->contents->x[i][0] = props[prop_idx];
-      ++prop_idx;
-      fr->contents->x[i][1] = props[prop_idx];
-      ++prop_idx;
-      fr->contents->x[i][2] = props[prop_idx];
-      ++prop_idx;
+      fr->contents->x[i][0] = atof(props[pidx]);
+      fr->contents->x[i][1] = atof(props[pidx+1]);
+      fr->contents->x[i][2] = atof(props[pidx+2]);
+      pidx += 3;
     }
     if (fr->contents->bV)
     {
-      fr->contents->v[i][0] = props[prop_idx];
-      ++prop_idx;
-      fr->contents->v[i][1] = props[prop_idx];
-      ++prop_idx;
-      fr->contents->v[i][2] = props[prop_idx];
-      ++prop_idx;
+      fr->contents->v[i][0] = atof(props[pidx]);
+      fr->contents->v[i][1] = atof(props[pidx+1]);
+      fr->contents->v[i][2] = atof(props[pidx+2]);
+      pidx += 3;
     }
     if (fr->contents->bF)
     {
-      fr->contents->f[i][0] = props[prop_idx];
-      ++prop_idx;
-      fr->contents->f[i][1] = props[prop_idx];
-      ++prop_idx;
-      fr->contents->f[i][2] = props[prop_idx];
-      ++prop_idx;
-    } 
-  } 
+      fr->contents->f[i][0] = atof(props[pidx]);
+      fr->contents->f[i][1] = atof(props[pidx+1]);
+      fr->contents->f[i][2] = atof(props[pidx+2]);
+      pidx += 3;
+    }
+  }
   get_next_line(fr->fp,inp_line);
-  
+
   return TRUE;
 
 }
+
+/* MRD 06.18.2020 */
+bool read_bocs_frame_dir_local_densities(tW_gmx_trxframe *fr, tW_line inp_line)
+{
+  int i, test_sscanf;
+  for (i = 0; i < fr->contents->natoms; ++i)
+  {
+    get_next_line(fr->fp, inp_line);
+    pop_LD_vector(inp_line,fr->local_densities[i],fr->n_atomtypes);
+  }
+  get_next_line(fr->fp,inp_line);
+}
+
+bool read_bocs_frame_dir_local_density_gradients(tW_gmx_trxframe *fr, tW_line inp_line)
+{
+  int i, test_sscanf;
+  for (i = 0; i < fr->contents->natoms; ++i)
+  {
+    get_next_line(fr->fp,inp_line);
+    populate_LD_Gradients(inp_line, fr->local_density_gradients[i],fr->n_atomtypes);
+  }
+  get_next_line(fr->fp,inp_line);
+}
+
+
 
 /*
 new_read_next_bocs_frame(): The newer function to read a bocs frame.
@@ -4206,8 +4040,8 @@ new_read_next_bocs_frame(): The newer function to read a bocs frame.
 */
 bool new_read_next_bocs_frame(tW_gmx_trxframe * fr)
 {
-  bool bEND, bFRAME, bNATOMS, bFLAGS, bTITLE, bSTEP, bTIME, bPREC, bBOX, bXVF;
-  bEND = bFRAME = bNATOMS = bFLAGS = bTITLE = bSTEP = bTIME = bPREC = bBOX = bXVF = FALSE;
+  bool bEND, bFRAME, bNATOMS, bFLAGS, bTITLE, bSTEP, bTIME, bPREC, bBOX, bXVF, bLD, bLDG;
+  bEND = bFRAME = bNATOMS = bFLAGS = bTITLE = bSTEP = bTIME = bPREC = bBOX = bXVF = bLD = bLDG = FALSE;
   char *xvf_dir = (char *) ecalloc(6,sizeof(char));
   tW_line inp_line;
 
@@ -4275,6 +4109,21 @@ bool new_read_next_bocs_frame(tW_gmx_trxframe * fr)
       check_double_bocs_dir(bXVF,xvf_dir,fr->counter);
       check_unexpected_dir((fr->contents->bX || fr->contents->bV || fr->contents->bF),xvf_dir,fr->counter);
       bXVF = read_bocs_frame_dir_xvf(fr,inp_line);
+    }
+    /* MRD 06.18.2020 */
+    else if (strstr(inp_line,"[local_densities]") != NULL)
+    {
+      check_dirs("[local_densities]",3,bFRAME,bNATOMS,bFLAGS,fr->counter);
+      check_double_bocs_dir(bLD,"[local_densities]",fr->counter);
+      check_unexpected_dir(fr->bLDs,"[local_densities]",fr->counter);
+      bLD = read_bocs_frame_dir_local_densities(fr,inp_line);
+    }
+    else if (strstr(inp_line,"[local_density_gradients]") != NULL)
+    {
+      check_dirs("[local_density_gradients]",3,bFRAME,bNATOMS,bFLAGS,fr->counter);
+      check_double_bocs_dir(bLDG,"[local_density_gradients]",fr->counter);
+      check_unexpected_dir(fr->bLD_Grads,"[local_density_gradients]",fr->counter);
+      bLDG = read_bocs_frame_dir_local_density_gradients(fr,inp_line);
     }  
     else if (strstr(inp_line,"[END_FRAME]") != NULL) { bEND = TRUE; }
     else
@@ -4321,7 +4170,6 @@ bool read_next_bocs_frame(tW_gmx_trxframe * fr)
     fprintf(stderr,"ERROR: %s %d\n",__FILE__,__LINE__); 
     exit(1); 
   }
-  fr->counter = frnr;
   
   get_next_line(fr->fp,inp_line);
   test_line(inp_line,"[natoms]", TRUE, "ERROR: Expected [natoms] ####\n");
@@ -4616,10 +4464,6 @@ void write_delta_frame(tW_gmx_trxframe *fr, FILE *fpbox, FILE *fpx, FILE *fpv, F
 /*****************************************************************************************
 The following are functions that have been copied and trimmed down from GROMACS.
 They are used for reading/writing binary files (either trj files or trr (xdr) files).
-I do not understand the function of GROMACS_MAGIC, if its value (1993) is significant,
-and if it will change for some unknown reason in future GROMACS versions.
-
-I changed the name from GROMACS_MAGIC to BOCS_MAGIC because why not.
 *****************************************************************************************/
 
 static bool tW_do_binwrite(FILE *fp, const void *item, int nitem, int eio)
@@ -4655,7 +4499,7 @@ static bool tW_do_binwrite(FILE *fp, const void *item, int nitem, int eio)
 
 static bool tW_do_write_trjheader(tW_gmx_trxframe *fr)
 {
-  int magic = BOCS_MAGIC;
+  int magic = GROMACS_MAGIC;
   bool bOK = TRUE;
 
   bOK = tW_do_binwrite(fr->fp, &magic, 1, eioINT);
@@ -4743,7 +4587,7 @@ static bool tW_do_binread(FILE *fp, void *item, int nitem, int eio)
 
 static bool tW_do_read_trjheader(tW_gmx_trxframe *fr)
 {
-  int magic=BOCS_MAGIC;
+  int magic=GROMACS_MAGIC;
   int magic_test;
   char buf[256];
   bool bOK = TRUE;
@@ -4915,7 +4759,7 @@ static bool tW_do_write_xdr(tW_gmx_trxframe *fr, const void *item, int nitem, in
 
 static bool tW_do_write_trrheader(tW_gmx_trxframe *fr)
 {
-  int magic = BOCS_MAGIC;
+  int magic = GROMACS_MAGIC;
   bool bOK = TRUE;
 
   bOK = tW_do_write_xdr(fr, &magic, 1, eioINT);
@@ -4983,11 +4827,18 @@ void wrap_tW_write_trr_frame(tW_gmx_trxframe *fr)
 {
   tW_write_trr_frame(fr);
 }
-
+/*********************************************************************************
+ * tW_do_read_xdr
+ * Attempts to encode/decode various data types from the xdr data stream
+ * [the data stream represents our trajectory], stores results in item
+ * @param fr trajectory, not human readable
+ * @param item stores decode results 
+ * @return TRUE if encoding/decoding was successful FALSE if not
+ *********************************************************************************/
 static bool tW_do_read_xdr(tW_gmx_trxframe *fr, void *item, int nitem, int eio)
 {
   unsigned char   ucdum, *ucptr;
-  bool            res = 0;
+  bool            res = 0; //res = result, represents success or failure
   float           fvec[DIM];
   double          dvec[DIM];
   int             j, m, *iptr, idum;
@@ -5082,7 +4933,7 @@ static bool tW_do_read_xdr(tW_gmx_trxframe *fr, void *item, int nitem, int eio)
 
 static bool get_trr_precision(tW_gmx_trxframe *fr)
 {
-  int magic=BOCS_MAGIC;
+  int magic=GROMACS_MAGIC;
   int magic_test;
   char buf[256];
   bool bOK = TRUE;
@@ -5116,7 +4967,7 @@ static bool get_trr_precision(tW_gmx_trxframe *fr)
   bOK = bOK && tW_do_read_xdr(fr, &t, 1, eioREAL); // t 
   bOK = bOK && tW_do_read_xdr(fr, &lambda, 1, eioREAL); // lambda
 
-  if (!bOK)
+  if (!bOK) // then at least one decoding got messed up
   {
     fprintf(stderr,"ERROR: unable to determine precision of trr file\n");
     exit(1);
@@ -5189,7 +5040,7 @@ static bool get_trr_precision(tW_gmx_trxframe *fr)
 
 static bool tW_do_read_trrheader(tW_gmx_trxframe *fr)
 {
-  int magic=BOCS_MAGIC;
+  int magic=GROMACS_MAGIC;
   int magic_test;
   char buf[256];
   bool bOK = TRUE;
@@ -5256,7 +5107,7 @@ static bool tW_do_read_trrstuff(tW_gmx_trxframe *fr)
 bool tW_read_first_trr_frame(tW_gmx_trxframe *fr, const char *trx_fnm)
 {
   bool bOK;
-  fr->setup_xdr(fr,trx_fnm,TRUE);
+  fr->setup_xdr(fr,trx_fnm,TRUE); // link xdr object to file stream and determine trr precision
   bOK = tW_do_read_trrheader(fr);
   set_natoms(fr, fr->contents->natoms);
   rewind(fr->fp); 
@@ -5284,7 +5135,7 @@ int read_first_lammps_frame(tW_gmx_trxframe *fr, const char *fnm)
 {
   int test_sscanf, n_atoms, n_words;
   tW_line inp_line;
-  int i;
+  int i, n_LDs = 0, n_LDGs = 0;
 
   fr->fp = open_file(fnm,'r');
 
@@ -5330,6 +5181,9 @@ int read_first_lammps_frame(tW_gmx_trxframe *fr, const char *fnm)
     else if (strcmp(word_list[i],"fy") == 0) { fr->fids[1] = i-2; indices |= (1 << 7); }
     else if (strcmp(word_list[i],"fz") == 0) { fr->fids[2] = i-2; indices |= (1 << 8); }
     else if (strcmp(word_list[i],"id") == 0) { fr->atid_id = i-2; indices |= (1 << 9); }
+    else if (strstr(word_list[i],"lddens") != NULL) { ++n_LDs; indices |= (1 << 10); }
+    else if (strstr(word_list[i],"grad") != NULL) { ++n_LDGs; indices |= (1 << 11); }
+
 //    else if (strcmp(word_list[i],"type") == 0) { fr->attype_id = i-2; indices |= (1 << 10); }
 //    else if (strcmp(word_list[i],"mol") == 0) { fr->molid_id = i-2; indices |= (1 << 11); }
   }
@@ -5344,14 +5198,64 @@ int read_first_lammps_frame(tW_gmx_trxframe *fr, const char *fnm)
   { fr->contents->bF = TRUE; }
   else { fr->contents->bF = FALSE; } 
 
-  if ((indices & ((1 << 9))) == 0) // | (1 << 10) | (1 << 11))) == 0)
+  if ((indices & ((1 << 9))) == 0) 
   {
     fprintf(stderr,"ERROR: Missing columns from lammps dump file.\n");
     if ((indices & (1 << 9)) == 0) { fprintf(stderr,"\tMissing id\n"); }
-//    if ((indices & (1 << 10)) == 0) { fprintf(stderr,"\tMissing type\n"); }
-//    if ((indices & (1 << 11)) == 0) { fprintf(stderr,"\tMissing mol\n"); } 
     exit(1);  
   } 
+
+  /* Local Density 06.17.2020 MRD */
+  fprintf(stderr,"n_LDs: %d \n",n_LDs);
+  if (n_LDs > 0)
+  {
+    fr->bLDs = TRUE;
+    fr->n_atomtypes = n_LDs;
+    fr->ld_id = (int *) ecalloc(n_LDs+1,sizeof(int));
+    int a_type;
+    for (i = 0; i < n_words; ++i)
+    {
+      if (strstr(word_list[i],"lddens") != NULL)
+      {
+        test_sscanf = sscanf(word_list[i],"lddens%d",&(a_type));
+        if (test_sscanf != 1)
+        {
+          fprintf(stderr,"LDDENS READ ERROR!\n");
+        }
+        fr->ld_id[a_type] = i-2;
+        fprintf(stderr,"fr->ld_id[%d]: %d \n",a_type,fr->ld_id[a_type]);
+      }
+    }
+    if (n_LDGs > 0)
+    {
+      char xyz;
+      fr->bLD_Grads = TRUE;
+      fr->ldg_id = (int *) ecalloc(n_LDGs+3,sizeof(int));
+      for (i = 0; i < n_words; ++i)
+      {
+        if ((strstr(word_list[i],"grad") != NULL) && (strstr(word_list[i],"nrg") == NULL))
+        {
+          test_sscanf = sscanf(word_list[i],"grad%c%d",&(xyz),&(a_type));
+          if (test_sscanf != 2)
+          {
+            fprintf(stderr,"LDGRAD READ ERROR! \n");
+            fprintf(stderr,"line: %s",inp_line);
+            fprintf(stderr,"word: %s\n",word_list[i]);
+          }
+          if (xyz == 'x') { fr->ldg_id[DIM*a_type] = i-2; }
+          else if (xyz == 'y') { fr->ldg_id[DIM*a_type+1] = i-2; }
+          else if (xyz == 'z') { fr->ldg_id[DIM*a_type+2] = i-2; }
+          else
+          {
+            fprintf(stderr,"ERROR: did not understand word: %s \n",word_list[i]);
+            fprintf(stderr,"Expected: gradx#, grady#, or gradz#\n");
+            exit(1);
+          }
+        }
+      }
+    }
+  }
+
 
 // Generic LAMMPS stuff
   fr->contents->bBox = TRUE;
@@ -5359,6 +5263,7 @@ int read_first_lammps_frame(tW_gmx_trxframe *fr, const char *fnm)
   fr->contents->bDouble = TRUE;
   fr->contents->bTime = TRUE;
   fr->contents->bStep = TRUE;
+  fr->contents->bPrec = FALSE;
  
   rewind(fr->fp);
 
@@ -5435,6 +5340,24 @@ bool read_next_lammps_frame(tW_gmx_trxframe *fr)
       for (j=0; j<DIM; ++j)
       {
         fr->contents->f[at_idx][j] = (tW_real) (atof(word_list[fr->fids[j]]) * F_LMP2GRO);
+      }
+    }
+  /* Local Density */
+    if (fr->bLDs)
+    {
+      for (j = 1; j <= fr->n_atomtypes; ++j)
+      {
+        fr->local_densities[at_idx][j-1] = (double) (atof(word_list[fr->ld_id[j]]) * LD_LMP2GRO);
+      }
+    }
+  /* Local Density Gradients */
+    if (fr->bLD_Grads)
+    {
+      for (j = 1; j <= fr->n_atomtypes; ++j)
+      {
+        fr->local_density_gradients[at_idx][j-1][0] = (double) (atof(word_list[fr->ldg_id[j*DIM]]) * LDG_LMP2GRO);
+        fr->local_density_gradients[at_idx][j-1][1] = (double) (atof(word_list[fr->ldg_id[j*DIM+1]]) * LDG_LMP2GRO);
+        fr->local_density_gradients[at_idx][j-1][2] = (double) (atof(word_list[fr->ldg_id[j*DIM+2]]) * LDG_LMP2GRO);
       }
     }
     free(word_list);
@@ -5525,8 +5448,6 @@ void write_lammps_data(tW_gmx_trxframe *fr, tW_gmx_topology *top)
     if (strcmp(top->force_names[i],"BONDS") == 0) { ++n_bt; top->int_map[i] = n_bt; }
     else if (strcmp(top->force_names[i],"ANGLES") == 0) { ++n_at; top->int_map[i] = n_at; }
     else if (strcmp(top->force_names[i],"PDIHS") == 0) { ++n_dt; top->int_map[i] = n_dt; }
-    else if (strcmp(top->force_names[i],"RBDIHS") == 0) { ++n_dt; top->int_map[i] = n_dt; }
-    else if (strcmp(top->force_names[i],"TABDIHS") == 0) { ++n_dt; top->int_map[i] = n_dt; }
   }
 
   fprintf(fp,"     %d  bonds\n",n_bonds);
@@ -5685,233 +5606,1482 @@ void do_PBC(tW_gmx_trxframe *fr)
 }
 
 
-/*
- *
- *
-/*
-  while (ret_flag == 1)
+/* Local Density Function 06.17.2020 MRD */
+
+/* Populates the LD vector for an atom given an input line from a .btj file */
+void pop_LD_vector(tW_line inp_line, double *lds, int ntypes)
+{
+  char *start;
+//  float inp_float; MCL PREC FIX 02.28.25
+  double inp_float;
+  int i, test_sscanf;
+
+  start = &(inp_line[0]);
+  for (i = 0; i < ntypes; ++i)
   {
-    if (strstr(inp_line,"moltype") != NULL) { strcpy(*(ret_inp_line),inp_line); return; ret_flag = 0; }
-    else if (strstr(inp_line,"grp") != NULL) { strcpy(*(ret_inp_line),inp_line); return; ret_flag = 0; }
-    else if (strstr(inp_line,"Bond") != NULL) // This should be able to handle regular bonds and tabulated bonds (types 1 and 8), but not both in the same file.
+    test_sscanf = sscanf(start," %lf ",&inp_float); // MCL 02.05.25 - in sscanf this is a double, need to be careful reading in text data so that we don't round onto knot pointss for OG Bspline_deriv alg
+    if (test_sscanf != 1)
     {
-      if ((flags & flag_bonds) != 0) 
-      { 
-	fprintf(stderr,"ERROR: found section \"Bond:\" twice in moltype %s\n",mol->molname); 
-	exit(1); 
-      }
-      flags |= flag_bonds;
-      get_next_line(fp,inp_line); // nr: X   
-      test_sscanf = sscanf(inp_line," nr: %d ",&inp_int);
-      int n_bonds = inp_int / BOND_DIV;
-      mol->bond_nr = inp_int;
-      mol->n_bonds = n_bonds;
-      mol->bond_types = (int *) ecalloc(n_bonds, sizeof(int));
-      mol->bond_ij = (int **) ecalloc(n_bonds,sizeof(int *));
-      int bidx, btype, bidxi, bidxj;
-      tW_word inp_word;
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_bonds; ++i)
-      {
-        get_next_line(fp,inp_line); // idx type=X (BONDS) i j
-	test_line(inp_line,"BONDS",TRUE,"Expected to find BONDS");
-        test_sscanf = sscanf(inp_line, " %d type=%d %s %d %d ",&bidx, &btype, &inp_word, &bidxi, &bidxj);
-        mol->bond_ij[i] = (int *) ecalloc(2,sizeof(int));
-	mol->bond_types[i] = btype;
-	mol->bond_ij[i][0] = bidxi;
-	mol->bond_ij[i][1] = bidxj;
-      }      
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"BONDS",FALSE,"Expected to be done finding BONDS");
-    }
-    else if (strstr(inp_line,"Angle") != NULL) // This should be able to handle regular angles and tabulated angles (types 1 and 8), but not both in the same file.
-    {
-      if ((flags & flag_angles) != 0) 
-      { 
-	fprintf(stderr,"ERROR: found section \"Angle:\" twice in moltype %s\n",mol->molname); 
-	fprintf(stderr,"\tflags: %d   flag_angles: %d\n",flags,flag_angles);
-	fprintf(stderr," flags & flag_angles: %d\n",flags & flag_angles);
-        fprintf(stderr," Please make sure that you only have one angle type (either 1=angle or 8=tab angle) in your top file\n");
-	exit(1); 
-      }
-      flags |= flag_angles;
-      get_next_line(fp,inp_line); // nr: X
-      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
-      int n_angles = inp_int / ANGLE_DIV;
-      mol->angle_nr = inp_int;
-      mol->n_angles = n_angles;
-      mol->angle_types = (int *) ecalloc(n_angles,sizeof(int));
-      mol->angle_ijk = (int **) ecalloc(n_angles,sizeof(int *));
-      int aidx, atype, aidxi, aidxj, aidxk;
-      tW_word inp_word;
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_angles; ++i)
-      {
-	get_next_line(fp,inp_line); // idx type=X (ANGLES) i j k
-	test_line(inp_line,"ANGLES",TRUE,"Expected to find ANGLES");
-        test_sscanf = sscanf(inp_line," %d type=%d %s %d %d %d ",&aidx, &atype, &inp_word, &aidxi, &aidxj, &aidxk);
-        mol->angle_ijk[i] = (int *) ecalloc(3,sizeof(int));
-	mol->angle_types[i] = atype;
-	mol->angle_ijk[i][0] = aidxi;
-        mol->angle_ijk[i][1] = aidxj;
-        mol->angle_ijk[i][2] = aidxk;
-      }
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"ANGLES",FALSE,"Expected to be done finding ANGLES");
-    }
-    else if (strstr(inp_line,"Dih.") != NULL)
-    {
-      if ((flags & flag_pdihs) != 0) 
-      { 
-	fprintf(stderr,"ERROR: found section \"Dih.\" twice in moltype %s\n",mol->molname); 
-	fprintf(stderr,"\tflags: %d   flag_pdihs: %d\n",flags,flag_pdihs);
-	fprintf(stderr," flags & flag_pdihs: %d\n",flags & flag_pdihs);
-        fprintf(stderr,"Make sure you only have one type of dihedral (either 1=pdih or 8=tabdih) in your topology file\n");
-	exit(1); 
-      }
-      flags |= flag_pdihs;
-//      if ((flags & flag_tabdihs) != 0)
-//      {
-//        fprintf(stderr,"ERROR: we found section \"Tab. Dih.\" already, and now have found section \"Proper Dih.\"\n");
-//        fprintf(stderr,"you must have ALL dihedral angles in your topology one or the other \n");
-//        exit(EXIT_FAILURE);
-//      }
-      get_next_line(fp,inp_line); // nr: X
-      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
-      int n_pdih = inp_int / PDIH_DIV;
-      mol->pdih_nr = inp_int;
-      mol->n_pdihs = n_pdih;
-      mol->pdih_types = (int *) ecalloc(n_pdih,sizeof(int));
-      mol->pdih_ijkl = (int **) ecalloc(n_pdih,sizeof(int *));
-      int pdih_idx, pdih_type, pdi, pdj, pdk, pdl;
-      char dihtype[30];
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_pdih; ++i)
-      { 
-	get_next_line(fp,inp_line); // idx type=X (PDIHS) i j k l
-//	test_line(inp_line,"PDIHS",TRUE,"Expected to find PDIHS");
-        test_sscanf = sscanf(inp_line," %d type=%d %s %d %d %d %d ",&pdih_idx, &pdih_type, &(dihtype), &pdi, &pdj, &pdk, &pdl);
-        mol->pdih_ijkl[i] = (int *) ecalloc(4,sizeof(int));
-        mol->pdih_types[i] = pdih_type;
-        mol->pdih_ijkl[i][0] = pdi;
-        mol->pdih_ijkl[i][1] = pdj;
-        mol->pdih_ijkl[i][2] = pdk;
-        mol->pdih_ijkl[i][3] = pdl;
-      }
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"PDIHS",FALSE,"Expected to be done finding PDIHS");
-      test_line(inp_line,"TABDIHS",FALSE,"Expected to be done finding TABDIHS");
-    }
-    else if (strstr(inp_line,"Ryckaert-Bell.") != NULL)
-    {
-      fprintf(stderr,"ERROR: we do not support RB dihedral angles.\n");
-      fprintf(stderr,"\tPlease change all RB dihedrals to either proper or tabulated\n");
+      fprintf(stderr,"ERROR: expected to read %dth float from line: %s",i+1,inp_line);
+      fprintf(stderr,"\tCurrent location of line: %s",start);
       exit(1);
-/*      if ((flags & flag_rbdihs) != 0) 
-      { 
-	fprintf(stderr,"ERROR: found section \"Ryckaert-Bell.:\" twice in moltype %s\n",mol->molname); 
-	exit(1); 
-      }
-      flags |= flag_rbdihs;
-      get_next_line(fp,inp_line); // nr: X
-      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
-      int n_rbdih = inp_int / RBDIH_DIV;
-      mol->rbdih_nr = inp_int;
-      mol->n_rbdihs = n_rbdih;
-      mol->rbdih_types = (int *) ecalloc(n_rbdih,sizeof(int));
-      mol->rbdih_ijkl = (int **) ecalloc(n_rbdih,sizeof(int *));
-      int rbidx, rbtype, rbidxi, rbidxj, rbidxk, rbidxl;
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_rbdih; ++i)
-      {
-        get_next_line(fp,inp_line); // idx type=X (RBDIHS) i j k l
-	test_line(inp_line,"RBDIHS",TRUE,"Expected to find RBDIHS");
-	test_sscanf = sscanf(inp_line," %d type=%d (RBDIHS) %d %d %d %d ",&rbidx, &rbtype, &rbidxi, &rbidxj, &rbidxk, &rbidxl);
-        mol->rbdih_ijkl[i] = (int *) ecalloc(4,sizeof(int));
-	mol->rbdih_types[i] = rbtype;
-	mol->rbdih_ijkl[i][0] = rbidxi;
-        mol->rbdih_ijkl[i][1] = rbidxj;
-        mol->rbdih_ijkl[i][2] = rbidxk;
-        mol->rbdih_ijkl[i][3] = rbidxl;
-      }
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"RBDIHS",FALSE,"Expected to be done finding RBDIHS");
     }
-/*    else if (strstr(inp_line,"Tab. Dih.") != NULL)
+    lds[i] = (double) inp_float;
+    while ((*start) == ' ') { ++start; } // Finds the next number (non-space character, which is in inp_float)
+    start = strstr(start," "); // Finds the space after that number
+  }
+}
+
+void populate_LD_Gradients(tW_line inp_line, dvec *ldgs, int ntypes)
+{
+  char *start, *end;
+  float inp_float;
+  int i, j, test_sscanf;
+
+  start = &(inp_line[0]);
+  for (i = 0; i < ntypes; ++i)
+  {
+    for (j = 0; j < DIM; ++j)
     {
-      if ((flags & flag_tabdihs) != 0)
+      test_sscanf = sscanf(start, " %f ", &inp_float);
+      if (test_sscanf != 1)
       {
-        fprintf(stderr,"ERROR: found section \"Tab. Dih.:\" twice in moltype %s\n",mol->molname);
+        fprintf(stderr,"ERROR: expected to read %dth float from line: %s",i*DIM+j+1,inp_line);
+        fprintf(stderr,"\tCurrent location of line: %s",start);
         exit(1);
       }
-      flags |= flag_tabdihs;
-      if ((flags & flag_pdihs) != 0)
-      {
-        fprintf(stderr,"ERROR: we found section \"Proper Dih.\" previously, and are now in section \"Tab Dih.\" \n");
-        fprintf(stderr,"you must have ALL dihedral angles in your topology one or the other\n");
-        exit(EXIT_FAILURE);
-      }
-      get_next_line(fp,inp_line); // nr: X
-      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
-      int n_tabdih = inp_int / TABDIH_DIV;
-      mol->tabdih_nr = inp_int;
-      mol->n_tabdihs = n_tabdih;
-      mol->tabdih_types = (int *) ecalloc(n_tabdih,sizeof(int));
-      mol->tabdih_ijkl = (int **) ecalloc(n_tabdih,sizeof(int *));
-      int tabidx, tabtype, tabidxi, tabidxj, tabidxk, tabidxl;
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_tabdih; ++i)
-      {
-        get_next_line(fp,inp_line); // idx type=X (RBDIHS) i j k l
-        test_line(inp_line,"TABDIHS",TRUE,"Expected to find TABDIHS");
-        test_sscanf = sscanf(inp_line," %d type=%d (TABDIHS) %d %d %d %d ",&tabidx, &tabtype, &tabidxi, &tabidxj, &tabidxk, &tabidxl);
-        mol->tabdih_ijkl[i] = (int *) ecalloc(4,sizeof(int));
-        mol->tabdih_types[i] = tabtype;
-        mol->tabdih_ijkl[i][0] = tabidxi;
-        mol->tabdih_ijkl[i][1] = tabidxj;
-        mol->tabdih_ijkl[i][2] = tabidxk;
-        mol->tabdih_ijkl[i][3] = tabidxl;
-      }
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"TABDIHS",FALSE,"Expected to be done finding TABDIHS");
+      ldgs[i][j] = (double) inp_float;
+      while ((*start) == ' ') { ++start; }
+      start = strstr(start," ");
     }
-    else if (strstr(inp_line,"LJ-14") != NULL)
-    {
-      if ((flags & flag_lj14) != 0) 
-      { 
-	fprintf(stderr,"ERROR: found section \"LJ-14:\" twice in moltype %s\n",mol->molname); 
-	exit(1); 
-      }
-      flags |= flag_lj14;
-      get_next_line(fp,inp_line); // nr: X
-      test_sscanf = sscanf(inp_line, " nr: %d ",&inp_int);
-      int n_lj14 = inp_int / LJ14_DIV;
-      mol->lj14_nr = inp_int;
-      mol->n_lj14s = n_lj14;
-      mol->lj14_types = (int *) ecalloc(n_lj14,sizeof(int));
-      mol->lj14_ij = (int **) ecalloc(n_lj14,sizeof(int *));
-      int lj14idx, lj14type, lj14idxi, lj14idxj;
-      get_next_line(fp,inp_line); // iatoms:
-      for (i = 0; i < n_lj14; ++i)
-      {
-	get_next_line(fp,inp_line); // idx type=X (LJ14) i j
-	test_line(inp_line,"LJ14",TRUE,"Expected to find LJ14");
-	test_sscanf = sscanf(inp_line, "%d type=%d (LJ14) %d %d ",&lj14idx,&lj14type,&lj14idxi,&lj14idxj);
-	mol->lj14_ij[i] = (int *) ecalloc(2,sizeof(int));
-	mol->lj14_types[i] = lj14type;
-	mol->lj14_ij[i][0] = lj14idxi;
-	mol->lj14_ij[i][1] = lj14idxj;
-      }
-      get_next_line(fp,inp_line);
-      test_line(inp_line,"LJ14",FALSE,"Expected to be done finding LJ14");
-    }
-    else if (flags == old_flags)
-    {
-      fprintf(stderr,"ERROR: went around while loop once, flags never changed, and I didn't find moltype nor grp\n");
-      fprintf(stderr,"\tline: %s",inp_line);
-      get_next_line(fp,inp_line);
-      fprintf(stderr,"\t just got line: %s",inp_line);
-    }   
-    old_flags = flags;   
   }
-*/
+}
+
+void copy_xvf(tW_gmx_trxframe *source, tW_gmx_trxframe *dest, bool bX, bool bV, bool bF)
+{
+  int i;
+
+  dvec zero;
+  zero[0] = zero[1] = zero[2] = 0.0;
+  for (i = 0; i < source->contents->natoms; ++i)
+  {
+    if (bX && source->contents->bX && dest->contents->bX) { copy_vector(source->contents->x[i],dest->contents->x[i]); }
+    else if (dest->contents->bX) { copy_vector(zero,dest->contents->x[i]); }
+    if (bV && source->contents->bV && dest->contents->bV) { copy_vector(source->contents->v[i],dest->contents->v[i]); }
+    else if (dest->contents->bV) { copy_vector(zero,dest->contents->v[i]); }
+    if (bF && source->contents->bF && dest->contents->bF) { copy_vector(source->contents->f[i],dest->contents->f[i]); }
+    else if (dest->contents->bF) { copy_vector(zero,dest->contents->f[i]); }
+  }
+}
+
+
+void copy_lds(tW_gmx_trxframe *source, tW_gmx_trxframe *dest)
+{
+  int i = 0, j = 0;
+  int n_atomtypes = source->n_atomtypes;
+  if (source->bLDs)
+  {
+    dest->bLDs = source->bLDs;
+    for (i = 0; i < source->contents->natoms; ++i)
+    {
+      for (j = 0; j < n_atomtypes; ++j)
+      {
+        dest->local_densities[i][j] = source->local_densities[i][j];
+      }
+    }
+  }
+}
+
+
+void copy_ldgs(tW_gmx_trxframe *source, tW_gmx_trxframe *dest)
+{
+  int register i = 0;
+  int register j = 0;
+  int register n_atomtypes = source->n_atomtypes;
+  int register natoms = source->contents->natoms;
+  if (source->bLD_Grads)
+  {
+    dest->bLD_Grads = source->bLD_Grads;
+    for (i = 0; i < natoms; ++i)
+    {
+      for (j = 0; j <= n_atomtypes; ++j)
+      {
+        dest->local_density_gradients[i][j][0] = source->local_density_gradients[i][j][0];
+        dest->local_density_gradients[i][j][1] = source->local_density_gradients[i][j][1];
+        dest->local_density_gradients[i][j][2] = source->local_density_gradients[i][j][2];
+      }
+    }
+  }
+}
+
+
+
+
+/* MRD Index Files */
+
+int get_n_words_from_line(tW_line inp_line)
+{
+  tW_line new_line;
+  strcpy(new_line,inp_line);
+  int n_words = 0;
+  int n_chars = 0;
+  int idx = 0;
+  bool in_word;
+  while ((new_line[idx] != '\n') && (new_line[idx] != '\0'))
+  {
+    if (new_line[idx] == '\t') { new_line[idx] = ' '; }
+    ++idx;
+  }
+  n_chars = idx;
+  idx = 0;
+  in_word = FALSE;
+  while (idx < n_chars)
+  {
+    if ((new_line[idx] != ' ') && (new_line[idx] != '\0') && (new_line[idx] != '\n'))
+    {
+      if (! in_word) { ++n_words; in_word = TRUE; }
+    }
+    else
+    {
+      in_word = FALSE;
+    }
+    ++idx;
+  }
+  return n_words;
+}
+
+void put_at_nums_in(tW_line inp_line, int *spots, int n_words_this_line)
+{
+  int at_idx = 0;
+  int idx = 0;
+  int n_chars;
+  bool in_word = FALSE;
+  char *p, *p2;
+  tW_line new_line;
+  strcpy(new_line,inp_line);
+  while ((new_line[idx] != '\n') && (new_line[idx] != '\0'))
+  {
+    if (new_line[idx] == '\t') { new_line[idx] = ' '; }
+    ++idx;
+  }
+  n_chars = idx;
+  idx = 0;
+  in_word = FALSE;
+  while ((at_idx < n_words_this_line) && (idx < n_chars))
+  {
+    if ((new_line[idx] != ' ') && (new_line[idx] != '\0') && (new_line[idx] != '\n'))
+    {
+      if (! in_word)
+      {
+        p = &(new_line[idx]);
+        p2 = strstr(p," ");
+        if (p2 == NULL)
+        {
+          p2 = strstr(p,"\n");
+        }
+        *p2 = '\0';
+        spots[at_idx] = atoi(p);
+        ++at_idx;
+        *p2 = ' ';
+        in_word = TRUE;
+      }
+    }
+    else
+    {
+      in_word = FALSE;
+    }
+    ++idx;
+  }
+}
+
+void alloc_index_ng(tW_index_file *idx, int ng)
+{
+  idx->n_groups = ng;
+  idx->group_names = (tW_word *) ecalloc(ng,sizeof(tW_word));
+  idx->n_at_per_group = (int *) ecalloc(ng,sizeof(int));
+  idx->atoms_in_group = (int **) ecalloc(ng,sizeof(int *));
+}
+
+void alloc_index_aig(tW_index_file *idx)
+{
+  int i;
+  for (i = 0; i < idx->n_groups; ++i)
+  {
+    idx->atoms_in_group[i] = (int *) ecalloc(idx->n_at_per_group[i], sizeof(int));
+  }
+}
+
+void read_index_file(tW_word fnm, tW_gmx_topology *top)
+{
+  FILE *fp = open_file(fnm,'r');
+  tW_line inp_line;
+  tW_word inp_word;
+  int test_sscanf;
+  int n_groups = 0;
+  int i, j;
+  while (get_next_line(fp,inp_line) != -1)
+  {
+    if ((strstr(inp_line,"[") != NULL) && (strstr(inp_line,"]") != NULL))
+    {
+      ++n_groups;
+    }
+  }
+  rewind(fp);
+
+  if (! top->idx_file) { top->idx_file = (tW_index_file *) ecalloc(1,sizeof(tW_index_file)); }
+
+  alloc_index_ng(top->idx_file,n_groups);
+
+  int group_idx = -1;
+  int n_atoms_on_line;
+  while (get_next_line(fp,inp_line) != -1)
+  {
+    if ((strstr(inp_line,"[") != NULL) && (strstr(inp_line,"]") != NULL))
+    {
+      ++group_idx;
+      test_sscanf = sscanf(inp_line,"[ %s ]",&inp_word);
+      top->idx_file->n_at_per_group[group_idx] = 0;
+      if (test_sscanf != 1)
+      {
+        fprintf(stderr,"ERROR: unable to read name for index group idx %d\n",group_idx);
+        fprintf(stderr,"\tline: %s",inp_line);
+        exit(1);
+      }
+      strcpy(top->idx_file->group_names[group_idx],inp_word);
+    }
+    else
+    {
+      int n_words_this_line = get_n_words_from_line(inp_line);
+      if (n_words_this_line > 0)
+      {
+        top->idx_file->n_at_per_group[group_idx] += n_words_this_line;
+      }
+    }
+  }
+
+  alloc_index_aig(top->idx_file);
+
+  rewind(fp);
+  group_idx = -1;
+  int at_idx;
+  while (get_next_line(fp,inp_line) != -1)
+  {
+    if ((strstr(inp_line,"[") != NULL) && (strstr(inp_line,"]") != NULL))
+    {
+      ++group_idx;
+      at_idx = 0;
+    }
+    else
+    {
+      int n_words_this_line = get_n_words_from_line(inp_line);
+      if (n_words_this_line > 0)
+      {
+        put_at_nums_in(inp_line,&(top->idx_file->atoms_in_group[group_idx][at_idx]),n_words_this_line);
+        at_idx += n_words_this_line;
+      }
+    }
+  }
+  fclose(fp);
+}
+
+void copy_idx_file(tW_index_file *dest, tW_index_file *source)
+{
+  int i, j;
+  alloc_index_ng(dest,source->n_groups);
+  for (i = 0; i < dest->n_groups; ++i)
+  {
+    dest->n_at_per_group[i] = source->n_at_per_group[i];
+    strcpy(dest->group_names[i],source->group_names[i]);
+    dest->atoms_in_group[i] = (int *) ecalloc(dest->n_at_per_group[i],sizeof(int));
+    for (j = 0; j < dest->n_at_per_group[i]; ++j)
+    {
+      dest->atoms_in_group[i][j] = source->atoms_in_group[i][j];
+    }
+  }
+}
+
+void generate_generic_index_file(tW_gmx_topology *top, bool bOld)
+{
+  int i, j, k, n_groups;
+  tW_index_file old_idx_file;
+  if (bOld)
+  {
+    copy_idx_file(&(old_idx_file),top->idx_file);
+    efree(top->idx_file);
+  }
+  top->idx_file = (tW_index_file *) ecalloc(1,sizeof(tW_index_file));
+  n_groups = 1 + top->contents->mols.nr +  top->n_atomtypes;
+  bool *olds;
+  if (bOld)
+  {
+    olds = (bool*) ecalloc(old_idx_file.n_groups, sizeof(bool));
+    bool exists = FALSE;
+    for (i = 0; i < old_idx_file.n_groups; ++i)
+    {
+      exists = FALSE;
+      if (strcmp(old_idx_file.group_names[i],"System") == 0) { exists = TRUE; }
+      for (j = 0; j < top->contents->mols.nr; ++j)
+      {
+        if (strcmp(old_idx_file.group_names[i],top->molecules[j].molname) == 0) { exists = TRUE; }
+      }
+      for (j = 0; j < top->n_atomtypes; ++j)
+      {
+        if (strcmp(old_idx_file.group_names[i],top->atom_type_names[j]) == 0) { exists = TRUE; }
+      }
+
+      if (! exists) { ++n_groups; }
+      olds[i] = !exists;
+    }
+  }
+
+  alloc_index_ng(top->idx_file,n_groups);
+  int group_idx = 0;
+
+  /* first group is always system and contains everything */
+  strcpy(top->idx_file->group_names[group_idx],"System");
+  top->idx_file->n_at_per_group[group_idx] = top->contents->atoms.nr;
+  ++group_idx;
+  /* next groups are the molecule groups */
+  for (i = 0; i < top->contents->mols.nr; ++i)
+  {
+    strcpy(top->idx_file->group_names[group_idx],top->molecules[i].molname);
+    top->idx_file->n_at_per_group[group_idx] = top->molecules[i].n_mols*top->molecules[i].n_apm;
+    ++group_idx;
+  }
+  /* last groups are the atom groups */
+  for (i = 0; i < top->n_atomtypes; ++i)
+  {
+    /* Make sure no atom type has same name as molecule type */
+    bool mol_at_different = TRUE;
+    for (j = 0; j < top->contents->mols.nr; ++j)
+    {
+      if (strcmp(top->molecules[j].molname,top->atom_type_names[i]) == 0) { mol_at_different = FALSE; }
+    }
+    if (mol_at_different)
+    {
+      strcpy(top->idx_file->group_names[group_idx],top->atom_type_names[i]);
+    }
+    else
+    {
+      sprintf(top->idx_file->group_names[group_idx],"%s_ATOMS",top->atom_type_names[i]);
+    }
+    int n_at = 0;
+    for (j = 0; j < top->contents->mols.nr; ++j)
+    {
+      int n_in_mol = 0;
+      for (k = 0; k < top->molecules[j].n_apm; ++k)
+      {
+        if (strcmp(top->atom_type_names[i],top->molecules[j].atom_types[k]) == 0)
+        {
+          ++n_in_mol;
+        }
+      }
+      n_at += n_in_mol * top->molecules[j].n_mols;
+    }
+    top->idx_file->n_at_per_group[group_idx] = n_at;
+    ++group_idx;
+  }
+  /* finally do old index file groups */
+  if (bOld)
+  {
+    for (i = 0; i < old_idx_file.n_groups; ++i)
+    {
+      if (olds[i])
+      {
+        strcpy(top->idx_file->group_names[group_idx],old_idx_file.group_names[i]);
+        top->idx_file->n_at_per_group[group_idx] = old_idx_file.n_at_per_group[i];
+        ++group_idx;
+      }
+    }
+  }
+
+  alloc_index_aig(top->idx_file);
+  /* Populate atoms_in_group s */
+  /* System */
+  group_idx = 0;
+  for (i = 0; i < top->contents->atoms.nr; ++i)
+  {
+    top->idx_file->atoms_in_group[/*group_idx*/0][i] = i;
+  }
+  ++group_idx;
+  /* Molecules */
+  /* This relies on the assumption that all molecules of a given type are grouped together in the top/gro files */
+  int at_idx = 0;
+  for (i = 0; i < top->contents->mols.nr; ++i)
+  {
+    for (j = 0; j < top->molecules[i].n_mols * top->molecules[i].n_apm; ++j)
+    {
+      top->idx_file->atoms_in_group[group_idx][j] = at_idx;
+      ++at_idx;
+    }
+    ++group_idx;
+  }
+  /* Atoms */
+  int *idxes = (int *) ecalloc(top->n_atomtypes, sizeof(int));
+  for (i = 0; i < top->n_atomtypes; ++i)
+  {
+    idxes[i] = 0;
+  }
+  for (i = 0; i < top->contents->atoms.nr; ++i)
+  {
+    int itype = get_type(*(top->contents->atoms.atomtype[i]),top);
+    top->idx_file->atoms_in_group[group_idx+itype][idxes[itype]] = i;
+    ++(idxes[itype]);
+  }
+  group_idx += top->n_atomtypes;
+  /* Old ones */
+  if (bOld)
+  {
+    for (i = 0; i < old_idx_file.n_groups; ++i)
+    {
+      if (olds[i])
+      {
+        for (j = 0; j < old_idx_file.n_at_per_group[i]; ++j)
+        {
+          top->idx_file->atoms_in_group[group_idx][j] = old_idx_file.atoms_in_group[i][j];
+        }
+        ++group_idx;
+      }
+    }
+    efree(olds);
+  }
+  efree(idxes);
+}
+
+void print_index_names_and_atom_counts(tW_index_file *idx)
+{
+  int i;
+  fprintf(stderr,"%3s    %20s    %10s\n","Idx","Index Group Name","Atom Count");
+  fprintf(stderr,"---    --------------------    ----------\n");
+  for (i = 0; i < idx->n_groups; ++i)
+  {
+    fprintf(stderr,"%3d    %20s    %6d\n",i,idx->group_names[i],idx->n_at_per_group[i]);
+  }
+}
+
+
+/*****************************************************************************************
+skip_excl():
+*****************************************************************************************/
+bool skip_excl(int nr_excl, int *excl_list, int j)
+{
+    int i;
+
+    for (i = 0; i < nr_excl; i++) {
+        if (j == excl_list[i]) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+/******************************************************************************************
+dprocess_sysname_natoms():
+@arg fp the pointer to the dumped tpr file
+@arg top the pointer to the topology we are populating via tpr info
+@arg lin_buf allocated space for working with lines (dummy space)
+@return true (success) false (something bad happened)
+This function reads dumped tpr files from the topology header and 2 lines below. 
+In doing so it obtains the system name and number of atoms
+it returns false if there was a problem and errors werent caught earlier
+*******************************************************************************************/
+bool dprocess_sysname_natoms(FILE* fp, tW_gmx_topology* top, tW_line* lin_buf)
+{
+ bool bOk;
+ tW_word inp_word;
+ int integer_holder;
+// skip to topology:
+ bOk = find_line_in_file(fp, "topology:", NULL);
+ get_next_line(fp, *lin_buf); // expect name="name" undertop
+ if (!bOk) { THROW_TPR_ERROR("Can't find `topology:`\n");}
+ bOk =!(strstr(*lin_buf, "name=\"") == NULL); //NOT OKAY IF NO OVERLAP IS TRUE
+ if (!bOk == TRUE) { THROW_TPR_ERROR("Can't find name=\"name\" under topology:\n"); }
+ bOk = sscanf(*lin_buf, " name=\"%s ", &inp_word);
+ if (!bOk) { THROW_TPR_ERROR("name=name fmt change\n"); }
+ elim_char(inp_word, '"'); strcpy(top->contents->name, inp_word); //TOP INFO->SYSNAME
+ get_next_line(fp,*lin_buf); // expect #atoms = XXXXX
+ bOk = !((strstr(*lin_buf,"#atoms") == NULL));
+ if (!bOk) { THROW_TPR_ERROR("#atoms = XXXX not found\n"); }
+ bOk = sscanf(*lin_buf, " #atoms = %d ", &integer_holder);
+ if (!bOk) { THROW_TPR_ERROR("atoms=XXX fmt change\n"); }
+ top->contents->atoms.nr = integer_holder; //TOP INFO-> TOTAL ATOMS
+ return TRUE;
+}
+
+/******************************************************************************************
+dprocess_nmolblocks():
+@arg fp the pointer to the dumped tpr file
+@arg top the pointer to the topology we are populating via tpr info
+@arg lin_buf allocated space for working with lines (dummy space)
+@return true (success) false (something bad happened)
+This function reads dumped tpr file to determine the number of molecule blocks
+(It allows for there to be e.g. 3 molecule blocks where e.g. 2 different molecule types are listed)
+(This feature is per MRD 01.17.2020 BOCS issue 11)
+This sets us up for reading the molecule details later by figuring out how many are required.
+it returns false if there was a problem and errors werent caught earlier
+*******************************************************************************************/
+bool dprocess_nmolblocks(FILE* fp, tW_gmx_topology* top, tW_line* lin_buf)
+{
+ bool bOk;
+ tW_word inp_word;
+ int EOF_sentinal = 0;
+ int nmolblocks = 0;
+ //Find molblock section in versions 5.1.4 and later
+ bOk = find_line_in_file(fp, "#molblock", *lin_buf);
+ if (!bOk)
+ {
+	  // We think this can happen in earlier versions of gromacs
+	  // Scroll through file from here, count number times molblock comes up
+	  find_line_in_file(fp, "topology:\n", NULL);
+	  while (EOF_sentinal != -1) // EOF
+	  {
+		  EOF_sentinal = get_next_line(fp, *lin_buf);
+		  if (strstr(*lin_buf, "molblock (") != NULL) { nmolblocks++; }
+	  }
+	  if (nmolblocks == 0) { THROW_TPR_ERROR("UNABLE TO COUNT \"molblock (X)\" SECTIONS\n");}
+ }
+ else 
+ {
+	  bOk = sscanf(*lin_buf, " #molblock = %d", &nmolblocks);
+	  if (!bOk) { THROW_TPR_ERROR("UNABLE TO PARSE #molblock = # in tpr\n"); }
+ }
+ if (nmolblocks == 0) { THROW_TPR_ERROR("COULD NOT READ n in #molblock =n\n"); }
+ top->n_molblocks = nmolblocks;
+ 
+ return TRUE;
+}
+
+/**************************************************************************************
+dget_moltypes_in_molblocks():
+@arg fp the pointer to the dumped tpr file
+@arg top the pointer to the topology we are populating via tpr info
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+@return TRUE if successful FALSE (something bad happened)
+This function determines the number of unique molecule types listed in the tpr molblocks
+It populates the list of unique moltypes, and coordinates them to each block listed
+**************************************************************************************/
+bool dget_moltypes_in_molblocks(FILE* fp, tW_gmx_topology* top, tW_line* lin_buf)
+{
+ bool bOk;
+ tW_word inp_word; 
+ int integer_holder;
+ int nmoleculetypes = 0;
+ tW_word molblock_header;
+ for (int i = 0; i < top->n_molblocks ; i++)
+ {
+  sprintf(molblock_header, "molblock (%d):", i);
+  // skip to moleblock (#):
+  bOk = find_line_in_file(fp, molblock_header, *lin_buf);
+  if (!bOk) { sprintf(molblock_header, "UNABLE TO FIND molblock (%d):",i);
+              THROW_TPR_ERROR(molblock_header);}
+  // We expect names and indices one line down from molblock header. e.g. moltype = 0 "BRANCH"
+  get_next_line(fp, *lin_buf);
+  bOk = sscanf(*lin_buf, " moltype = %d \"%s", &integer_holder, &inp_word);
+  if (!bOk) { THROW_TPR_ERROR("COULD NOT PARSE MOLTYPE\n"); }
+  elim_char(inp_word, '"');
+  
+  // Associate molecule with block
+  top->molblocks[i].moltype = integer_holder;
+  strcpy(top->molblocks[i].molname, inp_word);
+
+  // If index read >= ntypes we know about, count total types as that index + 1 [eg i=0 is 1 type]
+  // (This is an MRD innovation MCL ported here)
+  if (integer_holder + 1 > nmoleculetypes) { nmoleculetypes = integer_holder + 1; }
+
+  //figure out how many molecules in system are listed in this block. We expect it listed on the 
+  //next line down e.g. #molecules = 
+  get_next_line(fp, *lin_buf);
+  bOk = sscanf(*lin_buf, " #molecules = %d ", &integer_holder);
+  if (!bOk) { THROW_TPR_ERROR("UNABLE TO DETERMINE nmolecules from molblock\n");}
+  top->molblocks[i].n_mols = integer_holder;
+  //fprintf(stderr, "molblock[%d] n = %d\n", i, top->molblocks[i].n_mols);
+ }
+ top->n_molecule_types = nmoleculetypes;
+
+ return TRUE;
+}
+
+/**************************************************************************************
+dget_top_ff_info():
+@arg fp the pointer to the dumped tpr file
+@arg top the pointer to the topology we are populating via tpr info
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+@return TRUE if successful FALSE (something bad happened)
+This function reads the list of different interactions that will be simulated if 
+the tpr dumped is simulated in gromacs. [Does not account for distinct energy groups]
+@note MCL 11.07.2025 To clarify, we don't do anything with this info for force-matching. The list of interactions read in in that case is determine by the par file and Bocs atom types.
+@warning this function dynamically allocates memory for top structure members
+**************************************************************************************/
+bool dget_top_ff_info(FILE* fp, tW_gmx_topology* top, tW_line* lin_buf)
+{
+ bool bOk;
+ tW_word interaction_name;
+ tW_word functype_key;
+ int integer_holder;
+ float fudge_holder;
+
+ bOk = find_line_in_file(fp, "ffparams", NULL);
+ if (!bOk) { THROW_TPR_ERROR("Unable to read ffparams from dumped tpr\n");}
+ get_next_line(fp, *lin_buf); //we expect atnr = X one line below
+ bOk = sscanf(*lin_buf, " atnr=%d ", &integer_holder);
+ if (!bOk) { THROW_TPR_ERROR("Unable to determine n_unique nonbonded atom params\n"); }
+ top->contents->idef.atnr = integer_holder;
+ top->contents->atomtypes.nr = top->contents->idef.atnr;
+ get_next_line(fp, *lin_buf); // ntypes=X
+ bOk = sscanf(*lin_buf, " ntypes=%d ", &integer_holder);
+ if (!bOk) { THROW_TPR_ERROR("Unable to determine n_interactions defined by top\n");}
+ top->contents->idef.ntypes = integer_holder;
+
+ // Now we can make room for the list and search for names
+ top->contents->idef.functype = (tW_t_functype *) ecalloc(top->contents->idef.ntypes,sizeof(tW_t_functype));
+ top->contents->idef.iparams = (tW_t_iparams *) ecalloc(top->contents->idef.ntypes,sizeof(tW_t_iparams));
+ top->force_names = (tW_word *) ecalloc(top->contents->idef.ntypes,sizeof(tW_word));
+ 
+ // We expect lines like
+ // functype[0]=LJ_SR, c6= 0.00000000e+00, c12= 1.00000000e+00, though some types take multiple lines
+ for (int i = 0; i < top->contents->idef.ntypes; ++i)
+  {
+    sprintf(functype_key, "functype[%d]", i);
+    bOk = find_line_in_file(fp, functype_key, *lin_buf);
+    if (!bOk) { 
+	       sprintf(functype_key, "Unable to find functype[%d] when nfunctypes is %d\n", i, top->contents->idef.ntypes);
+	       THROW_TPR_ERROR(functype_key); }
+    bOk = sscanf(*lin_buf," functype[%d]=%s ",&integer_holder,&interaction_name);
+    if (!bOk) { THROW_TPR_ERROR("Unexpected functype format\n");}
+    elim_char(interaction_name,',');
+    strcpy(top->force_names[i],interaction_name);
+  }
+ bOk = find_line_in_file(fp, "fudgeQQ", *lin_buf);
+ if (!bOk) { THROW_TPR_ERROR("Could not find mixing coeff\n"); }
+ bOk = sscanf(*lin_buf, " fudgeQQ = %f ", &fudge_holder);
+ if (!bOk) { THROW_TPR_ERROR("Unexpected fudgefmt \n"); }
+ top->contents->idef.fudgeQQ = fudge_holder;
+ return TRUE;
+}
+/**************************************************************************************
+dfind_all_molinfo:
+@arg fp the pointer to the dumped tpr file
+@arg mol the list of molecule types in the top
+@arg nmol the length of the list
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+@return TRUE if successful FALSE (something bad happened)
+This function searches the tpr file for the various fields of the molecule structure.
+It does this for every distinct molecule type in the system
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note This function replaces get_moltype_info
+**************************************************************************************/
+bool dfind_all_molinfo(FILE *fp, tW_molecule * mol, int nmol, tW_line * lin_buf)
+{
+ bool bOk; 
+ tW_word word_holder;
+ int integer_holder;
+ tW_word moltype_header;
+
+ for (int i = 0; i < nmol; i++) // Scan info for all dif mol types
+ {
+   sprintf(moltype_header, "moltype (%d):", i);
+   bOk = find_line_in_file(fp, moltype_header, NULL);
+   if (!bOk) {
+	   sprintf(moltype_header, "Unable to find moltype (%d): when nmoltypes is %d\n", i, nmol);
+	   THROW_TPR_ERROR(moltype_header); }
+   get_next_line(fp, *lin_buf); //name = X
+   bOk = sscanf(*lin_buf, " name=\"%s\" ", &word_holder);
+   if (!bOk) { sprintf(moltype_header, "Could not parse name under moltype (%d):\n", i);
+	   THROW_TPR_ERROR(moltype_header);}
+   elim_char(word_holder,'"');
+   strcpy(mol[i].molname, word_holder);
+
+   get_next_line(fp, *lin_buf); // atoms:
+   get_next_line(fp, *lin_buf); // atom (#):
+   bOk = sscanf(*lin_buf, " atom (%d) ", &integer_holder);
+   if (!bOk) { sprintf(moltype_header, "Unable to parse apm for moltype %d\n", i);
+               THROW_TPR_ERROR(moltype_header); }
+   // Now we have atoms per molecule
+   mol[i].n_apm = integer_holder;
+   bOk = dparse_atom_per_molecule_info(fp, &mol[i], lin_buf);
+   if (!bOk) { sprintf(moltype_header, "Unable to parse atom info for moltype %d\n", i);
+               THROW_TPR_ERROR(moltype_header);}
+   bOk = dparse_residue_per_molecule_info(fp, &mol[i], lin_buf);
+   if (!bOk) { sprintf(moltype_header, "Unable to parse residue info for moltype %d\n", i);
+               THROW_TPR_ERROR(moltype_header);}
+   bOk = dparse_charge_groups_per_molecule(fp, &mol[i], lin_buf, i);
+   if (!bOk) { sprintf(moltype_header, "Unable to parse charge_group info for moltype %d\n", i);
+               THROW_TPR_ERROR(moltype_header);}
+   bOk = dparse_atomic_exclusions_per_molecule(fp, &mol[i], lin_buf, i);
+   if (!bOk) { sprintf(moltype_header, "Unable to parse excl. per. atom info for moltype %d\n", i);
+               THROW_TPR_ERROR(moltype_header);}
+   bOk = dparse_bonded_int_lists_per_molecule(fp, &mol[i], lin_buf, i);
+
+ }
+ 
+}
+/**************************************************************************************
+dparse_atom_per_molecule_info:
+@arg fp the pointer to the dumped tpr file
+@arg moli molecule_typei
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+@return TRUE if successful FALSE (something bad happened)
+This function is meant to parse the section of text following moltype(i)-> atom (apm)
+It fills in the atomic info for the passed molecule structure
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note This function is a helper function @see dfind_all_molinfo
+@warning This function dynamically allocates memory in the molecule structure (in top structure)
+**************************************************************************************/
+bool dparse_atom_per_molecule_info(FILE* fp, tW_molecule* moli, tW_line* lin_buf)
+{
+ bool bOk; 
+ int at_per_mi = moli->n_apm;
+ int atype_id, residx;
+ tW_word atname;
+ tW_word atype, atomBtype;
+ float mass, charge; // doubles > float but sscanf works with float
+
+
+ // MRD 11.05.2019 now we finally have n_apm, allocate memory for stuff
+  moli->type_ids = (int *) ecalloc(at_per_mi,sizeof(int));
+  moli->residx = (int *) ecalloc(at_per_mi,sizeof(int));
+  moli->atom_names = (tW_word *) ecalloc(at_per_mi,sizeof(tW_word));
+  moli->atom_types = (tW_word *) ecalloc(at_per_mi,sizeof(tW_word));
+  moli->atom_Btypes = (tW_word *) ecalloc(at_per_mi,sizeof(tW_word));
+  moli->m = (double *) ecalloc(at_per_mi,sizeof(double));
+  moli->q = (double *) ecalloc(at_per_mi,sizeof(double));
+
+  // off target variables (dummies for reading/checking)
+  int atom_index, dumi, dumi2, dumi3;
+  tW_word dumword, dumword2;
+  float dumf, dumf1;
+
+  for (int i = 0; i < at_per_mi; i++) // Scan for mass/charge/residx
+  {
+    get_next_line(fp,*lin_buf); 
+    bOk = sscanf(*lin_buf," atom[ %d]={type= %d, typeB= %d, ptype= %s m= %f, q= %f, mB= %g, qB= %g, resind= %d, atomnumber= %d} ",&atom_index, &atype_id, &dumi, &dumword, &mass, &charge, &dumf, &dumf1, &residx, &dumi3);
+    if (bOk != 10) { THROW_TPR_ERROR("COULDNT READ MASS CHARGE RESIDX PROPERLY\n"); }
+    bOk=(atom_index == i);//if file alligned correctly, index should correspond to line we're processing
+    if (!bOk) { THROW_TPR_ERROR("DID NOT PROPERLY READ ATOMS_PER_MOLECULE\n"); } 
+    moli->type_ids[i] = atype_id;
+    moli->m[i] = mass;
+    moli->q[i] = charge;
+    moli->residx[i] = residx;
+  }
+  get_next_line(fp, *lin_buf); // skip second atom (apm):
+  
+  for (int i = 0; i < at_per_mi; i++) // Scan for atom names
+  {
+    get_next_line(fp, *lin_buf);
+    bOk = sscanf(*lin_buf," atom[%d]={name=\"%s\"} ",&atom_index, &atname);
+    if (bOk != 2) { THROW_TPR_ERROR("DID NOT PARSE ATOM NAMES\n"); }
+    if (atom_index != i) { THROW_TPR_ERROR("APM READER MISALIGNED IN ATOM NAMES\n"); }
+    elim_char(atname, '"');
+    strcpy(moli->atom_names[i], atname);
+  }
+  get_next_line(fp, *lin_buf); // skip type (apm):
+  
+  for (int i = 0; i < at_per_mi; i++) // Scan for atom types, they list 2, we take first
+  {
+    get_next_line(fp, *lin_buf);
+   // bOk = sscanf(*lin_buf, " type[%d]=\"%s,nameB=\"%s}", &atom_index, &atype, &dumword);
+    bOk = sscanf(*lin_buf, " type[%d]={name=\"%s", &atom_index, &atype);// &dumword);
+   // fprintf(stderr, "%s %d\n", *lin_buf, bOk);
+    if (bOk != 2) { THROW_TPR_ERROR("DID NOT PARSE ATOM TYPES\n"); }
+    if (atom_index != i) { THROW_TPR_ERROR("APM READER MISALIGNED IN ATOM TYPES\n"); }
+    elim_char(atype, '"');
+    strcpy(moli->atom_types[i], atype);
+  }
+  return TRUE;
+}
+
+/**************************************************************************************
+dparse_residue_per_molecule_info:
+@arg fp the pointer to the dumped tpr file
+@arg moli molecule_typei
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+@return TRUE if successful FALSE (something bad happened)
+This function is meant to parse the section of text following moltype(i)-> residue(nresidue)
+It fills in the residue info for the passed molecule structure
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note This function is a helper function @see dfind_all_molinfo
+@warning This function dynamically allocates memory in the molecule structure (in top structure)
+**************************************************************************************/
+bool dparse_residue_per_molecule_info(FILE* fp, tW_molecule* moli, tW_line* lin_buf)
+{
+ bool bOk;
+ int nresidues, residue_idx;
+ tW_word resname;
+
+ int dumi;
+// tW_word dum_word;
+ char dum_word[50];
+ char atype[50];
+
+ // Find nresidue and make space
+ get_next_line(fp, *lin_buf); // should be residue (nres):, follow by the list
+ bOk = sscanf(*lin_buf, " residue (%d): ", &nresidues);
+ if (!bOk) { sprintf(resname, "COULD NOT READ NRESIDUE FROM LINE: %s", lin_buf);
+	 THROW_TPR_ERROR(resname); }
+ moli->n_res = nresidues;
+ moli->resname = ( tW_word *) ecalloc(nresidues, sizeof(tW_word));
+ for (int i = 0; i < nresidues; i++) // Scan for resnames
+ {
+  get_next_line(fp, *lin_buf);
+  bOk = sscanf(*lin_buf," residue[%d]={name=\"%s\"", &residue_idx, &resname);
+		  //, nr=%d, ic\'%s\'} ",&residue_idx, &resname, &dumi, dum_word);
+  //fprintf(stderr, "bOk %d string: %s\n", bOk, lin_buf);
+  if (bOk != 2) { THROW_TPR_ERROR("RESIDUE INFO FMT CHANGE\n");}
+  if (residue_idx != i) { THROW_TPR_ERROR("RESIDUE READER MISALIGNED\n"); }
+  elim_char(resname, '"');
+  strcpy(moli->resname[i], resname);
+ }
+ return TRUE;
+}
+/**************************************************************************************
+dparse_charge_groups_per_molecule:
+@arg fp the pointer to the dumped tpr file
+@arg moli molecule_typei
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+@return TRUE if successful FALSE (something bad happened)
+This function is meant to parse the section of text following moltype(i)-> cgs:
+It fills in the number of charge groups/members involved for the passed molecule structure
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note newer tprs do not have charge groups. Also charge groups are blocked by contiguous atoms with the same type in the .top file. (not the indices passed into the .top e.g. 1 2 1 2 is 4 dif charge groups)
+@note This function is a helper function @see dfind_all_molinfo
+@warning This function dynamically allocates memory in the molecule structure (in top structure)
+**************************************************************************************/
+bool dparse_charge_groups_per_molecule(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid)
+{
+ bool bOk;
+ int n_cg, cg_idx, idxatomstart, idxatomstop;
+ tW_word moltype_header;
+ sprintf(moltype_header, "moltype (%d):", moltypeid);
+ find_line_in_file(fp, moltype_header, NULL); // go to correct section
+ bOk = find_line_in_file(fp, "cgs:", NULL); // see if found
+ if (bOk) // parse ncgs found
+ {
+   get_next_line(fp,*lin_buf); // nr=X
+   bOk = sscanf(*lin_buf," nr=%d ",&n_cg);
+   if (!bOk) { THROW_TPR_ERROR("Found charge group info but could not parse cgs\n");} 
+ }
+ if(!bOk) { n_cg = 0; } // then there are none to find
+ moli->n_cg = n_cg;
+
+ moli->cg_start = (int *) ecalloc(n_cg, sizeof(int));
+ moli->cg_end = (int *) ecalloc(n_cg, sizeof(int));
+
+ for (int i = 0; i < n_cg; i++) // Scan for cg members cgs[X]={start..stop}
+ {
+   get_next_line(fp, *lin_buf);
+   bOk = sscanf(*lin_buf," cgs[%d]={%d..%d} ",&cg_idx, &idxatomstart, &idxatomstop);
+   if (bOk !=3) { THROW_TPR_ERROR("charge group iatom fmt change\n"); }
+   moli->cg_start[i] = idxatomstart;
+   moli->cg_end[i] = idxatomstop;
+ }
+ return TRUE;
+}
+/**************************************************************************************
+dparse_atomic_exclusions_per_molecule:
+@arg fp the pointer to the dumped tpr file
+@arg moli molecule_typei
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+@return TRUE if successful FALSE (something bad happened)
+This function is meant to parse the section of text following moltype(i)-> excls:
+It is *VERY* important for cgff/ldcalc that this function works.
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note older and newer tprs will format the exclusion list differently
+@note This function is a helper function @see dfind_all_molinfo
+@warning This function dynamically allocates memory in the molecule structure (in top structure)
+**************************************************************************************/
+bool dparse_atomic_exclusions_per_molecule(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid)
+{
+ bool bOk;
+ bool bnew_excl_fmt = FALSE;
+ int nr_exclusion_lists, total_members_across_lists, lstid;
+ int exc_for_ati_startidx, exc_for_ati_stopidx, lenlist_ati;
+ char* excl_mem_parser;
+ char* excl_mem_parser2;
+
+ int members_found, member_id;
+ int EOF_sentinal;
+ 
+ tW_word moltype_header;
+ sprintf(moltype_header, "moltype (%d):", moltypeid);
+ find_line_in_file(fp, moltype_header, NULL); // go to correct section
+ bOk = find_line_in_file(fp, "excls:", NULL); // see if found
+ if (!bOk) { THROW_TPR_ERROR("TRIED TO PARSE EXCLUSIONS but info not found excls: SECTION\n"); }
+ get_next_line(fp,*lin_buf); // nr=X or numLists=X
+ //fprintf(stderr, "found %s\n", *lin_buf); 
+ bOk = sscanf(*lin_buf," nr=%d ",&nr_exclusion_lists);
+ if (!bOk) 
+ { 
+   bOk = sscanf(*lin_buf, " numLists=%d", &nr_exclusion_lists);
+   if (!bOk) {THROW_TPR_ERROR("nr=X/numLists=X NOT FOUND UNDER exclusions\n"); }
+ }
+
+ moli->n_excls = nr_exclusion_lists;
+ if (nr_exclusion_lists != moli->n_apm)
+ { THROW_TPR_ERROR("NUMBER OF ATOMS THAT HAVE EXCLUSION LISTS != NUMBER ATOMS IN MOLECULE\n"); }
+ get_next_line(fp, *lin_buf); // nra=X or numElements
+ bOk = sscanf(*lin_buf, " nra=%d ", &total_members_across_lists);
+ if (!bOk)
+ {
+   bOk = sscanf(*lin_buf, " numElements=%d ", &total_members_across_lists); 
+   if (!bOk) {THROW_TPR_ERROR("nra=X/numElements=X NOT FOUND UNDER nr-X:\n");}
+   bnew_excl_fmt= TRUE;
+ }
+ moli->n_exclsa = total_members_across_lists; // exclusions are a jagged array
+
+ // Now we can allocate space for each exclusion list
+ moli->excls = (int **) ecalloc(nr_exclusion_lists, sizeof(int *));
+ moli->n_epa = (int *) ecalloc(nr_exclusion_lists, sizeof(int *)); // will hold each list len
+
+ for (int i = 0; i < nr_exclusion_lists; i++) // Scan for list members & parse
+ {
+   //Determine number of entries in each list
+   get_next_line(fp, *lin_buf);
+   bOk = sscanf(*lin_buf, " excls[%d][%d..%d]", &lstid, &exc_for_ati_startidx, &exc_for_ati_stopidx);
+   if (bOk == 3) // old fmt
+   {
+     lenlist_ati = exc_for_ati_stopidx - exc_for_ati_startidx + 1;
+   }
+   if (bOk !=3) // new fmt
+   { 
+     bOk = sscanf(*lin_buf, " excls[%d][num=%d]", &lstid, &lenlist_ati);
+     if (bOk !=2) {THROW_TPR_ERROR("UNEXPECTED EXCLUSION LIST FMT\n"); }
+   }
+   if (lstid != i) { THROW_TPR_ERROR("EXCLUSION PARSER MISALIGNED\n"); }
+   moli->n_epa[i] = lenlist_ati;
+
+   // Make space & fill
+   moli->excls[i] = (int *) ecalloc(lenlist_ati, sizeof(int));
+
+   // Expect lines like excls[X][start..stop]{atomid1, atomid2}, gotta store and parse the brackets
+   excl_mem_parser = strstr(*lin_buf, "=");
+   if (bnew_excl_fmt) // then we gotta split by = twice
+   { 
+     excl_mem_parser2 = excl_mem_parser+1; 
+     excl_mem_parser = strstr(excl_mem_parser2, "=");
+   }
+   if (DEBUG_BUILD) {fprintf(stderr, "EXCL PARSER %s", excl_mem_parser);}
+   members_found = 0;
+   while (members_found < lenlist_ati)
+   {
+     bOk = sscanf(excl_mem_parser, "%d", &member_id);
+     if (!bOk) // Then keep searching string subsections until it is okay
+     {
+       excl_mem_parser = (excl_mem_parser + 1); // address of next char in
+       if ( (strstr(excl_mem_parser, ",") == NULL) &&
+	  (strstr(excl_mem_parser, "}") == NULL) &&
+	  (members_found < lenlist_ati) ) // { } This list can take multiple lines
+          {
+            EOF_sentinal = get_next_line(fp, *lin_buf);
+	    if (EOF_sentinal == -1 ) { THROW_TPR_ERROR("Unable to complete reading excl list\n"); }
+	    excl_mem_parser = *lin_buf;
+          }
+     }
+     else // we probably found an id
+     {
+       moli->excls[i][members_found] = member_id;
+       members_found++;
+       excl_mem_parser = strstr(excl_mem_parser, ","); // split remaining line by ,
+     }
+   }
+ }
+ return TRUE;
+}
+
+/**************************************************************************************
+dparse_Bonded_int_lists_per_molecule:
+@arg fp the pointer to the dumped tpr file
+@arg moli molecule_typei
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+@arg moltypeidx the index of the molecule type we should fill this info for
+@return TRUE if successful FALSE (something bad happened)
+This is a wrapper function.
+The goal of this function is to generate a list of types of intra (Bonded) interactions in the topology
+and the indices of the molecule's atoms involved in each.
+It is *VERY* important for cgff/ldcalc that this function works.
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note This function is a helper function @see dfind_all_molinfo
+**************************************************************************************/
+bool dparse_bonded_int_lists_per_molecule(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeidx)
+{
+  int n_found;
+  
+  n_found = dfill_bonds_from_gmx_bondtype_headers(fp, moli, lin_buf, moltypeidx);
+  if (DEBUG_BUILD) { fprintf(stderr, "Found %d bonds in moleculetype[%d]\n", n_found, moltypeidx);}
+  n_found = dfill_angles_from_gmx_angletype_headers(fp, moli, lin_buf, moltypeidx);
+  if (DEBUG_BUILD) {fprintf(stderr, "Found %d angles in moleculetype[%d]\n", n_found, moltypeidx);}
+  n_found = dfill_dihedrals_from_gmx_dihedraltype_headers(fp, moli, lin_buf, moltypeidx);
+  if (DEBUG_BUILD) {fprintf(stderr, "Found %d dihedrals in moleculetype[%d]\n", n_found, moltypeidx);}
+  n_found = dfill_bigdihedrals_from_gmx_bigdihedraltype_headers(fp, moli, lin_buf, moltypeidx);
+  if (DEBUG_BUILD) {fprintf(stderr, "Found %d bigdihedrals in moleculetype[%d]\n", n_found, moltypeidx);}
+  n_found = dfill_14nb_from_gmx_IMNB_headers(fp, moli, lin_buf, moltypeidx);
+  if (DEBUG_BUILD) {fprintf(stderr, "Found %d 14nb interactions in moleculetype[%d]\n", n_found, moltypeidx);}
+  n_found =  dproc_other_headers(fp, moli, lin_buf, moltypeidx);
+
+  return TRUE;
+}
+
+/**************************************************************************************
+dfill_bonds_from_gmx_bondtype_headers:
+@arg fp the pointer to the dumped tpr file
+@arg moli molecule_typei
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+@return TRUE if successful FALSE (something bad happened)
+This is one of the functions we expect to update over time
+It stores a list of gromacs headers that signal bond member lists and fills the interactions
+in the topology
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note older and newer tprs will format the exclusion list differently
+@note This function is a helper function to  @see dfind_all_molinfo -> @see dparse_bond_int_lists_per_molecule
+@warning This function dynamically allocates memory in the molecule structure (in top structure)
+**************************************************************************************/
+int dfill_bonds_from_gmx_bondtype_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid)
+{
+  bool bOk;
+
+  int nBondTypes = 10; // increase this and add headers for new gromacs versions
+  const tW_word BondTypes[] = {"Bond:","G96Bond:","Morse:","Cubic Bonds:","Connect Bonds:",
+	                       "Harmonic Pot.:","FENE Bonds:","Tab. Bonds:","Tab. Bonds NC:",
+			       "Restraint Pot.:"};
+  int integer_holder;
+  int change_in_bond_count, prev_n_bonds, n_words;
+  int BIDX = 0;
+
+  moli->bond_nr = 0; // total entries for bond lists (memberids + interaction indices)
+  moli->n_bonds = 0; // Instances of bonds
+  tW_word moltype_header;
+  sprintf(moltype_header, "moltype (%d):", moltypeid);
+
+  for (int i = 0; i < nBondTypes; i++) // Scan all known bond headers
+  {
+   find_line_in_file(fp, moltype_header, NULL); //make sure we're always in the right section to start
+   find_line_in_file(fp, BondTypes[i], NULL); // If exists find next header instance
+   get_next_line(fp, *lin_buf); // nr: X should always be under the header
+   bOk = sscanf(*lin_buf, " nr: %d ", &integer_holder); //space needed to hold n_members + int_idx
+   if (!bOk) { THROW_TPR_ERROR("Could not find nr: X under Bondtype header\n"); }
+   if (integer_holder == 0) { continue; }
+
+   // Mark prior found info and figure out new space requirements
+   prev_n_bonds = moli->n_bonds;
+   moli->bond_nr += integer_holder;
+   moli->n_bonds += integer_holder/BOND_DIV; // 3 entries, 2 members + 1 idx
+   change_in_bond_count = integer_holder/BOND_DIV;
+
+   // Make room
+   moli->bond_types = (int *) erealloc(moli->bond_types, moli->n_bonds * sizeof(int)); //list of instances 
+   moli->bond_type_top_cat = (int *) erealloc(moli->bond_type_top_cat, moli->n_bonds * sizeof(int));
+   moli->bond_ij = (int **) erealloc(moli->bond_ij, moli->n_bonds * sizeof(int *)); // members per inst only
+
+   for (int j = prev_n_bonds; j < moli->n_bonds; j++) {moli->bond_ij[j] = (int *) ecalloc(2,sizeof(int));}
+
+   // skip header
+   get_next_line(fp, *lin_buf); // if != 0, iatoms:
+
+   for (int j = 0; j < change_in_bond_count; j++) 
+   {
+     get_next_line(fp,*lin_buf);
+     elim_char(*lin_buf,'\n');
+     n_words = get_word_count_delim(*lin_buf," ");
+     tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
+     get_words_delim(*lin_buf," ",word_list);
+
+     bOk = sscanf(word_list[1],"type=%d",&integer_holder);
+     moli->bond_types[BIDX] = integer_holder;
+     moli->bond_type_top_cat[BIDX] = i;
+     moli->bond_ij[BIDX][0] = atoi(word_list[3]);
+     moli->bond_ij[BIDX][1] = atoi(word_list[4]);
+     ++BIDX;
+     efree(word_list);
+   }
+  }
+
+  return moli->n_bonds;
+}
+/***************************************************************************************
+dfill_angles_from_gmx_angletype_headers:
+@arg fp the pointer to the dumped tpr file
+@arg moli molecule_typei
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+@return TRUE if successful FALSE (something bad happened)
+This is one of the functions we expect to update over time
+It stores a list of gromacs headers that signal angle member lists and fills the interactions
+in the topology
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note older and newer tprs will format the exclusion list differently
+@note This function is a helper function to  @see dfind_all_molinfo -> @see dparse_bond_int_lists_per_molecule
+@warning This function dynamically allocates memory in the molecule structure (in top structure)
+**************************************************************************************/
+int dfill_angles_from_gmx_angletype_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid)
+{
+  tW_word moltype_header;
+  sprintf(moltype_header, "moltype (%d):", moltypeid);
+  bool bOk;
+  int AIDX = 0;
+  int nAngleTypes = 10;
+  const tW_word AngleTypes[] = {"Angle:","G96Angle:","Restricted Angles:","Lin. Angle:",
+	                        "Bond-Cross:","BA-Cross:","U-B:","Quartic Angles:","Tab. Angles:","Restr. Angles:"};
+  moli->angle_nr = moli->n_angles = 0;
+  int integer_holder;
+  int prev_n_angles, n_new_angles;
+
+  for (int i = 0; i < nAngleTypes; i++)
+  {
+    find_line_in_file(fp, moltype_header, NULL); //make sure we're always in the right section to start
+    if (!find_line_in_file(fp, AngleTypes[i], NULL)) { continue; } // If exists find next header instance, if not, continue to next one
+    get_next_line(fp, *lin_buf); // nr: X should always be under the header
+    bOk = sscanf(*lin_buf, " nr: %d ", &integer_holder); //space needed to hold n_members + int_idx
+    if (!bOk) { THROW_TPR_ERROR("Could not find nr: X under Angletype header\n"); }
+    if (integer_holder == 0) { continue; }
+    get_next_line(fp,*lin_buf); // iatoms:
+    moli->angle_nr += integer_holder;
+    prev_n_angles = moli->n_angles;
+    moli->n_angles += integer_holder/ANGLE_DIV;
+    n_new_angles = integer_holder/ANGLE_DIV;
+    moli->angle_types = (int *) erealloc(moli->angle_types, moli->n_angles * sizeof(int));
+    moli->angle_type_top_cat = (int *) erealloc(moli->angle_type_top_cat, moli->n_angles * sizeof(int));
+    moli->angle_ijk = (int **) erealloc(moli->angle_ijk, moli->n_angles * sizeof(int *));
+    for (int j = prev_n_angles; j < moli->n_angles; ++j) {moli->angle_ijk[j] = (int *) ecalloc(3,sizeof(int));}
+    for (int j = 0; j < n_new_angles; ++j)
+    {
+      get_next_line(fp,*lin_buf);
+      
+      elim_char(*lin_buf,'\n');
+      int n_words = get_word_count_delim(*lin_buf," ");
+      tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
+      get_words_delim(*lin_buf," ",word_list);
+      
+      bOk = sscanf(word_list[1],"type=%d",&integer_holder);
+      moli->angle_types[AIDX] = integer_holder;
+      moli->angle_type_top_cat[AIDX] = i;
+      moli->angle_ijk[AIDX][0] = atoi(word_list[3]);
+      moli->angle_ijk[AIDX][1] = atoi(word_list[4]);
+      moli->angle_ijk[AIDX][2] = atoi(word_list[5]);
+      ++AIDX;
+      efree(word_list);
+    }
+  }
+  return moli->n_angles;
+}
+
+/***************************************************************************************
+dfill_dihedrals_from_gmx_dihedraltype_headers:
+@arg fp the pointer to the dumped tpr file
+@arg moli molecule_typei
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+@return TRUE if successful FALSE (something bad happened)
+This is one of the functions we expect to update over time
+It stores a list of gromacs headers that signal dihedral member lists and fills the interactions
+in the topology
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note older and newer tprs will format the exclusion list differently
+@note This function is a helper function to  @see dfind_all_molinfo -> @see dparse_bond_int_lists_per_molecule
+@warning This function dynamically allocates memory in the molecule structure (in top structure)
+**************************************************************************************/
+int dfill_dihedrals_from_gmx_dihedraltype_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid)
+{
+  tW_word moltype_header;
+  sprintf(moltype_header, "moltype (%d):", moltypeid);
+  bool bOk;
+  bool bsecond_Improper_Dih_head = FALSE;
+  bool checked_for_second = FALSE;
+  int DIDX = 0;
+  int  nDihedralTypes = 9;
+  const tW_word DihedralTypes[] = {"Proper Dih.:","Ryckaert-Bell.:", "Restr. Dih.:","Restricted Dih.:",
+	                           "CBT Dih.:","Fourier Dih.:","Improper Dih.:","Per. Imp. Dih.:","Tab. Dih.:"}; 
+
+  moli->dih_nr = moli->n_dihs = 0;
+  int prev_n_dihs, n_new_dihs, n_words, integer_holder;
+
+  int improp_i = -1; // Default index of improper dihedral type in DihedralTypes array
+  for (int i = 0; i < nDihedralTypes; i++) 
+  { 
+    if (strcmp(DihedralTypes[i], "Improper Dih.:") == 0)
+    { improp_i = i; 
+      if (DEBUG_BUILD) printf("Found Improper Dih. at index %d\n", improp_i);
+    }
+  }  
+
+  for (int i = 0; i < nDihedralTypes; i++)
+  {
+    find_line_in_file(fp, moltype_header, NULL); //make sure we're always in the right section to start
+    if(!find_line_in_file(fp, DihedralTypes[i], NULL)){continue;} // If exists find next header instance, if not, continue to next one
+    if (bsecond_Improper_Dih_head && (i == improp_i)) // Check if processing Improper Dih. The integer check is more straightforward to implement than the string
+    {find_line_in_file(fp, DihedralTypes[improp_i], NULL);} // Go to second header if needed
+    get_next_line(fp, *lin_buf); // nr: X should always be under the header
+    bOk = sscanf(*lin_buf, " nr: %d ", &integer_holder); //space needed to hold n_members + int_idx
+    if (!bOk) { THROW_TPR_ERROR("Could not find nr: X under Dihedraltype header\n"); }
+    if (integer_holder == 0) 
+    { 
+      if (i != improp_i) {continue;} // Check for second if first improp was 0
+      if (bsecond_Improper_Dih_head) { continue; }
+      else { get_next_line(fp, *lin_buf); 
+	     bsecond_Improper_Dih_head=((strstr(*lin_buf, DihedralTypes[i]) != NULL));
+	     if (!checked_for_second){ i=i-1;}
+      	     checked_for_second=TRUE;
+           } 
+    }
+    get_next_line(fp, *lin_buf); // iatoms:
+
+    moli->dih_nr += integer_holder;
+//    fprintf(stderr, "Got %d dih for %s of type %s\n", integer_holder, moltype_header, DihedralTypes[i]);
+    prev_n_dihs = moli->n_dihs;
+    moli->n_dihs += integer_holder/DIH_DIV;
+    n_new_dihs = integer_holder/DIH_DIV;
+    moli->dih_types = (int *) erealloc(moli->dih_types, moli->n_dihs * sizeof(int));
+    moli->dih_type_top_cat = (int *) erealloc(moli->dih_type_top_cat, moli->n_dihs * sizeof(int));
+    moli->dih_ijkl = (int **) erealloc(moli->dih_ijkl, moli->n_dihs * sizeof(int *));
+    for (int j = prev_n_dihs; j < moli->n_dihs; ++j) { moli->dih_ijkl[j] = (int *) ecalloc(4,sizeof(int)); }
+    for (int j = 0; j < n_new_dihs; ++j)
+    {
+      get_next_line(fp,*lin_buf);
+     // fprintf(stderr, "%s\n", lin_buf);
+      elim_char(*lin_buf,'\n');
+      n_words = get_word_count_delim(*lin_buf," ");
+      tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
+      get_words_delim(*lin_buf," ",word_list);
+     
+      bOk = sscanf(word_list[1],"type=%d",&integer_holder);
+      moli->dih_types[DIDX] = integer_holder;
+      moli->dih_type_top_cat[DIDX] = i;
+      moli->dih_ijkl[DIDX][0] = atoi(word_list[3]);
+      moli->dih_ijkl[DIDX][1] = atoi(word_list[4]);
+      moli->dih_ijkl[DIDX][2] = atoi(word_list[5]);
+      moli->dih_ijkl[DIDX][3] = atoi(word_list[6]);
+      ++DIDX;
+      efree(word_list);
+    }
+    if (i == improp_i) // Then we need to check if we're in the version regime where Improp Dih is listed 2x per molecule.
+    {
+      get_next_line(fp, *lin_buf); // It will be one line down from the first one if its here.
+      if ((strstr(*lin_buf, "Improper Dih.:") != NULL) && !bsecond_Improper_Dih_head)
+      {
+//        fprintf(stderr, "In the improper check\n");
+	bsecond_Improper_Dih_head = TRUE;
+	i=i-1; // We'll process this kind of header again if we need to (but not if we've done this already)
+      }
+    }
+  }
+  return moli->n_dihs;
+}
+
+/***************************************************************************************
+dfill_bigdihedrals_from_gmx_bigdihedraltype_headers:
+@arg fp the pointer to the dumped tpr file
+@arg moli molecule_typei
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+This is one of the functions we expect to update over time
+It stores a list of gromacs headers that signal bigdihedral (Charm) member lists and fills the interactions
+in the topology
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note older and newer tprs will format the exclusion list differently
+@note This function is a helper function to  @see dfind_all_molinfo -> @see dparse_bond_int_lists_per_molecule
+@warning This function dynamically allocates memory in the molecule structure (in top structure)
+**************************************************************************************/
+int dfill_bigdihedrals_from_gmx_bigdihedraltype_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid)
+{
+  
+  tW_word moltype_header;
+  sprintf(moltype_header, "moltype (%d):", moltypeid);
+  bool bOk;
+
+  const tW_word BigDihedralTypes[] = {"CMAP Dih.:"}; // MRD 01.24.2020
+  int  nBigDihedralTypes = 1;
+  int BDIDX, integer_holder;
+  int prev_n_bigdihs, n_new_bigdihs, n_words;
+  moli->n_bigdihs = 0;
+  for (int i=0; i < nBigDihedralTypes; i++)
+  {
+    find_line_in_file(fp, moltype_header, NULL); //make sure we're always in the right section to start
+    find_line_in_file(fp, BigDihedralTypes[i], NULL); // If exists find next header instance
+    get_next_line(fp, *lin_buf); // nr: X should always be under the header
+    bOk = sscanf(*lin_buf, " nr: %d ", &integer_holder); //space needed to hold n_members + int_idx
+    if (!bOk) { THROW_TPR_ERROR("Could not find nr: X under BigDihedraltype header\n"); }
+    if (integer_holder == 0) { continue; }
+    get_next_line(fp,*lin_buf); // iatoms:
+
+    moli->bigdih_nr += integer_holder;
+    prev_n_bigdihs = moli->n_bigdihs;
+    moli->n_bigdihs += integer_holder/BIGDIH_DIV;
+    n_new_bigdihs = integer_holder/BIGDIH_DIV;
+    moli->bigdih_types = (int *) erealloc(moli->bigdih_types, moli->n_bigdihs * sizeof(int));
+    moli->bigdih_type_top_cat = (int *) erealloc(moli->bigdih_type_top_cat, moli->n_bigdihs * sizeof(int));
+    moli->bigdih_ijklm = (int **) erealloc(moli->bigdih_ijklm, moli->n_bigdihs * sizeof(int *));
+    for (int j = prev_n_bigdihs; j < moli->n_bigdihs; ++j) { moli->bigdih_ijklm[j] = (int *) ecalloc(5,sizeof(int)); }
+    for (int j = 0; j < n_new_bigdihs; ++j)
+    {
+      get_next_line(fp,*lin_buf);
+     
+      elim_char(*lin_buf,'\n');
+      n_words = get_word_count_delim(*lin_buf," ");
+      tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
+      get_words_delim(*lin_buf," ",word_list);
+     
+      bOk = sscanf(word_list[1],"type=%d",&integer_holder);
+      moli->bigdih_types[BDIDX] = integer_holder;
+      moli->bigdih_type_top_cat[BDIDX] = i;
+      moli->bigdih_ijklm[BDIDX][0] = atoi(word_list[3]);
+      moli->bigdih_ijklm[BDIDX][1] = atoi(word_list[4]);
+      moli->bigdih_ijklm[BDIDX][2] = atoi(word_list[5]);
+      moli->bigdih_ijklm[BDIDX][3] = atoi(word_list[6]);
+      moli->bigdih_ijklm[BDIDX][4] = atoi(word_list[7]);
+      ++BDIDX;
+      efree(word_list);
+    }
+  
+  }
+  return moli->n_bigdihs;
+}
+
+/****************************************************************************
+dfill_14nb_from_gmx_IMNB_headers
+@arg fp the pointer to the dumped tpr file
+@arg moli molecule_typei
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+This is one of the functions we expect to update over time
+It stores a list of gromacs headers that signal bigdihedral (Charm) member lists and fills the interactions
+in the topology
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note older and newer tprs will format the exclusion list differently
+@note This function is a helper function to  @see dfind_all_molinfo -> @see dparse_bond_int_lists_per_molecule
+@warning This function dynamically allocates memory in the molecule structure (in top structure)
+**************************************************************************************/
+int dfill_14nb_from_gmx_IMNB_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid)
+{
+  tW_word moltype_header;
+  sprintf(moltype_header, "moltype (%d):", moltypeid);
+  const tW_word IMNBTypes[] = {"LJ-14:","Coulomb-14:","LJC-14 q:","LJC Pairs NB:"};
+  int nIMNBTypes = 4;
+  int IMNBIDX = 0;
+  int integer_holder, prev_n_imnbs, n_words, n_new_imnbs;
+  moli->imnb_nr = moli->n_imnbs = 0;
+  bool bOk;
+  
+   for (int i=0; i < nIMNBTypes; i++)
+  {
+    find_line_in_file(fp, moltype_header, NULL); //make sure we're always in the right section to start
+    find_line_in_file(fp, IMNBTypes[i], NULL); // If exists find next header instance
+    get_next_line(fp, *lin_buf); // nr: X should always be under the header
+    bOk = sscanf(*lin_buf, " nr: %d ", &integer_holder); //space needed to hold n_members + int_idx
+    if (!bOk) { THROW_TPR_ERROR("Could not find nr: X under 14NB header\n"); }
+    if (integer_holder == 0) { continue; }
+    get_next_line(fp,*lin_buf); // iatoms:
+    moli->imnb_nr += integer_holder;
+    prev_n_imnbs = moli->n_imnbs;
+    moli->n_imnbs += integer_holder / IMNB_DIV;
+    n_new_imnbs = integer_holder / IMNB_DIV;
+    moli->imnb_types = (int *) erealloc(moli->imnb_types, moli->n_imnbs * sizeof(int));
+    moli->imnb_type_top_cat = (int *) erealloc(moli->imnb_type_top_cat, moli->n_imnbs * sizeof(int));
+    moli->imnb_ij = (int **) erealloc(moli->imnb_ij, moli->n_imnbs * sizeof(int *));
+    for (int j = prev_n_imnbs; j < moli->n_imnbs; ++j) { moli->imnb_ij[j] = (int *) ecalloc(2,sizeof(int)); }
+    for (int j = 0; j < n_new_imnbs; ++j)
+    {
+      get_next_line(fp,*lin_buf);
+      elim_char(*lin_buf,'\n');
+      n_words = get_word_count_delim(*lin_buf," ");
+      tW_word * word_list = (tW_word *) ecalloc(n_words, sizeof(tW_word));
+      get_words_delim(*lin_buf," ",word_list);
+    
+      bOk = sscanf(word_list[1],"type=%d",&integer_holder);
+      moli->imnb_types[IMNBIDX] = integer_holder;
+      moli->imnb_type_top_cat[IMNBIDX] = i;
+      moli->imnb_ij[IMNBIDX][0] = atoi(word_list[3]);
+      moli->imnb_ij[IMNBIDX][1] = atoi(word_list[4]);
+      ++IMNBIDX;
+      efree(word_list);
+    } 
+  }
+   return moli->n_imnbs;
+}
+
+/****************************************************************************
+dproc_other_headers
+@arg fp the pointer to the dumped tpr file
+@arg moli molecule_typei
+@arg lin_buf allocated space for working with lines (something like address of (char*))
+This is one of the functions we expect to update over time
+It stores a list of gromacs headers that contain interaction lists BOCS doesnt handle
+@note in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info
+@note older and newer tprs will format the exclusion list differently
+@note This function is a helper function to  @see dfind_all_molinfo -> @see dparse_bond_int_lists_per_molecule
+@warning This function dynamically allocates memory in the molecule structure (in top structure)
+**************************************************************************************/
+int dproc_other_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid)
+{
+  tW_word moltype_header;
+  sprintf(moltype_header, "moltype (%d):", moltypeid);
+  const tW_word OtherTypes[] = {"GB 1-2 Pol.:","GB 1-2 Pol. (unused):","GB 1-3 Pol.:",
+              "GB 1-3 Pol. (unused):","GB 1-4 Pol. (unused):", "GB 1-4 Pol.:",
+  	          "GB Polariz.:","GB Polarization (unused):","Nonpolar Sol.:","Nonpolar Sol. (unused):",
+              "LJ (SR):","LJ:","B.ham:","Coul:", "Flat-b. P-R.:", "Dih. Rest. Vi.:",
+			        "Buck.ham (SR):","LJ (unused):","B.ham (unused):","Disper. corr.:",
+			        "Coulomb (SR):","Coul (unused):","RF excl.:","Coul. recip.:",
+			        "LJ recip.:","DPD:","Polarization:","Water Pol.:","Thole Pol.:",
+			        "Anharm. Pol.:","Position Rest.:","Flat-bottom posres:","Dis. Rest.:",
+			        "D.R.Viol. (nm):","Orient. Rest.:","Ori. R. RMSD:","Angle Rest.:",
+			        "Angle Rest. Z:","Dih. Rest.:","Dih. Rest. Viol.:","Constraint:",
+              "Constr. No Co.:", "Virtual site 1:", "Virt. site 2fd:", "Virt. site 3fd:",
+			        "Constr. No Conn.:","Settle:","Virtual site 2:","Virtual site 3:",
+			        "Virtual site 3fd:","Virtual site 3fad:","Virtual site 3out:",
+			        "Virtual site 4fd:","Virtual site 4fdn:","Virtual site N:",
+              "Vir. site 3fad:","Vir. site 3out:","Virt. site 4fd:","Vir. site 4fdn:",
+			        "COM Pull En.:","Quantum En.:","Potential:","Kinetic En.:",
+			        "Total Energy:","Conserved En.:","Temperature:","Vir. Temp. (not used):",
+			        "Pres. DC:","Pressure:","dH/dl constr.:","dVremain/dl:","dEkin/dl:",
+			        "dVcoul/dl:","dVvdw/dl:","dVbonded/dl:","dVrestraint/dl:",
+			        "dVtemperature/dl:","dVtemp/dl:","Vir. Temp.:", "Dens. fitting:"};
+  int nOtherTypes = 59;
+  int IMNBIDX = 0;
+  bool bOk;
+  int integer_holder, prev_n_imnbs, n_words;
+  
+  moli->n_other = (int *) ecalloc(nOtherTypes,sizeof(int));
+  moli->other_nr = (int *) ecalloc(nOtherTypes,sizeof(int));
+  moli->other_types = (int **) ecalloc(nOtherTypes,sizeof(int *));
+  moli->other_ijklmn = (int ***) ecalloc(nOtherTypes,sizeof(int **));
+
+  for (int i=0; i < nOtherTypes; i++)
+  {
+    find_line_in_file(fp, moltype_header, NULL); //make sure we're always in the right section to start
+    find_line_in_file(fp, OtherTypes[i], NULL); // If exists find next header instance
+    get_next_line(fp, *lin_buf); // nr: X should always be under the header
+    bOk = sscanf(*lin_buf, " nr: %d ", &integer_holder); //space needed to hold n_members + int_idx
+    if (!bOk) { THROW_TPR_ERROR("Could not find nr: X under 14NB header\n"); }
+    if (integer_holder == 0) { continue; }
+    get_next_line(fp, *lin_buf); // iatoms:
+    fprintf(stderr,"WARNING: nonzero number of interactions of type %s found\n",OtherTypes[i]);
+    fprintf(stderr,"These types of interactions do not correspond to BondStretch, Angle, Dihedral, nor IntraMolec_NB_Pair types\n");
+    fprintf(stderr,"Accordingly, they will not be used nor transferred to the .btp file\n");
+    get_next_line(fp,*lin_buf); // iatoms:
+    get_next_line(fp,*lin_buf);
+    // split this line up into words. is the number of words minus 2
+    // X type=XX (XXXX) I J K ...
+    elim_char(*lin_buf,'\n');
+    n_words = get_word_count_delim(*lin_buf," ");
+    tW_word * word_list = (tW_word *) ecalloc(n_words,sizeof(tW_word));
+    get_words_delim(*lin_buf," ",word_list);
+
+    moli->n_other[i] = moli->other_nr[i] / (n_words - 2);
+    moli->other_types[i] = (int *) ecalloc(moli->n_other[i], sizeof(int));
+    moli->other_ijklmn[i] = (int **) ecalloc(moli->n_other[i], sizeof(int *));
+    for (int j = 0; j < moli->n_other[i]; ++j)
+    { moli->other_ijklmn[i][j] = (int *) ecalloc(n_words-3,sizeof(int)); }
+
+    bOk = sscanf(word_list[1],"type=%d",&integer_holder);
+    moli->other_types[i][0] = integer_holder;
+    for (int j = 3; j < n_words; ++j) { moli->other_ijklmn[i][0][j-3] = atoi(word_list[j]); }
+    efree(word_list);
+    for (int j = 1; j < moli->n_other[i]; ++j)
+    {
+      get_next_line(fp,*lin_buf);
+      elim_char(*lin_buf,'\n');
+      int n_words2 = get_word_count_delim(*lin_buf," ");
+      tW_word * word_list2 = (tW_word *) ecalloc(n_words2,sizeof(tW_word));
+      get_words_delim(*lin_buf," ",word_list2);
+      moli->other_types[i][j] = integer_holder;
+      for (int k = 3; k < n_words; ++k) { moli->other_ijklmn[i][j][k-3] = atoi(word_list2[k]); }
+      efree(word_list2);
+     }
+  }
+  // Need to consider how to scan for unknown headers
+  return 0;
+}

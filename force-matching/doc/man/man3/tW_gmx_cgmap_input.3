@@ -1,0 +1,97 @@
+.TH "tW_gmx_cgmap_input" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tW_gmx_cgmap_input
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <C:/Users/maria/Documents/Noid_Group/MYBOCS/05_11_26\-releasedoc/BOCS_Developers/force\-matching/src/gromacs_topology\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "char ** \fBmap_file_flags\fP"
+.br
+.ti -1c
+.RI "char ** \fBtime_flags\fP"
+.br
+.ti -1c
+.RI "char ** \fBfile_type_flags\fP"
+.br
+.ti -1c
+.RI "\fBtW_file_struct\fP \fBfiles\fP [\fBN_MAP_FILES\fP]"
+.br
+.ti -1c
+.RI "\fBtW_time_struct\fP \fBtimes\fP [\fBN_TIME_ARGS\fP]"
+.br
+.ti -1c
+.RI "\fBtW_fType_struct\fP \fBfile_types\fP [\fBN_FTYPE_ARGS\fP]"
+.br
+.ti -1c
+.RI "unsigned short \fBuse_files\fP"
+.br
+.ti -1c
+.RI "unsigned short \fBfile_times\fP"
+.br
+.ti -1c
+.RI "unsigned short \fBftflags\fP"
+.br
+.ti -1c
+.RI "char *(* \fBget_filename\fP )(struct \fBtW_gmx_cgmap_input\fP *, const char *)"
+.br
+.ti -1c
+.RI "\fBbool\fP(* \fBarg_is_set\fP )(struct \fBtW_gmx_cgmap_input\fP *, const char *)"
+.br
+.in -1c
+.SH "Field Documentation"
+.PP 
+.SS "\fBbool\fP(* arg_is_set) (struct \fBtW_gmx_cgmap_input\fP *, const char *)"
+
+.PP
+Referenced by \fBinit_tW_gmx_cgmap_input()\fP, and \fBmain()\fP\&.
+.SS "unsigned short file_times"
+
+.PP
+Referenced by \fBarg_is_set()\fP, and \fBinit_tW_gmx_cgmap_input()\fP\&.
+.SS "char** file_type_flags"
+
+.PP
+Referenced by \fBinit_tW_gmx_cgmap_input()\fP\&.
+.SS "\fBtW_fType_struct\fP file_types[\fBN_FTYPE_ARGS\fP]"
+
+.PP
+Referenced by \fBarg_is_set()\fP, \fBinit_tW_gmx_cgmap_input()\fP, and \fBmain()\fP\&.
+.SS "\fBtW_file_struct\fP files[\fBN_MAP_FILES\fP]"
+
+.PP
+Referenced by \fBarg_is_set()\fP, \fBget_filename()\fP, and \fBinit_tW_gmx_cgmap_input()\fP\&.
+.SS "unsigned short ftflags"
+
+.PP
+Referenced by \fBarg_is_set()\fP, and \fBinit_tW_gmx_cgmap_input()\fP\&.
+.SS "char *(* get_filename) (struct \fBtW_gmx_cgmap_input\fP *, const char *)"
+
+.PP
+Referenced by \fBinit_tW_gmx_cgmap_input()\fP, and \fBmain()\fP\&.
+.SS "char** map_file_flags"
+
+.PP
+Referenced by \fBinit_tW_gmx_cgmap_input()\fP\&.
+.SS "char** time_flags"
+
+.PP
+Referenced by \fBinit_tW_gmx_cgmap_input()\fP\&.
+.SS "\fBtW_time_struct\fP times[\fBN_TIME_ARGS\fP]"
+
+.PP
+Referenced by \fBarg_is_set()\fP, \fBinit_tW_gmx_cgmap_input()\fP, and \fBmain()\fP\&.
+.SS "unsigned short use_files"
+
+.PP
+Referenced by \fBarg_is_set()\fP, and \fBinit_tW_gmx_cgmap_input()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

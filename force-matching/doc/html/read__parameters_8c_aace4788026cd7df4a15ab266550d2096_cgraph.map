@@ -1,0 +1,5 @@
+<map id="get_ref_potential_ptr" name="get_ref_potential_ptr">
+<area shape="rect" id="Node000001" title="get_ref_potential_ptr(): Stores information read from ref." alt="" coords="5,5,145,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#ac9003761e07e1a6a43371290e32464e8" title="match_word(): Searches through N_words words in word_list to see if the string stored in word is incl..." alt="" coords="193,5,285,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="145,16,177,16,177,21,145,21"/>
+</map>

@@ -1,0 +1,28 @@
+<map id="read_box_dump_frame" name="read_box_dump_frame">
+<area shape="rect" id="Node000001" title="read_box_dump_frame(): This function reads the box information from a dumped trr file" alt="" coords="989,100,1143,127"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a107b7837786c30af084dfb7d240daff8" title="read_first_dump_frame(): Reads the first frame of a dumped file." alt="" coords="786,63,940,89"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="974,99,939,93,940,87,975,94"/>
+<area shape="rect" id="Node000009" href="$gromacs__topology_8c.html#a162b2788d24ab06f7672c9d45123d472" title="read_next_dump_frame(): self explanatory?" alt="" coords="784,125,941,152"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="974,127,942,131,942,126,974,122"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8c.html#aad9aa7cf97628a42ece2ecdc21a231c0" title="these next functions are basically wrappers that call the appropriate function to do the requested op..." alt="" coords="619,56,734,83"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="770,75,735,74,735,69,770,70"/>
+<area shape="rect" id="Node000004" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="296,132,346,159"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="604,87,409,129,347,143,346,138,408,124,603,82"/>
+<area shape="rect" id="Node000005" href="$ematch__func_8c.html#a17d07c6f77c45a8148fb4ff8268271b5" title=" " alt="" coords="432,5,546,32"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="609,54,541,35,542,30,611,49"/>
+<area shape="rect" id="Node000006" href="$ematch__func_8c.html#a50fde680e0e4d1d4cf85f50ef237534d" title=" " alt="" coords="282,5,360,32"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="416,21,361,21,361,16,416,16"/>
+<area shape="rect" id="Node000007" href="$ematch__func_8c.html#a6f63c009a254311f16cf558e12b7a45a" title=" " alt="" coords="103,5,234,32"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="266,21,234,21,234,16,266,16"/>
+<area shape="rect" id="Node000008" href="$ematch_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="87,21,55,21,55,16,87,16"/>
+<area shape="rect" id="Node000010" href="$gromacs__topology_8c.html#a43f9f5481bedfb32ca9352c1c3c15abe" title=" " alt="" coords="618,132,736,159"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="768,145,737,146,736,141,768,139"/>
+<area shape="poly" id="edge10_Node000010_Node000004" title=" " alt="" coords="602,148,346,148,346,143,602,143"/>
+<area shape="rect" id="Node000011" href="$gromacs__topology_8c.html#a98e797f71ed51e4cc6bd05c3443c4742" title="read_trr_2_CGstruct(): Tries to read another frame from trr file." alt="" coords="419,157,559,184"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="603,158,560,164,559,159,602,153"/>
+<area shape="rect" id="Node000012" href="$gromacs__topology_8c.html#ae7a2c03ec2dfdcc14593f523d14f002e" title="read_trr_2_CGstruct_ref(): JFR &#45; 07.16.12: for reading in reference forces from a trr file" alt="" coords="408,208,570,235"/>
+<area shape="poly" id="edge13_Node000010_Node000012" title=" " alt="" coords="637,168,571,198,539,210,537,205,569,194,635,164"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="404,161,346,152,347,146,405,155"/>
+<area shape="poly" id="edge14_Node000012_Node000004" title=" " alt="" coords="423,205,407,198,342,162,344,157,409,194,425,200"/>
+</map>

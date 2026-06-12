@@ -1,0 +1,30 @@
+!<----- This is a comment in BOCS syntax, lines starting with ! will be ignored 
+!# input file
+
+[Mode] GROMACS ! This is currently the only accepted mode
+
+[Temperature]  270.0 ! The temperature of the aa sim
+
+[Structures]    1 ! The number of input files we are looking for (you can match multiple simulations)
+inp.txt
+[End Structures]
+
+[Site_Types]    1 ! The total list of CG site types we are looking to create
+MEO
+[End Site_Types]
+
+[Inter_Types]  1  ! The total list of CG interactions we need to match, and the corresponding basis set parameters
+!inter_name          inter_type          basis       dr        R_min      R_max  spline_order   n_smooth
+ MEOMEO                Pair_Interaction  Bspline     0.02      0.000      1.400  4              0
+[End Inter_Types]
+
+[Pair_Interaction] 1 ! The list of involved atoms in each pair interaction defined above
+! inter_name   type1  type2           
+  MEOMEO        MEO    MEO                
+[End Pair_Interaction]
+
+[TPR] 1 ! The list of topology files associated with the CG resolution [.btp files]
+cg_methanol.btp
+[End TPR]
+
+

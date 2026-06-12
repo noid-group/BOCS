@@ -1,0 +1,122 @@
+.TH "read_map.c" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+read_map.c \- Functions related to reading in a map\&.top file\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <math\&.h>\fP
+.br
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <string\&.h>\fP
+.br
+\fR#include <stdlib\&.h>\fP
+.br
+\fR#include <stdbool\&.h>\fP
+.br
+\fR#include <ctype\&.h>\fP
+.br
+\fR#include 'read_map\&.h'\fP
+.br
+\fR#include 'safe_mem\&.h'\fP
+.br
+\fR#include 'io_read\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBeps_norm\fP   1\&.e\-10"
+.br
+.ti -1c
+.RI "#define \fBDEBUG_get_clean_line\fP   0"
+.br
+.ti -1c
+.RI "#define \fBDEBUG_get_map\fP   0"
+.br
+.ti -1c
+.RI "#define \fBDEBUG_get_map_1\fP   0"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBprint_site_mapping\fP (\fBtW_site_map\fP map)"
+.br
+.ti -1c
+.RI "void \fBprint_mapping_N\fP (int N_sites, \fBtW_site_map\fP map[])"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBis_blank\fP (char *line)"
+.br
+.ti -1c
+.RI "int \fBskip_space\fP (char *line, size_t nbytes, int start)"
+.br
+.ti -1c
+.RI "char * \fBget_directive\fP (char *line, char *directive, \fBbool\fP *have_directive, int start)"
+.br
+.ti -1c
+.RI "\fBtW_site_map\fP * \fBget_CG_map\fP (FILE *map_top, int *N_sites)"
+.br
+.ti -1c
+.RI "\fBtW_site_map\fP * \fBNEW_get_CG_map\fP (FILE *map_top, int *N_sites)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Functions related to reading in a map\&.top file\&. 
+
+
+.PP
+\fBAuthors\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser 
+.RE
+.PP
+
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define DEBUG_get_clean_line   0"
+
+.SS "#define DEBUG_get_map   0"
+
+.SS "#define DEBUG_get_map_1   0"
+
+.SS "#define eps_norm   1\&.e\-10"
+
+.PP
+Referenced by \fBget_CG_map()\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "\fBtW_site_map\fP * get_CG_map (FILE * map_top, int * N_sites)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "char * get_directive (char * line, char * directive, \fBbool\fP * have_directive, int start)"
+
+.PP
+Referenced by \fBget_CG_map()\fP\&.
+.SS "\fBbool\fP is_blank (char * line)"
+
+.PP
+Referenced by \fBget_CG_map()\fP, and \fBis_blank()\fP\&.
+.SS "\fBtW_site_map\fP * NEW_get_CG_map (FILE * map_top, int * N_sites)"
+
+.SS "void print_mapping_N (int N_sites, \fBtW_site_map\fP map[])"
+
+.SS "void print_site_mapping (\fBtW_site_map\fP map)"
+
+.PP
+Referenced by \fBprint_mapping_N()\fP\&.
+.SS "int skip_space (char * line, size_t nbytes, int start)"
+
+.PP
+Referenced by \fBget_CG_map()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

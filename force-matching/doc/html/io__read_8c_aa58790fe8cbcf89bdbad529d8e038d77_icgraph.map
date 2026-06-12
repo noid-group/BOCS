@@ -1,0 +1,77 @@
+<map id="delete_directive_from_line" name="delete_directive_from_line">
+<area shape="rect" id="Node000001" title="delete_directive_from_line(): For lines that contain a directive marked by [...], the ending brace is..." alt="" coords="1214,836,1386,863"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#a7dc95985b8b4f176c4e8734604ac4f8a" title="get_no_inter_type(s): Returns the number of interactions listed after a directive in&#45; dicated by keyw..." alt="" coords="1034,346,1166,372"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1285,823,1104,374,1109,372,1290,821"/>
+<area shape="rect" id="Node000021" href="$read__parameters_8c.html#ae5d06088756e63f85d49a86d4a250310" title="get_structures(): Saves all the file names that contain structures from the list of files names read ..." alt="" coords="1048,786,1152,812"/>
+<area shape="poly" id="edge32_Node000001_Node000021" title=" " alt="" coords="1229,835,1152,815,1153,810,1230,829"/>
+<area shape="rect" id="Node000022" href="$read__parameters_8c.html#ad9ee6b752ced82b2353be504663215d3" title="read_structures(): Reads in the file names that contain structures." alt="" coords="844,786,955,812"/>
+<area shape="poly" id="edge45_Node000001_Node000022" title=" " alt="" coords="1268,829,1221,800,1194,786,1165,776,1107,768,1048,769,993,777,947,788,946,783,992,772,1048,764,1108,763,1166,771,1196,781,1224,795,1271,825"/>
+<area shape="rect" id="Node000023" href="$read__parameters_8c.html#affd5ec0e59d9104b318acafc756971a7" title="get_TPR():" alt="" coords="427,778,500,804"/>
+<area shape="poly" id="edge35_Node000001_Node000023" title=" " alt="" coords="1198,848,813,827,500,798,501,792,813,822,1198,843"/>
+<area shape="rect" id="Node000024" href="$read__parameters_8c.html#a1db6df3d8dc530dc916c213f026e1fd8" title="open_ref_potential_file(): Opens the file that contains the reference potential information." alt="" coords="604,632,755,659"/>
+<area shape="poly" id="edge37_Node000001_Node000024" title=" " alt="" coords="1273,827,1225,788,1196,769,1165,754,1114,739,1069,733,1029,734,990,738,951,742,910,744,864,739,812,726,787,712,764,695,705,662,708,657,766,690,790,707,814,721,865,734,910,738,951,737,990,733,1029,729,1070,728,1115,734,1167,749,1199,764,1229,783,1276,823"/>
+<area shape="rect" id="Node000025" href="$read__parameters_8c.html#ae2b851b58186b294a85149525664433d" title="read_mode(): Reads and stores the mode for the calculation." alt="" coords="637,887,722,914"/>
+<area shape="poly" id="edge39_Node000001_Node000025" title=" " alt="" coords="1199,867,1166,871,914,891,722,901,722,896,914,886,1165,866,1198,862"/>
+<area shape="rect" id="Node000026" href="$read__parameters_8c.html#aec67a25d1a3bb2a4f4afdf8503e5d11d" title="read_nrexcl(): Reads the number of bonds for determining exclusion lists." alt="" coords="419,879,508,906"/>
+<area shape="poly" id="edge41_Node000001_Node000026" title=" " alt="" coords="1239,870,1166,887,1006,917,881,937,820,941,754,942,680,938,593,928,548,920,507,909,508,904,549,915,594,923,681,932,755,937,820,936,880,932,1006,912,1165,882,1237,865"/>
+<area shape="rect" id="Node000027" href="$read__parameters_8c.html#a8589aa81c0325ecfdef96777bb5309ea" title="read_site_types(): Reads the site types listed in the parameter file." alt="" coords="623,988,736,1015"/>
+<area shape="poly" id="edge43_Node000001_Node000027" title=" " alt="" coords="1281,878,1233,928,1202,953,1167,972,1110,992,1051,1006,991,1015,932,1019,822,1019,736,1012,737,1007,823,1014,932,1014,990,1009,1050,1001,1109,987,1165,967,1199,948,1230,924,1277,874"/>
+<area shape="rect" id="Node000028" href="$read__parameters_8c.html#a649f9307ec0ae1aeca266346b7ab5ff6" title="read_temperature(): Reads the temperature from the parameter file." alt="" coords="1039,1039,1161,1066"/>
+<area shape="poly" id="edge46_Node000001_Node000028" title=" " alt="" coords="1285,878,1238,948,1205,987,1167,1023,1138,1041,1135,1036,1164,1018,1201,983,1233,945,1281,875"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#a4c6ae0bb8f1299e093c86515d3feabfd" title="read_BOND_angle_inter(): Reads the angle bending intramolecular interactions from the parameter file." alt="" coords="598,12,760,39"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1095,331,1088,272,1071,197,1056,159,1038,122,1014,88,985,60,960,44,933,32,875,17,815,13,761,15,761,10,816,7,875,12,935,27,962,39,988,56,1018,85,1042,119,1061,157,1076,196,1093,271,1100,330"/>
+<area shape="rect" id="Node000007" href="$read__parameters_8c.html#a2d9d096ce637cd48d1165ebf5242c21a" title="read_Bond_dihedral_inter(): Reads the dihedral intramolecular interactions from the parameter file." alt="" coords="396,66,531,108"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="1091,331,1080,285,1060,229,1029,172,1009,148,985,127,931,96,872,74,810,62,748,56,687,56,629,60,532,74,531,69,628,54,686,50,748,51,811,56,874,69,933,91,988,122,1013,144,1033,169,1065,226,1085,283,1097,330"/>
+<area shape="rect" id="Node000008" href="$read__parameters_8c.html#a40f2fde9fc23b9f490aeec4bba75e5c3" title="read_Bond_nb_pair_inter(): Reads the non&#45;bonded intramolecular interactions from the parameter file." alt="" coords="381,135,546,162"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="1088,332,1075,294,1053,250,1024,207,1005,189,985,173,927,145,865,126,800,116,735,113,673,115,615,121,520,137,519,132,614,115,673,109,736,107,801,111,866,121,929,140,988,169,1009,185,1028,204,1058,247,1080,292,1093,330"/>
+<area shape="rect" id="Node000009" href="$read__parameters_8c.html#a1d53a7209466eeaa83548f49085e330a" title="read_BOND_stretch_inter(): Reads the bond stretch intramolecular interactions from the parameter file..." alt="" coords="594,164,765,191"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="1084,333,1068,303,1046,270,1019,238,985,212,932,190,875,177,818,172,766,172,766,166,818,166,875,172,933,184,988,207,1022,234,1051,266,1073,300,1089,330"/>
+<area shape="rect" id="Node000010" href="$read__parameters_8c.html#a88d4d44417c2ba2c1bf2e433035a7061" title="read_external_potential_inter(): reads the [External_Potential] Directive" alt="" coords="386,252,541,295"/>
+<area shape="poly" id="edge12_Node000002_Node000010" title=" " alt="" coords="1072,338,1033,307,985,282,928,264,868,252,808,246,747,243,635,249,542,261,541,256,634,244,747,238,808,240,869,247,929,259,987,277,1036,303,1075,333"/>
+<area shape="rect" id="Node000011" href="$read__parameters_8c.html#aeb0185939ad9bf5910f1b058879dfed2" title="read_Inter_Types(): Reads the interaction types listed in the parameter file." alt="" coords="619,266,740,292"/>
+<area shape="poly" id="edge14_Node000002_Node000011" title=" " alt="" coords="1058,341,1023,326,986,314,921,300,855,291,740,283,740,277,856,286,922,295,987,309,1025,321,1060,336"/>
+<area shape="rect" id="Node000012" href="$read__parameters_8c.html#a71e00cf3c626fbd343cd8a90865c5250" title="read_nb_pair_inter(): Reads in the non&#45;bonded intermolecular pair interactions." alt="" coords="400,432,527,459"/>
+<area shape="poly" id="edge16_Node000002_Node000012" title=" " alt="" coords="1019,359,986,358,899,354,862,353,813,358,737,371,679,388,621,407,546,428,522,434,521,429,545,423,620,402,677,382,736,366,813,352,861,348,900,348,986,352,1019,353"/>
+<area shape="rect" id="Node000013" href="$read__parameters_8c.html#a3375e0a4e6347260cb6ef8e96e4ff2cb" title="read_REF_BOND_angle_inter(): Reads information for the angle bending interactions." alt="" coords="818,367,982,410"/>
+<area shape="poly" id="edge18_Node000002_Node000013" title=" " alt="" coords="1019,374,983,379,982,374,1019,368"/>
+<area shape="rect" id="Node000016" href="$read__parameters_8c.html#a87389912d8bfca23fb16d0845370a1ad" title="read_REF_Bond_dihedral_inter(): Reads information for the dihedral interactions." alt="" coords="815,434,984,476"/>
+<area shape="poly" id="edge22_Node000002_Node000016" title=" " alt="" coords="1064,383,987,424,961,436,959,431,985,419,1061,378"/>
+<area shape="rect" id="Node000017" href="$read__parameters_8c.html#acce75c2047d270e8906f03ea07f2bde9" title="read_REF_BOND_stretch_inter(): Reads information for the bond stretch interactions." alt="" coords="813,500,986,543"/>
+<area shape="poly" id="edge24_Node000002_Node000017" title=" " alt="" coords="1084,387,1044,439,1017,466,988,491,968,502,966,498,985,486,1014,462,1040,435,1080,384"/>
+<area shape="rect" id="Node000018" href="$read__parameters_8c.html#a1e8cf8be4c3399a81fe0a9880f9f17f1" title="read_REF_forces(): Read in the reference forces listed in input." alt="" coords="838,567,961,594"/>
+<area shape="poly" id="edge26_Node000002_Node000018" title=" " alt="" coords="1093,388,1078,426,1056,472,1026,518,988,557,963,571,960,566,985,553,1022,514,1052,469,1073,424,1088,386"/>
+<area shape="rect" id="Node000019" href="$read__parameters_8c.html#a92f1dcbb839d2ffb6117799908b2ed78" title="read_REF_IntraMolecPair_inter(): Reads information for the intramolecular pair inter&#45; actions." alt="" coords="814,618,985,660"/>
+<area shape="poly" id="edge28_Node000002_Node000019" title=" " alt="" coords="1096,389,1083,436,1062,494,1031,554,1011,583,988,608,972,619,969,615,985,604,1007,579,1026,552,1057,492,1078,434,1090,387"/>
+<area shape="rect" id="Node000020" href="$read__parameters_8c.html#a182c9eca300090698c124f3ebaf75d9c" title="read_REF_nb_inter(): Reads information for the intermolecular interactions." alt="" coords="833,684,966,711"/>
+<area shape="poly" id="edge30_Node000002_Node000020" title=" " alt="" coords="1099,388,1092,447,1073,524,1059,565,1040,605,1017,642,988,674,968,688,965,683,985,670,1013,639,1036,602,1054,563,1068,523,1086,446,1094,387"/>
+<area shape="rect" id="Node000004" href="$read__parameters_8c.html#ad59ee67290b65b03bcfa5766b31cd49b" title="get_parameters(): Reads a line from the parameter file passed from read_par()." alt="" coords="222,542,333,568"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="599,12,545,8,487,12,431,26,406,39,383,56,370,71,358,92,337,149,320,219,306,296,289,444,282,542,277,541,284,443,301,295,314,218,332,147,353,90,366,68,380,52,403,34,430,21,487,6,545,3,599,7"/>
+<area shape="rect" id="Node000005" href="$read__parameters_8c.html#a05efae93beb41e2b0d8cbe4581086bd1" title="read_par(): Reads the information from the parameter file and files listed in the param&#45; eter file." alt="" coords="103,542,174,568"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="206,558,174,558,174,552,206,552"/>
+<area shape="rect" id="Node000006" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,542,55,568"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="87,558,55,558,55,552,87,552"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="388,120,383,125,364,159,346,208,316,333,295,458,283,542,278,541,289,457,310,332,341,207,359,157,379,122,384,116"/>
+<area shape="poly" id="edge9_Node000008_Node000004" title=" " alt="" coords="403,172,383,188,352,232,328,282,310,334,297,386,284,479,282,541,276,541,279,479,292,385,305,332,323,280,348,229,379,184,399,167"/>
+<area shape="poly" id="edge11_Node000009_Node000004" title=" " alt="" coords="578,177,528,182,477,193,427,213,383,242,352,277,329,317,311,360,298,404,285,485,282,541,276,541,280,485,293,403,306,358,324,314,348,274,380,238,424,208,475,188,528,177,578,172"/>
+<area shape="poly" id="edge13_Node000010_Node000004" title=" " alt="" coords="415,307,383,337,347,392,318,451,285,542,280,541,313,449,342,390,379,333,412,303"/>
+<area shape="poly" id="edge15_Node000011_Node000004" title=" " alt="" coords="618,300,565,320,503,347,441,381,383,423,352,453,326,486,289,543,284,540,321,483,348,449,380,418,438,377,501,342,563,315,617,295"/>
+<area shape="poly" id="edge17_Node000012_Node000004" title=" " alt="" coords="427,470,303,544,301,539,425,465"/>
+<area shape="rect" id="Node000014" href="$read__parameters_8c.html#a40f4e74d3e5d11fdfb7970ba691a167d" title="read_REF_information(): Reads the information for a reference potential." alt="" coords="604,567,755,594"/>
+<area shape="poly" id="edge19_Node000013_Node000014" title=" " alt="" coords="821,420,815,424,774,460,738,500,691,568,687,565,734,497,770,456,811,420,818,415"/>
+<area shape="rect" id="Node000015" href="$read__parameters_8c.html#ad5ab07944494d7bfa6d7122321bb1d98" title="get_ref_potential(): Reads and stores the information for a reference potential." alt="" coords="405,567,522,594"/>
+<area shape="poly" id="edge20_Node000014_Node000015" title=" " alt="" coords="588,583,523,583,523,578,588,578"/>
+<area shape="poly" id="edge21_Node000015_Node000004" title=" " alt="" coords="389,573,333,565,334,560,390,568"/>
+<area shape="poly" id="edge23_Node000016_Node000014" title=" " alt="" coords="824,486,814,491,750,531,699,569,696,564,747,527,812,486,822,481"/>
+<area shape="poly" id="edge25_Node000017_Node000014" title=" " alt="" coords="803,550,733,569,731,564,802,545"/>
+<area shape="poly" id="edge27_Node000018_Node000014" title=" " alt="" coords="823,583,755,583,755,578,823,578"/>
+<area shape="poly" id="edge29_Node000019_Node000014" title=" " alt="" coords="802,616,731,597,733,592,803,611"/>
+<area shape="poly" id="edge31_Node000020_Node000014" title=" " alt="" coords="822,680,812,675,796,662,786,649,777,636,763,623,716,597,719,592,767,618,781,632,791,646,800,658,814,670,824,676"/>
+<area shape="poly" id="edge33_Node000021_Node000022" title=" " alt="" coords="1032,802,956,802,956,796,1032,796"/>
+<area shape="poly" id="edge34_Node000022_Node000004" title=" " alt="" coords="842,783,637,710,508,661,380,608,304,571,306,567,382,603,510,656,639,705,843,778"/>
+<area shape="poly" id="edge36_Node000023_Node000004" title=" " alt="" coords="425,771,379,732,346,688,318,643,282,570,287,568,323,640,351,685,383,728,428,767"/>
+<area shape="poly" id="edge38_Node000024_Node000015" title=" " alt="" coords="617,630,510,597,511,592,619,625"/>
+<area shape="poly" id="edge40_Node000025_Node000004" title=" " alt="" coords="621,888,473,849,380,819,353,789,331,756,314,720,301,684,284,617,278,569,283,568,290,615,306,682,319,718,336,753,357,786,383,814,474,844,622,883"/>
+<area shape="poly" id="edge42_Node000026_Node000004" title=" " alt="" coords="403,879,379,862,351,826,328,786,311,743,298,700,282,623,277,569,282,569,288,622,303,699,316,741,333,784,356,823,383,859,407,875"/>
+<area shape="poly" id="edge44_Node000027_Node000004" title=" " alt="" coords="607,1003,552,997,491,982,431,958,404,940,379,920,345,877,320,829,301,778,289,726,277,632,276,569,281,569,282,631,294,725,306,776,325,827,350,874,383,916,407,936,434,953,492,977,553,991,608,998"/>
+<area shape="poly" id="edge47_Node000028_Node000004" title=" " alt="" coords="1037,1073,977,1087,902,1100,817,1110,726,1113,633,1106,541,1088,497,1072,455,1053,416,1029,379,1000,356,966,336,916,319,854,306,787,287,657,277,569,283,569,292,656,311,786,324,853,341,914,361,964,383,996,419,1025,458,1048,499,1067,543,1082,633,1101,726,1107,817,1104,901,1095,975,1081,1036,1068"/>
+</map>

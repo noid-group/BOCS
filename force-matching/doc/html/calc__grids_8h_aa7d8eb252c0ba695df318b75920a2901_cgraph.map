@@ -1,0 +1,7 @@
+<map id="get_L2_L3_angles" name="get_L2_L3_angles">
+<area shape="rect" id="Node000001" title="get_L2_L3_angles():" alt="" coords="5,31,132,57"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="180,5,296,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,32,164,27,165,32,132,37"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#a1f483015ac47277c71a1e600b42befd8" title="vect_diff(): Calculates diff = v1 &#45; v2." alt="" coords="203,56,273,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="132,51,188,59,187,64,131,56"/>
+</map>

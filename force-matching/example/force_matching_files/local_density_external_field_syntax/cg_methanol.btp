@@ -1,0 +1,33 @@
+[name] Methanol System
+
+[natoms] 5000
+
+[ffparams] 1
+!ind 	name
+0 	LJ_SR
+!atnr  fudgeQQ
+1 1.000000
+
+[molblocks] 1
+!moltype  mol_name  n_mols
+0 	  MET 	  5000 
+
+[moltypes] 1
+!ind 	name	n_mols	n_apm	n_res	n_cgs	excls_nr 	excls_nra 	bond_nr 	angle_nr 	dih_nr   	bigdih_nr  	imnb_nr
+0 	MET	5000	1	1	1	1		1		0		0		0		0		0	
+  [res]
+  SOL
+  [cg]
+  !idx  start  end
+     0      0    0
+
+[attypes]
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           0       0     0   32.04  0.00000       0       MET        MET  1
+  [epa]
+  0
+
+
+[Bocs_at_types] 1
+!idx  typename
+   0       MET

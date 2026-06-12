@@ -1,0 +1,1725 @@
+.TH "gromacs_topology.c" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+gromacs_topology.c
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <string\&.h>\fP
+.br
+\fR#include <stdlib\&.h>\fP
+.br
+\fR#include <tirpc/rpc/xdr\&.h>\fP
+.br
+\fR#include 'cgff_types\&.h'\fP
+.br
+\fR#include 'safe_mem\&.h'\fP
+.br
+\fR#include 'wnoid_math\&.h'\fP
+.br
+\fR#include 'io_read\&.h'\fP
+.br
+\fR#include 'gromacs_topology\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBTHROW_TPR_ERROR\fP(msg)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBcopyright\fP ()"
+.br
+.RI "\fBcopyright()\fP: Prints the gromacs copyright and credits output "
+.ti -1c
+.RI "int \fBget_natoms\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_natoms()\fP: Returns the number of atoms specified by topology 'self' "
+.ti -1c
+.RI "char * \fBget_name\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_natoms()\fP: Returns the name of topology 'self' "
+.ti -1c
+.RI "int \fBget_nbonds\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_nbonds()\fP: Returns the number of bonds listed in self "
+.ti -1c
+.RI "int \fBget_bond_count\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_bond_count()\fP: Returns the number of bonds present in topology "
+.ti -1c
+.RI "int \fBget_n_bond_types\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_n_bond_types()\fP: Returns the number of different bond types "
+.ti -1c
+.RI "int \fBget_nangles\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_nangles()\fP: Returns the number of angles listed in self "
+.ti -1c
+.RI "int \fBget_angle_count\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_angle_count()\fP: Returns the number of angles present in topology "
+.ti -1c
+.RI "int \fBget_n_angle_types\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_n_angle_types()\fP: Returns the number of different angle interaction types "
+.ti -1c
+.RI "int \fBget_ndihs\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_ndihs()\fP: Returns the number of dihedrals listed in self "
+.ti -1c
+.RI "int \fBget_dihedral_count\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_dihedral_count()\fP: Returns the number of dihedrals present in topology "
+.ti -1c
+.RI "int \fBget_n_dihedral_types\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_n_dihedral_types()\fP: Returns the different number of dihedral interaction types "
+.ti -1c
+.RI "int \fBget_npairs\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_npairs()\fP: Returns the number of intramolecular nonbonded pairs listed in self "
+.ti -1c
+.RI "int * \fBget_bond_list\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_bond_list()\fP Returns a list of bonds in the t_ilist format: "
+.ti -1c
+.RI "int * \fBget_angle_list\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_angle_list()\fP Returns a list of angles in the t_ilist format: "
+.ti -1c
+.RI "int * \fBget_dih_list\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_dih_list()\fP Returns a list of dihedrals in the t_ilist format: "
+.ti -1c
+.RI "int * \fBget_pair_list\fP (\fBtW_gmx_topology\fP *self)"
+.br
+.RI "\fBget_pair_list()\fP Returns a list of nonbonded intramolecular pairs in the t_ilist format: "
+.ti -1c
+.RI "int \fBget_resind\fP (\fBtW_gmx_topology\fP *self, int i_atom)"
+.br
+.RI "\fBget_resind()\fP: Returns the residue index of the i_atom'th atom in topology 'self' "
+.ti -1c
+.RI "char * \fBget_atomtype\fP (\fBtW_gmx_topology\fP *self, int i_atom)"
+.br
+.RI "\fBget_atomtype()\fP: Returns the type of the i_atom'th atom in topology 'self' "
+.ti -1c
+.RI "int \fBget_nexcl\fP (\fBtW_gmx_topology\fP *self, int i_atom)"
+.br
+.RI "\fBget_nexcl()\fP: Returns the number of exclusions for i_atom'th atom in topology 'self' "
+.ti -1c
+.RI "int * \fBget_excl_list\fP (\fBtW_gmx_topology\fP *self, int i_atom)"
+.br
+.RI "\fBget_excl_list()\fP: Returns the exclusion list for the i_atom'th atom in topolgy 'self' "
+.ti -1c
+.RI "\fBtW_gmx_topology\fP * \fBinit_tW_gmx_topology\fP ()"
+.br
+.RI "\fBinit_tW_gmx_topology()\fP: initialize the topology structure and align the function pointers "
+.ti -1c
+.RI "\fBbool\fP \fBget_top\fP (\fBtW_word\fP coord_fnm, \fBtW_gmx_topology\fP *top, \fBbool\fP TPR_flag, \fBtW_word\fP tpr_filename)"
+.br
+.RI "\fBget_top()\fP: Opens GROMACS topology (tpr) file and stores topology information in the data structure top\&. "
+.ti -1c
+.RI "int \fBprint_tpr_file\fP (FILE *fp_log, \fBtW_gmx_topology\fP *top)"
+.br
+.RI "\fBprint_tpr_file()\fP: Prints information stored in top\&. "
+.ti -1c
+.RI "void \fBget_site_info\fP (\fBtW_CG_site\fP *CG_struct, \fBtW_system\fP *sys, \fBtW_gmx_topology\fP *top)"
+.br
+.RI "\fBget_site_info()\fP: Stores information from top into sys and CG_struct\&. "
+.ti -1c
+.RI "void \fBset_natoms\fP (\fBtW_gmx_trxframe\fP *self, int natoms)"
+.br
+.RI "\fBset_natoms()\fP: sets the number of atoms in the frame self to natoms, and allocates memory for those arrays that are flagged as present "
+.ti -1c
+.RI "void \fBset_atom_labels\fP (\fBtW_gmx_trxframe\fP *self, \fBtW_gmx_topology\fP *top)"
+.br
+.RI "\fBset_atom_labels()\fP: sets the atom labels of the frame self if they are available in top "
+.ti -1c
+.RI "void \fBprint_frame_dump\fP (\fBtW_gmx_trxframe\fP *self)"
+.br
+.RI "\fBprint_frame_dump()\fP: dumps trr frame details to the screen for reading "
+.ti -1c
+.RI "void \fBget_pos_of\fP (\fBtW_gmx_trxframe\fP *self, int i, \fBdvec\fP x)"
+.br
+.RI "\fBget_pos_of()\fP: copies the dvec containing the position of the ith atom in the frame to x "
+.ti -1c
+.RI "void \fBget_vel_of\fP (\fBtW_gmx_trxframe\fP *self, int i, \fBdvec\fP v)"
+.br
+.RI "\fBget_vel_of()\fP: copies the dvec containing the velocity of the ith atom in the frame to v "
+.ti -1c
+.RI "void \fBget_box\fP (\fBtW_gmx_trxframe\fP *self, \fBmatrix\fP box)"
+.br
+.RI "\fBget_box()\fP: copies the box matrix of this frame to box "
+.ti -1c
+.RI "void \fBsetup_xdr\fP (\fBtW_gmx_trxframe\fP *self, const char *fnm, \fBbool\fP bRead)"
+.br
+.RI "\fBsetup_xdr()\fP: sets up the XDR data structure for reading/writing trr files MRD 92517 "
+.ti -1c
+.RI "\fBtW_gmx_trxframe\fP * \fBinit_tW_gmx_trxframe\fP ()"
+.br
+.RI "\fBinit_tW_gmx_trxframe()\fP: initializes a \fBtW_gmx_trxframe\fP variable "
+.ti -1c
+.RI "void \fBcopy_trxframe_info\fP (\fBtW_gmx_trxframe\fP *source, \fBtW_gmx_trxframe\fP *dest)"
+.br
+.RI "\fBcopy_trxframe_info()\fP: copies the resolution-independent information from source to dest "
+.ti -1c
+.RI "void \fBclear_dvec\fP (\fBdvec\fP a)"
+.br
+.RI "\fBclear_dvec()\fP: This was copied from the GROMACS Library\&. "
+.ti -1c
+.RI "void \fBmap_trxframe\fP (\fBtW_gmx_trxframe\fP *source, \fBtW_gmx_trxframe\fP *dest, \fBtW_site_map\fP *map)"
+.br
+.RI "\fBmap_trxframe()\fP: maps source to dest according to the correspondence defined in map "
+.ti -1c
+.RI "char * \fBget_filename\fP (\fBtW_gmx_cgmap_input\fP *self, const char *opt)"
+.br
+.RI "\fBget_filename()\fP: returns the filename corresponding to the argument opt\&. "
+.ti -1c
+.RI "\fBbool\fP \fBarg_is_set\fP (\fBtW_gmx_cgmap_input\fP *self, const char *opt)"
+.br
+.RI "\fBarg_is_set()\fP: returns TRUE if the argument corresponding to opt has been set, and FALSE otherwise This replaces an old GROMACS function "
+.ti -1c
+.RI "\fBtW_gmx_cgmap_input\fP * \fBinit_tW_gmx_cgmap_input\fP (int argc, char *argv[])"
+.br
+.RI "\fBinit_tW_gmx_cgmap_input()\fP: Initializes a new instance of \fBtW_gmx_cgmap_input\fP "
+.ti -1c
+.RI "\fBbool\fP \fBcopy_trr_2_CGstruct\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_CG_site\fP CG_struct[])"
+.br
+.RI "\fBcopy_trr_2_CGstruct()\fP: copies position and force information from one data structure to another "
+.ti -1c
+.RI "\fBbool\fP \fBcopy_trr_2_CGstruct_ref\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_CG_site\fP CG_struct[])"
+.br
+.RI "\fBcopy_trr_2_CGstruct_ref()\fP: JFR - 07\&.16\&.12: for reading in reference forces from a trr file "
+.ti -1c
+.RI "\fBbool\fP \fBread_trr_2_CGstruct\fP (\fBtW_gmx_info\fP *info, \fBtW_gmx_trxframe\fP *fr, \fBtW_CG_site\fP CG_struct[])"
+.br
+.RI "\fBread_trr_2_CGstruct()\fP: Tries to read another frame from trr file\&. "
+.ti -1c
+.RI "\fBbool\fP \fBread_trr_2_CGstruct_ref\fP (\fBtW_gmx_info\fP *info, \fBtW_gmx_trxframe\fP *fr, \fBtW_CG_site\fP CG_struct[])"
+.br
+.RI "\fBread_trr_2_CGstruct_ref()\fP: JFR - 07\&.16\&.12: for reading in reference forces from a trr file "
+.ti -1c
+.RI "int \fBupdate_info_trr\fP (\fBtW_gmx_info\fP *info, \fBtW_gmx_trxframe\fP *fr)"
+.br
+.RI "\fBupdate_info_trr()\fP: "
+.ti -1c
+.RI "int \fBread_first_frame\fP (\fBtW_gmx_trxframe\fP *fr, const char *fnm)"
+.br
+.RI "these next functions are basically wrappers that call the appropriate function to do the requested operation based on the file type stored in fr->eFileType or top->eFileType "
+.ti -1c
+.RI "\fBbool\fP \fBread_next_frame\fP (\fBtW_gmx_trxframe\fP *fr, \fBbool\fP printCount)"
+.br
+.ti -1c
+.RI "void \fBopen_write_trajectory\fP (\fBtW_gmx_trxframe\fP *fr, char *fnm)"
+.br
+.ti -1c
+.RI "void \fBwrite_frame\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_gmx_topology\fP *top)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_topology\fP (\fBtW_gmx_topology\fP *top, const char *fnm)"
+.br
+.ti -1c
+.RI "int \fBget_word_count_delim\fP (\fBtW_line\fP inp_line, const char *delims)"
+.br
+.RI "\fBget_word_count_delim()\fP: Gets the number of words separated by chars in delims in a line "
+.ti -1c
+.RI "void \fBget_words_delim\fP (\fBtW_line\fP inp_line, const char *delims, \fBtW_word\fP *word_list)"
+.br
+.RI "\fBget_words_delim()\fP: supposed to be like python's string\&.split() "
+.ti -1c
+.RI "void \fBcheck_count\fP (int iarg, int argc, char *opt)"
+.br
+.RI "\fBcheck_count()\fP: For command line argument parsing\&. "
+.ti -1c
+.RI "void \fBtest_line\fP (\fBtW_line\fP inp_line, const char *term, \fBtW_gmx_bool\fP want, const char *errmsg)"
+.br
+.RI "\fBtest_line()\fP: Tests to see if a line contains 'term' against whether or not it is expected to ('want')\&. "
+.ti -1c
+.RI "void \fBelim_char\fP (\fBtW_word\fP word, char elim)"
+.br
+.RI "\fBelim_char()\fP: Replaces occurrances of char 'elim' with '\\0' in word\&. "
+.ti -1c
+.RI "char ** \fBget_quoted_words\fP (\fBtW_line\fP line, int expected_words)"
+.br
+.RI "get_quoted_words: For an input line of text containing a known number of '', extract an expected number of words from between the quotes e\&.g\&. "
+.ti -1c
+.RI "void \fBdump_molecule_info\fP (\fBtW_gmx_topology\fP *top)"
+.br
+.RI "\fBdump_molecule_info()\fP: Prints some basic info for each molecule type from the \fBtW_molecule\fP struct\&. "
+.ti -1c
+.RI "void \fBpop_contents\fP (\fBtW_gmx_topology\fP *top)"
+.br
+.RI "\fBpop_contents()\fP: pop here is short for populate\&. "
+.ti -1c
+.RI "\fBbool\fP \fBfind_line_in_file\fP (FILE *fp, const char *target, char *ret_line)"
+.br
+.RI "\fBfind_line_in_file()\fP: "
+.ti -1c
+.RI "\fBbool\fP \fBread_tpr_dump\fP (\fBtW_word\fP fnm, \fBtW_gmx_topology\fP *top)"
+.br
+.RI "\fBread_tpr_dump()\fP: Function to read a text file that contains a dumped tpr file "
+.ti -1c
+.RI "\fBtW_gmx_bool\fP \fBread_box_dump_frame\fP (FILE *fp, \fBtW_matrix\fP box)"
+.br
+.RI "\fBread_box_dump_frame()\fP: This function reads the box information from a dumped trr file "
+.ti -1c
+.RI "int \fBread_first_dump_frame\fP (\fBtW_gmx_trxframe\fP *frame, const char *trx_fnm)"
+.br
+.RI "\fBread_first_dump_frame()\fP: Reads the first frame of a dumped file\&. "
+.ti -1c
+.RI "int \fBread_first_bocs_frame\fP (\fBtW_gmx_trxframe\fP *frame, const char *trx_fnm)"
+.br
+.RI "\fBread_first_bocs_frame()\fP: reads the first frame of a bocs\&.traj file\&. "
+.ti -1c
+.RI "void \fBcopy_atom_props\fP (FILE *fp, \fBtW_rvec\fP *p, int natoms)"
+.br
+.RI "\fBcopy_atom_props()\fP: Reads 'natoms' lines from a dump file and stores the numbers in the appropriate array "
+.ti -1c
+.RI "void \fBget_prop\fP (FILE *fp, \fBtW_gmx_bool\fP present, \fBtW_rvec\fP *p, char test_prop, int natoms, int step)"
+.br
+.RI "\fBget_prop()\fP: makes sure the dumped trajectory file has the correct property next\&. "
+.ti -1c
+.RI "\fBbool\fP \fBread_next_dump_frame\fP (\fBtW_gmx_trxframe\fP *frame)"
+.br
+.RI "\fBread_next_dump_frame()\fP: self explanatory? "
+.ti -1c
+.RI "void \fBwrite_dump_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "int \fBread_first_gro_frame\fP (\fBtW_gmx_trxframe\fP *frame, const char *fnm)"
+.br
+.RI "\fBread_first_gro_frame()\fP: reads the first 3 lines of a \&.gro file, then rewinds it\&. "
+.ti -1c
+.RI "\fBbool\fP \fBread_next_gro_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "void \fBwrite_gro_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "void \fBwrite_bocs_top\fP (\fBtW_word\fP fnm, \fBtW_gmx_topology\fP *top)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_top\fP (\fBtW_word\fP fnm, \fBtW_gmx_topology\fP *top)"
+.br
+.ti -1c
+.RI "void \fBwrite_bocs_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "void \fBcheck_dirs\fP (const char *current_dir, int ntest, \fBbool\fP bFRAME, \fBbool\fP bNATOMS, \fBbool\fP bFLAGS, int count)"
+.br
+.ti -1c
+.RI "void \fBcheck_double_bocs_dir\fP (\fBbool\fP bTEST, const char *dir, int count)"
+.br
+.ti -1c
+.RI "void \fBcheck_unexpected_dir\fP (\fBbool\fP bTEST, const char *dir, int count)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_frame_dir_frame\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_frame_dir_natoms\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_frame_dir_flags\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_frame_dir_title\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_frame_dir_step\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_frame_dir_time\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_frame_dir_prec\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_frame_dir_box\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_frame_dir_xvf\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_frame_dir_local_densities\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_bocs_frame_dir_local_density_gradients\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBnew_read_next_bocs_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBread_next_bocs_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "void \fBcomp_2_frames\fP (\fBtW_gmx_trxframe\fP *fr1, \fBtW_gmx_trxframe\fP *fr2, \fBtW_gmx_trxframe\fP *fro)"
+.br
+.ti -1c
+.RI "void \fBwrite_delta_frame\fP (\fBtW_gmx_trxframe\fP *fr, FILE *fpbox, FILE *fpx, FILE *fpv, FILE *fpf)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBtW_write_trj_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "void \fBwrap_tW_write_trj_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBtW_read_first_trj_frame\fP (\fBtW_gmx_trxframe\fP *fr, const char *trx_fnm)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBtW_read_next_trj_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBtW_write_trr_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "void \fBwrap_tW_write_trr_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBtW_read_first_trr_frame\fP (\fBtW_gmx_trxframe\fP *fr, const char *trx_fnm)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBtW_read_next_trr_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "int \fBread_first_lammps_frame\fP (\fBtW_gmx_trxframe\fP *fr, const char *fnm)"
+.br
+.RI "\fBread_first_lammps_frame()\fP: reads the first frame from a lammps custom dump file\&. "
+.ti -1c
+.RI "\fBbool\fP \fBread_next_lammps_frame\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "void \fBwrite_lammps_frame\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_gmx_topology\fP *top)"
+.br
+.ti -1c
+.RI "void \fBwrite_lammps_data\fP (\fBtW_gmx_trxframe\fP *fr, \fBtW_gmx_topology\fP *top)"
+.br
+.ti -1c
+.RI "int \fBget_type\fP (const char *a_type, \fBtW_gmx_topology\fP *top)"
+.br
+.ti -1c
+.RI "void \fBdo_PBC\fP (\fBtW_gmx_trxframe\fP *fr)"
+.br
+.ti -1c
+.RI "void \fBpop_LD_vector\fP (\fBtW_line\fP inp_line, double *lds, int ntypes)"
+.br
+.ti -1c
+.RI "void \fBpopulate_LD_Gradients\fP (\fBtW_line\fP inp_line, \fBdvec\fP *ldgs, int ntypes)"
+.br
+.ti -1c
+.RI "void \fBcopy_xvf\fP (\fBtW_gmx_trxframe\fP *source, \fBtW_gmx_trxframe\fP *dest, \fBbool\fP bX, \fBbool\fP bV, \fBbool\fP bF)"
+.br
+.ti -1c
+.RI "void \fBcopy_lds\fP (\fBtW_gmx_trxframe\fP *source, \fBtW_gmx_trxframe\fP *dest)"
+.br
+.ti -1c
+.RI "void \fBcopy_ldgs\fP (\fBtW_gmx_trxframe\fP *source, \fBtW_gmx_trxframe\fP *dest)"
+.br
+.ti -1c
+.RI "int \fBget_n_words_from_line\fP (\fBtW_line\fP inp_line)"
+.br
+.ti -1c
+.RI "void \fBput_at_nums_in\fP (\fBtW_line\fP inp_line, int *spots, int n_words_this_line)"
+.br
+.ti -1c
+.RI "void \fBalloc_index_ng\fP (\fBtW_index_file\fP *idx, int ng)"
+.br
+.ti -1c
+.RI "void \fBalloc_index_aig\fP (\fBtW_index_file\fP *idx)"
+.br
+.ti -1c
+.RI "void \fBread_index_file\fP (\fBtW_word\fP fnm, \fBtW_gmx_topology\fP *top)"
+.br
+.ti -1c
+.RI "void \fBcopy_idx_file\fP (\fBtW_index_file\fP *dest, \fBtW_index_file\fP *source)"
+.br
+.ti -1c
+.RI "void \fBgenerate_generic_index_file\fP (\fBtW_gmx_topology\fP *top, \fBbool\fP bOld)"
+.br
+.ti -1c
+.RI "void \fBprint_index_names_and_atom_counts\fP (\fBtW_index_file\fP *idx)"
+.br
+.ti -1c
+.RI "\fBbool\fP \fBskip_excl\fP (int nr_excl, int *excl_list, int j)"
+.br
+.RI "\fBskip_excl()\fP: "
+.ti -1c
+.RI "\fBbool\fP \fBdprocess_sysname_natoms\fP (FILE *fp, \fBtW_gmx_topology\fP *top, \fBtW_line\fP *lin_buf)"
+.br
+.RI "\fBdprocess_sysname_natoms()\fP: "
+.ti -1c
+.RI "\fBbool\fP \fBdprocess_nmolblocks\fP (FILE *fp, \fBtW_gmx_topology\fP *top, \fBtW_line\fP *lin_buf)"
+.br
+.RI "\fBdprocess_nmolblocks()\fP: "
+.ti -1c
+.RI "\fBbool\fP \fBdget_moltypes_in_molblocks\fP (FILE *fp, \fBtW_gmx_topology\fP *top, \fBtW_line\fP *lin_buf)"
+.br
+.RI "\fBdget_moltypes_in_molblocks()\fP: "
+.ti -1c
+.RI "\fBbool\fP \fBdget_top_ff_info\fP (FILE *fp, \fBtW_gmx_topology\fP *top, \fBtW_line\fP *lin_buf)"
+.br
+.RI "\fBdget_top_ff_info()\fP: "
+.ti -1c
+.RI "\fBbool\fP \fBdfind_all_molinfo\fP (FILE *fp, \fBtW_molecule\fP *mol, int nmol, \fBtW_line\fP *lin_buf)"
+.br
+.RI "dfind_all_molinfo: "
+.ti -1c
+.RI "\fBbool\fP \fBdparse_atom_per_molecule_info\fP (FILE *fp, \fBtW_molecule\fP *moli, \fBtW_line\fP *lin_buf)"
+.br
+.RI "dparse_atom_per_molecule_info: "
+.ti -1c
+.RI "\fBbool\fP \fBdparse_residue_per_molecule_info\fP (FILE *fp, \fBtW_molecule\fP *moli, \fBtW_line\fP *lin_buf)"
+.br
+.RI "dparse_residue_per_molecule_info: "
+.ti -1c
+.RI "\fBbool\fP \fBdparse_charge_groups_per_molecule\fP (FILE *fp, \fBtW_molecule\fP *moli, \fBtW_line\fP *lin_buf, int moltypeid)"
+.br
+.RI "dparse_charge_groups_per_molecule: "
+.ti -1c
+.RI "\fBbool\fP \fBdparse_atomic_exclusions_per_molecule\fP (FILE *fp, \fBtW_molecule\fP *moli, \fBtW_line\fP *lin_buf, int moltypeid)"
+.br
+.RI "dparse_atomic_exclusions_per_molecule: "
+.ti -1c
+.RI "\fBbool\fP \fBdparse_bonded_int_lists_per_molecule\fP (FILE *fp, \fBtW_molecule\fP *moli, \fBtW_line\fP *lin_buf, int moltypeidx)"
+.br
+.RI "dparse_Bonded_int_lists_per_molecule: "
+.ti -1c
+.RI "int \fBdfill_bonds_from_gmx_bondtype_headers\fP (FILE *fp, \fBtW_molecule\fP *moli, \fBtW_line\fP *lin_buf, int moltypeid)"
+.br
+.RI "dfill_bonds_from_gmx_bondtype_headers: "
+.ti -1c
+.RI "int \fBdfill_angles_from_gmx_angletype_headers\fP (FILE *fp, \fBtW_molecule\fP *moli, \fBtW_line\fP *lin_buf, int moltypeid)"
+.br
+.RI "dfill_angles_from_gmx_angletype_headers: "
+.ti -1c
+.RI "int \fBdfill_dihedrals_from_gmx_dihedraltype_headers\fP (FILE *fp, \fBtW_molecule\fP *moli, \fBtW_line\fP *lin_buf, int moltypeid)"
+.br
+.RI "dfill_dihedrals_from_gmx_dihedraltype_headers: "
+.ti -1c
+.RI "int \fBdfill_bigdihedrals_from_gmx_bigdihedraltype_headers\fP (FILE *fp, \fBtW_molecule\fP *moli, \fBtW_line\fP *lin_buf, int moltypeid)"
+.br
+.RI "dfill_bigdihedrals_from_gmx_bigdihedraltype_headers: "
+.ti -1c
+.RI "int \fBdfill_14nb_from_gmx_IMNB_headers\fP (FILE *fp, \fBtW_molecule\fP *moli, \fBtW_line\fP *lin_buf, int moltypeid)"
+.br
+.RI "dfill_14nb_from_gmx_IMNB_headers "
+.ti -1c
+.RI "int \fBdproc_other_headers\fP (FILE *fp, \fBtW_molecule\fP *moli, \fBtW_line\fP *lin_buf, int moltypeid)"
+.br
+.RI "dproc_other_headers "
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define THROW_TPR_ERROR(msg)"
+\fBValue:\fP.PP
+.nf
+    do { \\
+    fprintf(stderr, "ERROR: Unexpected file format while translating dumped tpr\\n"); \\
+    fprintf(stderr, "likely this is due to newer gromacs \&.tpr formats (post 2024\&.3)\\n"); \\
+    fprintf(stderr, "please open a PR on github to alert us\\n");\\
+    fprintf(stderr, "Be sure to copy/paste this error and let us know which version\\n");\\
+    fprintf(stderr, "of gromacs you were using so that we can update our code\\n");\\
+    fprintf(stderr, "%s::%d::%s()\\nERROR:%s\\n",__FILE__, __LINE__, __func__, msg);\\
+        exit(1);\\
+} while (0)
+.fi
+
+.PP
+Referenced by \fBdfill_14nb_from_gmx_IMNB_headers()\fP, \fBdfill_angles_from_gmx_angletype_headers()\fP, \fBdfill_bigdihedrals_from_gmx_bigdihedraltype_headers()\fP, \fBdfill_bonds_from_gmx_bondtype_headers()\fP, \fBdfill_dihedrals_from_gmx_dihedraltype_headers()\fP, \fBdfind_all_molinfo()\fP, \fBdget_moltypes_in_molblocks()\fP, \fBdget_top_ff_info()\fP, \fBdparse_atom_per_molecule_info()\fP, \fBdparse_atomic_exclusions_per_molecule()\fP, \fBdparse_charge_groups_per_molecule()\fP, \fBdparse_residue_per_molecule_info()\fP, \fBdproc_other_headers()\fP, \fBdprocess_nmolblocks()\fP, \fBdprocess_sysname_natoms()\fP, and \fBread_tpr_dump()\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void alloc_index_aig (\fBtW_index_file\fP * idx)"
+
+.PP
+Referenced by \fBgenerate_generic_index_file()\fP, and \fBread_index_file()\fP\&.
+.SS "void alloc_index_ng (\fBtW_index_file\fP * idx, int ng)"
+
+.PP
+Referenced by \fBcopy_idx_file()\fP, \fBgenerate_generic_index_file()\fP, and \fBread_index_file()\fP\&.
+.SS "\fBbool\fP arg_is_set (\fBtW_gmx_cgmap_input\fP * self, const char * opt)"
+
+.PP
+\fBarg_is_set()\fP: returns TRUE if the argument corresponding to opt has been set, and FALSE otherwise This replaces an old GROMACS function 
+.PP
+Referenced by \fBinit_tW_gmx_cgmap_input()\fP\&.
+.SS "void check_count (int iarg, int argc, char * opt)"
+
+.PP
+\fBcheck_count()\fP: For command line argument parsing\&. 
+.SS "void check_dirs (const char * current_dir, int ntest, \fBbool\fP bFRAME, \fBbool\fP bNATOMS, \fBbool\fP bFLAGS, int count)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "void check_double_bocs_dir (\fBbool\fP bTEST, const char * dir, int count)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "void check_unexpected_dir (\fBbool\fP bTEST, const char * dir, int count)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "void clear_dvec (\fBdvec\fP a)"
+
+.PP
+\fBclear_dvec()\fP: This was copied from the GROMACS Library\&. 
+.PP
+Referenced by \fBmap_trxframe()\fP\&.
+.SS "void comp_2_frames (\fBtW_gmx_trxframe\fP * fr1, \fBtW_gmx_trxframe\fP * fr2, \fBtW_gmx_trxframe\fP * fro)"
+
+.SS "void copy_atom_props (FILE * fp, \fBtW_rvec\fP * p, int natoms)"
+
+.PP
+\fBcopy_atom_props()\fP: Reads 'natoms' lines from a dump file and stores the numbers in the appropriate array 
+.PP
+Referenced by \fBget_prop()\fP\&.
+.SS "void copy_idx_file (\fBtW_index_file\fP * dest, \fBtW_index_file\fP * source)"
+
+.PP
+Referenced by \fBgenerate_generic_index_file()\fP\&.
+.SS "void copy_ldgs (\fBtW_gmx_trxframe\fP * source, \fBtW_gmx_trxframe\fP * dest)"
+
+.SS "void copy_lds (\fBtW_gmx_trxframe\fP * source, \fBtW_gmx_trxframe\fP * dest)"
+
+.SS "\fBbool\fP copy_trr_2_CGstruct (\fBtW_gmx_trxframe\fP * fr, \fBtW_CG_site\fP CG_struct[])"
+
+.PP
+\fBcopy_trr_2_CGstruct()\fP: copies position and force information from one data structure to another 
+.PP
+Referenced by \fBmain()\fP, and \fBread_trr_2_CGstruct()\fP\&.
+.SS "\fBbool\fP copy_trr_2_CGstruct_ref (\fBtW_gmx_trxframe\fP * fr, \fBtW_CG_site\fP CG_struct[])"
+
+.PP
+\fBcopy_trr_2_CGstruct_ref()\fP: JFR - 07\&.16\&.12: for reading in reference forces from a trr file 
+.PP
+Referenced by \fBmain()\fP, and \fBread_trr_2_CGstruct_ref()\fP\&.
+.SS "void copy_trxframe_info (\fBtW_gmx_trxframe\fP * source, \fBtW_gmx_trxframe\fP * dest)"
+
+.PP
+\fBcopy_trxframe_info()\fP: copies the resolution-independent information from source to dest 
+.PP
+Referenced by \fBmain()\fP, \fBmap_config()\fP, and \fBsetup_CG_trr()\fP\&.
+.SS "void copy_xvf (\fBtW_gmx_trxframe\fP * source, \fBtW_gmx_trxframe\fP * dest, \fBbool\fP bX, \fBbool\fP bV, \fBbool\fP bF)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void copyright ()"
+
+.PP
+\fBcopyright()\fP: Prints the gromacs copyright and credits output 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int dfill_14nb_from_gmx_IMNB_headers (FILE * fp, \fBtW_molecule\fP * moli, \fBtW_line\fP * lin_buf, int moltypeid)"
+
+.PP
+dfill_14nb_from_gmx_IMNB_headers 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+moli molecule_typei 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) This is one of the functions we expect to update over time It stores a list of gromacs headers that signal bigdihedral (Charm) member lists and fills the interactions in the topology 
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+older and newer tprs will format the exclusion list differently 
+.PP
+This function is a helper function to 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBdfind_all_molinfo\fP -> 
+.PP
+dparse_bond_int_lists_per_molecule 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+This function dynamically allocates memory in the molecule structure (in top structure) 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdparse_bonded_int_lists_per_molecule()\fP\&.
+.SS "int dfill_angles_from_gmx_angletype_headers (FILE * fp, \fBtW_molecule\fP * moli, \fBtW_line\fP * lin_buf, int moltypeid)"
+
+.PP
+dfill_angles_from_gmx_angletype_headers: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+moli molecule_typei 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) 
+.PP
+\fBReturns\fP
+.RS 4
+TRUE if successful FALSE (something bad happened) This is one of the functions we expect to update over time It stores a list of gromacs headers that signal angle member lists and fills the interactions in the topology 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+older and newer tprs will format the exclusion list differently 
+.PP
+This function is a helper function to 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBdfind_all_molinfo\fP -> 
+.PP
+dparse_bond_int_lists_per_molecule 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+This function dynamically allocates memory in the molecule structure (in top structure) 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdparse_bonded_int_lists_per_molecule()\fP\&.
+.SS "int dfill_bigdihedrals_from_gmx_bigdihedraltype_headers (FILE * fp, \fBtW_molecule\fP * moli, \fBtW_line\fP * lin_buf, int moltypeid)"
+
+.PP
+dfill_bigdihedrals_from_gmx_bigdihedraltype_headers: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+moli molecule_typei 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) This is one of the functions we expect to update over time It stores a list of gromacs headers that signal bigdihedral (Charm) member lists and fills the interactions in the topology 
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+older and newer tprs will format the exclusion list differently 
+.PP
+This function is a helper function to 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBdfind_all_molinfo\fP -> 
+.PP
+dparse_bond_int_lists_per_molecule 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+This function dynamically allocates memory in the molecule structure (in top structure) 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdparse_bonded_int_lists_per_molecule()\fP\&.
+.SS "int dfill_bonds_from_gmx_bondtype_headers (FILE * fp, \fBtW_molecule\fP * moli, \fBtW_line\fP * lin_buf, int moltypeid)"
+
+.PP
+dfill_bonds_from_gmx_bondtype_headers: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+moli molecule_typei 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) 
+.PP
+\fBReturns\fP
+.RS 4
+TRUE if successful FALSE (something bad happened) This is one of the functions we expect to update over time It stores a list of gromacs headers that signal bond member lists and fills the interactions in the topology 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+older and newer tprs will format the exclusion list differently 
+.PP
+This function is a helper function to 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBdfind_all_molinfo\fP -> 
+.PP
+dparse_bond_int_lists_per_molecule 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+This function dynamically allocates memory in the molecule structure (in top structure) 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdparse_bonded_int_lists_per_molecule()\fP\&.
+.SS "int dfill_dihedrals_from_gmx_dihedraltype_headers (FILE * fp, \fBtW_molecule\fP * moli, \fBtW_line\fP * lin_buf, int moltypeid)"
+
+.PP
+dfill_dihedrals_from_gmx_dihedraltype_headers: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+moli molecule_typei 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) 
+.PP
+\fBReturns\fP
+.RS 4
+TRUE if successful FALSE (something bad happened) This is one of the functions we expect to update over time It stores a list of gromacs headers that signal dihedral member lists and fills the interactions in the topology 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+older and newer tprs will format the exclusion list differently 
+.PP
+This function is a helper function to 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBdfind_all_molinfo\fP -> 
+.PP
+dparse_bond_int_lists_per_molecule 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+This function dynamically allocates memory in the molecule structure (in top structure) 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdparse_bonded_int_lists_per_molecule()\fP\&.
+.SS "\fBbool\fP dfind_all_molinfo (FILE * fp, \fBtW_molecule\fP * mol, int nmol, \fBtW_line\fP * lin_buf)"
+
+.PP
+dfind_all_molinfo: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+mol the list of molecule types in the top 
+.IP "\(bu" 1
+nmol the length of the list 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) 
+.PP
+\fBReturns\fP
+.RS 4
+TRUE if successful FALSE (something bad happened) This function searches the tpr file for the various fields of the molecule structure\&. It does this for every distinct molecule type in the system 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+This function replaces get_moltype_info 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBread_tpr_dump()\fP\&.
+.SS "\fBbool\fP dget_moltypes_in_molblocks (FILE * fp, \fBtW_gmx_topology\fP * top, \fBtW_line\fP * lin_buf)"
+
+.PP
+\fBdget_moltypes_in_molblocks()\fP: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+top the pointer to the topology we are populating via tpr info 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) 
+.PP
+\fBReturns\fP
+.RS 4
+TRUE if successful FALSE (something bad happened) This function determines the number of unique molecule types listed in the tpr molblocks It populates the list of unique moltypes, and coordinates them to each block listed 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBread_tpr_dump()\fP\&.
+.SS "\fBbool\fP dget_top_ff_info (FILE * fp, \fBtW_gmx_topology\fP * top, \fBtW_line\fP * lin_buf)"
+
+.PP
+\fBdget_top_ff_info()\fP: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+top the pointer to the topology we are populating via tpr info 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) 
+.PP
+\fBReturns\fP
+.RS 4
+TRUE if successful FALSE (something bad happened) This function reads the list of different interactions that will be simulated if the tpr dumped is simulated in gromacs\&. [Does not account for distinct energy groups] 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+MCL 11\&.07\&.2025 To clarify, we don't do anything with this info for force-matching\&. The list of interactions read in in that case is determine by the par file and Bocs atom types\&. 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+this function dynamically allocates memory for top structure members 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBread_tpr_dump()\fP\&.
+.SS "void do_PBC (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "\fBbool\fP dparse_atom_per_molecule_info (FILE * fp, \fBtW_molecule\fP * moli, \fBtW_line\fP * lin_buf)"
+
+.PP
+dparse_atom_per_molecule_info: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+moli molecule_typei 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) 
+.PP
+\fBReturns\fP
+.RS 4
+TRUE if successful FALSE (something bad happened) This function is meant to parse the section of text following moltype(i)-> atom (apm) It fills in the atomic info for the passed molecule structure 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+This function is a helper function 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBdfind_all_molinfo\fP 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+This function dynamically allocates memory in the molecule structure (in top structure) 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdfind_all_molinfo()\fP\&.
+.SS "\fBbool\fP dparse_atomic_exclusions_per_molecule (FILE * fp, \fBtW_molecule\fP * moli, \fBtW_line\fP * lin_buf, int moltypeid)"
+
+.PP
+dparse_atomic_exclusions_per_molecule: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+moli molecule_typei 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) 
+.PP
+\fBReturns\fP
+.RS 4
+TRUE if successful FALSE (something bad happened) This function is meant to parse the section of text following moltype(i)-> excls: It is \fIVERY\fP important for cgff/ldcalc that this function works\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+older and newer tprs will format the exclusion list differently 
+.PP
+This function is a helper function 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBdfind_all_molinfo\fP 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+This function dynamically allocates memory in the molecule structure (in top structure) 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdfind_all_molinfo()\fP\&.
+.SS "\fBbool\fP dparse_bonded_int_lists_per_molecule (FILE * fp, \fBtW_molecule\fP * moli, \fBtW_line\fP * lin_buf, int moltypeidx)"
+
+.PP
+dparse_Bonded_int_lists_per_molecule: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+moli molecule_typei 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) 
+.IP "\(bu" 1
+moltypeidx the index of the molecule type we should fill this info for 
+.PP
+\fBReturns\fP
+.RS 4
+TRUE if successful FALSE (something bad happened) This is a wrapper function\&. The goal of this function is to generate a list of types of intra (Bonded) interactions in the topology and the indices of the molecule's atoms involved in each\&. It is \fIVERY\fP important for cgff/ldcalc that this function works\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+This function is a helper function 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBdfind_all_molinfo\fP 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdfind_all_molinfo()\fP\&.
+.SS "\fBbool\fP dparse_charge_groups_per_molecule (FILE * fp, \fBtW_molecule\fP * moli, \fBtW_line\fP * lin_buf, int moltypeid)"
+
+.PP
+dparse_charge_groups_per_molecule: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+moli molecule_typei 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) 
+.PP
+\fBReturns\fP
+.RS 4
+TRUE if successful FALSE (something bad happened) This function is meant to parse the section of text following moltype(i)-> cgs: It fills in the number of charge groups/members involved for the passed molecule structure 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+newer tprs do not have charge groups\&. Also charge groups are blocked by contiguous atoms with the same type in the \&.top file\&. (not the indices passed into the \&.top e\&.g\&. 1 2 1 2 is 4 dif charge groups) 
+.PP
+This function is a helper function 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBdfind_all_molinfo\fP 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+This function dynamically allocates memory in the molecule structure (in top structure) 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdfind_all_molinfo()\fP\&.
+.SS "\fBbool\fP dparse_residue_per_molecule_info (FILE * fp, \fBtW_molecule\fP * moli, \fBtW_line\fP * lin_buf)"
+
+.PP
+dparse_residue_per_molecule_info: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+moli molecule_typei 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) 
+.PP
+\fBReturns\fP
+.RS 4
+TRUE if successful FALSE (something bad happened) This function is meant to parse the section of text following moltype(i)-> residue(nresidue) It fills in the residue info for the passed molecule structure 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+This function is a helper function 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBdfind_all_molinfo\fP 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+This function dynamically allocates memory in the molecule structure (in top structure) 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdfind_all_molinfo()\fP\&.
+.SS "int dproc_other_headers (FILE * fp, \fBtW_molecule\fP * moli, \fBtW_line\fP * lin_buf, int moltypeid)"
+
+.PP
+dproc_other_headers 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+moli molecule_typei 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (something like address of (char*)) This is one of the functions we expect to update over time It stores a list of gromacs headers that contain interaction lists BOCS doesnt handle 
+.PP
+\fBNote\fP
+.RS 4
+in legacy versions of BOCS this functionality was handled one at a time in get_moltype_info 
+.PP
+older and newer tprs will format the exclusion list differently 
+.PP
+This function is a helper function to 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBdfind_all_molinfo\fP -> 
+.PP
+dparse_bond_int_lists_per_molecule 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+This function dynamically allocates memory in the molecule structure (in top structure) 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdparse_bonded_int_lists_per_molecule()\fP\&.
+.SS "\fBbool\fP dprocess_nmolblocks (FILE * fp, \fBtW_gmx_topology\fP * top, \fBtW_line\fP * lin_buf)"
+
+.PP
+\fBdprocess_nmolblocks()\fP: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+top the pointer to the topology we are populating via tpr info 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (dummy space) 
+.PP
+\fBReturns\fP
+.RS 4
+true (success) false (something bad happened) This function reads dumped tpr file to determine the number of molecule blocks (It allows for there to be e\&.g\&. 3 molecule blocks where e\&.g\&. 2 different molecule types are listed) (This feature is per MRD 01\&.17\&.2020 BOCS issue 11) This sets us up for reading the molecule details later by figuring out how many are required\&. it returns false if there was a problem and errors werent caught earlier 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBread_tpr_dump()\fP\&.
+.SS "\fBbool\fP dprocess_sysname_natoms (FILE * fp, \fBtW_gmx_topology\fP * top, \fBtW_line\fP * lin_buf)"
+
+.PP
+\fBdprocess_sysname_natoms()\fP: 
+.PD 0
+.IP "\(bu" 1
+fp the pointer to the dumped tpr file 
+.IP "\(bu" 1
+top the pointer to the topology we are populating via tpr info 
+.IP "\(bu" 1
+lin_buf allocated space for working with lines (dummy space) 
+.PP
+\fBReturns\fP
+.RS 4
+true (success) false (something bad happened) This function reads dumped tpr files from the topology header and 2 lines below\&. In doing so it obtains the system name and number of atoms it returns false if there was a problem and errors werent caught earlier 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBread_tpr_dump()\fP\&.
+.SS "void dump_molecule_info (\fBtW_gmx_topology\fP * top)"
+
+.PP
+\fBdump_molecule_info()\fP: Prints some basic info for each molecule type from the \fBtW_molecule\fP struct\&. 
+.PP
+Referenced by \fBread_bocs_top()\fP, and \fBwrite_lammps_data()\fP\&.
+.SS "void elim_char (\fBtW_word\fP word, char elim)"
+
+.PP
+\fBelim_char()\fP: Replaces occurrances of char 'elim' with '\\0' in word\&. Useful because when reading some strings from some file formats, there's a comma (or other character) at the end of the string and we want it gone\&. 
+.PP
+Referenced by \fBdfill_14nb_from_gmx_IMNB_headers()\fP, \fBdfill_angles_from_gmx_angletype_headers()\fP, \fBdfill_bigdihedrals_from_gmx_bigdihedraltype_headers()\fP, \fBdfill_bonds_from_gmx_bondtype_headers()\fP, \fBdfill_dihedrals_from_gmx_dihedraltype_headers()\fP, \fBdfind_all_molinfo()\fP, \fBdget_moltypes_in_molblocks()\fP, \fBdget_top_ff_info()\fP, \fBdparse_atom_per_molecule_info()\fP, \fBdparse_residue_per_molecule_info()\fP, \fBdproc_other_headers()\fP, \fBdprocess_sysname_natoms()\fP, \fBread_bocs_top()\fP, and \fBread_first_lammps_frame()\fP\&.
+.SS "\fBbool\fP find_line_in_file (FILE * fp, const char * target, char * ret_line)"
+
+.PP
+\fBfind_line_in_file()\fP: 
+.PD 0
+.IP "\(bu" 1
+fp pointer to file we are searching 
+.IP "\(bu" 1
+target string (char *) for pattern we are searching for 
+.IP "\(bu" 1
+ret_line string (char *) for storing the line that has the pattern Reads a file looking for target pattern, if found, stores line in ret_line and stops file pointer after line containing pattern Pass NULL if don't care\&. 
+.PP
+\fBReturns\fP
+.RS 4
+true if found 
+.PP
+false if not 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBdfill_14nb_from_gmx_IMNB_headers()\fP, \fBdfill_angles_from_gmx_angletype_headers()\fP, \fBdfill_bigdihedrals_from_gmx_bigdihedraltype_headers()\fP, \fBdfill_bonds_from_gmx_bondtype_headers()\fP, \fBdfill_dihedrals_from_gmx_dihedraltype_headers()\fP, \fBdfind_all_molinfo()\fP, \fBdget_moltypes_in_molblocks()\fP, \fBdget_top_ff_info()\fP, \fBdparse_atomic_exclusions_per_molecule()\fP, \fBdparse_charge_groups_per_molecule()\fP, \fBdproc_other_headers()\fP, \fBdprocess_nmolblocks()\fP, and \fBdprocess_sysname_natoms()\fP\&.
+.SS "void generate_generic_index_file (\fBtW_gmx_topology\fP * top, \fBbool\fP bOld)"
+
+.SS "int get_angle_count (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_angle_count()\fP: Returns the number of angles present in topology 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int * get_angle_list (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_angle_list()\fP Returns a list of angles in the t_ilist format: +-----+--+--+--+-----+--+--+--+ |type1|i1|i2|i3|type2|i1|i2|i3|\&.\&.\&. +-----+--+--+--+-----+--+--+--+ 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP, and \fBsetup_lists()\fP\&.
+.SS "char * get_atomtype (\fBtW_gmx_topology\fP * self, int i_atom)"
+
+.PP
+\fBget_atomtype()\fP: Returns the type of the i_atom'th atom in topology 'self' 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int get_bond_count (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_bond_count()\fP: Returns the number of bonds present in topology 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int * get_bond_list (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_bond_list()\fP Returns a list of bonds in the t_ilist format: +-----+--+--+-----+--+--+ |type1|i1|i2|type2|i1|i2|\&.\&.\&. +-----+--+--+-----+--+--+ 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP, and \fBsetup_lists()\fP\&.
+.SS "void get_box (\fBtW_gmx_trxframe\fP * self, \fBmatrix\fP box)"
+
+.PP
+\fBget_box()\fP: copies the box matrix of this frame to box 
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP\&.
+.SS "int * get_dih_list (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_dih_list()\fP Returns a list of dihedrals in the t_ilist format: +-----+--+--+--+--+-----+--+--+--+--+ |type1|i1|i2|i3|i4|type2|i1|i2|i3|i4|\&.\&.\&. +-----+--+--+--+--+-----+--+--+--+--+ 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP, and \fBsetup_lists()\fP\&.
+.SS "int get_dihedral_count (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_dihedral_count()\fP: Returns the number of dihedrals present in topology 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int * get_excl_list (\fBtW_gmx_topology\fP * self, int i_atom)"
+
+.PP
+\fBget_excl_list()\fP: Returns the exclusion list for the i_atom'th atom in topolgy 'self' 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "char * get_filename (\fBtW_gmx_cgmap_input\fP * self, const char * opt)"
+
+.PP
+\fBget_filename()\fP: returns the filename corresponding to the argument opt\&. This replaces an old GROMACS function 
+.PP
+Referenced by \fBinit_tW_gmx_cgmap_input()\fP\&.
+.SS "int get_n_angle_types (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_n_angle_types()\fP: Returns the number of different angle interaction types 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int get_n_bond_types (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_n_bond_types()\fP: Returns the number of different bond types 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int get_n_dihedral_types (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_n_dihedral_types()\fP: Returns the different number of dihedral interaction types 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int get_n_words_from_line (\fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBread_index_file()\fP\&.
+.SS "char * get_name (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_natoms()\fP: Returns the name of topology 'self' 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int get_nangles (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_nangles()\fP: Returns the number of angles listed in self 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP, and \fBsetup_lists()\fP\&.
+.SS "int get_natoms (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_natoms()\fP: Returns the number of atoms specified by topology 'self' 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int get_nbonds (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_nbonds()\fP: Returns the number of bonds listed in self 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int get_ndihs (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_ndihs()\fP: Returns the number of dihedrals listed in self 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP, and \fBsetup_lists()\fP\&.
+.SS "int get_nexcl (\fBtW_gmx_topology\fP * self, int i_atom)"
+
+.PP
+\fBget_nexcl()\fP: Returns the number of exclusions for i_atom'th atom in topology 'self' 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int get_npairs (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_npairs()\fP: Returns the number of intramolecular nonbonded pairs listed in self 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "int * get_pair_list (\fBtW_gmx_topology\fP * self)"
+
+.PP
+\fBget_pair_list()\fP Returns a list of nonbonded intramolecular pairs in the t_ilist format: +-----+--+--+-----+--+--+ |type1|i1|i2|type2|i1|i2|\&.\&.\&. +-----+--+--+-----+--+--+ 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "void get_pos_of (\fBtW_gmx_trxframe\fP * self, int i, \fBdvec\fP x)"
+
+.PP
+\fBget_pos_of()\fP: copies the dvec containing the position of the ith atom in the frame to x 
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP\&.
+.SS "void get_prop (FILE * fp, \fBtW_gmx_bool\fP present, \fBtW_rvec\fP * p, char test_prop, int natoms, int step)"
+
+.PP
+\fBget_prop()\fP: makes sure the dumped trajectory file has the correct property next\&. If so, calls a function to read it in 
+.PP
+Referenced by \fBread_next_dump_frame()\fP\&.
+.SS "char ** get_quoted_words (\fBtW_line\fP line, int expected_words)"
+
+.PP
+get_quoted_words: For an input line of text containing a known number of '', extract an expected number of words from between the quotes e\&.g\&. If line = ' "opls_136",nameB="opls_135" ' and expected_words = 2, the opls_13X will be checked 
+.PP
+\fBParameters\fP
+.RS 4
+\fIline\fP a list of words 
+.br
+\fIexpected_words\fP the number of quote pairs expected within lines 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Error if words found != expected_words, OR pointer to list of found words [len = expected_words] 
+.RE
+.PP
+
+.SS "int get_resind (\fBtW_gmx_topology\fP * self, int i_atom)"
+
+.PP
+\fBget_resind()\fP: Returns the residue index of the i_atom'th atom in topology 'self' 
+.PP
+Referenced by \fBinit_tW_gmx_topology()\fP\&.
+.SS "void get_site_info (\fBtW_CG_site\fP * CG_struct, \fBtW_system\fP * sys, \fBtW_gmx_topology\fP * top)"
+
+.PP
+\fBget_site_info()\fP: Stores information from top into sys and CG_struct\&. 
+.PP
+Referenced by \fBsetup_CG_struct()\fP\&.
+.SS "\fBbool\fP get_top (\fBtW_word\fP coord_fnm, \fBtW_gmx_topology\fP * top, \fBbool\fP TPR_flag, \fBtW_word\fP tpr_filename)"
+
+.PP
+\fBget_top()\fP: Opens GROMACS topology (tpr) file and stores topology information in the data structure top\&. 
+.PP
+Referenced by \fBget_site_info()\fP\&.
+.SS "int get_type (const char * a_type, \fBtW_gmx_topology\fP * top)"
+
+.PP
+Referenced by \fBcalculate_local_densities()\fP, \fBdo_ematch_pairs()\fP, \fBgenerate_generic_index_file()\fP, \fBget_site_info()\fP, \fBmain()\fP, and \fBwrite_lammps_frame()\fP\&.
+.SS "void get_vel_of (\fBtW_gmx_trxframe\fP * self, int i, \fBdvec\fP v)"
+
+.PP
+\fBget_vel_of()\fP: copies the dvec containing the velocity of the ith atom in the frame to v 
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP\&.
+.SS "int get_word_count_delim (\fBtW_line\fP inp_line, const char * delims)"
+
+.PP
+\fBget_word_count_delim()\fP: Gets the number of words separated by chars in delims in a line 
+.PP
+Referenced by \fBdfill_14nb_from_gmx_IMNB_headers()\fP, \fBdfill_angles_from_gmx_angletype_headers()\fP, \fBdfill_bigdihedrals_from_gmx_bigdihedraltype_headers()\fP, \fBdfill_bonds_from_gmx_bondtype_headers()\fP, \fBdfill_dihedrals_from_gmx_dihedraltype_headers()\fP, \fBdproc_other_headers()\fP, \fBget_words_delim()\fP, \fBread_bocs_top()\fP, \fBread_first_lammps_frame()\fP, and \fBread_next_lammps_frame()\fP\&.
+.SS "void get_words_delim (\fBtW_line\fP inp_line, const char * delims, \fBtW_word\fP * word_list)"
+
+.PP
+\fBget_words_delim()\fP: supposed to be like python's string\&.split() 
+.PP
+Referenced by \fBdfill_14nb_from_gmx_IMNB_headers()\fP, \fBdfill_angles_from_gmx_angletype_headers()\fP, \fBdfill_bigdihedrals_from_gmx_bigdihedraltype_headers()\fP, \fBdfill_bonds_from_gmx_bondtype_headers()\fP, \fBdfill_dihedrals_from_gmx_dihedraltype_headers()\fP, \fBdproc_other_headers()\fP, \fBread_bocs_top()\fP, \fBread_first_lammps_frame()\fP, and \fBread_next_lammps_frame()\fP\&.
+.SS "\fBtW_gmx_cgmap_input\fP * init_tW_gmx_cgmap_input (int argc, char * argv[])"
+
+.PP
+\fBinit_tW_gmx_cgmap_input()\fP: Initializes a new instance of \fBtW_gmx_cgmap_input\fP 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "\fBtW_gmx_topology\fP * init_tW_gmx_topology ()"
+
+.PP
+\fBinit_tW_gmx_topology()\fP: initialize the topology structure and align the function pointers 
+.PP
+Referenced by \fBget_site_info()\fP, \fBinitialize_esystem()\fP, and \fBmain()\fP\&.
+.SS "\fBtW_gmx_trxframe\fP * init_tW_gmx_trxframe ()"
+
+.PP
+\fBinit_tW_gmx_trxframe()\fP: initializes a \fBtW_gmx_trxframe\fP variable 
+.PP
+Referenced by \fBinitialize_esystem()\fP, and \fBmain()\fP\&.
+.SS "void map_trxframe (\fBtW_gmx_trxframe\fP * source, \fBtW_gmx_trxframe\fP * dest, \fBtW_site_map\fP * map)"
+
+.PP
+\fBmap_trxframe()\fP: maps source to dest according to the correspondence defined in map 
+.PP
+Referenced by \fBmap_config()\fP\&.
+.SS "\fBbool\fP new_read_next_bocs_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBread_next_frame()\fP\&.
+.SS "void open_write_trajectory (\fBtW_gmx_trxframe\fP * fr, char * fnm)"
+
+.PP
+Referenced by \fBmain()\fP, and \fBwrite_frame()\fP\&.
+.SS "void pop_contents (\fBtW_gmx_topology\fP * top)"
+
+.PP
+\fBpop_contents()\fP: pop here is short for populate\&. Maybe I should make that more explicit\&.\&.\&. This function populates the top->contents->atoms data structure based on what was previously read and stored in the top->molecules data structure 
+.PP
+Referenced by \fBread_bocs_top()\fP, and \fBread_tpr_dump()\fP\&.
+.SS "void pop_LD_vector (\fBtW_line\fP inp_line, double * lds, int ntypes)"
+
+.PP
+Referenced by \fBread_bocs_frame_dir_local_densities()\fP\&.
+.SS "void populate_LD_Gradients (\fBtW_line\fP inp_line, \fBdvec\fP * ldgs, int ntypes)"
+
+.PP
+Referenced by \fBread_bocs_frame_dir_local_density_gradients()\fP\&.
+.SS "void print_frame_dump (\fBtW_gmx_trxframe\fP * self)"
+
+.PP
+\fBprint_frame_dump()\fP: dumps trr frame details to the screen for reading 
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP\&.
+.SS "void print_index_names_and_atom_counts (\fBtW_index_file\fP * idx)"
+
+.SS "int print_tpr_file (FILE * fp_log, \fBtW_gmx_topology\fP * top)"
+
+.PP
+\fBprint_tpr_file()\fP: Prints information stored in top\&. Used for debugging\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void put_at_nums_in (\fBtW_line\fP inp_line, int * spots, int n_words_this_line)"
+
+.PP
+Referenced by \fBread_index_file()\fP\&.
+.SS "\fBbool\fP read_bocs_frame_dir_box (\fBtW_gmx_trxframe\fP * fr, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP read_bocs_frame_dir_flags (\fBtW_gmx_trxframe\fP * fr, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP read_bocs_frame_dir_frame (\fBtW_gmx_trxframe\fP * fr, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP read_bocs_frame_dir_local_densities (\fBtW_gmx_trxframe\fP * fr, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP read_bocs_frame_dir_local_density_gradients (\fBtW_gmx_trxframe\fP * fr, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP read_bocs_frame_dir_natoms (\fBtW_gmx_trxframe\fP * fr, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP read_bocs_frame_dir_prec (\fBtW_gmx_trxframe\fP * fr, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP read_bocs_frame_dir_step (\fBtW_gmx_trxframe\fP * fr, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP read_bocs_frame_dir_time (\fBtW_gmx_trxframe\fP * fr, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP read_bocs_frame_dir_title (\fBtW_gmx_trxframe\fP * fr, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP read_bocs_frame_dir_xvf (\fBtW_gmx_trxframe\fP * fr, \fBtW_line\fP inp_line)"
+
+.PP
+Referenced by \fBnew_read_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP read_bocs_top (\fBtW_word\fP fnm, \fBtW_gmx_topology\fP * top)"
+
+.PP
+Referenced by \fBread_topology()\fP\&.
+.SS "\fBtW_gmx_bool\fP read_box_dump_frame (FILE * fp, \fBtW_matrix\fP box)"
+
+.PP
+\fBread_box_dump_frame()\fP: This function reads the box information from a dumped trr file 
+.PP
+Referenced by \fBread_first_dump_frame()\fP, and \fBread_next_dump_frame()\fP\&.
+.SS "int read_first_bocs_frame (\fBtW_gmx_trxframe\fP * frame, const char * trx_fnm)"
+
+.PP
+\fBread_first_bocs_frame()\fP: reads the first frame of a bocs\&.traj file\&. gets 'header' information 
+.PP
+Referenced by \fBread_first_frame()\fP\&.
+.SS "int read_first_dump_frame (\fBtW_gmx_trxframe\fP * frame, const char * trx_fnm)"
+
+.PP
+\fBread_first_dump_frame()\fP: Reads the first frame of a dumped file\&. Gets 'header' information and finds out whether the positions/velocities/forces are present\&. 
+.PP
+Referenced by \fBread_first_frame()\fP\&.
+.SS "int read_first_frame (\fBtW_gmx_trxframe\fP * fr, const char * fnm)"
+
+.PP
+these next functions are basically wrappers that call the appropriate function to do the requested operation based on the file type stored in fr->eFileType or top->eFileType 
+.PP
+Referenced by \fBmain()\fP, and \fBread_etrajectory()\fP\&.
+.SS "int read_first_gro_frame (\fBtW_gmx_trxframe\fP * frame, const char * fnm)"
+
+.PP
+\fBread_first_gro_frame()\fP: reads the first 3 lines of a \&.gro file, then rewinds it\&. does nothing with the first line\&. gets natoms from the second line\&. sets the 'title' of the trajectory to the name of the gro file\&. sets bStep to true, and when reading the gro file, takes the value of fr->counter to be the step\&. from third line, determines if velocities are present 
+.br
+ 
+.PP
+Referenced by \fBread_first_frame()\fP\&.
+.SS "int read_first_lammps_frame (\fBtW_gmx_trxframe\fP * fr, const char * fnm)"
+
+.PP
+\fBread_first_lammps_frame()\fP: reads the first frame from a lammps custom dump file\&. that dump file MUST contain each atom's ID (since LAMMPS doesn't always print atoms in the same order from frame to frame, but we need to keep atoms straight for topology identification), and should contain x, y, z, (vx, vy, vz, fx, fy, fz) depending on what you're gonna do with the trajectory\&. 
+.PP
+Referenced by \fBread_first_frame()\fP\&.
+.SS "void read_index_file (\fBtW_word\fP fnm, \fBtW_gmx_topology\fP * top)"
+
+.SS "\fBbool\fP read_next_bocs_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.SS "\fBbool\fP read_next_dump_frame (\fBtW_gmx_trxframe\fP * frame)"
+
+.PP
+\fBread_next_dump_frame()\fP: self explanatory? 
+.PP
+Referenced by \fBread_next_frame()\fP\&.
+.SS "\fBbool\fP read_next_frame (\fBtW_gmx_trxframe\fP * fr, \fBbool\fP printCount)"
+
+.PP
+Referenced by \fBmain()\fP, \fBread_trr_2_CGstruct()\fP, and \fBread_trr_2_CGstruct_ref()\fP\&.
+.SS "\fBbool\fP read_next_gro_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBread_next_frame()\fP\&.
+.SS "\fBbool\fP read_next_lammps_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBread_next_frame()\fP\&.
+.SS "\fBbool\fP read_topology (\fBtW_gmx_topology\fP * top, const char * fnm)"
+
+.PP
+Referenced by \fBget_top()\fP, \fBmain()\fP, and \fBread_etopology()\fP\&.
+.SS "\fBbool\fP read_tpr_dump (\fBtW_word\fP fnm, \fBtW_gmx_topology\fP * top)"
+
+.PP
+\fBread_tpr_dump()\fP: Function to read a text file that contains a dumped tpr file 
+.PP
+Referenced by \fBread_topology()\fP\&.
+.SS "\fBbool\fP read_trr_2_CGstruct (\fBtW_gmx_info\fP * info, \fBtW_gmx_trxframe\fP * fr, \fBtW_CG_site\fP CG_struct[])"
+
+.PP
+\fBread_trr_2_CGstruct()\fP: Tries to read another frame from trr file\&. If successful, copies the info from frame data structure to CG_site data structure\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "\fBbool\fP read_trr_2_CGstruct_ref (\fBtW_gmx_info\fP * info, \fBtW_gmx_trxframe\fP * fr, \fBtW_CG_site\fP CG_struct[])"
+
+.PP
+\fBread_trr_2_CGstruct_ref()\fP: JFR - 07\&.16\&.12: for reading in reference forces from a trr file 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void set_atom_labels (\fBtW_gmx_trxframe\fP * self, \fBtW_gmx_topology\fP * top)"
+
+.PP
+\fBset_atom_labels()\fP: sets the atom labels of the frame self if they are available in top 
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, and \fBmain()\fP\&.
+.SS "void set_natoms (\fBtW_gmx_trxframe\fP * self, int natoms)"
+
+.PP
+\fBset_natoms()\fP: sets the number of atoms in the frame self to natoms, and allocates memory for those arrays that are flagged as present 
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP, \fBmain()\fP, \fBread_first_bocs_frame()\fP, \fBread_first_dump_frame()\fP, \fBread_first_gro_frame()\fP, \fBread_first_lammps_frame()\fP, \fBtW_read_first_trj_frame()\fP, and \fBtW_read_first_trr_frame()\fP\&.
+.SS "void setup_xdr (\fBtW_gmx_trxframe\fP * self, const char * fnm, \fBbool\fP bRead)"
+
+.PP
+\fBsetup_xdr()\fP: sets up the XDR data structure for reading/writing trr files MRD 92517 
+.PP
+Referenced by \fBinit_tW_gmx_trxframe()\fP\&.
+.SS "\fBbool\fP skip_excl (int nr_excl, int * excl_list, int j)"
+
+.PP
+\fBskip_excl()\fP: 
+.PP
+Referenced by \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBcalc_ref_nb_pair_forces()\fP, and \fBcalculate_local_densities()\fP\&.
+.SS "void test_line (\fBtW_line\fP inp_line, const char * term, \fBtW_gmx_bool\fP want, const char * errmsg)"
+
+.PP
+\fBtest_line()\fP: Tests to see if a line contains 'term' against whether or not it is expected to ('want')\&. Prints errmsg if the line contains the term and shouldn't, or if the line doesn't contain the term and should\&. 
+.PP
+Referenced by \fBget_next_line()\fP, \fBread_bocs_top()\fP, \fBread_first_bocs_frame()\fP, and \fBread_next_bocs_frame()\fP\&.
+.SS "\fBbool\fP tW_read_first_trj_frame (\fBtW_gmx_trxframe\fP * fr, const char * trx_fnm)"
+
+.PP
+Referenced by \fBread_first_frame()\fP\&.
+.SS "\fBbool\fP tW_read_first_trr_frame (\fBtW_gmx_trxframe\fP * fr, const char * trx_fnm)"
+
+.PP
+Referenced by \fBread_first_frame()\fP\&.
+.SS "\fBbool\fP tW_read_next_trj_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBread_next_frame()\fP\&.
+.SS "\fBbool\fP tW_read_next_trr_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBread_next_frame()\fP\&.
+.SS "\fBbool\fP tW_write_trj_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBwrap_tW_write_trj_frame()\fP\&.
+.SS "\fBbool\fP tW_write_trr_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBwrap_tW_write_trr_frame()\fP\&.
+.SS "int update_info_trr (\fBtW_gmx_info\fP * info, \fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+\fBupdate_info_trr()\fP: 
+.PP
+Referenced by \fBmain()\fP, \fBread_trr_2_CGstruct()\fP, and \fBread_trr_2_CGstruct_ref()\fP\&.
+.SS "void wrap_tW_write_trj_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBwrite_frame()\fP\&.
+.SS "void wrap_tW_write_trr_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBwrite_frame()\fP\&.
+.SS "void write_bocs_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBwrite_frame()\fP\&.
+.SS "void write_bocs_top (\fBtW_word\fP fnm, \fBtW_gmx_topology\fP * top)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void write_delta_frame (\fBtW_gmx_trxframe\fP * fr, FILE * fpbox, FILE * fpx, FILE * fpv, FILE * fpf)"
+
+.SS "void write_dump_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBwrite_frame()\fP\&.
+.SS "void write_frame (\fBtW_gmx_trxframe\fP * fr, \fBtW_gmx_topology\fP * top)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void write_gro_frame (\fBtW_gmx_trxframe\fP * fr)"
+
+.PP
+Referenced by \fBwrite_frame()\fP\&.
+.SS "void write_lammps_data (\fBtW_gmx_trxframe\fP * fr, \fBtW_gmx_topology\fP * top)"
+
+.PP
+Referenced by \fBmain()\fP, and \fBwrite_frame()\fP\&.
+.SS "void write_lammps_frame (\fBtW_gmx_trxframe\fP * fr, \fBtW_gmx_topology\fP * top)"
+
+.PP
+Referenced by \fBwrite_frame()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

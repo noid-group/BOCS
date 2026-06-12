@@ -1,6 +1,6 @@
 /**
 @file cgff_fn.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski
 @brief Helper functions for the cgff calculation
 */
 
@@ -45,7 +45,12 @@ void reset_gmx_info(tW_gmx_info *info)
 
 
 /*****************************************************************************************
-setup_CG_struct(): Stores the information in top into sys and CG_struct. 
+setup_CG_struct(): Stores the information in top into sys and CG_struct.
+@arg sys The somewhat initialized structure that will contain all top, ff, and frame info for the system [CG_struct coordinated top filled here]
+@arg top The already initialized structure that stores the topology info directly
+@arg CG_struct the list of CG sites in the system, info is filled by this func
+@arg Bonded_Inter_Types The list of bonded interactions the user requested as already initialized by read_par()
+@return The number of CG sites in the system 
 *****************************************************************************************/
 int setup_CG_struct(tW_system *sys, tW_gmx_topology *top,
 		    tW_CG_site *CG_struct,
@@ -57,7 +62,6 @@ int setup_CG_struct(tW_system *sys, tW_gmx_topology *top,
     /* Get bond information. */
     get_bonds(sys, top, top->get_natoms(top), CG_struct,
 	      sys->N_Bond_Int_Types, Bonded_Inter_Types);
-
     /* Return no. of particles in top file. */
     return top->get_natoms(top);
 
@@ -76,7 +80,7 @@ void get_bonds(tW_system  *sys,
     tW_bond_type_indices bond_type_indices;
 
     /* Allocate memory for list of indices for all bond interaction types. */
-    allocate_memory_bond_type_indices(top, &bond_type_indices);
+    allocate_memory_bond_type_indices(top, &bond_type_indices); // makes room to store indices for each intramolecular interaction instance
 
     /* Clear previous bond lists, if needed. */
     clear_bond_lists(N_Bond_Int_Types, Bond_Type_List);
@@ -124,7 +128,7 @@ void clear_bond_lists(int N_Bond_Int_Types,
 
 
     /* Loop over all bond interactions. */
-    for (i = 0; i < N_Bond_Int_Types; i++) {
+    for (i = 0; i < N_Bond_Int_Types; i++) { // This is a loop over intramolecular interaction types
 	/* Pointer to the ith bond interaction. */
 	Bond_Type_ptr = &(Bond_Type_List[i]);
 
@@ -367,11 +371,11 @@ void check_bonds(tW_gmx_topology *top, tW_CG_site * CG_struct, int *i_type,
     while (i < n_bonds) {
 
 	/* Get site numbers from the GROMACS topology. */
-	i1 = bond_list[i + 1];
+	i1 = bond_list[i + 1]; // Index of involved atoms 
 	i2 = bond_list[i + 2];
 
 	/* Copy site names into local variable. */
-	strcpy(site_names[0], CG_struct[i1].name);
+	strcpy(site_names[0], CG_struct[i1].name); // copy site type of involved atoms to site_names 
 	strcpy(site_names[1], CG_struct[i2].name);
 
 	/* Store indices to Bond_Type_List[] in order of interaction appreance in GROMACS topology. */
@@ -1181,18 +1185,30 @@ void dump_tW_CG_struct(char *fnm, tW_CG_site * sites, int n_sites)
   fclose(fp);  
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Begin MCL */
+/**
+ * print_bond_warnings
+ * Warns the user if a site in their system is involved in so many 
+ * bonded interactions that it might cause an overflow error while filling 
+ * vectors of dimension vec[MAX_NUM_BOND_COEFF] in the calc_grids functions
+ * @note I have increased MAX_NUM_BOND_COEFFs default value, but placed this func here in case
+ * @arg CG_struct_list the list of sites involved in the system
+ * @arg int numatoms The length of CG_structlist
+ */
+void print_bond_warnings(tW_CG_site * CG_struct_list, int numatoms)
+{
+  int gen_warnflag = -1;
+  int maxbondnum = 0;
+  /* Find the longest list of bonded lambda instances among all sites*/
+  for (int i = 0; i < numatoms ; i++)
+  {
+   if (CG_struct_list[i].nr_bonds > maxbondnum) { maxbondnum = CG_struct_list[i].nr_bonds; }
+  }
+  if (maxbondnum*4 > MAX_NUM_BOND_COEFF) { fprintf(stderr, "Warning: If using 4th order or higher splines for all bonded interactions you may segfault later\n"); gen_warnflag = 1;}
+  if (maxbondnum*2 > MAX_NUM_BOND_COEFF) { fprintf(stderr, "Warning: If using linear or higher splines for all bonded interactions you may segfault later\n"); gen_warnflag = 1;}
+  if (maxbondnum > MAX_NUM_BOND_COEFF) { fprintf(stderr, "Warning: The number of bonded interactions per site is too high \n"); gen_warnflag = 1;}
+  if (gen_warnflag > 0) {fprintf(stderr, "To avoid problems while forcematching this system please increase MAX_NUM_BOND_COEFF in cgff_types.h and recompile\n");
+                         fprintf(stderr, "Current value of MAX_NUM_BOND_COEFF = %d, you have a site site involed in %d bonded interactions", MAX_NUM_BOND_COEFF, maxbondnum);
+  			}
+}
+/* End MCL */

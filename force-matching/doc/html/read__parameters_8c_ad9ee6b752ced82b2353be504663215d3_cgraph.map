@@ -1,0 +1,27 @@
+<map id="read_structures" name="read_structures">
+<area shape="rect" id="Node000001" title="read_structures(): Reads in the file names that contain structures." alt="" coords="5,107,117,133"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#aa58790fe8cbcf89bdbad529d8e038d77" title="delete_directive_from_line(): For lines that contain a directive marked by [...], the ending brace is..." alt="" coords="317,5,489,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,103,340,34,342,39,110,109"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#ae5d06088756e63f85d49a86d4a250310" title="get_structures(): Saves all the file names that contain structures from the list of files names read ..." alt="" coords="165,107,269,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="117,117,149,117,149,123,117,123"/>
+<area shape="rect" id="Node000011" href="$io__read_8c.html#affbcef096bab7c5026b54cd3c7ac8a40" title="get_word_list(): Reads a list of N_words words, each on separate lines, following a line that contain..." alt="" coords="168,157,266,184"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="105,131,160,150,158,155,104,137"/>
+<area shape="poly" id="edge4_Node000003_Node000002" title=" " alt="" coords="231,104,268,73,316,42,329,35,332,40,318,46,271,77,234,108"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#afc26ee948fc1451d49561f3b6f1cb06a" title="check_inp_line(): Makes sure that the ending directive is not found were it is not supposed to be." alt="" coords="350,107,457,133"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="269,117,334,117,334,123,269,123"/>
+<area shape="rect" id="Node000005" href="$io__read_8c.html#a465f5441ca7fc78824e4e834b46a747f" title="file_exists(): Checks whether the supplied filename can be opened for reading." alt="" coords="363,56,443,83"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="268,103,347,82,349,87,270,109"/>
+<area shape="rect" id="Node000006" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="354,157,452,184"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="270,131,340,151,339,156,268,137"/>
+<area shape="rect" id="Node000010" href="$io__read_8c.html#a7b47f18d3649b2d4b9383a5aa3ddee38" title="test_end_directive(): Test to make sure the ending directive is found." alt="" coords="340,208,467,235"/>
+<area shape="poly" id="edge10_Node000003_Node000010" title=" " alt="" coords="252,132,271,143,285,157,295,170,304,182,318,194,328,199,326,204,316,198,300,186,290,173,281,161,267,147,249,136"/>
+<area shape="rect" id="Node000007" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="537,132,642,159"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="452,161,522,152,523,157,453,167"/>
+<area shape="rect" id="Node000009" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="554,183,625,209"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="453,175,540,187,539,192,452,180"/>
+<area shape="rect" id="Node000008" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="690,132,822,159"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="642,143,674,143,674,148,642,148"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="266,155,336,135,337,141,267,160"/>
+<area shape="poly" id="edge13_Node000011_Node000006" title=" " alt="" coords="266,168,339,168,339,173,266,173"/>
+<area shape="poly" id="edge14_Node000011_Node000010" title=" " alt="" coords="267,181,337,201,336,206,266,187"/>
+</map>

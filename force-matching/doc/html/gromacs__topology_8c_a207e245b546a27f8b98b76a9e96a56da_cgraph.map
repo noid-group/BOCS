@@ -1,0 +1,14 @@
+<map id="get_prop" name="get_prop">
+<area shape="rect" id="Node000001" title="get_prop(): makes sure the dumped trajectory file has the correct property next." alt="" coords="5,31,77,57"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a1a205a540dee3c756ca2a245d6bb48c8" title="copy_atom_props(): Reads &quot;natoms&quot; lines from a dump file and stores the numbers in the appropriate ar..." alt="" coords="125,5,249,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,35,109,30,110,35,77,40"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="297,31,395,57"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="77,41,282,41,282,47,77,47"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="250,26,282,31,281,36,249,31"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="443,5,548,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="395,33,427,27,428,33,396,38"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="460,56,531,83"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="396,50,445,58,444,63,395,55"/>
+<area shape="rect" id="Node000005" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="596,5,728,32"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="548,16,580,16,580,21,548,21"/>
+</map>

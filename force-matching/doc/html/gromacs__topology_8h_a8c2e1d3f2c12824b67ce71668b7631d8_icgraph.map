@@ -1,0 +1,7 @@
+<map id="map_trxframe" name="map_trxframe">
+<area shape="rect" id="Node000001" title="map_trxframe(): maps source to dest according to the correspondence defined in map" alt="" coords="239,5,340,32"/>
+<area shape="rect" id="Node000002" href="$transf__map_8c.html#af0bdb9d576702f314ce776fccee732eb" title=" " alt="" coords="103,5,191,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,21,191,21,191,16,223,16"/>
+<area shape="rect" id="Node000003" href="$cgmap_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="87,21,55,21,55,16,87,16"/>
+</map>

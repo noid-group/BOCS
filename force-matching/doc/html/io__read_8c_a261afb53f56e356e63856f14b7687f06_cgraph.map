@@ -1,0 +1,5 @@
+<map id="get_clean_line" name="get_clean_line">
+<area shape="rect" id="Node000001" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="5,5,110,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="158,5,290,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,16,142,16,142,21,110,21"/>
+</map>

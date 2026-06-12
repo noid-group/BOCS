@@ -1,0 +1,5 @@
+<map id="summarize_input_RESCALE" name="summarize_input_RESCALE">
+<area shape="rect" id="Node000001" title="summarize_input_RESCALE():" alt="" coords="5,5,196,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a7553f151522b5594937944e18c906b59" title="print_line_stars(): Prints a line of &#39;*&#39;." alt="" coords="244,5,353,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,16,228,16,228,21,196,21"/>
+</map>

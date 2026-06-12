@@ -1,0 +1,7 @@
+<map id="ext_potl_solve_lin_eqns" name="ext_potl_solve_lin_eqns">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,166,57"/>
+<area shape="rect" id="Node000002" href="$ematch__func_8h.html#ae674bcef4c754b3c21967e842298b79d" title=" " alt="" coords="235,5,301,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,30,219,23,220,28,167,35"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#aeabe54d7c475d74f71a949ba78a84247" title="index_Lpacked(): Calculate the index of element aij in an NxN matrix in Lower&#45;packed storage form." alt="" coords="214,56,322,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,53,199,57,198,62,166,58"/>
+</map>

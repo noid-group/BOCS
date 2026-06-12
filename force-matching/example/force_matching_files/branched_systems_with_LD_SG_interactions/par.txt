@@ -1,0 +1,152 @@
+[Mode] GROMACS
+
+[Temperature]  350.0
+
+[Structures]    1
+inp.txt
+[End Structures]
+
+[Site_Types]    4
+A
+B
+C
+D
+[End Site_Types]
+
+[Inter_Types]  53
+!inter_name  inter_type        basis       dr         R_min      R_max   spline_order    n_smooth
+ Pair_A_A       Pair_Interaction  Bspline     0.01       0.00      1.500          4    0
+ Pair_B_B       Pair_Interaction  Bspline     0.01       0.00      1.500          4    0
+ Pair_A_B       Pair_Interaction  Bspline     0.01       0.00      1.500    4    0
+ Pair_A_C 	Pair_Interaction  Bspline     0.01      0.00       1.500   4     0
+ Pair_B_C	Pair_Interaction  Bspline     0.01      0.00       1.500   4     0
+ Pair_C_C	Pair_Interaction  Bspline     0.01      0.00       1.500   4     0
+ Pair_A_D	Pair_Interaction  Bspline     0.01      0.00       1.500   4     0
+ Pair_B_D	Pair_Interaction  Bspline     0.01      0.00       1.500   4     0
+ Pair_C_D	Pair_Interaction  Bspline     0.01      0.00       1.500   4     0
+ Pair_D_D	Pair_Interaction  Bspline     0.01      0.00       1.500   4     0
+ LD_A_A Local_Density       Bspline     0.01      0.0  8.0      4  0 lucy 0.0 0.65
+ LD_A_B Local_Density      Bspline     0.01      0.0   8.0      4  0 lucy 0.0 0.65
+ LD_A_C Local_Density      Bspline     0.01      0.0   8.0       4  0 lucy 0.0 0.65
+ LD_A_D Local_Density     Bspline     0.01      0.0    8.0       4  0 lucy 0.0 0.65
+ LD_B_A Local_Density     Bspline     0.1      0.0    8.0      4  0 lucy 0.0 0.65
+ LD_B_B Local_Density     Bspline     0.1      0.0    8.0     4  0 lucy 0.0 0.65
+ LD_B_C Local_Density     Bspline     0.1      0.0    8.0       4  0 lucy 0.0 0.65
+ LD_B_D Local_Density     Bspline     0.1      0.0    8.0       4  0 lucy 0.0 0.65
+ LD_C_A Local_Density     Bspline     0.1      0.0    8.0      4  0 lucy 0.0 0.65
+ LD_C_B Local_Density     Bspline     0.1      0.0    8.0     4  0 lucy 0.0 0.65
+ LD_C_C Local_Density     Bspline     0.1      0.0    8.0     4  0 lucy 0.0 0.65
+ LD_C_D Local_Density     Bspline     0.1      0.0    8.0       4  0 lucy 0.0 0.65
+ LD_D_A Local_Density     Bspline     0.1      0.0    8.0    4  0 lucy 0.0 0.65
+ LD_D_B Local_Density     Bspline     0.1      0.0    8.0      4  0 lucy 0.0 0.65
+ LD_D_C Local_Density     Bspline     0.1      0.0    8.0     4  0 lucy 0.0 0.65
+ LD_D_D Local_Density     Bspline     0.1      0.0    8.0       4  0 lucy 0.0 0.65
+ Grad_A_A LD_Gradient       Bspline	0.1	 0.0   8.0       4  0 lucy 0.0 0.65
+ Grad_A_B LD_Gradient       Bspline     0.1      0.0   8.0       4  0 lucy 0.0 0.65
+ Grad_A_C LD_Gradient       Bspline     0.1      0.0   8.0       4  0 lucy 0.0 0.65
+ Grad_A_D LD_Gradient       Bspline     0.1      0.0   8.0       4  0 lucy 0.0 0.65
+ Grad_B_A LD_Gradient       Bspline     0.1      0.0   8.0      4  0 lucy 0.0 0.65
+ Grad_B_B LD_Gradient       Bspline     0.1      0.0   8.0     4  0 lucy 0.0 0.65
+ Grad_B_C LD_Gradient       Bspline     0.1      0.0   8.0       4  0 lucy 0.0 0.65
+ Grad_B_D LD_Gradient       Bspline     0.1      0.0   8.0       4  0 lucy 0.0 0.65
+ Grad_C_A LD_Gradient       Bspline     0.1      0.0   8.0      4  0 lucy 0.0 0.65
+ Grad_C_B LD_Gradient       Bspline     0.1      0.0   8.0      4  0 lucy 0.0 0.65
+ Grad_C_C LD_Gradient       Bspline     0.1      0.0   8.0     4  0 lucy 0.0 0.65
+ Grad_C_D LD_Gradient       Bspline     0.1      0.0   8.0       4  0 lucy 0.0 0.65
+ Grad_D_A LD_Gradient       Bspline     0.1      0.0   8.0      4  0 lucy 0.0 0.65
+ Grad_D_B LD_Gradient       Bspline     0.1      0.0   8.0     4  0 lucy 0.0 0.65
+ Grad_D_C LD_Gradient       Bspline     0.1      0.0   8.0     4  0 lucy 0.0 0.65
+ Grad_D_D LD_Gradient       Bspline     0.1      0.0   8.0       4  0 lucy 0.0 0.65
+ Bond_A_B BondStretch       harmonic      0.0001     0.00      0.45    0
+ Bond_B_C BondStretch       harmonic    0.0001     0.00      0.45      0
+ Bond_C_D BondStretch       harmonic    0.0001     0.00      0.45      0
+ Bond_A_D BondStretch       harmonic    0.0001      0.00      0.45     0
+ Angle_A_B_C Angle          harmonic    1          0           180     0
+ Angle_B_C_D Angle          harmonic    1          0           180     0
+ Angle_A_B_A Angle          harmonic    1          0           180     0
+ Angle_D_C_D Angle          harmonic    1          0           180     0
+ Angle_C_D_A Angle          harmonic    1          0           180     0
+ Dihedral_A_B_C_D Dihedral  Bspline    3    -180         180      4    0
+ Dihedral_B_C_D_A Dihedral  Bspline   3    -180         180       4    0
+[End Inter_Types]
+
+[Pair_Interaction] 42
+! inter_name   type1  type2
+  Pair_A_A       A    A
+  Pair_A_B	 A    B
+  Pair_A_C	 A    C
+  Pair_A_D       A    D
+  Pair_B_B	 B    B
+  Pair_B_C	 B    C
+  Pair_B_D	 B    D
+  Pair_C_C       C    C
+  Pair_C_D       C    D
+  Pair_D_D       D    D
+  LD_A_A         A    A
+  LD_A_B         A    B
+  LD_A_C         A    C
+  LD_A_D         A    D
+  LD_B_A         B    A
+  LD_B_B         B    B
+  LD_B_C         B    C
+  LD_B_D         B    D
+  LD_C_A         C    A
+  LD_C_B         C    B
+  LD_C_C         C    C
+  LD_C_D         C    D
+  LD_D_A         D    A
+  LD_D_B         D    B
+  LD_D_C         D    C
+  LD_D_D         D    D
+  Grad_A_A       A    A
+  Grad_A_B	 A    B
+  Grad_A_C	 A    C
+  Grad_A_D	 A    D
+  Grad_B_A	 B    A
+  Grad_B_B       B    B
+  Grad_B_C       B    C
+  Grad_B_D       B    D
+  Grad_C_A       C    A
+  Grad_C_B	 C    B
+  Grad_C_C       C    C
+  Grad_C_D       C    D
+  Grad_D_A       D    A
+  Grad_D_B	 D    B
+  Grad_D_C       D    C
+  Grad_D_D       D    D
+[End Pair_Interaction]
+
+
+[BondStretch] 4
+Bond_A_B A B
+Bond_B_C B C
+Bond_C_D C D
+Bond_A_D A D
+[End BondStretch]
+
+[Angle] 5
+Angle_A_B_C A B C
+Angle_B_C_D B C D
+Angle_A_B_A A B A
+Angle_D_C_D D C D
+Angle_C_D_A C D A
+[End Angle]
+
+[Dihedral] 2
+Dihedral_A_B_C_D A B C D
+Dihedral_B_C_D_A B C D A
+[End Dihedral]
+
+
+[Calculation_Mode]
+FULL
+[End Calculation_Mode]
+
+
+[ TPR ] 1
+box.btp
+[ End TPR]
+
+[TRIM]
+0.000001
+[End TRIM]

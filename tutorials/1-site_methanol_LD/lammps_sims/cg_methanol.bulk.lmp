@@ -1,0 +1,54 @@
+units		real
+dimension	3
+boundary	p p p
+atom_style	full
+
+newton		on
+timestep	1.0
+
+read_data	cg_methanol.data
+
+velocity	all create 270 22345 dist gaussian
+
+pair_style     hybrid/overlay ldd table spline 3000 
+
+bond_style	none
+angle_style	none
+dihedral_style	none
+improper_style	none
+
+pair_coeff	1 1 table lammps_nb_MEO_MEO.table MEOMEO 14.0
+pair_coeff      * * ldd cg_methanol.bulk.LD_ff_input MEO
+# Map atom type 1 to species MEO (defined in the ff file)
+
+neigh_modify	delay 0 every 1 check yes
+thermo          500
+
+variable STEP equal step
+variable TEMP equal temp
+variable VOL equal vol/1000.0
+variable PRESS equal press*1.01325
+
+## Set various fixes
+#
+## Set our thermostat and custom barostat
+#               ID group-ID style_name thermostat T_init T_end T_couple barostat P_start P_end  P_couple pmatch_basis avg_vol     N_sites N_coeffs coeff1           coeff2            always_zero
+fix             1  all      npt        temp       270  270 100.0 iso 0.986 0.986 1000.0
+
+run_style       verlet
+run 1000000
+
+fix             print_temp all print 500 "${STEP} ${TEMP}" file temp.dat screen no
+fix             print_vol all print 500 "${STEP} ${VOL}" file vol.dat screen no
+fix             print_press all print 500 "${STEP} ${PRESS}" file press.dat screen no
+fix		print_pv  all print 500 "${VOL} ${PRESS}" file PV.dat screen no
+
+## Prints a configuration to outfile.xtc every 1000 steps
+dump            2 all ldd 500 dump.txt
+dump_modify	2 sort id
+
+# Write restart files to continue simulations
+restart 100000 state1.restart state2.restart
+
+## Run for this many steps
+run 3000000 

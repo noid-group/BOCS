@@ -1,0 +1,59 @@
+[name] SOL
+
+[natoms] 1200
+
+[ffparams] 1
+!ind 	name
+0 	LJ_SR
+!atnr  fudgeQQ
+1 1.000000
+
+[molblocks] 3
+!moltype  mol_name  n_mols
+0 	  A 	  400 
+1 	  B 	  400 
+2 	  C 	  400 
+
+[moltypes] 3
+!ind 	name	n_mols	n_apm	n_res	n_cgs	excls_nr 	excls_nra 	bond_nr 	angle_nr 	dih_nr   	bigdih_nr  	imnb_nr
+0 	A	400	1	1	1	1		1		0		0		0		0		0	
+  [res]
+  A
+  [cg]
+  !idx  start  end
+     0      0    0
+!ind 	name	n_mols	n_apm	n_res	n_cgs	excls_nr 	excls_nra 	bond_nr 	angle_nr 	dih_nr   	bigdih_nr  	imnb_nr
+1 	B	400	1	1	1	1		1		0		0		0		0		0	
+  [res]
+  B
+  [cg]
+  !idx  start  end
+     0      0    0
+!ind 	name	n_mols	n_apm	n_res	n_cgs	excls_nr 	excls_nra 	bond_nr 	angle_nr 	dih_nr   	bigdih_nr  	imnb_nr
+2 	C	400	1	1	1	1		1		0		0		0		0		0	
+  [res]
+  C
+  [cg]
+  !idx  start  end
+     0      0    0
+
+[attypes]
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           0       0     0   18.01540  0.00000       0         A          A  1
+  [epa]
+  0
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           1       0     0   18.01540  0.00000       0         B          B  1
+  [epa]
+  0
+!moltype_ind  at_ind  type  m          q        resind  atomname  typename  n_epa
+           2       0     0   18.01540  0.00000       0         C          C  1
+  [epa]
+  0
+
+
+[Bocs_at_types] 3
+!idx  typename
+   0         A
+   1         B
+   2         C

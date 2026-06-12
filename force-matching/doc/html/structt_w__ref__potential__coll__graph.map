@@ -1,0 +1,7 @@
+<map id="tW_ref_potential" name="tW_ref_potential">
+<area shape="rect" id="Node000001" title=" " alt="" coords="54,160,170,187"/>
+<area shape="rect" id="Node000002" href="$cgff__types_8h.html#structt_w__ref__force" title=" " alt="" coords="5,5,102,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="66,46,110,158,105,160,61,48"/>
+<area shape="rect" id="Node000003" href="$cgff__types_8h.html#structt_w__ref__inter" title=" " alt="" coords="126,5,218,32"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="171,48,162,91,145,137,127,161,123,158,140,135,157,90,166,47"/>
+</map>

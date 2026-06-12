@@ -1,0 +1,97 @@
+.TH "cgff.c" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+cgff.c \- MPI driver for the cgff calculation\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <stdlib\&.h>\fP
+.br
+\fR#include <string\&.h>\fP
+.br
+\fR#include 'mpi\&.h'\fP
+.br
+\fR#include 'safe_mem\&.h'\fP
+.br
+\fR#include 'gromacs_topology\&.h'\fP
+.br
+\fR#include 'cgff_fn\&.h'\fP
+.br
+\fR#include 'calc_grids\&.h'\fP
+.br
+\fR#include 'read_parameters\&.h'\fP
+.br
+\fR#include 'io_output\&.h'\fP
+.br
+\fR#include 'calc_ref_potential\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBDEBUG_tpr\fP   \fBFALSE\fP"
+.br
+.ti -1c
+.RI "#define \fBDEBUG_setup_CG_struct\fP   \fBFALSE\fP"
+.br
+.ti -1c
+.RI "#define \fBDEBUG\fP   \fBFALSE\fP"
+.br
+.ti -1c
+.RI "#define \fBDEBUG_NFRAMES\fP   100"
+.br
+.ti -1c
+.RI "#define \fBDEBUG_PRINT_FRAME_COUNT\fP   \fBFALSE\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmain\fP (int argc, char *argv[])"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+MPI driver for the cgff calculation\&. 
+
+
+.PP
+\fBAuthors\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski 
+.RE
+.PP
+
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define DEBUG   \fBFALSE\fP"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "#define DEBUG_NFRAMES   100"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "#define DEBUG_PRINT_FRAME_COUNT   \fBFALSE\fP"
+
+.SS "#define DEBUG_setup_CG_struct   \fBFALSE\fP"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "#define DEBUG_tpr   \fBFALSE\fP"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int main (int argc, char * argv[])"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

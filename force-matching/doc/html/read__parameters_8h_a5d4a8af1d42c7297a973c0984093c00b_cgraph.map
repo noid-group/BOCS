@@ -1,0 +1,57 @@
+<map id="setup_sys_copy" name="setup_sys_copy">
+<area shape="rect" id="Node000001" title="setup_sys_copy(): Copies the information from sys_orig to sys_copy." alt="" coords="5,639,122,665"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#a20589ce6e3db851e976637985e217991" title="copy_arrays(): Allocates memory for arrays in sys_copy and makes sure they are zeroed." alt="" coords="211,5,304,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="63,638,69,524,85,345,99,251,116,164,139,92,153,64,168,42,180,32,195,24,198,29,183,36,172,46,157,66,144,94,122,165,104,252,90,346,74,524,68,639"/>
+<area shape="rect" id="Node000004" href="$read__parameters_8c.html#aebc7ec4a07b6e99dfd17c602e697942b" title="copy_Bonded_Inter_Types(): Copies information from sys_orig to sys_copy for all intramolecular intera..." alt="" coords="170,56,345,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="63,638,70,532,88,368,102,282,119,203,141,138,154,112,168,93,170,90,174,94,172,96,158,115,146,140,125,205,107,283,93,369,76,532,68,638"/>
+<area shape="rect" id="Node000005" href="$read__parameters_8c.html#a4330884d125f6f753ae2a4cfa9c4524e" title="copy_CalcMODE(): Copies the information from sys_orig to sys_copy." alt="" coords="196,107,319,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="63,638,72,541,91,392,105,315,122,243,143,184,168,144,180,134,183,138,172,147,148,186,127,245,110,316,96,393,77,541,68,639"/>
+<area shape="rect" id="Node000006" href="$read__parameters_8c.html#a96716f733266e172ec20b39c48f89cae" title="copy_CHISQD(): Copies the information from sys_orig to sys_copy." alt="" coords="203,157,312,184"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="63,638,74,549,94,416,108,347,125,283,145,230,168,194,187,180,190,185,172,198,150,233,130,285,114,348,99,417,79,550,69,639"/>
+<area shape="rect" id="Node000007" href="$read__parameters_8c.html#a7bf3e078a151173566cc5383a71a91b5" title="copy_CONSTRAIN(): Copies the information from sys_orig to sys_copy." alt="" coords="189,208,326,235"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="64,638,76,558,97,440,128,323,147,276,168,245,174,239,178,243,172,248,152,279,133,324,103,441,81,559,69,639"/>
+<area shape="rect" id="Node000008" href="$read__parameters_8c.html#afe2f528b2a4950aad1027d2f2128930c" title="copy_Eigen(): Copies the information from sys_orig to sys_copy." alt="" coords="213,259,302,285"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="62,638,64,576,77,485,90,434,109,384,134,337,168,295,196,278,199,283,171,299,139,340,114,386,95,436,82,486,69,577,67,638"/>
+<area shape="rect" id="Node000009" href="$read__parameters_8c.html#a6e3a600e68bb98581719ad35155ea5bf" title="copy_ERR(): Copies the information from sys_orig to sys_copy." alt="" coords="215,309,300,336"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="63,638,68,584,83,506,96,463,115,421,138,381,168,346,182,336,199,328,201,333,185,340,171,350,142,384,119,423,101,465,88,507,73,585,68,638"/>
+<area shape="rect" id="Node000010" href="$read__parameters_8c.html#aa40b6a69bf7561bf9c196cf1d268f69d" title="copy_FRAMEWEIGHT(): Copies the information from sys_orig to sys_copy." alt="" coords="179,360,336,387"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="64,638,72,592,89,527,120,457,142,425,168,397,172,393,176,397,171,401,146,428,125,460,94,529,77,593,69,639"/>
+<area shape="rect" id="Node000011" href="$read__parameters_8c.html#a902117766107b6c40f5de01ad5c2aa82" title="copy_Inter2_Types(): Copies information from sys_orig to sys_copy for all pair intermolecular interac..." alt="" coords="192,411,323,437"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="65,638,76,600,96,549,126,494,146,469,168,447,176,441,179,446,171,451,149,473,131,497,101,551,81,602,70,639"/>
+<area shape="rect" id="Node000012" href="$read__parameters_8c.html#a17495a549fe26ec061a7f97e8fef85a5" title="copy_Inter_Ext_Types(): Copies information from sys_orig to sys_copy for all external potential inter..." alt="" coords="182,461,333,488"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="68,637,103,571,132,531,168,498,176,493,179,497,171,502,136,535,108,573,73,640"/>
+<area shape="rect" id="Node000013" href="$read__parameters_8c.html#ab8981518202819bd4868ae992aadf60c" title="copy_Inter_Types(): Copies information from sys_orig to sys_copy for all interaction types." alt="" coords="195,512,320,539"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="74,636,112,593,139,569,168,548,180,543,182,547,171,553,142,573,116,597,77,640"/>
+<area shape="rect" id="Node000014" href="$read__parameters_8c.html#a6b18d5a76c96991b77a7f88575d1786f" title="copy_ITER(): Copies the information from sys_orig to sys_copy." alt="" coords="214,563,301,589"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="89,636,169,599,198,589,200,594,171,604,92,640"/>
+<area shape="rect" id="Node000015" href="$read__parameters_8c.html#a8fe3be5e553a6ae4379a8aa78fcd755c" title="copy_MEM(): Copies the information from sys_orig to sys_copy." alt="" coords="214,613,301,640"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="122,642,198,632,198,637,123,647"/>
+<area shape="rect" id="Node000016" href="$read__parameters_8c.html#aba6edcbfa47b0f00a674af80d506d07a" title="copy_MFD(): Copies the information from sys_orig to sys_copy." alt="" coords="215,664,300,691"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="123,657,200,667,199,672,122,662"/>
+<area shape="rect" id="Node000017" href="$read__parameters_8c.html#ad16d4b51646df0cf2d3dc418b6774d42" title="copy_MT(): Copies the information from sys_orig to sys_copy." alt="" coords="220,715,295,741"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="92,664,171,700,205,712,203,717,169,705,89,668"/>
+<area shape="rect" id="Node000018" href="$read__parameters_8c.html#aa8327ea786c40281db1892cdfe533fd4" title="copy_PC(): Copies the information from sys_orig to sys_copy." alt="" coords="220,765,295,792"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="77,664,116,707,142,731,171,751,205,765,203,770,168,756,139,735,112,711,74,668"/>
+<area shape="rect" id="Node000019" href="$read__parameters_8c.html#a0af0b543f79e76704b156e3ac34208f5" title="copy_PT(): Copies the information from sys_orig to sys_copy." alt="" coords="221,816,294,843"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="73,664,108,731,136,769,171,802,207,818,205,823,168,806,132,773,103,733,68,667"/>
+<area shape="rect" id="Node000020" href="$read__parameters_8c.html#ad385cf38c6ab4dd9a8dab79220ec6f62" title="copy_REF(): Copies the information from sys_orig to sys_copy." alt="" coords="216,867,299,893"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="70,665,81,702,101,753,131,807,149,831,171,853,202,869,200,873,168,857,146,835,126,810,96,755,76,704,65,666"/>
+<area shape="rect" id="Node000021" href="$read__parameters_8c.html#a3f6304a6a07b232f6c27b4acdcd47698" title="copy_REG(): Copies the information from sys_orig to sys_copy." alt="" coords="215,917,300,944"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="69,665,77,711,94,775,125,844,146,876,171,903,201,920,198,924,168,907,142,879,120,847,89,777,72,712,64,666"/>
+<area shape="rect" id="Node000022" href="$read__parameters_8c.html#aafdc39f5812110bdc426caad42940596" title="copy_RESCALE(): Copies the information from sys_orig to sys_copy." alt="" coords="198,968,317,995"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="68,666,73,719,88,797,101,839,119,881,142,920,171,954,185,964,182,968,168,958,138,923,115,883,96,841,83,798,68,720,63,666"/>
+<area shape="rect" id="Node000023" href="$read__parameters_8c.html#ac02ec40a53799e15bdde635ed7c91f9b" title="copy_site_types(): Copies information from sys_orig to sys_copy." alt="" coords="199,1019,316,1045"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="67,666,69,727,82,818,95,868,114,918,139,964,172,1005,187,1016,183,1020,168,1009,134,967,109,920,90,870,77,819,64,728,62,666"/>
+<area shape="rect" id="Node000024" href="$read__parameters_8c.html#acc946024188395aef83b2a4717332315" title="copy_SOLN(): Copies the information from sys_orig to sys_copy." alt="" coords="211,1069,304,1096"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="69,665,81,745,103,863,133,980,152,1025,172,1055,197,1072,195,1076,168,1059,147,1028,128,981,97,864,76,746,64,666"/>
+<area shape="rect" id="Node000025" href="$read__parameters_8c.html#a66bd0c4120fb21823f4caeeb89c6c159" title="copy_SVD(): Copies the information from sys_orig to sys_copy." alt="" coords="215,1120,300,1147"/>
+<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="69,665,79,754,99,887,114,956,130,1019,150,1071,172,1106,185,1117,201,1124,199,1129,182,1121,168,1110,145,1074,125,1021,108,957,94,888,74,755,63,666"/>
+<area shape="rect" id="Node000026" href="$read__parameters_8c.html#a5f350114949744ec39ca28a7774885ae" title="copy_TPR(): Copies the information from sys_orig to sys_copy." alt="" coords="216,1171,299,1197"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="68,665,77,763,96,911,110,988,127,1059,148,1118,172,1157,185,1168,202,1175,199,1180,182,1172,168,1160,143,1120,122,1061,105,989,91,912,72,763,63,666"/>
+<area shape="rect" id="Node000027" href="$read__parameters_8c.html#a125b207b4b33575bcd710e14734d6252" title="copy_TPR_EXCL(): Copies the information from sys_orig to sys_copy." alt="" coords="195,1221,320,1248"/>
+<area shape="poly" id="edge26_Node000001_Node000027" title=" " alt="" coords="68,666,76,772,93,935,107,1021,125,1099,146,1164,158,1189,172,1208,182,1217,179,1221,168,1211,154,1192,141,1166,119,1101,102,1022,88,936,70,772,63,666"/>
+<area shape="rect" id="Node000028" href="$read__parameters_8c.html#a8626b946ee997d7f625789809c7996a9" title="copy_TRIM(): Copies the information from sys_orig to sys_copy." alt="" coords="213,1272,302,1299"/>
+<area shape="poly" id="edge27_Node000001_Node000028" title=" " alt="" coords="68,665,74,780,90,958,104,1052,122,1139,144,1210,157,1238,172,1258,184,1268,199,1275,197,1280,181,1273,168,1262,153,1240,139,1212,116,1140,99,1053,85,959,69,780,63,666"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#abb17bf2cde61bbf80e87b7881dd7ea73" title="clear_sys_arrays(): Zeros the arrays that are not pointing to NULL." alt="" coords="393,5,513,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="304,16,377,16,377,21,304,21"/>
+</map>

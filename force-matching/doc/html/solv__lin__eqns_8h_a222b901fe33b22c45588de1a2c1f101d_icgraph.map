@@ -1,0 +1,22 @@
+<map id="calc_Chi2" name="calc_Chi2">
+<area shape="rect" id="Node000001" title="calc_Chi2(): Calc Chi2." alt="" coords="973,64,1053,91"/>
+<area shape="rect" id="Node000002" href="$solv__lin__eqns_8c.html#a2f13b6768f19f59c05a1178ff499c1d9" title="solv_lin_eqns_Bayesian(): JFR &#45; 12.20.13: This is the original implementation of the Bayesian inferen..." alt="" coords="764,5,925,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="962,60,924,47,890,35,892,30,926,41,964,55"/>
+<area shape="rect" id="Node000003" href="$solv__lin__eqns_8c.html#a56edd5acb004efa86d1e94a408e6c575" title="solv_lin_eqns_Bayesian_saveparams(): same as normal but the regularization parameters are stored" alt="" coords="764,56,925,99"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="957,80,926,80,926,75,957,75"/>
+<area shape="rect" id="Node000010" href="$solv__lin__eqns_8c.html#a89774c967e5c050a0aafa5e539bfdfce" title="solv_lin_eqns_constrain_tabdih_Bayesian(): JFR &#45; 12.20.13: This should be equivalent to solv_lin_eqns..." alt="" coords="764,123,925,165"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="964,99,901,125,899,120,962,94"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#a77e0198687daf9ae5d7552b0e9d846c8" title="direct_solve_lin_eqns(): JFR &#45; 12.20.13: takes care of deciding which matrix inversion routine to use..." alt="" coords="570,64,716,91"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="748,80,716,80,716,75,748,75"/>
+<area shape="rect" id="Node000005" href="$calc__grids_8c.html#a12d971fb783c7e9422f4003259198a34" title="get_phi_forces(): Calculates the coefficients when forces are available." alt="" coords="415,39,522,65"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="554,67,522,62,523,57,555,62"/>
+<area shape="rect" id="Node000009" href="$calc__grids_8c.html#a848758fbee5a06201f914b2de1efcacf" title="get_phi_struct(): Calculates the coefficients using b_struct." alt="" coords="417,89,520,116"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="555,93,521,98,520,93,554,88"/>
+<area shape="rect" id="Node000006" href="$calc__grids_8c.html#a9668198003b2ac7edf32c26546d86bfb" title="get_phi_struct_and_phi_forces(): Calculates the coefficients using b_forces if forces were available ..." alt="" coords="236,56,367,99"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="400,65,368,70,367,65,400,60"/>
+<area shape="rect" id="Node000007" href="$calc__grids_8c.html#a7d1f81fde08821aebf1b645466f849a4" title="get_results(): (1) Calculate and store b_forces and b_struct." alt="" coords="103,64,188,91"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="221,80,189,80,189,75,221,75"/>
+<area shape="rect" id="Node000008" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,64,55,91"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="87,80,55,80,55,75,87,75"/>
+<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="401,95,367,90,368,85,402,90"/>
+</map>

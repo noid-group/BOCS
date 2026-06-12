@@ -1,0 +1,1939 @@
+.TH "cgff_types.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+cgff_types.h \- Defines properties and structures of the cgff and cgmap calculations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <stdint\&.h>\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBtW_site_map\fP"
+.br
+.RI "The explicit mapping operator for a single site\&. "
+.ti -1c
+.RI "struct \fBmapping_type\fP"
+.br
+.RI "Defines the mapping operator for a single molecule type\&. "
+.ti -1c
+.RI "struct \fBmapping_op\fP"
+.br
+.RI "Defines the mapping operator for a system of fixed composition\&. "
+.ti -1c
+.RI "struct \fBtW_type_inter_external\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_type_inter2\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_Bonded_Inter\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_Inter_Types\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_PT\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_Eigen\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_SVD\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_TPR\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_TPR_EXCL\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_MT\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_MFD\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_CalcMODE\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_PC\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_MEM\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_SOLN\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_FRAMEWEIGHT\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_ERR\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_REF\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_TRIM\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_CHISQD\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_REG\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_RESCALE\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_CONSTRAIN\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_ITER\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_system\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_CG_site\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_files\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_dihedral\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_ref_inter\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_ref_force\fP"
+.br
+.ti -1c
+.RI "struct \fBtW_ref_potential\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBbool\fP   int"
+.br
+.ti -1c
+.RI "#define \fBDIM\fP   3"
+.br
+.ti -1c
+.RI "#define \fBM_PI\fP   3\&.14159265358979323846"
+.br
+.ti -1c
+.RI "#define \fBFALSE\fP   0"
+.br
+.ti -1c
+.RI "#define \fBTRUE\fP   1"
+.br
+.ti -1c
+.RI "#define \fBKILO\fP   (1e3)"
+.br
+.ti -1c
+.RI "#define \fBBOLTZMANN\fP   (1\&.380658e\-23)"
+.br
+.ti -1c
+.RI "#define \fBAVOGADRO\fP   (6\&.0221367e23)"
+.br
+.ti -1c
+.RI "#define \fBRGAS\fP   (\fBBOLTZMANN\fP*\fBAVOGADRO\fP)"
+.br
+.ti -1c
+.RI "#define \fBBOLTZ\fP   (\fBRGAS\fP/\fBKILO\fP)"
+.br
+.ti -1c
+.RI "#define \fBGMX_MODE\fP   'GROMACS'"
+.br
+.ti -1c
+.RI "#define \fBPDB_MODE\fP   'PDB'"
+.br
+.ti -1c
+.RI "#define \fBDELTA_NAME\fP   'delta'"
+.br
+.ti -1c
+.RI "#define \fBHARMONIC_NAME\fP   'harmonic'"
+.br
+.ti -1c
+.RI "#define \fBRYCKAERT_BELLEMANS_NAME\fP   'RB'"
+.br
+.ti -1c
+.RI "#define \fBTOY_DIHED_NAME\fP   'TOY'"
+.br
+.ti -1c
+.RI "#define \fBPOWER_NAME\fP   'power'"
+.br
+.ti -1c
+.RI "#define \fBLINEAR_NAME\fP   'linear'"
+.br
+.ti -1c
+.RI "#define \fBBSPLINE_NAME\fP   'Bspline'"
+.br
+.ti -1c
+.RI "#define \fBDELTA_BASIS_INDEX\fP   0"
+.br
+.ti -1c
+.RI "#define \fBHARMONIC_BASIS_INDEX\fP   1"
+.br
+.ti -1c
+.RI "#define \fBRYCKAERT_BELLEMANS_BASIS_INDEX\fP   2"
+.br
+.ti -1c
+.RI "#define \fBTOY_DIHED_INDEX\fP   3"
+.br
+.ti -1c
+.RI "#define \fBPOWER_INDEX\fP   4"
+.br
+.ti -1c
+.RI "#define \fBLINEAR_BASIS_INDEX\fP   5"
+.br
+.ti -1c
+.RI "#define \fBBSPLINE_BASIS_INDEX\fP   6	/* JFR \- 07\&.22\&.12: Bspline basis set */"
+.br
+.ti -1c
+.RI "#define \fBNB_PAIR\fP   'Pair_Interaction'"
+.br
+.ti -1c
+.RI "#define \fBNB_LOCAL_DENSITY\fP   'Local_Density'"
+.br
+.ti -1c
+.RI "#define \fBNB_LD_GRADIENT\fP   'LD_Gradient'"
+.br
+.ti -1c
+.RI "#define \fBNB_EXT_POTL\fP   'External_Potential'"
+.br
+.ti -1c
+.RI "#define \fBEXT_POTL_NAME\fP   'External'"
+.br
+.ti -1c
+.RI "#define \fBB_BOND_STRETCH\fP   'BondStretch'"
+.br
+.ti -1c
+.RI "#define \fBB_ANGLE\fP   'Angle'"
+.br
+.ti -1c
+.RI "#define \fBB_DIHEDRAL\fP   'Dihedral'"
+.br
+.ti -1c
+.RI "#define \fBB_NB_PAIR_BOND\fP   'IntraMolec_NB_Pair'"
+.br
+.ti -1c
+.RI "#define \fBREF_FORCE\fP   'RefForces'"
+.br
+.ti -1c
+.RI "#define \fBREF_NO_INTERPOL_N\fP   'none'"
+.br
+.ti -1c
+.RI "#define \fBREF_LINEAR_INTERPOL_N\fP   'linear'"
+.br
+.ti -1c
+.RI "#define \fBREF_NO_INTERPOL_I\fP   0"
+.br
+.ti -1c
+.RI "#define \fBREF_LINEAR_INTERPOL_I\fP   1"
+.br
+.ti -1c
+.RI "#define \fBLINEAR_STRUCT\fP   1"
+.br
+.ti -1c
+.RI "#define \fBBSPLINE_STRUCT\fP   1"
+.br
+.ti -1c
+.RI "#define \fBNOT_SET\fP   \-1"
+.br
+.ti -1c
+.RI "#define \fBMAX_NUM_BOND_COEFF\fP   200"
+.br
+.ti -1c
+.RI "#define \fBMax_Num_Sites_Prot\fP   10000	/* 1000000 <\- This used to be the max, we currently don't get anywhere close to this */"
+.br
+.ti -1c
+.RI "#define \fBMAX_POWER_COEFF\fP   5"
+.br
+.ti -1c
+.RI "#define \fBMAX_BSPLINE_COEFF\fP   20	/* JFR \- 07\&.22\&.12: This is kspline */"
+.br
+.ti -1c
+.RI "#define \fBMAXWORDLEN\fP   1000"
+.br
+.ti -1c
+.RI "#define \fBMAXLINELEN\fP   5000"
+.br
+.ti -1c
+.RI "#define \fBCOMMENTFLAG\fP   '*!;'"
+.br
+.ti -1c
+.RI "#define \fBFLOAT_EPS\fP   1\&.0e\-8"
+.br
+.ti -1c
+.RI "#define \fBDIHED_PREC\fP   \fBFLOAT_EPS\fP	/* How close to zero to allow 1/sin(phi)\&. */"
+.br
+.ti -1c
+.RI "#define \fBFULL\fP   'FULL'"
+.br
+.ti -1c
+.RI "#define \fBFIRST_HALF\fP   'FIRST_HALF'"
+.br
+.ti -1c
+.RI "#define \fBSECOND_HALF\fP   'SECOND_HALF'"
+.br
+.ti -1c
+.RI "#define \fBTEST_INP\fP   'TEST_INP'"
+.br
+.ti -1c
+.RI "#define \fBIFULL\fP   0"
+.br
+.ti -1c
+.RI "#define \fBIFIRST_HALF\fP   1"
+.br
+.ti -1c
+.RI "#define \fBISECOND_HALF\fP   2"
+.br
+.ti -1c
+.RI "#define \fBITEST_INP\fP   3"
+.br
+.ti -1c
+.RI "#define \fBLU\fP   'LU'"
+.br
+.ti -1c
+.RI "#define \fBUU\fP   'UU'"
+.br
+.ti -1c
+.RI "#define \fBCHOLESKY\fP   'CHOLESKY'"
+.br
+.ti -1c
+.RI "#define \fBSVD_SOLV\fP   'SVD'"
+.br
+.ti -1c
+.RI "#define \fBPC_DEFAULT\fP   'RPC'"
+.br
+.ti -1c
+.RI "#define \fBNPT\fP   'NPT'"
+.br
+.ti -1c
+.RI "#define \fBNONE\fP   'NONE'"
+.br
+.ti -1c
+.RI "#define \fBGET_N_SPOTS\fP(x)   ((int)((x)/64)+1)"
+.br
+.ti -1c
+.RI "#define \fBSETSPOT1\fP(bm,  x)   (bm[(int)((x)/64)] |= (1ULL << ((x) % 64)))"
+.br
+.ti -1c
+.RI "#define \fBGETSPOT1\fP(bm,  x)   ((bm[(int)((x)/64)] & (1ULL << ((x) % 64))) > 0)"
+.br
+.ti -1c
+.RI "#define \fBCLEARSPOT1\fP(bm,  x)   (bm[(int)((x)/64)] &= ~(1ULL << ((x) % 64)))"
+.br
+.ti -1c
+.RI "#define \fBSETSPOT2\fP(bm,  n,  x,  y)   (bm[(int)(((y)*(n)+(x))/64)] |= (1ULL << (((y)*(n)+(x)) % 64)))"
+.br
+.ti -1c
+.RI "#define \fBGETSPOT2\fP(bm,  n,  x,  y)   ((bm[(int)(((y)*(n)+(x))/64)] & (1ULL << (((y)*(n)+(x)) % 64))) > 0)"
+.br
+.ti -1c
+.RI "#define \fBCLEARSPOT2\fP(bm,  n,  x,  y)   (bm[(int)(((y)*(n)+(x))/64)] &= ~(1ULL << (((y)*(n)+(x)) % 64)))"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef double \fBdvec\fP[\fBDIM\fP]"
+.br
+.ti -1c
+.RI "typedef double \fBmatrix\fP[\fBDIM\fP][\fBDIM\fP]"
+.br
+.ti -1c
+.RI "typedef char \fBtW_word\fP[\fBMAXWORDLEN\fP]"
+.br
+.ti -1c
+.RI "typedef char \fBtW_line\fP[\fBMAXLINELEN\fP]"
+.br
+.ti -1c
+.RI "typedef struct tW_indicator_function \fBtW_indicator_function\fP"
+.br
+.ti -1c
+.RI "typedef uint64_t \fBbitMask\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines properties and structures of the cgff and cgmap calculations\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser 
+.RE
+.PP
+
+.SH "Data Structure Documentation"
+.PP 
+.SH "struct tW_site_map"
+.PP 
+The explicit mapping operator for a single site\&. 
+.PP
+\fBData Fields:\fP
+.RS 4
+char ** \fIatm_name\fP name of atoms 
+.br
+.PP
+double * \fIc_Ii\fP mapping coefficients for site 
+.br
+.PP
+char * \fIcg_name\fP name of site 
+.br
+ 
+.br
+.PP
+int * \fIi_atm\fP array of atm indices for atoms mapped to cg site 
+.br
+.PP
+\fBtW_word\fP \fImap_type\fP type of mapping\&. usr, com, cog are supported 
+.br
+.PP
+char * \fImol_name\fP name of molecule 
+.br
+.PP
+int \fIn_atms\fP no\&. of atms mapped to cg site 
+.br
+.PP
+int \fIres_no\fP no\&. of molecule 
+.br
+.PP
+.RE
+.PP
+.SH "struct mapping_type"
+.PP 
+Defines the mapping operator for a single molecule type\&. 
+.PP
+\fBData Fields:\fP
+.RS 4
+char *** \fIatom_names\fP 
+.br
+.PP
+char ** \fIatom_sites\fP 
+.br
+.PP
+int ** \fIindices\fP 
+.br
+.PP
+char ** \fImap_type\fP 
+.br
+.PP
+char * \fImolname\fP 
+.br
+.PP
+int * \fIn_atoms\fP 
+.br
+.PP
+int \fIn_sites\fP 
+.br
+.PP
+double * \fIsite_masses\fP 
+.br
+.PP
+char ** \fIsite_names\fP 
+.br
+.PP
+int \fItotal_atoms\fP 
+.br
+.PP
+double ** \fIweights\fP 
+.br
+.PP
+.RE
+.PP
+.SH "struct mapping_op"
+.PP 
+Defines the mapping operator for a system of fixed composition\&. 
+.PP
+\fBData Fields:\fP
+.RS 4
+\fBmapping_type\fP * \fImolecule_types\fP 
+.br
+.PP
+int * \fIn_molecules\fP 
+.br
+.PP
+int \fIn_types\fP 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_type_inter_external"
+.PP 
+\fBData Fields:\fP
+.RS 4
+\fBtW_word\fP \fIbasis\fP e\&.g\&. delta, linear, Bspline 
+.br
+.PP
+double \fIdr\fP calculated as (R_max - R_0)/n_pts 
+.br
+.PP
+\fBbool\fP \fIextPBC\fP true if we can carry over from low indices to high, and vice versa 
+.br
+.PP
+int \fIi_0\fP starting index in sys->M, g2, etc 
+.br
+.PP
+int \fIi_basis\fP basis type index (0 = delta, 5 = linear, 6 = Bspline) 
+.br
+.PP
+\fBtW_word\fP \fIinter_name\fP name of interaction 
+.br
+.PP
+int \fIkspline\fP for Bspline basis, k is the order of the spline 
+.br
+.PP
+int \fIN_coeff\fP Number of grid points in table (duplicated bc it is duplicated in \fBtW_type_inter2\fP below) 
+.br
+.PP
+int \fIN_inter\fP idx of this interaction in sys->inter_types\&. Note, this is not the same as N_inter for other interaction types 
+.br
+.PP
+int \fIN_pts\fP Number of grid points in table 
+.br
+.PP
+int \fIn_smooth\fP we always use 0 for this, but i'll carry it just incase 
+.br
+.PP
+\fBtW_word\fP \fIname1\fP name of site, e\&.g\&. MET 
+.br
+.PP
+double * \fIptr_b\fP 
+.br
+.PP
+double * \fIptr_b_forces\fP 
+.br
+.PP
+double * \fIptr_b_ref\fP 
+.br
+.PP
+double * \fIptr_b_struct\fP 
+.br
+.PP
+double * \fIptr_g\fP 
+.br
+.PP
+double * \fIptr_g_cnt\fP 
+.br
+.PP
+double * \fIptr_L\fP 
+.br
+.PP
+double * \fIptr_phi\fP 
+.br
+.PP
+double * \fIptr_phi_forces\fP 
+.br
+.PP
+double * \fIptr_phi_struct\fP 
+.br
+.PP
+double * \fIptr_x\fP 
+.br
+.PP
+double \fIR_0\fP lowest value of z, read in from frame 
+.br
+.PP
+double \fIR_max\fP highest value of z, read in from frame 
+.br
+.PP
+\fBbool\fP \fIsolveExt\fP true if we solve for external force\&. false if we force external potential to 0 everywhere\&. 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_type_inter2"
+.PP 
+\fBData Fields:\fP
+.RS 4
+\fBtW_word\fP \fIbasis\fP 
+.br
+.PP
+double \fIdr\fP grid spacing 
+.br
+.PP
+int \fIi_0\fP starting index for inter in sys->M,g2 
+.br
+.PP
+int \fIi_basis\fP type of basis functions 
+.br
+.PP
+\fBtW_word\fP \fIinter_name\fP 
+.br
+.PP
+\fBtW_word\fP \fIinter_type\fP 
+.br
+.PP
+int \fIkspline\fP JFR - 07\&.22\&.12: for Bspline basis, k is the order of the spline 
+.br
+.PP
+\fBtW_indicator_function\fP * \fILD_W\fP 
+.br
+.PP
+\fBbool\fP \fILDGradient\fP 
+.br
+.PP
+int \fIN_coeff\fP no\&. of grid points in table 
+.br
+.PP
+int \fIN_inter\fP no\&. of instances 
+.br
+.PP
+int \fIN_powers\fP 
+.br
+.PP
+int \fIN_pts\fP no\&. of grid points in table 
+.br
+.PP
+int \fIn_smooth\fP number of points in running average (use odd number since includes central point) 
+.br
+.PP
+\fBtW_word\fP \fIname1\fP name of site1 
+.br
+.PP
+\fBtW_word\fP \fIname2\fP name of site2 
+.br
+.PP
+int * \fIpowers\fP 
+.br
+.PP
+double * \fIptr_b\fP ptr to deriv of pmf 
+.br
+.PP
+double * \fIptr_b_forces\fP 
+.br
+.PP
+double * \fIptr_b_ref\fP ptr to deriv of pmf 
+.br
+.PP
+double * \fIptr_b_struct\fP 
+.br
+.PP
+double * \fIptr_g2\fP ptr to rdf 
+.br
+.PP
+double * \fIptr_g2_cnt\fP 
+.br
+.PP
+double * \fIptr_L\fP ptr to laplacian // Seems more like pointer to L [the structure] 
+.br
+.PP
+double * \fIptr_u2\fP ptr to pair potential 
+.br
+.PP
+double * \fIptr_u2_forces\fP 
+.br
+.PP
+double * \fIptr_u2_struct\fP 
+.br
+.PP
+double * \fIptr_x\fP ptr to x values for truncated arrays 
+.br
+.PP
+double \fIR_0\fP min grid pt 
+.br
+.PP
+double \fIR_max\fP max grid pt 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_Bonded_Inter"
+.PP 
+\fBData Fields:\fP
+.RS 4
+\fBtW_word\fP \fIbasis\fP 
+.br
+.PP
+double \fIdr\fP grid spacing 
+.br
+.PP
+int \fIi_0\fP starting index in sys->M,g2,b,phi 
+.br
+.PP
+int \fIi_basis\fP MCL: This is an index to make IDing basis types easier, allways check cgff_type\&.h for X_BASIS_INDEX constants at top 
+.br
+.PP
+int ** \fIInter_List\fP List of site indices for each of the N_instances occurances\&. 
+.br
+.PP
+\fBtW_word\fP \fIinter_name\fP Name used to specify a specific Inter_Type[]\&. 
+.br
+.PP
+int \fIkspline\fP JFR - 07\&.23\&.12: for Bspline basis, k is the order of the spline 
+.br
+.PP
+int \fIn_bonds_intramolec_pair_inter\fP 
+.br
+.PP
+int \fIN_coeff\fP no\&. of parameters describing force function, for delta assumes same as grid points 
+.br
+.PP
+int \fIN_instances\fP Number of times bond interactions appears\&. 
+.br
+.PP
+int \fIN_Int_Sites\fP no\&. sites per interaction 
+.br
+.PP
+int \fIN_powers\fP 
+.br
+.PP
+int \fIN_pts\fP no\&. of grid points in table for delta basis (bond) 
+.br
+.PP
+int \fIn_smooth\fP 
+.br
+.PP
+\fBtW_word\fP \fIname\fP name of int\&. type (e\&.g\&. BondStretch) 
+.br
+.PP
+int * \fIpowers\fP 
+.br
+.PP
+double * \fIptr_b\fP ptr to force correlation fcn 
+.br
+.PP
+double * \fIptr_b_forces\fP 
+.br
+.PP
+double * \fIptr_b_ref\fP ptr to force correlation fcn 
+.br
+.PP
+double * \fIptr_b_struct\fP 
+.br
+.PP
+double * \fIptr_g\fP ptr to pair distribution 
+.br
+.PP
+double * \fIptr_g_cnt\fP ptr to pair distribution 
+.br
+.PP
+double * \fIptr_L\fP ptr to laplacian 
+.br
+.PP
+double * \fIptr_phi\fP ptr to force parameters 
+.br
+.PP
+double * \fIptr_phi_forces\fP 
+.br
+.PP
+double * \fIptr_phi_struct\fP 
+.br
+.PP
+double * \fIptr_x\fP ptr to x - only used after trim_Mb 
+.br
+.PP
+double \fIR_0\fP min grid pt 
+.br
+.PP
+double \fIR_max\fP max grid pt 
+.br
+.PP
+\fBtW_word\fP * \fISite_Types\fP names of types of interacting sites 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_Inter_Types"
+.PP 
+\fBData Fields:\fP
+.RS 4
+\fBtW_word\fP \fIbasis\fP 
+.br
+.PP
+double \fIdr\fP 
+.br
+.PP
+\fBbool\fP \fIextPBC\fP Do we have PBC in the z direction? 
+.br
+.PP
+int \fIi_0\fP 
+.br
+.PP
+int \fIi_basis\fP 
+.br
+.PP
+\fBtW_word\fP \fIinter_name\fP 
+.br
+.PP
+\fBtW_word\fP \fIinter_type\fP 
+.br
+.PP
+int \fIkspline\fP JFR - 07\&.22\&.12: for Bspline basis, k is the order of the spline 
+.br
+.PP
+\fBtW_indicator_function\fP * \fILD_W\fP 
+.br
+.PP
+\fBbool\fP \fILDGradient\fP 
+.br
+.PP
+int \fIN_coeff\fP 
+.br
+.PP
+int \fIN_powers\fP 
+.br
+.PP
+int \fIN_pts\fP 
+.br
+.PP
+int \fIn_smooth\fP 
+.br
+.PP
+int * \fIpowers\fP 
+.br
+.PP
+double * \fIptr_b\fP 
+.br
+.PP
+double * \fIptr_b_forces\fP 
+.br
+.PP
+double * \fIptr_b_ref\fP 
+.br
+.PP
+double * \fIptr_b_struct\fP 
+.br
+.PP
+double * \fIptr_g\fP 
+.br
+.PP
+double * \fIptr_g_cnt\fP 
+.br
+.PP
+double * \fIptr_L\fP 
+.br
+.PP
+double * \fIptr_phi\fP 
+.br
+.PP
+double * \fIptr_phi_forces\fP 
+.br
+.PP
+double * \fIptr_phi_struct\fP 
+.br
+.PP
+double * \fIptr_x\fP 
+.br
+.PP
+double \fIR_max\fP 
+.br
+.PP
+double \fIR_min\fP 
+.br
+.PP
+\fBbool\fP \fIsolveExt\fP Do we want to solve require no external potential? 
+.br
+.PP
+double \fIuser_R_max\fP MCL - 05\&.08\&.25; For Bspline basis, keeping track of user requested function domain so that we don't print padded regions 
+.br
+.PP
+double \fIuser_R_min\fP MCL - 05\&.08\&.25; For Bspline basis, keeping track of user requested function domain so that we don't print padded regions later 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_PT"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIdPT\fP spacing of output 
+.br
+.PP
+int \fIflag_eigen\fP True => calc the eigenspectrum at each perturbation step 
+.br
+.PP
+int \fIflag_MMOTF_SEP\fP True => calc the decomposition of b at each perturbation step 
+.br
+.PP
+int \fIflag_PT\fP True => do the PT calculation 
+.br
+.PP
+int \fIN_eigen\fP Number of eigenvectors to print out from each side of the spectrum (pos and neg) 
+.br
+.PP
+int \fIN_PT\fP Number of perturbation steps 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_Eigen"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIDL\fP spacing for grouping eigenvectors from the bottom 
+.br
+.PP
+int \fIDM\fP spacing for grouping eigenvectors from the top 
+.br
+.PP
+int \fIflag_Eigen\fP True => calc the eigenspectrum of the G matrix 
+.br
+.PP
+int \fIflag_Gbar\fP True => calc the eigenspectrum of the Gbar matrix (i\&.e\&., take out two body terms) 
+.br
+.PP
+int \fIflag_norm\fP True => normalize the nb parts of the matrix by r^2 before calculating the eigenspectrum 
+.br
+.PP
+int \fIflag_printn\fP True => print fn, bn, Mn for various sets of eigenvectors 
+.br
+.PP
+int \fIN_Eigen\fP Number of eigenvectors to print out from each side of the spectrum (pos and neg) 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_SVD"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_printevecs\fP If flag_printSV == TRUE, then TRUE => Print out evecs also 
+.br
+.PP
+int \fIflag_printSV\fP Explicitly calculate and print out singular values 
+.br
+.PP
+int \fIflag_solve\fP If flag_solve == TRUE, then use SVD algorithm to solve the equations 
+.br
+.PP
+int \fIflag_SVD\fP True => use the option below 
+.br
+.PP
+double \fIrcond\fP Throw away eigenvalues under this number\&. -1=> machine precision, FLOAT_EPS=> 1e-6\&. 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_TPR"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_TPR\fP True => replace default tpr files 
+.br
+.PP
+int \fIN_TPR\fP Number of tpr files, this should be the same as the number of trr files in inp\&.txt 
+.br
+.PP
+\fBtW_word\fP * \fITPR_files\fP name of each tpr file 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_TPR_EXCL"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_TPR_excl\fP True => use alternative TPR file for exclusions 
+.br
+.PP
+\fBtW_word\fP \fITPR_excl\fP name of alternative TPR file 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_MT"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_Mcnt\fP True => calculate the unweighted version of the matrix, Mcnt 
+.br
+.PP
+int \fIflag_MT\fP True => use the MT options 
+.br
+.PP
+int \fIflag_norm\fP True => normalize the metric tensor by r^2 for nonbonded interactions 
+.br
+.PP
+int \fIflag_print\fP True => print the metric tensor related files 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_MFD"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_MFD\fP True => calculate the decomposition of b from each interaction in the system 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_CalcMODE"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fICalcMODE\fP \fBFULL(0)\fP => do entire calculation, \fBFIRST_HALF(1)\fP => do the traj loop, calc correlation functions, print a save state 
+.br
+.PP
+int \fIflag_CalcMODE\fP True => specify the calculation mode 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_PC"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_normb\fP True => rescale so that the norm of b is 1 
+.br
+.PP
+int \fIflag_normphi\fP True => rescale so that the norm of phi is 1 
+.br
+.PP
+int \fIflag_PC\fP True => specify the preconditioning for LU decomposition (and SVD if applicable) 
+.br
+.PP
+\fBtW_word\fP \fILPC\fP no, dimless, rowmax, bvar, gcnt 
+.br
+.PP
+\fBtW_word\fP \fIRPC\fP no, dimless, colnorm, MTvar, gcnt 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_MEM"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_LOWMEM\fP True => run the calculation in low memory mode 
+.br
+.PP
+int \fIflag_MEM\fP True => Use the user memory options 
+.br
+.PP
+int \fIflag_mult_top\fP True => solve the problem for each topolgy separately 
+.br
+.PP
+\fBtW_word\fP \fIinfo\fP info = 'forces' or 'structures', which will be the only one used if flag_LOWMEM == TRUE 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_SOLN"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_SOLN\fP True => specify the solution methods for the matrix inversion 
+.br
+.PP
+\fBtW_word\fP \fISOLN_METH\fP LU, UU, Cholesky, SVD 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_FRAMEWEIGHT"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_FRAMEWEIGHT\fP True => Specify the ensemble of the input trr file 
+.br
+.PP
+\fBtW_word\fP \fIFRAMEWEIGHT\fP NONE, NPT 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_ERR"
+.PP 
+\fBData Fields:\fP
+.RS 4
+char \fIFACT\fP 
+.br
+.PP
+int \fIflag_ERR\fP True => calculate errors associated with the matrix inversion 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_REF"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_calcbref\fP True => skip the triple loop, just calculate and print out bref 
+.br
+.PP
+int \fIflag_readbref\fP True => use bref supplied in the file bref\&.dat (Note that [Reference_Potential] need not be specified) 
+.br
+.PP
+int \fIflag_REF\fP True => use ref options specified in variable below 
+.br
+.PP
+int \fIflag_reftrr\fP True => read in a trr file with the reference forces 
+.br
+.PP
+int \fIflag_splitfiles\fP True => The MPI processes will be split between files instead of frames (np should divide n_files) 
+.br
+.PP
+int \fIN_fnm\fP 
+.br
+.PP
+\fBtW_word\fP * \fIreftrr_fnm\fP reference force filename 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_TRIM"
+.PP 
+\fBData Fields:\fP
+.RS 4
+double \fIFE\fP 
+.br
+.PP
+int \fIflag_TRIM\fP True => trim the metric tensor below FE instead of the defult FLOAT_EPS 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_CHISQD"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_CHISQD\fP True => read in a force file to use with the Chi2 calculation 
+.br
+.PP
+\fBtW_word\fP \fIforce_fnm\fP force filename 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_REG"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_REG\fP True => Use Bayesian Inference to regularize the calculation 
+.br
+.PP
+int \fINframes\fP total number of data frames (BAYES) 
+.br
+.PP
+int \fINmax\fP Maximum number of iterations to optimize the regularization parameters (BAYES) 
+.br
+.PP
+double \fItau_alpha\fP Tolerence for convergence of the regularization matrix parameters (BAYES) 
+.br
+.PP
+double \fItau_beta\fP Tolerence for convergence of the precision parameter (BAYES or UNCERT) 
+.br
+.PP
+\fBtW_word\fP \fItype\fP type of REG (BAYES or UNCERT for now) 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_RESCALE"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIflag_RESCALE\fP True => Use the force rescaling right preconditioning scheme 
+.br
+.PP
+int \fINmax\fP Maximum number of iterations to optimize scaling 
+.br
+.PP
+double \fItau_phi\fP Tolerence for convergence of the scaling parameter 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_CONSTRAIN"
+.PP 
+\fBData Fields:\fP
+.RS 4
+double \fIdlambda\fP amount to increase scaling parameter by after each step 
+.br
+.PP
+int \fIflag_CONSTRAIN\fP True => Constrain the dihedral force coefficients to sum to zero 
+.br
+.PP
+double \fIlambda\fP initial constraint scaling parameter 
+.br
+.PP
+int \fINmax\fP Maximum number of iterations to optimize contraint scaling parameter, lambda 
+.br
+.PP
+double \fItau_dih\fP Tolerence for convergence of the constraint scaling parameter, lambda 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_ITER"
+.PP 
+\fBData Fields:\fP
+.RS 4
+\fBtW_word\fP \fIAAM2_fnm\fP AAM2 filename 
+.br
+.PP
+int \fIflag_AAM2\fP Use the AA 2-body contributions for the bond and angle interactions 
+.br
+.PP
+int \fIflag_bsolnerr\fP TRUE => calculate the difference in the projected forces from the current and previous iterations 
+.br
+.PP
+int \fIflag_ITER\fP True => Apply options for iter-gYBG procedure 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_system"
+.PP 
+\fBData Fields:\fP
+.RS 4
+double * \fIb\fP deriv\&. of pmf 
+.br
+.PP
+double * \fIb_forces\fP 
+.br
+.PP
+double * \fIb_ref\fP 
+.br
+.PP
+double * \fIb_struct\fP 
+.br
+.PP
+double * \fIb_wt\fP accumulation of the frame-weighted b's 
+.br
+.PP
+int \fIbGradient\fP Did user ask for SG coeffs? 0 -no 1-yes 
+.br
+.PP
+\fBbitMask\fP * \fIbm_half_mat\fP 
+.br
+.PP
+\fBtW_Bonded_Inter\fP * \fIBonded_Inter_Types\fP array of bonded interaction types 
+.br
+.PP
+\fBtW_CalcMODE\fP \fICalcMODE_var\fP JFR - added 04\&.06\&.12 for splitting the FF calculation into two parts (for efficiency purposes) 
+.br
+.PP
+double \fIChi2\fP JFR - added 06\&.27\&.12 calculate and print out Chi2 
+.br
+.PP
+\fBtW_CHISQD\fP \fICHISQD_var\fP JFR - added 01\&.29\&.13 options for Chi2 calculation 
+.br
+.PP
+\fBtW_CONSTRAIN\fP \fICONSTRAIN_var\fP JFR - added 01\&.31\&.13 option for constraining dihedrals 
+.br
+.PP
+double * \fId2b\fP JFR - added 01\&.31\&.12: variance of b_forces for preconditioning 
+.br
+.PP
+double * \fId2M\fP JFR - added 01\&.31\&.12: variance of M for preconditioning 
+.br
+.PP
+\fBtW_Eigen\fP \fIEigen_var\fP JFR - added 08\&.11\&.11 for calculating eigenspectrum of the G matrix 
+.br
+.PP
+\fBtW_ERR\fP \fIERR_var\fP JFR - added 04\&.16\&.12 for error options 
+.br
+.PP
+int \fIflag_ref_potential\fP 
+.br
+.PP
+\fBtW_FRAMEWEIGHT\fP \fIFRAMEWEIGHT_var\fP NJD - added 03\&.10\&.15 for ensemble selection options 
+.br
+.PP
+double * \fIg\fP rdf 
+.br
+.PP
+double * \fIg_cnt\fP 
+.br
+.PP
+\fBdvec\fP ** \fIhalf_matrix\fP 
+.br
+.PP
+\fBtW_type_inter2\fP * \fIInter2_Type_List\fP list of types of pair inter\&. 
+.br
+.PP
+\fBtW_type_inter_external\fP * \fIInter_Ext_Type_List\fP 
+.br
+.PP
+int ** \fIInter_iMap\fP list of lists of indices for the above named sites // Inter_iMap[0] is the list of interaction indices site_type0 takes part in [the indices belong to the Inter2_Type_List] 
+.br
+.PP
+\fBtW_word\fP ** \fIInter_Map\fP list of lists of site names involved in pair interactions // (N_Site_Types long) e\&.g\&. Inter_Map[0] is the list of site types involved with site_type[0] in a pair interaction 
+.br
+.PP
+int * \fIInter_Map_Len\fP number of pair interaction partners for each site type // (N_Site_Types long) e\&.g\&. Inter_Map_Len[0] is the number of words listed in Inter_Map[0] (no\&. types type_0 intrxs with] 
+.br
+.PP
+\fBtW_Inter_Types\fP * \fIInter_Types\fP Array of interaction types\&. 
+.br
+.PP
+\fBtW_ITER\fP \fIITER_var\fP JFR - added 12\&.03\&.13 options for the iter-gYBG procedure 
+.br
+.PP
+double * \fIL\fP laplacian 
+.br
+.PP
+\fBtW_word\fP * \fILD_type_names\fP Contains the name of the type associated with CG_site->LD_type_idx 
+.br
+.PP
+\fBdvec\fP * \fIlinear_half_matrix\fP 
+.br
+.PP
+double * \fIM\fP correlation kernel 
+.br
+.PP
+double * \fIM2\fP 2-body contribution to M 
+.br
+.PP
+double * \fIM2_wt\fP accumulation of the frame-weighted 2-body M's 
+.br
+.PP
+double * \fIM_cnt\fP unweighted distributions 
+.br
+.PP
+\fBbool\fP \fIM_M2_proc\fP 
+.br
+.PP
+double * \fIM_wt\fP accumulation of the frame-weighted M's 
+.br
+.PP
+\fBtW_MEM\fP \fIMEM_var\fP JFR - added 04\&.13\&.12 for memory options 
+.br
+.PP
+\fBtW_MFD\fP \fIMFD_var\fP JFR - added 04\&.06\&.12 for calculating the mean force decomposition 
+.br
+.PP
+\fBtW_MT\fP \fIMT_var\fP JFR - added 04\&.06\&.12 for options for printing and normalizing the metric tensor 
+.br
+.PP
+int \fIn_atomtypes\fP 
+.br
+.PP
+int \fIN_Bond_Int_Types\fP no\&. of bond interaction types 
+.br
+.PP
+int \fIN_coeff\fP no\&. of data_pts in g2, phi 
+.br
+.PP
+int \fIN_Inter2_Types\fP no\&. of pair interaction types 
+.br
+.PP
+int \fIN_Inter2_Types_LD\fP 
+.br
+.PP
+int \fIN_Inter2_Types_pair\fP 
+.br
+.PP
+int \fIN_Inter_Ext_types\fP 
+.br
+.PP
+int \fIN_Inter_Types\fP Total number of interaction types\&. 
+.br
+.PP
+int \fIN_pack\fP JFR - added 04\&.11\&.12: This is the number of elements in the matrix in packed form 
+.br
+.PP
+int \fIn_particles\fP 
+.br
+.PP
+int \fIN_Site_Types\fP no\&. of site types 
+.br
+.PP
+int \fInrexcl\fP Number of exclusion for FF; not needed for gmx loop 
+.br
+.PP
+\fBtW_PC\fP \fIPC_var\fP JFR - added 04\&.06\&.12 for specifying a particular preconditioning for the matrix inversion 
+.br
+.PP
+double * \fIphi\fP ff coefficients 
+.br
+.PP
+double * \fIphi_forces\fP 
+.br
+.PP
+double * \fIphi_struct\fP 
+.br
+.PP
+\fBtW_PT\fP \fIPT_var\fP JFR - added 08\&.10\&.11 for solving the matrix equation using matrix perturbation theory 
+.br
+.PP
+\fBtW_REF\fP \fIREF_var\fP JFR - added 07\&.16\&.12 options for precomputing and reading in bref 
+.br
+.PP
+\fBtW_REG\fP \fIREG_var\fP JFR - added 12\&.03\&.13 options for Regularization 
+.br
+.PP
+double * \fIrescale\fP JFR - added 01\&.31\&.12: rescaling factors for preconditioning (currently with gcnt) 
+.br
+.PP
+\fBtW_RESCALE\fP \fIRESCALE_var\fP JFR - added 01\&.31\&.13 option for force rescale preconditioning 
+.br
+.PP
+\fBtW_word\fP * \fISite_Types\fP list of names for site types 
+.br
+.PP
+\fBtW_SOLN\fP \fISOLN_var\fP JFR - added 04\&.16\&.12 for solution method options 
+.br
+.PP
+\fBtW_SVD\fP \fISVD_var\fP JFR - added 04\&.06\&.12 for solving the matric eqn with SVD and calculating condition numbers 
+.br
+.PP
+double \fITemperature\fP 
+.br
+.PP
+\fBtW_TPR_EXCL\fP \fITPR_EXCL_var\fP JFR - added 06\&.27\&.12 for using alternative TPR file for exclusions 
+.br
+.PP
+\fBtW_TPR\fP \fITPR_var\fP JFR - added 04\&.06\&.12 for over-writing default tpr filenames 
+.br
+.PP
+\fBtW_TRIM\fP \fITRIM_var\fP JFR - added 01\&.29\&.13 options for trimming out basis vectors 
+.br
+.PP
+\fBbool\fP \fIUSE_OLD_ALGORITHM\fP 
+.br
+.PP
+double \fIwt_norm\fP the normalization for the frame-weighting 
+.br
+.PP
+double * \fIx\fP grid of order parameters 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_CG_site"
+.PP 
+\fBData Fields:\fP
+.RS 4
+\fBint\fP ** \fIbond_site\fP List of pointers to \fBtW_system\&.Bonded_Inter_Types\fP[\fBtW_CG_site\&.bond_type\fP]\&.Inter_List[]\&. 
+.br
+.PP
+\fBint\fP * \fIbond_type\fP List of indices to \fBtW_system\&.Bonded_Inter_Types\fP[]\&. 
+.br
+.PP
+\fBint\fP * \fIexcl_list\fP List of exlusions\&. 
+.br
+.PP
+\fBdvec\fP \fIf\fP force on site 
+.br
+.PP
+\fBint\fP \fIi_res\fP Residue number read from *\&.tpr file\&. 
+.br
+.PP
+\fBint\fP \fIi_type\fP Index to find site in \fBtW_system\&.Site_Types\fP[]\&. 
+.br
+.PP
+\fBint\fP \fILD_type_idx\fP 
+.br
+.PP
+\fBdvec\fP * \fILDGrads\fP 
+.br
+.PP
+\fBdouble\fP * \fILDs\fP 
+.br
+.PP
+\fBtW_word\fP \fIname\fP Name from par\&.txt and atomtype in *\&.tpr\&. 
+.br
+.PP
+\fBint\fP \fInr_bond_coeffs\fP Number of coeffs\&. to determine for bond interactions\&. 
+.br
+.PP
+\fBint\fP \fInr_bonds\fP Number of bond interactions\&. 
+.br
+.PP
+\fBint\fP \fInr_excl\fP Number of exlusions\&. 
+.br
+.PP
+\fBdvec\fP \fIr\fP coordinates for site 
+.br
+.PP
+\fBdvec\fP \fIref_f\fP forces from ref\&. pot\&. 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_files"
+.PP 
+\fBData Fields:\fP
+.RS 4
+FILE * \fIfp_log\fP ptr to global log file 
+.br
+ 
+.br
+.PP
+FILE * \fIfp_par\fP ptr to parameter file 
+.br
+ 
+.br
+.PP
+\fBtW_word\fP \fImode\fP designates input and loop\&. 
+.br
+ 
+.br
+.PP
+int \fIN_struct\fP no\&. of structure files 
+.br
+ 
+.br
+.PP
+int \fIN_struct_file\fP no\&. of files with lists of structures 
+.br
+ 
+.br
+.PP
+double * \fIp_struct\fP p_gamma for topology gamma 
+.br
+ 
+.br
+.PP
+\fBtW_word\fP * \fIstruct_file\fP names of files listing structure files 
+.br
+ 
+.br
+.PP
+\fBtW_word\fP * \fIstructures\fP names of structure files 
+.br
+ 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_dihedral"
+.PP 
+\fBData Fields:\fP
+.RS 4
+double \fIangle\fP 
+.br
+.PP
+int \fIatom_position\fP 
+.br
+.PP
+double \fIcos_angle\fP 
+.br
+.PP
+int * \fIdihedral_quartet\fP 
+.br
+.PP
+\fBdvec\fP \fIgrad_B[4]\fP 
+.br
+.PP
+double \fIsin_angle\fP 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_ref_inter"
+.PP 
+\fBData Fields:\fP
+.RS 4
+int \fIbonds_IntraMolecPairs\fP 
+.br
+.PP
+double \fIdx\fP 
+.br
+.PP
+double * \fIf\fP 
+.br
+.PP
+int \fIN_inter_sites\fP 
+.br
+.PP
+int \fIN_pts\fP 
+.br
+.PP
+\fBtW_word\fP \fIname\fP 
+.br
+.PP
+\fBtW_word\fP * \fIsite_types\fP 
+.br
+.PP
+double * \fIx\fP 
+.br
+.PP
+double \fIx_0\fP 
+.br
+.PP
+double \fIx_max\fP 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_ref_force"
+.PP 
+\fBData Fields:\fP
+.RS 4
+double \fIdx\fP 
+.br
+.PP
+double * \fIf\fP 
+.br
+.PP
+int \fIN_pts\fP 
+.br
+.PP
+double * \fIx\fP 
+.br
+.PP
+double \fIx_0\fP 
+.br
+.PP
+double \fIx_max\fP 
+.br
+.PP
+.RE
+.PP
+.SH "struct tW_ref_potential"
+.PP 
+\fBData Fields:\fP
+.RS 4
+\fBtW_ref_inter\fP * \fIangle_inter\fP 
+.br
+.PP
+\fBtW_ref_inter\fP * \fIbondstretch_inter\fP 
+.br
+.PP
+\fBtW_ref_inter\fP * \fIdihedral_inter\fP 
+.br
+.PP
+\fBtW_word\fP * \fIfname\fP 
+.br
+.PP
+\fBtW_ref_force\fP * \fIforces\fP 
+.br
+.PP
+int \fIinterpolation_index\fP 
+.br
+.PP
+\fBtW_ref_inter\fP * \fIIntraMolecPairs_inter\fP 
+.br
+.PP
+int \fIN_angle_inter\fP 
+.br
+.PP
+int \fIN_bondstretch_inter\fP 
+.br
+.PP
+int \fIN_dihedral_inter\fP 
+.br
+.PP
+int \fIN_files\fP 
+.br
+.PP
+int \fIN_IntraMolecPairs_inter\fP 
+.br
+.PP
+int \fIN_nb_pair_inter\fP 
+.br
+.PP
+\fBtW_ref_inter\fP * \fInb_pair_inter\fP 
+.br
+.PP
+.RE
+.PP
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define AVOGADRO   (6\&.0221367e23)"
+() 
+.br
+ 
+.SS "#define B_ANGLE   'Angle'"
+
+.PP
+Referenced by \fBcheck_input()\fP, \fBdetermine_angle_type()\fP, \fBeval_bond_basis_vectors()\fP, \fBget_Bspline_basis_param()\fP, \fBget_delta_basis_param()\fP, \fBget_force()\fP, \fBget_linear_basis_param()\fP, \fBget_parameters()\fP, \fBprint_Bspline_basis_forces()\fP, \fBprint_Bspline_basis_output()\fP, \fBprint_delta_basis_forces()\fP, \fBprint_delta_basis_output()\fP, \fBprint_harmonic_basis_forces()\fP, \fBprint_linear_basis_forces()\fP, \fBprint_linear_basis_output()\fP, \fBread_BOND_angle_inter()\fP, \fBread_REF_BOND_angle_inter()\fP, \fBread_REF_information()\fP, and \fBsummarize_input()\fP\&.
+.SS "#define B_BOND_STRETCH   'BondStretch'"
+
+.PP
+Referenced by \fBcheck_input()\fP, \fBdetermine_bond_type()\fP, \fBeval_bond_basis_vectors()\fP, \fBget_parameters()\fP, \fBread_BOND_stretch_inter()\fP, \fBread_REF_BOND_stretch_inter()\fP, \fBread_REF_information()\fP, and \fBsummarize_input()\fP\&.
+.SS "#define B_DIHEDRAL   'Dihedral'"
+
+.PP
+Referenced by \fBcalc_b_struct()\fP, \fBcalc_dg_dz()\fP, \fBcheck_input()\fP, \fBdetermine_dihedral_type()\fP, \fBeval_bond_basis_vectors()\fP, \fBget_Bspline_basis_param()\fP, \fBget_delta_basis_param()\fP, \fBget_force()\fP, \fBget_linear_basis_param()\fP, \fBget_parameters()\fP, \fBget_results()\fP, \fBget_Zero_list()\fP, \fBprint_Bspline_basis_forces()\fP, \fBprint_Bspline_basis_output()\fP, \fBprint_delta_basis_forces()\fP, \fBprint_delta_basis_output()\fP, \fBprint_linear_basis_forces()\fP, \fBprint_linear_basis_output()\fP, \fBread_Bond_dihedral_inter()\fP, \fBread_REF_Bond_dihedral_inter()\fP, \fBread_REF_information()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, \fBsolv_lin_eqns_constrain_tabdih_2()\fP, \fBsolv_lin_eqns_constrain_tabdih_2_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP, and \fBsummarize_input()\fP\&.
+.SS "#define B_NB_PAIR_BOND   'IntraMolec_NB_Pair'"
+
+.PP
+Referenced by \fBcheck_Bonded_Inter_Types()\fP, \fBcheck_input()\fP, \fBdetermine_pair_type()\fP, \fBeval_bond_basis_vectors()\fP, \fBget_parameters()\fP, \fBget_ref_potential_info()\fP, \fBget_results()\fP, \fBread_Bond_nb_pair_inter()\fP, \fBread_REF_information()\fP, \fBread_REF_IntraMolecPair_inter()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP, \fBsummarize_input()\fP, and \fBsummarize_input_bond_inter()\fP\&.
+.SS "#define BOLTZ   (\fBRGAS\fP/\fBKILO\fP)"
+
+.PP
+Referenced by \fBcalc_b_struct()\fP\&.
+.SS "#define BOLTZMANN   (1\&.380658e\-23)"
+(J/K) 
+.br
+ 
+.SS "#define bool   int"
+
+.SS "#define BSPLINE_BASIS_INDEX   6	/* JFR \- 07\&.22\&.12: Bspline basis set */"
+
+.PP
+Referenced by \fBcalc_b_struct()\fP, \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBeval_external_basis_vectors()\fP, \fBget_Angle_basis_vectors()\fP, \fBget_BondStretch_basis_vectors()\fP, \fBget_Bspline_basis_param()\fP, \fBget_Dihedral_basis_vectors()\fP, \fBget_external_potl_extra_params()\fP, \fBget_Inter_Type()\fP, \fBget_IntraMolec_NB_Pair_basis_vectors()\fP, \fBget_local_density_extra_params()\fP, \fBget_Zero_list()\fP, \fBprint_output()\fP, \fBremove_zero_rows_mem()\fP, \fBsummarize_input_bond_inter()\fP, \fBsummarize_input_external_potential_inter()\fP, \fBsummarize_input_pair_inter()\fP, and \fBsummarize_Inter_Types()\fP\&.
+.SS "#define BSPLINE_NAME   'Bspline'"
+
+.PP
+Referenced by \fBget_Inter_Type()\fP, \fBread_eangles()\fP, \fBread_ebonds()\fP, \fBread_edihedrals()\fP, \fBread_epairs()\fP, and \fBsummarize_esystem()\fP\&.
+.SS "#define BSPLINE_STRUCT   1"
+
+.PP
+Referenced by \fBcalc_b_struct()\fP, \fBeval_Bspline_basis_vectors()\fP, \fBeval_Bspline_basis_vectors_ext()\fP, \fBeval_Bspline_basis_vectors_LD()\fP, \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBget_Bspline_angle_basis_vector()\fP, \fBget_Bspline_bond_basis_vector()\fP, and \fBget_Bspline_dihedral_basis_vector()\fP\&.
+.SS "#define CHOLESKY   'CHOLESKY'"
+
+.PP
+Referenced by \fBget_SOLN()\fP, and \fBsolv_lin_eqns_symm()\fP\&.
+.SS "#define CLEARSPOT1(bm, x)   (bm[(int)((x)/64)] &= ~(1ULL << ((x) % 64)))"
+
+.SS "#define CLEARSPOT2(bm, n, x, y)   (bm[(int)(((y)*(n)+(x))/64)] &= ~(1ULL << (((y)*(n)+(x)) % 64)))"
+
+.SS "#define COMMENTFLAG   '*!;'"
+
+.PP
+Referenced by \fBremove_comments()\fP\&.
+.SS "#define DELTA_BASIS_INDEX   0"
+
+.PP
+Referenced by \fBcalc_b_struct()\fP, \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBeval_external_basis_vectors()\fP, \fBget_Angle_basis_vectors()\fP, \fBget_BondStretch_basis_vectors()\fP, \fBget_delta_basis_param()\fP, \fBget_Dihedral_basis_vectors()\fP, \fBget_external_potl_extra_params()\fP, \fBget_IntraMolec_NB_Pair_basis_vectors()\fP, \fBget_local_density_extra_params()\fP, \fBprint_M_matrix2()\fP, \fBprint_Mn()\fP, \fBprint_output()\fP, \fBremove_zero_rows_mem()\fP, and \fBupdate_nb_pair_grids()\fP\&.
+.SS "#define DELTA_NAME   'delta'"
+
+.PP
+Referenced by \fBget_Inter_Type()\fP, \fBread_eangles()\fP, \fBread_ebonds()\fP, \fBread_edihedrals()\fP, \fBread_epairs()\fP, and \fBsummarize_esystem()\fP\&.
+.SS "#define DIHED_PREC   \fBFLOAT_EPS\fP	/* How close to zero to allow 1/sin(phi)\&. */"
+
+.PP
+Referenced by \fBget_Bspline_dihedral_basis_vector()\fP, \fBget_delta_dihedral_basis_vector()\fP, \fBget_linear_dihedral_basis_vector()\fP, and \fBget_TOY_dihedral_basis_vector()\fP\&.
+.SS "#define DIM   3"
+
+.PP
+Referenced by \fBcopy_matrix()\fP, \fBcopy_vector()\fP, \fBdet_min_image()\fP, \fBdo_PBC()\fP, \fBdot_prod()\fP, \fBget_dx()\fP, \fBpopulate_LD_Gradients()\fP, \fBprint_frame_dump()\fP, \fBread_bocs_frame_dir_box()\fP, \fBread_first_lammps_frame()\fP, \fBread_next_bocs_frame()\fP, \fBread_next_gro_frame()\fP, \fBread_next_lammps_frame()\fP, \fBscal_times_vect()\fP, \fBsetup_box_dimensions()\fP, \fBupdate_info_trr()\fP, \fBvect_diff()\fP, \fBvect_inc()\fP, \fBvect_sum()\fP, and \fBwrite_bocs_frame()\fP\&.
+.SS "#define EXT_POTL_NAME   'External'"
+
+.PP
+Referenced by \fBext_potl_solve_lin_eqns()\fP, \fBget_Inter_Type()\fP, and \fBget_phi_forces()\fP\&.
+.SS "#define FALSE   0"
+
+.PP
+Referenced by \fBarg_is_set()\fP, \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBcalculate_local_densities()\fP, \fBcheck_excl()\fP, \fBcheck_input()\fP, \fBcheck_mand_args()\fP, \fBcheck_word_list()\fP, \fBdfill_dihedrals_from_gmx_dihedraltype_headers()\fP, \fBdirect_solve_lin_eqns()\fP, \fBdparse_atomic_exclusions_per_molecule()\fP, \fBeigen()\fP, \fBelim_zero_cols()\fP, \fBestimate_memory_usage()\fP, \fBeval_linear_basis_vectors()\fP, \fBeval_linear_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LDGRAD()\fP, \fBfile_exists()\fP, \fBfind_line_in_file()\fP, \fBgenerate_generic_index_file()\fP, \fBget_bond_basis_parameters()\fP, \fBget_CG_map()\fP, \fBget_Eigen()\fP, \fBget_ITER()\fP, \fBget_linear_angle_basis_vector()\fP, \fBget_linear_bond_basis_vector()\fP, \fBget_MEM()\fP, \fBget_MT()\fP, \fBget_n_words_from_line()\fP, \fBget_PC()\fP, \fBget_phi_forces()\fP, \fBget_phi_struct_and_phi_forces()\fP, \fBget_PT()\fP, \fBget_REF()\fP, \fBget_ref_potential()\fP, \fBget_results()\fP, \fBget_SVD()\fP, \fBget_top()\fP, \fBget_word_count_delim()\fP, \fBget_words_delim()\fP, \fBget_zero_cols()\fP, \fBget_Zero_list()\fP, \fBinit_arg()\fP, \fBinit_arg_def()\fP, \fBinit_gmx_info()\fP, \fBinit_LD_info()\fP, \fBinit_tW_gmx_topology()\fP, \fBinit_tW_gmx_trxframe()\fP, \fBinitialize_esystem()\fP, \fBinitialize_Inter_Types()\fP, \fBinitialize_par_flags()\fP, \fBinitialize_ref_flags()\fP, \fBinitialize_sys()\fP, \fBis_blank()\fP, \fBLeft_PC()\fP, \fBmain()\fP, \fBmatch_word_list()\fP, \fBnew_read_next_bocs_frame()\fP, \fBopen_write_trajectory()\fP, \fBpop_contents()\fP, \fBPrecondition()\fP, \fBprint_M_matrix2()\fP, \fBprint_Mn()\fP, \fBprint_output()\fP, \fBprint_sep_M()\fP, \fBput_at_nums_in()\fP, \fBread_bocs_frame_dir_flags()\fP, \fBread_first_bocs_frame()\fP, \fBread_first_dump_frame()\fP, \fBread_first_gro_frame()\fP, \fBread_first_lammps_frame()\fP, \fBread_next_bocs_frame()\fP, \fBread_next_dump_frame()\fP, \fBread_next_frame()\fP, \fBread_next_gro_frame()\fP, \fBread_next_lammps_frame()\fP, \fBread_par()\fP, \fBread_topology()\fP, \fBread_trr_2_CGstruct()\fP, \fBread_trr_2_CGstruct_ref()\fP, \fBread_Type_Inter2()\fP, \fBread_Type_Inter_Ext()\fP, \fBreset_gmx_info()\fP, \fBRight_PC()\fP, \fBrun_checks()\fP, \fBset_atom_labels()\fP, \fBsetup_box_dimensions()\fP, \fBsetup_lists()\fP, \fBskip_excl()\fP, \fBsolv_lin_eqns()\fP, \fBsolv_lin_eqns_Bayesian()\fP, \fBsolv_lin_eqns_Bayesian_saveparams()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, \fBsolv_lin_eqns_constrain_tabdih_2()\fP, \fBsolv_lin_eqns_constrain_tabdih_2_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP, \fBsolv_lin_eqns_rescalephi()\fP, \fBsolv_lin_eqns_symm()\fP, \fBsolveSVD()\fP, \fBSVD()\fP, \fBtest_read_ref_forces()\fP, \fBupdate_info_trr()\fP, \fBupdate_nb_pair_grids()\fP, and \fBwas_inter_present()\fP\&.
+.SS "#define FIRST_HALF   'FIRST_HALF'"
+
+.PP
+Referenced by \fBget_CalcMODE()\fP, and \fBsummarize_input_CalcMODE()\fP\&.
+.SS "#define FLOAT_EPS   1\&.0e\-8"
+
+.PP
+Referenced by \fBcheck_angle_min_max()\fP, \fBcheck_dihedral_endpoints()\fP, \fBfill_f_bond()\fP, \fBfill_r_bond()\fP, \fBfill_r_nb()\fP, \fBget_angle_vector_forces()\fP, \fBget_b_soln_err()\fP, \fBget_b_soln_errAA()\fP, \fBget_Bspline_angle_basis_vector()\fP, \fBget_Bspline_basis_param()\fP, \fBget_delta_angle_basis_vector()\fP, \fBget_delta_basis_param()\fP, \fBget_dihedral_vector_forces()\fP, \fBget_force()\fP, \fBget_grid_index_for_linear_basis_em()\fP, \fBget_harmonic_angle_basis_vector()\fP, \fBget_linear_angle_basis_vector()\fP, \fBget_linear_basis_param()\fP, \fBget_structures()\fP, \fBget_total_n_pts()\fP, \fBget_total_n_pts_bond()\fP, \fBget_Zero_list()\fP, \fBinitialize_sys()\fP, \fBPrecondition()\fP, \fBprint_Bspline_basis_forces()\fP, \fBprint_Bspline_basis_output()\fP, \fBprint_delta_basis_forces()\fP, \fBprint_delta_basis_output()\fP, \fBprint_linear_basis_forces()\fP, \fBprint_linear_basis_output()\fP, \fBprint_M_matrix2()\fP, \fBprint_Mn()\fP, \fBprint_nb_table()\fP, \fBread_input_forces()\fP, \fBsetup_box_dimensions()\fP, and \fBwas_inter_present()\fP\&.
+.SS "#define FULL   'FULL'"
+
+.PP
+Referenced by \fBget_CalcMODE()\fP, and \fBsummarize_input_CalcMODE()\fP\&.
+.SS "#define GET_N_SPOTS(x)   ((int)((x)/64)+1)"
+
+.PP
+Referenced by \fBcalc_grids3()\fP, and \fBmain()\fP\&.
+.SS "#define GETSPOT1(bm, x)   ((bm[(int)((x)/64)] & (1ULL << ((x) % 64))) > 0)"
+
+.SS "#define GETSPOT2(bm, n, x, y)   ((bm[(int)(((y)*(n)+(x))/64)] & (1ULL << (((y)*(n)+(x)) % 64))) > 0)"
+
+.PP
+Referenced by \fBcalc_grids3()\fP\&.
+.SS "#define GMX_MODE   'GROMACS'"
+
+.PP
+Referenced by \fBcheck_struct_files()\fP, and \fBmain()\fP\&.
+.SS "#define HARMONIC_BASIS_INDEX   1"
+
+.PP
+Referenced by \fBcalc_b_struct()\fP, \fBget_Angle_basis_vectors()\fP, \fBget_BondStretch_basis_vectors()\fP, \fBget_Inter_Type()\fP, and \fBprint_output()\fP\&.
+.SS "#define HARMONIC_NAME   'harmonic'"
+
+.PP
+Referenced by \fBget_Inter_Type()\fP\&.
+.SS "#define IFIRST_HALF   1"
+
+.PP
+Referenced by \fBget_CalcMODE()\fP, \fBget_results()\fP, \fBprint_output()\fP, and \fBsummarize_input_CalcMODE()\fP\&.
+.SS "#define IFULL   0"
+
+.PP
+Referenced by \fBget_CalcMODE()\fP, \fBinitialize_sys()\fP, \fBprint_delta_basis_forces()\fP, \fBprint_linear_basis_forces()\fP, and \fBsummarize_input_CalcMODE()\fP\&.
+.SS "#define ISECOND_HALF   2"
+
+.PP
+Referenced by \fBget_CalcMODE()\fP, \fBget_results()\fP, \fBmain()\fP, and \fBprint_output()\fP\&.
+.SS "#define ITEST_INP   3"
+
+.PP
+Referenced by \fBget_CalcMODE()\fP, and \fBmain()\fP\&.
+.SS "#define KILO   (1e3)"
+Thousand 
+.br
+ 
+.SS "#define LINEAR_BASIS_INDEX   5"
+
+.PP
+Referenced by \fBcalc_b_struct()\fP, \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBeval_external_basis_vectors()\fP, \fBget_Angle_basis_vectors()\fP, \fBget_BondStretch_basis_vectors()\fP, \fBget_Dihedral_basis_vectors()\fP, \fBget_external_potl_extra_params()\fP, \fBget_Inter_Type()\fP, \fBget_IntraMolec_NB_Pair_basis_vectors()\fP, \fBget_linear_basis_param()\fP, \fBget_local_density_extra_params()\fP, \fBget_Zero_list()\fP, \fBprint_M_matrix2()\fP, \fBprint_Mn()\fP, \fBprint_output()\fP, \fBremove_zero_rows_mem()\fP, and \fBupdate_nb_pair_grids()\fP\&.
+.SS "#define LINEAR_NAME   'linear'"
+
+.PP
+Referenced by \fBget_Inter_Type()\fP, \fBread_eangles()\fP, \fBread_ebonds()\fP, \fBread_edihedrals()\fP, \fBread_epairs()\fP, and \fBsummarize_esystem()\fP\&.
+.SS "#define LINEAR_STRUCT   1"
+
+.PP
+Referenced by \fBcalc_b_struct()\fP, \fBeval_linear_basis_vectors()\fP, \fBeval_linear_basis_vectors_ext()\fP, \fBeval_linear_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LDGRAD()\fP, \fBget_linear_angle_basis_vector()\fP, \fBget_linear_bond_basis_vector()\fP, \fBget_linear_dihedral_basis_vector()\fP, and \fBupdate_nb_pair_grids()\fP\&.
+.SS "#define LU   'LU'"
+
+.PP
+Referenced by \fBestimate_memory_usage()\fP, and \fBget_SOLN()\fP\&.
+.SS "#define M_PI   3\&.14159265358979323846"
+
+.PP
+Referenced by \fBcalc_ref_Dihedral_forces()\fP, \fBget_angle()\fP, \fBget_Bspline_basis_param()\fP, \fBget_delta_basis_param()\fP, \fBget_dihedral()\fP, \fBget_force()\fP, \fBget_linear_basis_param()\fP, \fBget_RB_dihedral_basis_vector()\fP, \fBget_ref_Dihedral_info()\fP, \fBget_Zero_list()\fP, \fBprint_Bspline_basis_forces()\fP, \fBprint_Bspline_basis_output()\fP, \fBprint_delta_basis_forces()\fP, \fBprint_delta_basis_output()\fP, \fBprint_harmonic_basis_forces()\fP, \fBprint_linear_basis_forces()\fP, \fBprint_linear_basis_output()\fP, \fBprint_RB_basis_forces()\fP, and \fBprint_TOY_basis_forces()\fP\&.
+.SS "#define MAX_BSPLINE_COEFF   20	/* JFR \- 07\&.22\&.12: This is kspline */"
+
+.PP
+Referenced by \fBcalc_Bspline()\fP, \fBcalc_Bspline_deriv()\fP, \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBeval_Bspline_basis_vectors()\fP, \fBeval_Bspline_basis_vectors_ext()\fP, \fBeval_Bspline_basis_vectors_LD()\fP, \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBget_Bspline_angle_basis_vector()\fP, \fBget_Bspline_bond_basis_vector()\fP, \fBget_Bspline_dihedral_basis_vector()\fP, \fBprint_Bspline_basis_forces()\fP, and \fBprint_Bspline_basis_output()\fP\&.
+.SS "#define MAX_NUM_BOND_COEFF   200"
+
+.PP
+Referenced by \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, and \fBprint_bond_warnings()\fP\&.
+.SS "#define Max_Num_Sites_Prot   10000	/* 1000000 <\- This used to be the max, we currently don't get anywhere close to this */"
+
+.SS "#define MAX_POWER_COEFF   5"
+
+.SS "#define MAXLINELEN   5000"
+
+.PP
+Referenced by \fBget_clean_line()\fP, and \fBread_tpr_dump()\fP\&.
+.SS "#define MAXWORDLEN   1000"
+
+.SS "#define NB_EXT_POTL   'External_Potential'"
+
+.PP
+Referenced by \fBget_parameters()\fP, and \fBread_external_potential_inter()\fP\&.
+.SS "#define NB_LD_GRADIENT   'LD_Gradient'"
+
+.PP
+Referenced by \fBcalc_grids3()\fP, \fBcheck_input()\fP, \fBget_Bspline_basis_param()\fP, \fBget_Inter_Type()\fP, \fBget_Zero_list()\fP, \fBread_Type_Inter2()\fP, and \fBsummarize_input_pair_inter()\fP\&.
+.SS "#define NB_LOCAL_DENSITY   'Local_Density'"
+
+.PP
+Referenced by \fBcalc_grids3()\fP, \fBget_Bspline_basis_param()\fP, \fBget_Inter_Type()\fP, \fBget_Zero_list()\fP, \fBread_Type_Inter2()\fP, and \fBsummarize_input_pair_inter()\fP\&.
+.SS "#define NB_PAIR   'Pair_Interaction'"
+
+.PP
+Referenced by \fBcalc_grids3()\fP, \fBcheck_Type_Inter2()\fP, \fBeigen()\fP, \fBget_Bspline_basis_param()\fP, \fBget_parameters()\fP, \fBget_results()\fP, \fBget_Zero_list()\fP, \fBprint_M_matrix2()\fP, \fBprint_Mn()\fP, \fBprint_sep_M()\fP, \fBread_nb_pair_inter()\fP, \fBread_REF_information()\fP, \fBread_REF_nb_inter()\fP, \fBread_Type_Inter2()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, and \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP\&.
+.SS "#define NONE   'NONE'"
+
+.PP
+Referenced by \fBget_FRAMEWEIGHT()\fP\&.
+.SS "#define NOT_SET   \-1"
+
+.PP
+Referenced by \fBcheck_Bonded_Inter_Types()\fP, and \fBget_bond_inter_site_types()\fP\&.
+.SS "#define NPT   'NPT'"
+
+.PP
+Referenced by \fBget_FRAMEWEIGHT()\fP\&.
+.SS "#define PC_DEFAULT   'RPC'"
+
+.SS "#define PDB_MODE   'PDB'"
+
+.PP
+Referenced by \fBcheck_Bonded_Inter_Types()\fP, \fBcheck_input()\fP, \fBcheck_struct_files()\fP, \fBget_ref_potential_info()\fP, \fBsummarize_input()\fP, and \fBsummarize_input_bond_inter()\fP\&.
+.SS "#define POWER_INDEX   4"
+
+.PP
+Referenced by \fBcalc_b_struct()\fP, \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBget_IntraMolec_NB_Pair_basis_vectors()\fP, \fBget_power_basis_param()\fP, \fBprint_output()\fP, and \fBupdate_nb_pair_grids()\fP\&.
+.SS "#define POWER_NAME   'power'"
+
+.PP
+Referenced by \fBget_Inter_Type()\fP\&.
+.SS "#define REF_FORCE   'RefForces'"
+
+.PP
+Referenced by \fBread_REF_forces()\fP, and \fBtest_read_ref_forces()\fP\&.
+.SS "#define REF_LINEAR_INTERPOL_I   1"
+
+.PP
+Referenced by \fBget_interpolation_index()\fP, \fBget_scalar_f_from_table()\fP, and \fBprint_interpolation_type()\fP\&.
+.SS "#define REF_LINEAR_INTERPOL_N   'linear'"
+
+.PP
+Referenced by \fBget_interpolation_index()\fP, and \fBprint_interpolation_type()\fP\&.
+.SS "#define REF_NO_INTERPOL_I   0"
+
+.PP
+Referenced by \fBget_interpolation_index()\fP, \fBget_scalar_f_from_table()\fP, and \fBprint_interpolation_type()\fP\&.
+.SS "#define REF_NO_INTERPOL_N   'none'"
+
+.PP
+Referenced by \fBget_interpolation_index()\fP, and \fBprint_interpolation_type()\fP\&.
+.SS "#define RGAS   (\fBBOLTZMANN\fP*\fBAVOGADRO\fP)"
+(J/(mol K)) 
+.br
+ 
+.SS "#define RYCKAERT_BELLEMANS_BASIS_INDEX   2"
+
+.PP
+Referenced by \fBcalc_b_struct()\fP, \fBget_Dihedral_basis_vectors()\fP, \fBget_Inter_Type()\fP, and \fBprint_output()\fP\&.
+.SS "#define RYCKAERT_BELLEMANS_NAME   'RB'"
+
+.PP
+Referenced by \fBget_Inter_Type()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, and \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP\&.
+.SS "#define SECOND_HALF   'SECOND_HALF'"
+
+.PP
+Referenced by \fBget_CalcMODE()\fP, \fBmain()\fP, and \fBsummarize_input_CalcMODE()\fP\&.
+.SS "#define SETSPOT1(bm, x)   (bm[(int)((x)/64)] |= (1ULL << ((x) % 64)))"
+
+.SS "#define SETSPOT2(bm, n, x, y)   (bm[(int)(((y)*(n)+(x))/64)] |= (1ULL << (((y)*(n)+(x)) % 64)))"
+
+.PP
+Referenced by \fBcalc_grids3()\fP\&.
+.SS "#define SVD_SOLV   'SVD'"
+
+.PP
+Referenced by \fBget_SOLN()\fP, and \fBget_SVD()\fP\&.
+.SS "#define TEST_INP   'TEST_INP'"
+
+.PP
+Referenced by \fBget_CalcMODE()\fP\&.
+.SS "#define TOY_DIHED_INDEX   3"
+
+.PP
+Referenced by \fBcalc_b_struct()\fP, \fBget_Dihedral_basis_vectors()\fP, \fBget_Inter_Type()\fP, and \fBprint_output()\fP\&.
+.SS "#define TOY_DIHED_NAME   'TOY'"
+
+.PP
+Referenced by \fBget_Inter_Type()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, and \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP\&.
+.SS "#define TRUE   1"
+
+.PP
+Referenced by \fBarg_is_set()\fP, \fBcalc_grids2()\fP, \fBcalc_grids3()\fP, \fBcalc_linear_spline_A()\fP, \fBcheck_excl()\fP, \fBcheck_input()\fP, \fBcheck_mand_args()\fP, \fBcheck_word_list()\fP, \fBcopy_arrays()\fP, \fBdfill_dihedrals_from_gmx_dihedraltype_headers()\fP, \fBdget_moltypes_in_molblocks()\fP, \fBdget_top_ff_info()\fP, \fBdirect_solve_lin_eqns()\fP, \fBdparse_atom_per_molecule_info()\fP, \fBdparse_atomic_exclusions_per_molecule()\fP, \fBdparse_bonded_int_lists_per_molecule()\fP, \fBdparse_charge_groups_per_molecule()\fP, \fBdparse_residue_per_molecule_info()\fP, \fBdprocess_nmolblocks()\fP, \fBdprocess_sysname_natoms()\fP, \fBeigen()\fP, \fBestimate_memory_usage()\fP, \fBeval_Bspline_basis_vectors()\fP, \fBeval_Bspline_basis_vectors_ext()\fP, \fBeval_Bspline_basis_vectors_LD()\fP, \fBeval_Bspline_basis_vectors_LDGRAD()\fP, \fBeval_external_basis_vectors()\fP, \fBeval_linear_basis_vectors()\fP, \fBeval_linear_basis_vectors_ext()\fP, \fBeval_linear_basis_vectors_LD()\fP, \fBeval_linear_basis_vectors_LDGRAD()\fP, \fBeval_M_nb_pair_inter()\fP, \fBeval_power_basis_vectors()\fP, \fBext_potl_solve_lin_eqns()\fP, \fBfile_exists()\fP, \fBfind_line_in_file()\fP, \fBgenerate_generic_index_file()\fP, \fBget_b_struct_and_b_forces()\fP, \fBget_bond_basis_parameters()\fP, \fBget_Bspline_angle_basis_vector()\fP, \fBget_Bspline_bond_basis_vector()\fP, \fBget_Bspline_dihedral_basis_vector()\fP, \fBget_CalcMODE()\fP, \fBget_CG_map()\fP, \fBget_CHISQD()\fP, \fBget_command_line_args()\fP, \fBget_CONSTRAIN()\fP, \fBget_delta_angle_basis_vector()\fP, \fBget_delta_bond_basis_vector()\fP, \fBget_delta_dihedral_basis_vector()\fP, \fBget_delta_IntraMolec_NB_Pair_basis_vector()\fP, \fBget_Eigen()\fP, \fBget_ERR()\fP, \fBget_FRAMEWEIGHT()\fP, \fBget_harmonic_angle_basis_vector()\fP, \fBget_harmonic_bond_basis_vector()\fP, \fBget_Inter_Type()\fP, \fBget_IntraMolec_NB_Pair_basis_vectors()\fP, \fBget_ITER()\fP, \fBget_linear_angle_basis_vector()\fP, \fBget_linear_bond_basis_vector()\fP, \fBget_linear_dihedral_basis_vector()\fP, \fBget_MEM()\fP, \fBget_MFD()\fP, \fBget_MT()\fP, \fBget_n_words_from_line()\fP, \fBget_parameters()\fP, \fBget_PC()\fP, \fBget_phi_forces()\fP, \fBget_phi_struct_and_phi_forces()\fP, \fBget_PT()\fP, \fBget_RB_dihedral_basis_vector()\fP, \fBget_REF()\fP, \fBget_ref_potential()\fP, \fBget_REG()\fP, \fBget_RESCALE()\fP, \fBget_results()\fP, \fBget_site_info()\fP, \fBget_SOLN()\fP, \fBget_SVD()\fP, \fBget_top()\fP, \fBget_TOY_dihedral_basis_vector()\fP, \fBget_TPR()\fP, \fBget_TPR_EXCL()\fP, \fBget_TRIM()\fP, \fBget_word_count_delim()\fP, \fBget_words_delim()\fP, \fBget_zero_cols()\fP, \fBget_Zero_list()\fP, \fBinit_gmx_info()\fP, \fBinit_LD_info()\fP, \fBinit_tW_gmx_trxframe()\fP, \fBinitialize_esystem()\fP, \fBinitialize_Inter_Types()\fP, \fBinitialize_sys()\fP, \fBis_blank()\fP, \fBLeft_PC()\fP, \fBmain()\fP, \fBmatch_word_list()\fP, \fBnew_read_next_bocs_frame()\fP, \fBpop_contents()\fP, \fBPrecondition()\fP, \fBprint_Chi2()\fP, \fBprint_decomp_Chi2()\fP, \fBprint_M_matrix2()\fP, \fBprint_Mn()\fP, \fBprint_save_state()\fP, \fBprocess_G_matrix()\fP, \fBput_at_nums_in()\fP, \fBread_bocs_frame_dir_box()\fP, \fBread_bocs_frame_dir_flags()\fP, \fBread_bocs_frame_dir_frame()\fP, \fBread_bocs_frame_dir_natoms()\fP, \fBread_bocs_frame_dir_prec()\fP, \fBread_bocs_frame_dir_step()\fP, \fBread_bocs_frame_dir_time()\fP, \fBread_bocs_frame_dir_title()\fP, \fBread_bocs_frame_dir_xvf()\fP, \fBread_bocs_top()\fP, \fBread_BOND_angle_inter()\fP, \fBread_Bond_dihedral_inter()\fP, \fBread_Bond_nb_pair_inter()\fP, \fBread_BOND_stretch_inter()\fP, \fBread_box_dump_frame()\fP, \fBread_epar()\fP, \fBread_external_potential_inter()\fP, \fBread_first_bocs_frame()\fP, \fBread_first_dump_frame()\fP, \fBread_first_gro_frame()\fP, \fBread_first_lammps_frame()\fP, \fBread_Inter_Types()\fP, \fBread_mode()\fP, \fBread_nb_pair_inter()\fP, \fBread_next_bocs_frame()\fP, \fBread_next_dump_frame()\fP, \fBread_next_gro_frame()\fP, \fBread_next_lammps_frame()\fP, \fBread_nrexcl()\fP, \fBread_par()\fP, \fBread_REF_BOND_angle_inter()\fP, \fBread_REF_Bond_dihedral_inter()\fP, \fBread_REF_BOND_stretch_inter()\fP, \fBread_REF_forces()\fP, \fBread_REF_interpol_type()\fP, \fBread_REF_IntraMolecPair_inter()\fP, \fBread_REF_nb_inter()\fP, \fBread_save_state()\fP, \fBread_site_types()\fP, \fBread_structures()\fP, \fBread_temperature()\fP, \fBread_tpr_dump()\fP, \fBread_Type_Inter2()\fP, \fBread_Type_Inter_Ext()\fP, \fBRight_PC()\fP, \fBrun_checks()\fP, \fBset_atom_labels()\fP, \fBsetup_box_dimensions()\fP, \fBsetup_lists()\fP, \fBsetup_tables()\fP, \fBskip_excl()\fP, \fBsolv_lin_eqns()\fP, \fBsolv_lin_eqns_Bayesian()\fP, \fBsolv_lin_eqns_Bayesian_saveparams()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, \fBsolv_lin_eqns_constrain_tabdih_2()\fP, \fBsolv_lin_eqns_constrain_tabdih_2_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP, \fBsolv_lin_eqns_PT()\fP, \fBsolv_lin_eqns_rescalephi()\fP, \fBsolveSVD()\fP, \fBsummarize_input()\fP, \fBsummarize_input_ITER()\fP, \fBsummarize_input_MT()\fP, \fBsummarize_input_PC()\fP, \fBsummarize_input_REF()\fP, \fBsummarize_input_SVD()\fP, \fBSVD()\fP, \fBtW_read_first_trr_frame()\fP, \fBupdate_info_trr()\fP, and \fBwas_inter_present()\fP\&.
+.SS "#define UU   'UU'"
+
+.PP
+Referenced by \fBget_SOLN()\fP, and \fBsolv_lin_eqns_symm()\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef uint64_t \fBbitMask\fP"
+
+.SS "typedef double dvec[\fBDIM\fP]"
+
+.SS "typedef double matrix[\fBDIM\fP][\fBDIM\fP]"
+
+.SS "typedef struct tW_indicator_function tW_indicator_function"
+
+.SS "typedef char tW_line[\fBMAXLINELEN\fP]"
+
+.SS "typedef char tW_word[\fBMAXWORDLEN\fP]"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

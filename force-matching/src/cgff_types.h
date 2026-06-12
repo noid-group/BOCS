@@ -1,6 +1,6 @@
 /**
 @file cgff_types.h 
-@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
+@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski
 @brief Defines properties and structures of the cgff and cgmap calculations
 */
 
@@ -25,6 +25,10 @@ typedef double dvec[DIM];
 typedef double matrix[DIM][DIM];
 //#endif
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 #ifndef FALSE
 #define FALSE   0
 #endif
@@ -32,12 +36,12 @@ typedef double matrix[DIM][DIM];
 #define TRUE    1
 #endif
 
-#define KILO 		 (1e3)			/* Thousand	*/
+#define KILO 		 (1e3)			/*!< Thousand	*/
 //#if GMX != 51
-#define BOLTZMANN	 (1.380658e-23)		/* (J/K)	*/
-#define AVOGADRO	 (6.0221367e23)		/* ()		*/
+#define BOLTZMANN	 (1.380658e-23)		/*!< (J/K)	*/
+#define AVOGADRO	 (6.0221367e23)		/*!< ()		*/
 //#endif
-#define RGAS             (BOLTZMANN*AVOGADRO)   /* (J/(mol K))  */
+#define RGAS             (BOLTZMANN*AVOGADRO)   /*!< (J/(mol K))  */
 #define BOLTZ            (RGAS/KILO)    
 
 /* Modes */
@@ -69,6 +73,12 @@ typedef double matrix[DIM][DIM];
 /* Non-bonded interaction names. */
 #define NB_PAIR         "Pair_Interaction"
 
+/* MRD 06.17.2020 */
+#define NB_LOCAL_DENSITY "Local_Density"
+#define NB_LD_GRADIENT "LD_Gradient"
+#define NB_EXT_POTL "External_Potential"
+#define EXT_POTL_NAME "External"
+
 /* Bond interaction names. */
 #define B_BOND_STRETCH  "BondStretch"
 #define B_ANGLE         "Angle"
@@ -92,7 +102,7 @@ typedef double matrix[DIM][DIM];
 
 #define NOT_SET -1
 
-#define MAX_NUM_BOND_COEFF 100
+#define MAX_NUM_BOND_COEFF 200 // MCL 05.15.24 changed from 100 to accomodate larger molecules with IMNBs using splines
 #define Max_Num_Sites_Prot 10000	/* 1000000 <- This used to be the max, we currently don't get anywhere close to this */
 #define MAX_POWER_COEFF    5
 #define MAX_BSPLINE_COEFF 20	/* JFR - 07.22.12: This is kspline */
@@ -136,6 +146,9 @@ typedef double matrix[DIM][DIM];
 typedef char tW_word[MAXWORDLEN];
 typedef char tW_line[MAXLINELEN];
 
+/* MRD 06.17.2020 */
+typedef struct tW_indicator_function tW_indicator_function;
+
 /* MRD 02.14.2019 bimask */
 typedef uint64_t bitMask;
 
@@ -149,16 +162,19 @@ typedef uint64_t bitMask;
 
 
 typedef struct {
-    char *cg_name;		/* name of site  */
-    char *mol_name;		/* name of molecule */
-    int res_no;			/* no.  of molecule */
-    int n_atms;			/* no. of atms mapped to cg site */
-    char **atm_name;		/* name of atoms */
-    int *i_atm;			/* array of atm indices for atoms mapped to cg site */
-    tW_word map_type;	        /* type of mapping.  usr, com, cog are supported */
-    double *c_Ii;		/* mapping coefficients for site */
+    char *cg_name;		/*!< name of site  */
+    char *mol_name;		/*!< name of molecule */
+    int res_no;			/*!< no.  of molecule */
+    int n_atms;			/*!< no. of atms mapped to cg site */
+    char **atm_name;		/*!< name of atoms */
+    int *i_atm;			/*!< array of atm indices for atoms mapped to cg site */
+    tW_word map_type;	        /*!< type of mapping.  usr, com, cog are supported */
+    double *c_Ii;		/*!< mapping coefficients for site */
 } tW_site_map;
-/* The explicit mapping operator for a single site */
+/**
+ * \struct tW_site_map 
+ * The explicit mapping operator for a single site 
+ */
 
 typedef struct {
     int total_atoms;
@@ -174,7 +190,10 @@ typedef struct {
     char **map_type;
 
 } mapping_type;
-/* Defines the mapping operator for a single molecule type */
+/**
+ * \struct mapping_type
+ * Defines the mapping operator for a single molecule type 
+ */
 
 typedef struct {
     int n_types;
@@ -182,73 +201,110 @@ typedef struct {
     int *n_molecules;
 
 } mapping_op;
-/* Defines the mapping operator for a system of fixed composition */
+/**
+ * \struct mapping_op
+ * Defines the mapping operator for a system of fixed composition 
+ */
+
+/* MRD 06.17.2020 External Basis Vectors */
+typedef struct {
+    tW_word inter_name;         /*!< name of interaction*/
+    tW_word basis;              /*!< e.g. delta, linear, Bspline*/
+    tW_word name1;              /*!< name of site, e.g. MET*/
+    bool solveExt;              /*!< true if we solve for external force. false if we force external potential to 0 everywhere.*/
+    bool extPBC;                /*!< true if we can carry over from low indices to high, and vice versa*/
+    int N_inter;                /*!< idx of this interaction in sys->inter_types. Note, this is not the same as N_inter for other interaction types*/
+    int N_pts;                  /*!< Number of grid points in table*/
+    int N_coeff;                /*!< Number of grid points in table (duplicated bc it is duplicated in tW_type_inter2 below)*/
+    int i_basis;                /*!< basis type index (0 = delta, 5 = linear, 6 = Bspline)*/
+    int i_0;                    /*!< starting index in sys->M, g2, etc*/
+    double dr;                  /*!< calculated as (R_max - R_0)/n_pts*/
+    double R_0;                 /*!< lowest value of z, read in from frame*/
+    double R_max;               /*!< highest value of z, read in from frame*/
+    int n_smooth;               /*!< we always use 0 for this, but i'll carry it just incase*/
+    int kspline;                /*!< for Bspline basis, k is the order of the spline*/
+
+    double *ptr_x;
+    double *ptr_g;
+    double *ptr_g_cnt;
+    double *ptr_L;
+    double *ptr_b;
+    double *ptr_b_ref;
+    double *ptr_b_forces;
+    double *ptr_b_struct;
+    double *ptr_phi;
+    double *ptr_phi_forces;
+    double *ptr_phi_struct;
+} tW_type_inter_external;
+
 
 
 typedef struct {
     tW_word inter_name;
+    tW_word inter_type; 	// MRD 06.17.2020
     tW_word basis;
-    tW_word name1;		// name of site1
-    tW_word name2;		// name of site2
-    int N_inter;		// no. of instances
-    int N_pts;			// no. of grid points in table
-    int N_coeff;		// no. of grid points in table
-    int i_basis;		// type of basis functions
-    int i_0;			// starting index for inter in sys->M,g2
-    double dr;			// grid spacing
-    double R_0;			// min grid pt
-    double R_max;		// max grid pt
-    int n_smooth;		// number of points in running average (use odd number since includes central point)
+    tW_word name1;		/*!< name of site1*/
+    tW_word name2;		/*!< name of site2*/
+    int N_inter;		/*!< no. of instances*/
+    int N_pts;			/*!< no. of grid points in table*/
+    int N_coeff;		/*!< no. of grid points in table*/
+    int i_basis;		/*!< type of basis functions*/
+    int i_0;			/*!< starting index for inter in sys->M,g2*/
+    double dr;			/*!< grid spacing*/
+    double R_0;			/*!< min grid pt*/
+    double R_max;		/*!< max grid pt*/
+    int n_smooth;		/*!< number of points in running average (use odd number since includes central point)*/
     int N_powers;
-    int kspline;		/* JFR - 07.22.12: for Bspline basis, k is the order of the spline */
+    int kspline;		/*!< JFR - 07.22.12: for Bspline basis, k is the order of the spline */
     int *powers;
-    double *ptr_x;		// ptr to x values for truncated arrays
-    double *ptr_u2;		// ptr to pair potential
+    double *ptr_x;		/*!< ptr to x values for truncated arrays*/
+    double *ptr_u2;		/*!< ptr to pair potential*/
     double *ptr_u2_forces;
     double *ptr_u2_struct;
-    double *ptr_g2;		// ptr to rdf
+    double *ptr_g2;		/*!< ptr to rdf*/
     double *ptr_g2_cnt;		//
-    double *ptr_L;		// ptr to laplacian
-    double *ptr_b;		// ptr to deriv of pmf
-    double *ptr_b_ref;		// ptr to deriv of pmf
+    double *ptr_L;		/*!< ptr to laplacian // Seems more like pointer to L [the structure]*/
+    double *ptr_b;		/*!< ptr to deriv of pmf*/
+    double *ptr_b_ref;		/*!< ptr to deriv of pmf*/
     double *ptr_b_forces;
     double *ptr_b_struct;
+
+    tW_indicator_function *LD_W; // MRD 06.17.2020
+    bool LDGradient;		 // MRD 06.17.2020
 } tW_type_inter2;
 
 typedef struct {
-    tW_word name;		// name of int. type (e.g. BondStretch)
-    tW_word inter_name;		/* Name used to specify a specific Inter_Type[]. */
+    tW_word name;		/*!< name of int. type (e.g. BondStretch)*/
+    tW_word inter_name;		/*!< Name used to specify a specific Inter_Type[]. */
     tW_word basis;
-    int N_Int_Sites;		// no. sites per interaction
-    tW_word *Site_Types;	// names of types of interacting sites
-    int i_basis;		// harmonic (i_basis=0); delta(bond) (i_basis=1);
-    // delta(angle) (i_basis=2); harmonic angle (i_basis=3);
-    // delta(dihedral) (i_basis=4); RB(dihedral) (i_basis=5)
-    int N_coeff;		// no. of parameters describing force function, for delta assumes same as grid points
-    int i_0;			// starting index in sys->M,g2,b,phi
-    double dr;			// grid spacing
-    double R_0;			// min grid pt
-    double R_max;		// max grid pt
-    int N_pts;			// no. of grid points in table for delta basis (bond)
+    int N_Int_Sites;		/*!< no. sites per interaction*/
+    tW_word *Site_Types;	/*!< names of types of interacting sites*/
+    int i_basis;		/*!< MCL: This is an index to make IDing basis types easier, allways check cgff_type.h for X_BASIS_INDEX constants at top*/
+    int N_coeff;		/*!< no. of parameters describing force function, for delta assumes same as grid points*/
+    int i_0;			/*!< starting index in sys->M,g2,b,phi*/
+    double dr;			/*!< grid spacing*/
+    double R_0;			/*!< min grid pt*/
+    double R_max;		/*!< max grid pt*/
+    int N_pts;			/*!< no. of grid points in table for delta basis (bond)*/
     int n_smooth;
     int N_powers;
-    int kspline;		/* JFR - 07.23.12: for Bspline basis, k is the order of the spline */
+    int kspline;		/*!< JFR - 07.23.12: for Bspline basis, k is the order of the spline */
     int n_bonds_intramolec_pair_inter;
     int *powers;
-    double *ptr_x;		// ptr to x - only used after trim_Mb
-    double *ptr_g;		// ptr to pair distribution
-    double *ptr_g_cnt;		// ptr to pair distribution
-    double *ptr_L;		// ptr to laplacian
-    double *ptr_b;		// ptr to force correlation fcn
-    double *ptr_b_ref;		// ptr to force correlation fcn
+    double *ptr_x;		/*!< ptr to x - only used after trim_Mb*/
+    double *ptr_g;		/*!< ptr to pair distribution*/
+    double *ptr_g_cnt;		/*!< ptr to pair distribution*/
+    double *ptr_L;		/*!< ptr to laplacian*/
+    double *ptr_b;		/*!< ptr to force correlation fcn*/
+    double *ptr_b_ref;		/*!< ptr to force correlation fcn*/
     double *ptr_b_forces;
     double *ptr_b_struct;
-    double *ptr_phi;		// ptr to force parameters
+    double *ptr_phi;		/*!< ptr to force parameters*/
     double *ptr_phi_forces;
     double *ptr_phi_struct;
     /* below particular for each topology/system */
-    int N_instances;		/* Number of times bond interactions appears. */
-    int **Inter_List;		/* List of site indices for each of the N_instances occurances. */
+    int N_instances;		/*!< Number of times bond interactions appears. */
+    int **Inter_List;		/*!< List of site indices for each of the N_instances occurances. */
 } tW_Bonded_Inter;
 
 
@@ -265,7 +321,9 @@ typedef struct {
     int n_smooth;
     int i_0;
     int N_powers;
-    int kspline;		/* JFR - 07.22.12: for Bspline basis, k is the order of the spline */
+    int kspline;		/*!< JFR - 07.22.12: for Bspline basis, k is the order of the spline */
+    double user_R_min;          /*!< MCL - 05.08.25; For Bspline basis, keeping track of user requested function domain so that we don't print padded regions later*/
+    double user_R_max;		/*!< MCL - 05.08.25; For Bspline basis, keeping track of user requested function domain so that we don't print padded regions*/
     int *powers;
     double *ptr_x;
     double *ptr_g;
@@ -278,245 +336,271 @@ typedef struct {
     double *ptr_phi;
     double *ptr_phi_forces;
     double *ptr_phi_struct;
+
+    tW_indicator_function *LD_W; /* MRD 06.17.2020 */
+    bool LDGradient;
+    bool solveExt; /*!< Do we want to solve require no external potential?*/
+    bool extPBC; /*!< Do we have PBC in the z direction?*/
 } tW_Inter_Types;
 
 typedef struct {		/* JFR - 08.10.11 */
-    int flag_PT;		/* True => do the PT calculation */
-    int N_PT;			/* Number of perturbation steps */
-    int dPT;			/* spacing of output */
-    int flag_MMOTF_SEP;		/* True => calc the decomposition of b at each perturbation step */
-    int flag_eigen;		/* True => calc the eigenspectrum at each perturbation step */
-    int N_eigen;		/* Number of eigenvectors to print out from each side of the spectrum (pos and neg) */
+    int flag_PT;		/*!< True => do the PT calculation */
+    int N_PT;			/*!< Number of perturbation steps */
+    int dPT;			/*!< spacing of output */
+    int flag_MMOTF_SEP;		/*!< True => calc the decomposition of b at each perturbation step */
+    int flag_eigen;		/*!< True => calc the eigenspectrum at each perturbation step */
+    int N_eigen;		/*!< Number of eigenvectors to print out from each side of the spectrum (pos and neg) */
 } tW_PT;
 
 typedef struct {		/* JFR - 08.11.11 */
-    int flag_Eigen;		/* True => calc the eigenspectrum of the G matrix */
-    int N_Eigen;		/* Number of eigenvectors to print out from each side of the spectrum (pos and neg) */
-    int flag_printn;		/* True => print fn, bn, Mn for various sets of eigenvectors */
-    int DM;			/* spacing for grouping eigenvectors from the top */
-    int DL;			/* spacing for grouping eigenvectors from the bottom */
-    int flag_Gbar;		/* True => calc the eigenspectrum of the Gbar matrix (i.e., take out two body terms) */
-    int flag_norm;		/* True => normalize the nb parts of the matrix by r^2 before calculating the eigenspectrum */
+    int flag_Eigen;		/*!< True => calc the eigenspectrum of the G matrix */
+    int N_Eigen;		/*!< Number of eigenvectors to print out from each side of the spectrum (pos and neg) */
+    int flag_printn;		/*!< True => print fn, bn, Mn for various sets of eigenvectors */
+    int DM;			/*!< spacing for grouping eigenvectors from the top */
+    int DL;			/*!< spacing for grouping eigenvectors from the bottom */
+    int flag_Gbar;		/*!< True => calc the eigenspectrum of the Gbar matrix (i.e., take out two body terms) */
+    int flag_norm;		/*!< True => normalize the nb parts of the matrix by r^2 before calculating the eigenspectrum */
 } tW_Eigen;
 
 typedef struct {		/* JFR - 04.06.12 */
-    int flag_SVD;		/* True => use the option below */
-    double rcond;		/* Throw away eigenvalues under this number.  -1=> machine precision, FLOAT_EPS=> 1e-6. */
-    int flag_printSV;		/* Explicitly calculate and print out singular values */
-    int flag_printevecs;	/* If flag_printSV == TRUE, then TRUE => Print out evecs also */
-    int flag_solve;		/* If flag_solve == TRUE, then use SVD algorithm to solve the equations */
+    int flag_SVD;		/*!< True => use the option below */
+    double rcond;		/*!< Throw away eigenvalues under this number.  -1=> machine precision, FLOAT_EPS=> 1e-6. */
+    int flag_printSV;		/*!< Explicitly calculate and print out singular values */
+    int flag_printevecs;	/*!< If flag_printSV == TRUE, then TRUE => Print out evecs also */
+    int flag_solve;		/*!< If flag_solve == TRUE, then use SVD algorithm to solve the equations */
 } tW_SVD;
 
 typedef struct {		/* JFR - 04.06.12 */
-    int flag_TPR;		/* True => replace default tpr files */
-    int N_TPR;			/* Number of tpr files, this should be the same as the number of trr files in inp.txt */
-    tW_word *TPR_files;		/* name of each tpr file */
+    int flag_TPR;		/*!< True => replace default tpr files */
+    int N_TPR;			/*!< Number of tpr files, this should be the same as the number of trr files in inp.txt */
+    tW_word *TPR_files;		/*!< name of each tpr file */
 } tW_TPR;
 
 typedef struct {		/* JFR - 06.27.12 */
-    int flag_TPR_excl;		/* True => use alternative TPR file for exclusions */
-    tW_word TPR_excl;		/* name of alternative TPR file */
+    int flag_TPR_excl;		/*!< True => use alternative TPR file for exclusions */
+    tW_word TPR_excl;		/*!< name of alternative TPR file */
 } tW_TPR_EXCL;
 
 typedef struct {		/* JFR - 04.06.12 */
-    int flag_MT;		/* True => use the MT options */
-    int flag_print;		/* True => print the metric tensor related files */
-    int flag_norm;		/* True => normalize the metric tensor by r^2 for nonbonded interactions */
-    int flag_Mcnt;		/* True => calculate the unweighted version of the matrix, Mcnt */
+    int flag_MT;		/*!< True => use the MT options */
+    int flag_print;		/*!< True => print the metric tensor related files */
+    int flag_norm;		/*!< True => normalize the metric tensor by r^2 for nonbonded interactions */
+    int flag_Mcnt;		/*!< True => calculate the unweighted version of the matrix, Mcnt */
 } tW_MT;
 
 typedef struct {		/* JFR - 04.06.12 */
-    int flag_MFD;		/* True => calculate the decomposition of b from each interaction in the system */
+    int flag_MFD;		/*!< True => calculate the decomposition of b from each interaction in the system */
 } tW_MFD;
 
 typedef struct {		/* JFR - 04.06.12 */
-    int flag_CalcMODE;		/* True => specify the calculation mode */
-    int CalcMODE;		/* FULL(0) => do entire calculation, FIRST_HALF(1) => do the traj loop, calc correlation functions, print a save state */
+    int flag_CalcMODE;		/*!< True => specify the calculation mode */
+    int CalcMODE;		/*!< FULL(0) => do entire calculation, FIRST_HALF(1) => do the traj loop, calc correlation functions, print a save state */
     /*  SECOND_HALF(2) => read in save state, do the matrix inversion */
 } tW_CalcMODE;
 
 typedef struct {		/* JFR - 04.06.12 */
-    int flag_PC;		/* True => specify the preconditioning for LU decomposition (and SVD if applicable) */
-    tW_word RPC;		/* no, dimless, colnorm, MTvar, gcnt */
-    int flag_normb;		/* True => rescale so that the norm of b is 1 */
-    tW_word LPC;		/* no, dimless, rowmax, bvar, gcnt */
-    int flag_normphi;		/* True => rescale so that the norm of phi is 1 */
+    int flag_PC;		/*!< True => specify the preconditioning for LU decomposition (and SVD if applicable) */
+    tW_word RPC;		/*!< no, dimless, colnorm, MTvar, gcnt */
+    int flag_normb;		/*!< True => rescale so that the norm of b is 1 */
+    tW_word LPC;		/*!< no, dimless, rowmax, bvar, gcnt */
+    int flag_normphi;		/*!< True => rescale so that the norm of phi is 1 */
 } tW_PC;
 
 typedef struct {		/* JFR - 04.06.12 */
-    int flag_MEM;		/* True => Use the user memory options */
-    int flag_LOWMEM;		/* True => run the calculation in low memory mode */
-    tW_word info;		/* info = "forces" or "structures", which will be the only one used if flag_LOWMEM == TRUE */
-    int flag_mult_top;		/* True => solve the problem for each topolgy separately */
+    int flag_MEM;		/*!< True => Use the user memory options */
+    int flag_LOWMEM;		/*!< True => run the calculation in low memory mode */
+    tW_word info;		/*!< info = "forces" or "structures", which will be the only one used if flag_LOWMEM == TRUE */
+    int flag_mult_top;		/*!< True => solve the problem for each topolgy separately */
 } tW_MEM;
 
 typedef struct {		/* JFR - 04.16.12 */
-    int flag_SOLN;		/* True => specify the solution methods for the matrix inversion */
-    tW_word SOLN_METH;		/* LU, UU, Cholesky, SVD */
+    int flag_SOLN;		/*!< True => specify the solution methods for the matrix inversion */
+    tW_word SOLN_METH;		/*!< LU, UU, Cholesky, SVD */
 } tW_SOLN;
 
 typedef struct {		/* NJD - 03.10.15 */
-    int flag_FRAMEWEIGHT;		/* True => Specify the ensemble of the input trr file */
-    tW_word FRAMEWEIGHT;		/* NONE, NPT */
+    int flag_FRAMEWEIGHT;		/*!< True => Specify the ensemble of the input trr file */
+    tW_word FRAMEWEIGHT;		/*!< NONE, NPT */
 } tW_FRAMEWEIGHT;
 
 typedef struct {		/* JFR - 04.16.12 */
-    int flag_ERR;		/* True => calculate errors associated with the matrix inversion */
+    int flag_ERR;		/*!< True => calculate errors associated with the matrix inversion */
     char FACT;
 } tW_ERR;
 
 typedef struct {		/* JFR - 07.16.12 */
-    int flag_REF;		/* True => use ref options specified in variable below */
-    int flag_calcbref;		/* True => skip the triple loop, just calculate and print out bref */
-    int flag_readbref;		/* True => use bref supplied in the file bref.dat (Note that [Reference_Potential] need not be specified) */
-    int flag_splitfiles;	/* True => The MPI processes will be split between files instead of frames (np should divide n_files) */
-    int flag_reftrr;		/* True => read in a trr file with the reference forces */
+    int flag_REF;		/*!< True => use ref options specified in variable below */
+    int flag_calcbref;		/*!< True => skip the triple loop, just calculate and print out bref */
+    int flag_readbref;		/*!< True => use bref supplied in the file bref.dat (Note that [Reference_Potential] need not be specified) */
+    int flag_splitfiles;	/*!< True => The MPI processes will be split between files instead of frames (np should divide n_files) */
+    int flag_reftrr;		/*!< True => read in a trr file with the reference forces */
     int N_fnm;
-    tW_word *reftrr_fnm;	/* reference force filename */
+    tW_word *reftrr_fnm;	/*!< reference force filename */
 } tW_REF;
 
 typedef struct {		/* JFR - 01.29.13 */
-    int flag_TRIM;		/* True => trim the metric tensor below FE instead of the defult FLOAT_EPS */
+    int flag_TRIM;		/*!< True => trim the metric tensor below FE instead of the defult FLOAT_EPS */
     double FE;
 } tW_TRIM;
 
 typedef struct {		/* JFR - 01.29.13 */
-    int flag_CHISQD;		/* True => read in a force file to use with the Chi2 calculation */
-    tW_word force_fnm;		/* force filename */
+    int flag_CHISQD;		/*!< True => read in a force file to use with the Chi2 calculation */
+    tW_word force_fnm;		/*!< force filename */
 } tW_CHISQD;
 
 typedef struct {		/* JFR - 12.03.13 */
-    int flag_REG;		/* True => Use Bayesian Inference to regularize the calculation */
-    tW_word type;		/* type of REG (BAYES or UNCERT for now) */
-    int Nmax;			/* Maximum number of iterations to optimize the regularization parameters (BAYES) */
-    double tau_alpha;		/* Tolerence for convergence of the regularization matrix parameters (BAYES) */
-    double tau_beta;		/* Tolerence for convergence of the precision parameter (BAYES or UNCERT) */
-    int Nframes;		/* total number of data frames (BAYES) */
+    int flag_REG;		/*!< True => Use Bayesian Inference to regularize the calculation */
+    tW_word type;		/*!< type of REG (BAYES or UNCERT for now) */
+    int Nmax;			/*!< Maximum number of iterations to optimize the regularization parameters (BAYES) */
+    double tau_alpha;		/*!< Tolerence for convergence of the regularization matrix parameters (BAYES) */
+    double tau_beta;		/*!< Tolerence for convergence of the precision parameter (BAYES or UNCERT) */
+    int Nframes;		/*!< total number of data frames (BAYES) */
 } tW_REG;
 
 typedef struct {		/* JFR - 01.31.13 */
-    int flag_RESCALE;		/* True => Use the force rescaling right preconditioning scheme */
-    int Nmax;			/* Maximum number of iterations to optimize scaling */
-    double tau_phi;		/* Tolerence for convergence of the scaling parameter */
+    int flag_RESCALE;		/*!< True => Use the force rescaling right preconditioning scheme */
+    int Nmax;			/*!< Maximum number of iterations to optimize scaling */
+    double tau_phi;		/*!< Tolerence for convergence of the scaling parameter */
 } tW_RESCALE;
 
 typedef struct {		/* JFR - 01.31.13 */
-    int flag_CONSTRAIN;		/* True => Constrain the dihedral force coefficients to sum to zero */
-    int Nmax;			/* Maximum number of iterations to optimize contraint scaling parameter, lambda */
-    double tau_dih;		/* Tolerence for convergence of the constraint scaling parameter, lambda */
-    double lambda;		/* initial constraint scaling parameter */
-    double dlambda;		/*  amount to increase scaling parameter by after each step */
+    int flag_CONSTRAIN;		/*!< True => Constrain the dihedral force coefficients to sum to zero */
+    int Nmax;			/*!< Maximum number of iterations to optimize contraint scaling parameter, lambda */
+    double tau_dih;		/*!< Tolerence for convergence of the constraint scaling parameter, lambda */
+    double lambda;		/*!< initial constraint scaling parameter */
+    double dlambda;		/*!< amount to increase scaling parameter by after each step */
 } tW_CONSTRAIN;
 
 typedef struct {		/* JFR - 12.03.13 */
-    int flag_ITER;		/* True => Apply options for iter-gYBG procedure */
-    int flag_AAM2;		/* Use the AA 2-body contributions for the bond and angle interactions */
-    tW_word AAM2_fnm;		/* AAM2 filename */
-    int flag_bsolnerr;		/* TRUE => calculate the difference in the projected forces from the current and previous iterations */
+    int flag_ITER;		/*!< True => Apply options for iter-gYBG procedure */
+    int flag_AAM2;		/*!< Use the AA 2-body contributions for the bond and angle interactions */
+    tW_word AAM2_fnm;		/*!< AAM2 filename */
+    int flag_bsolnerr;		/*!< TRUE => calculate the difference in the projected forces from the current and previous iterations */
     /*         using the current metric tensor                                                           */
 } tW_ITER;
 
 typedef struct {
-    int N_Site_Types;		// no. of site types
-    tW_word *Site_Types;	// list of names for site types
+    int N_Site_Types;		/*!< no. of site types*/
+    tW_word *Site_Types;	/*!< list of names for site types*/
 
-    tW_word **Inter_Map;	// list of lists of site names involved in pair interactions
-    int **Inter_iMap;		// list of lists of indices for the above named sites
-    int *Inter_Map_Len;		// number of pair interaction partners for each site type
+    tW_word **Inter_Map;	/*!< list of lists of site names involved in pair interactions // (N_Site_Types long) e.g. Inter_Map[0] is the list of site types involved with site_type[0] in a pair interaction*/
+    int **Inter_iMap;		/*!< list of lists of indices for the above named sites // Inter_iMap[0] is the list of interaction indices site_type0 takes part in [the indices belong to the Inter2_Type_List]*/
+    int *Inter_Map_Len;		/*!< number of pair interaction partners for each site type // (N_Site_Types long) e.g. Inter_Map_Len[0] is the number of words listed in Inter_Map[0] (no. types type_0 intrxs with]*/
 
-    int N_Inter_Types;		/* Total number of interaction types. */
-    tW_Inter_Types *Inter_Types;	/* Array of interaction types. */
-    int N_Inter2_Types;		// no. of pair interaction types
-    tW_type_inter2 *Inter2_Type_List;	// list of types of pair inter.
-    int N_Bond_Int_Types;	// no. of bond interaction types
-    tW_Bonded_Inter *Bonded_Inter_Types;	// array of bonded interaction types
-    int N_coeff;		// no. of data_pts in g2, phi
-    int N_pack;			// JFR - added 04.11.12: This is the number of elements in the matrix in packed form
+    int N_Inter_Types;		/*!< Total number of interaction types. */
+    tW_Inter_Types *Inter_Types;	/*!< Array of interaction types. */
+
+    int N_Inter2_Types;		/*!< no. of pair interaction types*/
+    tW_type_inter2 *Inter2_Type_List;	/*!< list of types of pair inter.*/
+
+    /* MRD 06.17.2020 When adding any forces that have a pairwise decomp, add another counter here */
+    int N_Inter2_Types_pair;
+    int N_Inter2_Types_LD;
+
+    int bGradient; /*!< Did user ask for SG coeffs? 0 -no 1-yes*/
+
+    int n_atomtypes;
+    tW_word *LD_type_names; /*!< Contains the name of the type associated with CG_site->LD_type_idx*/
+    int n_particles;
+
+    int N_Inter_Ext_types;
+    tW_type_inter_external *Inter_Ext_Type_List;
+
+    int N_Bond_Int_Types;	/*!< no. of bond interaction types*/
+    tW_Bonded_Inter *Bonded_Inter_Types;	/*!< array of bonded interaction types*/
+    int N_coeff;		/*!< no. of data_pts in g2, phi*/
+    int N_pack;			/*!< JFR - added 04.11.12: This is the number of elements in the matrix in packed form*/
     double Temperature;
-    int nrexcl;			// Number of exclusion for FF; not needed for gmx loop
-    double *x;			// grid of order parameters
-    double *b;			// deriv. of pmf
+    int nrexcl;			/*!< Number of exclusion for FF; not needed for gmx loop*/
+    double *x;			/*!< grid of order parameters*/
+    double *b;			/*!< deriv. of pmf*/
     double *b_ref;
     double *b_forces;
     double *b_struct;
-    double *g;			// rdf
+    double *g;			/*!< rdf*/
     double *g_cnt;
-    double *L;			// laplacian
-    double *phi;		// ff coefficients
+    double *L;			/*!< laplacian*/
+    double *phi;		/*!< ff coefficients*/
     double *phi_forces;
     double *phi_struct;
 
     /* MRD 02.14.2019 Eliminating the triple loop */
-    bool SKIP_TRIPLE_LOOP;
+//    bool SKIP_TRIPLE_LOOP;
+    bool USE_OLD_ALGORITHM;
     dvec *linear_half_matrix;
     dvec **half_matrix; 
     bitMask *bm_half_mat; 
     bool M_M2_proc;
 
     // JFR - added 04.11.12: put the matrix in packed form
-    double *M;			// correlation kernel
-    double *M2;			// 2-body contribution to M
-    double *M_cnt;		// unweighted distributions
+    double *M;			/*!< correlation kernel*/
+    double *M2;			/*!< 2-body contribution to M*/
+    double *M_cnt;		/*!< unweighted distributions*/
     //
-    double *d2b;		// JFR - added 01.31.12: variance of b_forces for preconditioning
-    double *d2M;		// JFR - added 01.31.12: variance of M for preconditioning
-    double *rescale;		// JFR - added 01.31.12: rescaling factors for preconditioning (currently with gcnt)
+    double *d2b;		/*!< JFR - added 01.31.12: variance of b_forces for preconditioning*/
+    double *d2M;		/*!< JFR - added 01.31.12: variance of M for preconditioning*/
+    double *rescale;		/*!< JFR - added 01.31.12: rescaling factors for preconditioning (currently with gcnt)*/
     //
     /* NJD - add the extra G_wt, b_wt, etc. here */
-    double *b_wt;		// accumulation of the frame-weighted b's
-    double *M_wt;		// accumulation of the frame-weighted M's
-    double *M2_wt;		// accumulation of the frame-weighted 2-body M's
-    double wt_norm;             // the normalization for the frame-weighting
+    double *b_wt;		/*!< accumulation of the frame-weighted b's*/
+    double *M_wt;		/*!< accumulation of the frame-weighted M's*/
+    double *M2_wt;		/*!< accumulation of the frame-weighted 2-body M's*/
+    double wt_norm;             /*!< the normalization for the frame-weighting*/
     //
     int flag_ref_potential;
-    tW_PT PT_var;		// JFR - added 08.10.11 for solving the matrix equation using matrix perturbation theory
-    tW_Eigen Eigen_var;		// JFR - added 08.11.11 for calculating eigenspectrum of the G matrix
-    tW_SVD SVD_var;		// JFR - added 04.06.12 for solving the matric eqn with SVD and calculating condition numbers
-    tW_TPR TPR_var;		// JFR - added 04.06.12 for over-writing default tpr filenames
-    tW_TPR_EXCL TPR_EXCL_var;	// JFR - added 06.27.12 for using alternative TPR file for exclusions
-    tW_MT MT_var;		// JFR - added 04.06.12 for options for printing and normalizing the metric tensor
-    tW_MFD MFD_var;		// JFR - added 04.06.12 for calculating the mean force decomposition
-    tW_CalcMODE CalcMODE_var;	// JFR - added 04.06.12 for splitting the FF calculation into two parts (for efficiency purposes) 
-    tW_PC PC_var;		// JFR - added 04.06.12 for specifying a particular preconditioning for the matrix inversion
-    tW_MEM MEM_var;		// JFR - added 04.13.12 for memory options
-    tW_SOLN SOLN_var;		// JFR - added 04.16.12 for solution method options
-    tW_FRAMEWEIGHT FRAMEWEIGHT_var;	// NJD - added 03.10.15 for ensemble selection options
-    tW_ERR ERR_var;		// JFR - added 04.16.12 for error options
-    double Chi2;		// JFR - added 06.27.12 calculate and print out Chi2
-    tW_REF REF_var;		// JFR - added 07.16.12 options for precomputing and reading in bref
-    tW_TRIM TRIM_var;		// JFR - added 01.29.13 options for trimming out basis vectors
-    tW_CHISQD CHISQD_var;	// JFR - added 01.29.13 options for Chi2 calculation
-    tW_REG REG_var;		// JFR - added 12.03.13 options for Regularization
-    tW_RESCALE RESCALE_var;	// JFR - added 01.31.13 option for force rescale preconditioning
-    tW_CONSTRAIN CONSTRAIN_var;	// JFR - added 01.31.13 option for constraining dihedrals
-    tW_ITER ITER_var;		// JFR - added 12.03.13 options for the iter-gYBG procedure
+    tW_PT PT_var;		/*!< JFR - added 08.10.11 for solving the matrix equation using matrix perturbation theory*/
+    tW_Eigen Eigen_var;		/*!< JFR - added 08.11.11 for calculating eigenspectrum of the G matrix*/
+    tW_SVD SVD_var;		/*!< JFR - added 04.06.12 for solving the matric eqn with SVD and calculating condition numbers*/
+    tW_TPR TPR_var;		/*!< JFR - added 04.06.12 for over-writing default tpr filenames*/
+    tW_TPR_EXCL TPR_EXCL_var;	/*!< JFR - added 06.27.12 for using alternative TPR file for exclusions*/
+    tW_MT MT_var;		/*!< JFR - added 04.06.12 for options for printing and normalizing the metric tensor*/
+    tW_MFD MFD_var;		/*!< JFR - added 04.06.12 for calculating the mean force decomposition*/
+    tW_CalcMODE CalcMODE_var;	/*!< JFR - added 04.06.12 for splitting the FF calculation into two parts (for efficiency purposes) */
+    tW_PC PC_var;		/*!< JFR - added 04.06.12 for specifying a particular preconditioning for the matrix inversion*/
+    tW_MEM MEM_var;		/*!< JFR - added 04.13.12 for memory options*/
+    tW_SOLN SOLN_var;		/*!< JFR - added 04.16.12 for solution method options*/
+    tW_FRAMEWEIGHT FRAMEWEIGHT_var;	/*!< NJD - added 03.10.15 for ensemble selection options*/
+    tW_ERR ERR_var;		/*!< JFR - added 04.16.12 for error options*/
+    double Chi2;		/*!< JFR - added 06.27.12 calculate and print out Chi2*/
+    tW_REF REF_var;		/*!< JFR - added 07.16.12 options for precomputing and reading in bref*/
+    tW_TRIM TRIM_var;		/*!< JFR - added 01.29.13 options for trimming out basis vectors*/
+    tW_CHISQD CHISQD_var;	/*!< JFR - added 01.29.13 options for Chi2 calculation*/
+    tW_REG REG_var;		/*!< JFR - added 12.03.13 options for Regularization*/
+    tW_RESCALE RESCALE_var;	/*!< JFR - added 01.31.13 option for force rescale preconditioning*/
+    tW_CONSTRAIN CONSTRAIN_var;	/*!< JFR - added 01.31.13 option for constraining dihedrals*/
+    tW_ITER ITER_var;		/*!< JFR - added 12.03.13 options for the iter-gYBG procedure*/
 } tW_system;
 
 typedef struct {
-    tW_word name;		/* Name from par.txt and atomtype in *.tpr. */
-    int i_type;			/* Index to find site in tW_system.Site_Types[]. */
-    int i_res;			/* Residue number read from *.tpr file. */
-    int nr_excl;		/* Number of exlusions. */
-    int *excl_list;		/* List of exlusions. */
-    int nr_bonds;		/* Number of bond interactions. */
-    int nr_bond_coeffs;		/* Number of coeffs. to determine for bond interactions. *//* NEEDED? */
-    int *bond_type;		/* List of indices to tW_system.Bonded_Inter_Types[]. */
-    int **bond_site;		/* List of pointers to tW_system.Bonded_Inter_Types[tW_CG_site.bond_type].Inter_List[]. */
-    dvec r;			// coordinates for site
-    dvec f;			// force on site
-    dvec ref_f;			// forces from ref. pot.
+    tW_word name;		/*!< Name from par.txt and atomtype in *.tpr. */
+    int i_type;			/*!< Index to find site in tW_system.Site_Types[]. */
+    int i_res;			/*!< Residue number read from *.tpr file. */
+    int nr_excl;		/*!< Number of exlusions. */
+    int *excl_list;		/*!< List of exlusions. */
+    int nr_bonds;		/*!< Number of bond interactions. */ // Number interaction instances the site is involved in
+    int nr_bond_coeffs;		/*!< Number of coeffs. to determine for bond interactions. *//* NEEDED? */
+    int *bond_type;		/*!< List of indices to tW_system.Bonded_Inter_Types[]. */
+    int **bond_site;		/*!< List of pointers to tW_system.Bonded_Inter_Types[tW_CG_site.bond_type].Inter_List[]. */ // List of involved atom indice lists for each bond interaction instance
+    dvec r;			/*!< coordinates for site*/
+    dvec f;			/*!< force on site*/
+    dvec ref_f;			/*!< forces from ref. pot.*/
+
+    /* MRD 06.17.2020 */
+    int LD_type_idx;
+    double *LDs;
+    dvec *LDGrads;
 } tW_CG_site;
 
 
 typedef struct {
-    FILE *fp_par;		/* ptr to parameter file                    */
-    FILE *fp_log;		/* ptr to global log file                   */
-    int N_struct_file;		/* no. of files with lists of structures    */
-    tW_word *struct_file;	/* names of files listing structure files   */
-    int N_struct;		/* no. of structure files                   */
-    tW_word *structures;	/* names of structure files                 */
-    double *p_struct;		/* p_gamma for topology gamma               */
-    tW_word mode;		/* designates input and loop.               */
+    FILE *fp_par;		/*!< ptr to parameter file                    */
+    FILE *fp_log;		/*!< ptr to global log file                   */
+    int N_struct_file;		/*!< no. of files with lists of structures    */
+    tW_word *struct_file;	/*!< names of files listing structure files   */
+    int N_struct;		/*!< no. of structure files                   */
+    tW_word *structures;	/*!< names of structure files                 */
+    double *p_struct;		/*!< p_gamma for topology gamma               */
+    tW_word mode;		/*!< designates input and loop.               */
 } tW_files;
 
 

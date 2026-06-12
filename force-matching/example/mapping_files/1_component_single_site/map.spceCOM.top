@@ -1,0 +1,17 @@
+[ moleculetype ]
+; name    n_atoms
+  SOL     3 
+
+[ sitetypes ] 1 
+; name   mapping_type  n_atoms
+  SOL    com           3   
+
+[ atomtypes ]
+; number    type    site    mass/weighting
+    1       OW	    SOL	    15.9994
+    2       HW1	    SOL     1.008
+    3       HW2     SOL     1.008
+
+[ molecules ]
+; name number
+SOL 5000

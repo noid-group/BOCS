@@ -1,0 +1,7 @@
+<map id="check_angles" name="check_angles">
+<area shape="rect" id="Node000001" title="check_angles():" alt="" coords="5,5,107,32"/>
+<area shape="rect" id="Node000002" href="$cgff__fn_8c.html#a726e6ece0355e35c40a956bd68a66251" title="determine_angle_type():" alt="" coords="155,5,303,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,16,139,16,139,21,107,21"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a5a715a0635053d2135ccef36af1599f7" title="check_word_list(): Checks to see if the n_words words in list1[] occur in list_2[] in any order." alt="" coords="351,5,466,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="303,16,335,16,335,21,303,21"/>
+</map>

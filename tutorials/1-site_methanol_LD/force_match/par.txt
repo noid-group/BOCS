@@ -1,0 +1,34 @@
+[Mode] GROMACS
+
+[Temperature]  270
+
+[Structures]    1
+inp.txt
+[End Structures]
+
+[Site_Types]    1
+MEO
+[End Site_Types]
+
+[Inter_Types]  2
+!inter_name   inter_type        basis       dr         R_min      R_max    spline_order    n_smooth
+ Pair_MEO_MEO  Pair_Interaction  Bspline     0.01       0.000      1.400     4               0
+ LD_MEO_MEO   Local_Density     Bspline     0.1          LDLO      LDHI       4               0 lucy 0.0 0.52685
+[End Inter_Types]
+
+[Pair_Interaction] 2
+! inter_name   type1  type2
+ Pair_MEO_MEO MEO MEO
+ LD_MEO_MEO MEO MEO
+[End Pair_Interaction]
+
+[SVD]
+0.00000001
+YES
+NO
+YES
+[End SVD]
+
+[ TPR ] 1
+/path/to/cg_methanol.btp
+[ End TPR]

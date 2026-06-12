@@ -1,0 +1,7 @@
+<map id="get_ref_potential_info" name="get_ref_potential_info">
+<area shape="rect" id="Node000001" title="get_ref_potential_info(): Stores information for a interaction in the reference potential." alt="" coords="5,5,151,32"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#aace4788026cd7df4a15ab266550d2096" title="get_ref_potential_ptr(): Stores information read from ref." alt="" coords="199,5,338,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,16,183,16,183,21,151,21"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#ac9003761e07e1a6a43371290e32464e8" title="match_word(): Searches through N_words words in word_list to see if the string stored in word is incl..." alt="" coords="386,5,478,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="338,16,370,16,370,21,338,21"/>
+</map>

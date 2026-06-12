@@ -1,0 +1,161 @@
+.TH "safe_mem.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+safe_mem.h \- Functions related to safe memory management\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdlib\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBecalloc\fP(ptr,  size)   	\fBecalloc_impl\fP((ptr), (size), __FILE__, __LINE__, __func__)"
+.br
+.ti -1c
+.RI "#define \fBemalloc\fP(size)   	\fBemalloc_impl\fP((size), __FILE__, __LINE__, __func__)"
+.br
+.ti -1c
+.RI "#define \fBerealloc\fP(ptr,  size)           \fBerealloc_impl\fP((ptr), (size), __FILE__, __LINE__, __func__)"
+.br
+.ti -1c
+.RI "#define \fBefree\fP(ptr)   	\fBefree_impl\fP((void**)&(ptr), __FILE__, __LINE__, __func__)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void * \fBecalloc_impl\fP (size_t number, size_t size, const char *file, int line, const char *func)"
+.br
+.RI "This function replaces calloc in code, and causes the program to exit when memory cannot be allocated rather than permit undefined behavior\&. "
+.ti -1c
+.RI "void * \fBemalloc_impl\fP (size_t size, const char *file, int line, const char *func)"
+.br
+.ti -1c
+.RI "void * \fBerealloc_impl\fP (void *old_ptr, size_t size, const char *file, int line, const char *func)"
+.br
+.ti -1c
+.RI "void \fBefree_impl\fP (void **ptr, const char *file, int line, const char *func)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Functions related to safe memory management\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Nicholas Dunn, Maria Lesniewski 
+.RE
+.PP
+
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ecalloc(ptr, size)   	\fBecalloc_impl\fP((ptr), (size), __FILE__, __LINE__, __func__)"
+
+.PP
+Referenced by \fBalloc_index_aig()\fP, \fBalloc_index_ng()\fP, \fBallocate_angle_memory()\fP, \fBallocate_memory_bond_type_indices()\fP, \fBcalc_b_struct()\fP, \fBcalc_grids3()\fP, \fBcopy_arrays()\fP, \fBcopy_Bonded_Inter_Types()\fP, \fBcopy_idx_file()\fP, \fBcopy_site_types()\fP, \fBcopy_TPR()\fP, \fBdfill_14nb_from_gmx_IMNB_headers()\fP, \fBdfill_angles_from_gmx_angletype_headers()\fP, \fBdfill_bigdihedrals_from_gmx_bigdihedraltype_headers()\fP, \fBdfill_bonds_from_gmx_bondtype_headers()\fP, \fBdfill_dihedrals_from_gmx_dihedraltype_headers()\fP, \fBdget_top_ff_info()\fP, \fBdo_bins_allocate_mem()\fP, \fBdparse_atom_per_molecule_info()\fP, \fBdparse_atomic_exclusions_per_molecule()\fP, \fBdparse_charge_groups_per_molecule()\fP, \fBdparse_residue_per_molecule_info()\fP, \fBdproc_other_headers()\fP, \fBelim_zero_cols()\fP, \fBext_potl_solve_lin_eqns()\fP, \fBgenerate_generic_index_file()\fP, \fBget_angle_list()\fP, \fBget_angle_potential()\fP, \fBget_answer()\fP, \fBget_b_struct_and_b_forces()\fP, \fBget_bond_list()\fP, \fBget_bond_potential()\fP, \fBget_CG_map()\fP, \fBget_dih_list()\fP, \fBget_dihedral_potential()\fP, \fBget_directive()\fP, \fBget_excl_list()\fP, \fBget_nb_pair_inter_ptr_n()\fP, \fBget_nb_potential()\fP, \fBget_pair_list()\fP, \fBget_power_basis_param()\fP, \fBget_quoted_words()\fP, \fBget_REF()\fP, \fBget_results()\fP, \fBget_site_info()\fP, \fBget_top()\fP, \fBget_TPR()\fP, \fBget_word_count_delim()\fP, \fBget_words_delim()\fP, \fBinit_arg()\fP, \fBinit_arg_def()\fP, \fBinit_indicator_function()\fP, \fBinit_LD_info()\fP, \fBinit_tW_gmx_cgmap_input()\fP, \fBinit_tW_gmx_topology()\fP, \fBmain()\fP, \fBNEW_get_CG_map()\fP, \fBnew_read_next_bocs_frame()\fP, \fBpop_coeffs_dpd()\fP, \fBpop_coeffs_lucy()\fP, \fBpop_coeffs_shell()\fP, \fBpop_coeffs_smooth()\fP, \fBpop_coeffs_sphere()\fP, \fBpop_contents()\fP, \fBread_bocs_frame_dir_title()\fP, \fBread_bocs_top()\fP, \fBread_ebonds()\fP, \fBread_edihedrals()\fP, \fBread_eenergy()\fP, \fBread_epairs()\fP, \fBread_esites()\fP, \fBread_first_dump_frame()\fP, \fBread_first_gro_frame()\fP, \fBread_first_lammps_frame()\fP, \fBread_index_file()\fP, \fBread_next_bocs_frame()\fP, \fBread_next_lammps_frame()\fP, \fBread_ref_potential()\fP, \fBread_save_state()\fP, \fBread_tpr_dump()\fP, \fBremove_zero_rows_mem()\fP, \fBresize_arrays_trim_Mb()\fP, \fBsave_answer()\fP, \fBset_natoms()\fP, \fBsetup_lists()\fP, \fBsetup_tables()\fP, \fBsetup_xdr()\fP, \fBsolv_lin_eqns()\fP, \fBsolv_lin_eqns_Bayesian()\fP, \fBsolv_lin_eqns_Bayesian_saveparams()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, \fBsolv_lin_eqns_constrain_tabdih_2()\fP, \fBsolv_lin_eqns_constrain_tabdih_2_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP, \fBsolv_lin_eqns_PT()\fP, \fBsolv_lin_eqns_rescalephi()\fP, \fBsolv_lin_eqns_symm()\fP, \fBsolveSVD()\fP, \fBSVD()\fP, and \fBwrite_lammps_data()\fP\&.
+.SS "#define efree(ptr)   	\fBefree_impl\fP((void**)&(ptr), __FILE__, __LINE__, __func__)"
+
+.PP
+Referenced by \fBcalc_grids3()\fP, \fBcalculate_local_densities()\fP, \fBdfill_14nb_from_gmx_IMNB_headers()\fP, \fBdfill_angles_from_gmx_angletype_headers()\fP, \fBdfill_bigdihedrals_from_gmx_bigdihedraltype_headers()\fP, \fBdfill_bonds_from_gmx_bondtype_headers()\fP, \fBdfill_dihedrals_from_gmx_dihedraltype_headers()\fP, \fBdproc_other_headers()\fP, \fBgenerate_generic_index_file()\fP, \fBget_answer()\fP, \fBget_nb_pair_inter_ptr_n()\fP, \fBget_results()\fP, \fBget_site_info()\fP, \fBmain()\fP, \fBread_bocs_top()\fP, and \fBsave_answer()\fP\&.
+.SS "#define emalloc(size)   	\fBemalloc_impl\fP((size), __FILE__, __LINE__, __func__)"
+
+.PP
+Referenced by \fBallocate_memory_for_Bond_Inter_List()\fP, \fBallocate_memory_for_sites()\fP, \fBcopy_Bonded_Inter_Types()\fP, \fBcopy_Inter2_Types()\fP, \fBcopy_Inter_Ext_Types()\fP, \fBcopy_Inter_Types()\fP, \fBcopy_REF()\fP, \fBcopy_site_types()\fP, \fBget_Bond_Inter_Types()\fP, \fBget_Inter_Type_List()\fP, \fBget_ref_inter()\fP, \fBget_ref_potential_info()\fP, \fBget_Type_Ext_List()\fP, \fBget_Type_Inter2_List()\fP, \fBget_word_list()\fP, \fBinit_tW_gmx_topology()\fP, \fBinit_tW_gmx_trxframe()\fP, and \fBread_REF_forces()\fP\&.
+.SS "#define erealloc(ptr, size)           \fBerealloc_impl\fP((ptr), (size), __FILE__, __LINE__, __func__)"
+
+.PP
+Referenced by \fBcheck_Bonded_Inter_Types()\fP, \fBcheck_site_types()\fP, \fBcheck_struct_files()\fP, \fBdfill_14nb_from_gmx_IMNB_headers()\fP, \fBdfill_angles_from_gmx_angletype_headers()\fP, \fBdfill_bigdihedrals_from_gmx_bigdihedraltype_headers()\fP, \fBdfill_bonds_from_gmx_bondtype_headers()\fP, \fBdfill_dihedrals_from_gmx_dihedraltype_headers()\fP, \fBget_angle_potential()\fP, \fBget_Bond_Inter_Types()\fP, \fBget_bond_potential()\fP, \fBget_nb_potential()\fP, \fBget_structures()\fP, \fBresize_arrays_trim_Mb()\fP, and \fBsummarize_input_bond_inter()\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void * ecalloc_impl (size_t number, size_t size, const char * file, int line, const char * func)"
+
+.PP
+This function replaces calloc in code, and causes the program to exit when memory cannot be allocated rather than permit undefined behavior\&. This function replaces calloc in code, and causes the program to exit when memory cannot be allocated rather than permit undefined behavior\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fInumber\fP The number of blocks to allocate in memory 
+.br
+\fIsize\fP The size of each block in bytes 
+.br
+\fIfile\fP The filename of the function calling ecalloc 
+.br
+\fIline\fP The line number ecalloc was called 
+.br
+\fIfunc\fP The function calling ecalloc
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Pointer to a block of memory of the requested size, if it can be allocated
+.RE
+.PP
+
+.SS "void efree_impl (void ** ptr, const char * file, int line, const char * func)"
+This function replaces free in code, and checks if a pointer is NULL before trying to free it\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIptr\fP The location of the pointer to be free'd 
+.br
+\fIfile\fP The filename of the function calling efree 
+.br
+\fIline\fP The line number efree was called 
+.br
+\fIfunc\fP The function calling efree
+.RE
+.PP
+
+.SS "void * emalloc_impl (size_t size, const char * file, int line, const char * func)"
+This function replaces malloc in code, and causes the program to exit when memory cannot be allocated rather than permit undefined behavior 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP The size of each block in bytes 
+.br
+\fIfile\fP The filename of the function calling emalloc 
+.br
+\fIline\fP The line number emalloc was called 
+.br
+\fIfunc\fP The function calling emalloc
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Pointer to a block of memory of the requested size, if it can be allocated
+.RE
+.PP
+
+.SS "void * erealloc_impl (void * old_ptr, size_t size, const char * file, int line, const char * func)"
+This function replaces realloc in code, and causes the program to exit with an error when memory cannoy be allocated rather than permit undefined behavior\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIold_ptr\fP The location of the pointer to be reallocated 
+.br
+\fIsize\fP The size of each block in bytes 
+.br
+\fIfile\fP The filename of the function calling erealloc 
+.br
+\fIline\fP The line number erealloc was called 
+.br
+\fIfunc\fP The function calling erealloc
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Pointer to a block of memory of the requested size, if it can be allocated
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

@@ -1,0 +1,20 @@
+<map id="do_ematch_angles" name="do_ematch_angles">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,107,136,133"/>
+<area shape="rect" id="Node000002" href="$ematch__func_8c.html#aa707f49e082da45a28704192792d7593" title=" " alt="" coords="187,5,346,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,104,129,73,182,42,197,35,199,40,185,46,132,78,90,108"/>
+<area shape="rect" id="Node000003" href="$ematch__func_8c.html#a46076930c4634d227626ff1922e083f1" title=" " alt="" coords="184,56,349,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="124,103,196,85,198,90,126,109"/>
+<area shape="rect" id="Node000004" href="$ematch__func_8c.html#a4db64a3eece35afb989bbfe561fe3e14" title=" " alt="" coords="228,107,305,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="136,117,212,117,212,123,136,123"/>
+<area shape="rect" id="Node000008" href="$ematch__func_8c.html#ae8592d473cbb2f16bda7f1f7dac0ddc2" title=" " alt="" coords="203,157,330,200"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="118,131,188,153,187,158,117,136"/>
+<area shape="rect" id="Node000009" href="$ematch__func_8c.html#ad401c3bee7024114ac3edd57918cf5e9" title=" " alt="" coords="203,224,330,267"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="87,132,129,169,185,210,193,214,191,219,182,214,126,174,84,136"/>
+<area shape="rect" id="Node000005" href="$wnoid__math_8c.html#aed00bac3dd87333226ee1d7cb19700af" title="calc_norm(): Returns the norm of an dvec." alt="" coords="397,56,478,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="305,106,382,83,383,88,306,111"/>
+<area shape="rect" id="Node000006" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="526,81,598,108"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="305,114,511,96,511,102,306,119"/>
+<area shape="rect" id="Node000007" href="$wnoid__math_8c.html#a1f483015ac47277c71a1e600b42befd8" title="vect_diff(): Calculates diff = v1 &#45; v2." alt="" coords="402,157,473,184"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="306,129,388,153,387,159,305,134"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="479,75,512,82,511,87,478,80"/>
+</map>

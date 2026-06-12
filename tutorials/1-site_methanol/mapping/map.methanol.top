@@ -1,0 +1,21 @@
+[ moleculetype ]  ! We have to list the following 3 headers each time we have a new molecule we are defining a mapping for
+; name    n_atoms
+  MEO     6 		! This is the name of our molecule we want to map and the number of aa atoms it has
+
+[ sitetypes ] 1     ! This is the number of sites / the list of sites our new CG molecule will have. Each site has contributions from n_atoms 
+; name   mapping_type  n_atoms
+  MEO    com           6    
+
+[ atomtypes ]
+; number    type    site    mass/weighting
+    1       C       MEO     12.011
+    2       H       MEO     1.008
+    3       H       MEO     1.008
+    4       H       MEO     1.008
+    5       O       MEO     15.999
+    6       H       MEO     1.008
+
+[ molecules ] ! Once we define everything, we have this final header for our system
+; name number
+MEO 968
+

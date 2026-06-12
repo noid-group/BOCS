@@ -1,0 +1,3 @@
+[Struct_Files] 1
+../bocs_traj.lmp 1.0
+[End Struct_Files]

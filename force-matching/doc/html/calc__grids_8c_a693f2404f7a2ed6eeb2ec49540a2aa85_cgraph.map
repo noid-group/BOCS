@@ -1,0 +1,31 @@
+<map id="get_b_struct_and_b_forces" name="get_b_struct_and_b_forces">
+<area shape="rect" id="Node000001" title="get_b_struct_and_b_forces(): (1) Allocates memory for sys&#45;&gt;b_forces and sys&#45;&gt;b_struct." alt="" coords="5,276,141,319"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#ad57745737b5b34d79d978168f4a8ef44" title="calc_b_struct(): Calculate b_struct from g and L." alt="" coords="189,183,288,209"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,273,201,216,203,220,111,278"/>
+<area shape="rect" id="Node000011" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="189,360,288,387"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="123,317,195,351,192,355,120,322"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#a249691db7f149668222a7ead356d51e3" title="calc_dg_dz(): Calculates the derivative of g and stores it into sm_dg_dz." alt="" coords="366,157,454,184"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="288,186,351,177,352,182,289,191"/>
+<area shape="rect" id="Node000005" href="$wnoid__math_8c.html#ab494fb3070ff8cfcbb0c0c91f08cefcd" title="calc_running_avg(): Calculates a running average." alt="" coords="558,107,681,133"/>
+<area shape="poly" id="edge6_Node000002_Node000005" title=" " alt="" coords="259,180,293,160,335,143,388,130,443,122,543,116,543,121,444,128,389,135,337,148,296,165,261,185"/>
+<area shape="rect" id="Node000006" href="$wnoid__math_8c.html#a0111272413fc103491b51fef9fa03d49" title="calc_running_avg_periodic(): Calculate running averages for periodic functions." alt="" coords="532,208,707,235"/>
+<area shape="poly" id="edge7_Node000002_Node000006" title=" " alt="" coords="289,197,517,212,517,217,288,202"/>
+<area shape="rect" id="Node000007" href="$calc__grids_8c.html#aef2decc942d057de8534a2473e07106d" title="get_b_harmonic_bond():" alt="" coords="336,259,484,285"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="271,208,337,238,364,250,362,254,335,242,269,212"/>
+<area shape="rect" id="Node000008" href="$calc__grids_8c.html#a46f42fa0d4d3edbf15b01eb719b5e878" title="get_b_power():" alt="" coords="362,309,458,336"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="251,208,286,251,311,274,337,295,350,302,347,307,335,300,307,278,283,254,247,211"/>
+<area shape="rect" id="Node000009" href="$calc__grids_8c.html#abacf3324f7a74b96162c74b0c7e0e417" title="get_b_rb_dihedral():" alt="" coords="348,5,472,32"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="242,181,274,115,301,76,334,42,341,37,344,42,338,46,305,79,279,118,247,183"/>
+<area shape="rect" id="Node000010" href="$calc__grids_8c.html#a5a1b24ff83d7b36ccd6205b4d10783a2" title="get_b_TOY_dihedral():" alt="" coords="340,56,480,83"/>
+<area shape="poly" id="edge11_Node000002_Node000010" title=" " alt="" coords="249,180,285,141,334,99,355,87,358,92,338,104,288,145,253,184"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8c.html#ad10f231e689de1598ee729119a8d9b02" title="calc_centered_diff(): Calculate the centered difference." alt="" coords="556,157,683,184"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="454,168,541,168,541,173,454,173"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="454,158,546,135,547,140,455,163"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="455,179,547,201,546,206,454,184"/>
+<area shape="rect" id="Node000012" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="358,411,462,437"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="287,385,349,403,347,408,286,390"/>
+<area shape="rect" id="Node000014" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="375,360,445,387"/>
+<area shape="poly" id="edge15_Node000011_Node000014" title=" " alt="" coords="288,371,360,371,360,376,288,376"/>
+<area shape="rect" id="Node000013" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="553,411,686,437"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="463,421,538,421,538,427,463,427"/>
+</map>

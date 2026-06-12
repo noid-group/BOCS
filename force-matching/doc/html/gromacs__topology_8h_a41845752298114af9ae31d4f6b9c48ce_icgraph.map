@@ -1,0 +1,12 @@
+<map id="copy_trxframe_info" name="copy_trxframe_info">
+<area shape="rect" id="Node000001" title="copy_trxframe_info(): copies the resolution&#45;independent information from source to dest" alt="" coords="250,56,382,83"/>
+<area shape="rect" id="Node000002" href="$_l_d_d__calc_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="128,5,177,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="255,53,177,29,178,24,257,48"/>
+<area shape="rect" id="Node000003" href="$transf__map_8c.html#af0bdb9d576702f314ce776fccee732eb" title=" " alt="" coords="108,56,196,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,72,197,72,197,67,235,67"/>
+<area shape="rect" id="Node000005" href="$transf__map_8c.html#a1dfc1ec238c80338775c6047823b1874" title=" " alt="" coords="103,107,202,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="257,90,199,109,197,104,255,85"/>
+<area shape="rect" id="Node000004" href="$cgmap_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,81,55,108"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="93,84,56,92,54,87,92,79"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="87,109,54,102,56,97,88,104"/>
+</map>

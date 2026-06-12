@@ -1,0 +1,7 @@
+<map id="get_scalar_f_from_table" name="get_scalar_f_from_table">
+<area shape="rect" id="Node000001" title="get_scalar_f_from_table(): Returns f(x) which were read in from input." alt="" coords="5,31,166,57"/>
+<area shape="rect" id="Node000002" href="$calc__ref__potential_8c.html#ab93a0f08cba524f3e61a1e04bcebe8f5" title="get_linear_interpolation_f(): Returns f(x) by linearly interpolating between grid points on either si..." alt="" coords="214,5,379,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,32,198,28,198,33,166,37"/>
+<area shape="rect" id="Node000003" href="$calc__ref__potential_8c.html#a5e372043274f5537c02fff4c7cce3289" title="get_no_interpolation_f(): Returns f(x) without interpolating between grid points." alt="" coords="222,56,370,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="166,51,207,56,206,61,166,56"/>
+</map>

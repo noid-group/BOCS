@@ -1,0 +1,133 @@
+.TH "safe_mem.c" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+safe_mem.c \- Functions related to safe memory management\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <errno\&.h>\fP
+.br
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include <string\&.h>\fP
+.br
+\fR#include 'safe_mem\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void * \fBecalloc_impl\fP (size_t number, size_t size, const char *file, int line, const char *func)"
+.br
+.RI "This function replaces calloc in code, and causes the program to exit when memory cannot be allocated rather than permit undefined behavior\&. "
+.ti -1c
+.RI "void * \fBemalloc_impl\fP (size_t size, const char *file, int line, const char *func)"
+.br
+.ti -1c
+.RI "void * \fBerealloc_impl\fP (void *old_ptr, size_t size, const char *file, int line, const char *func)"
+.br
+.ti -1c
+.RI "void \fBefree_impl\fP (void **ptr, const char *file, int line, const char *func)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Functions related to safe memory management\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Nicholas Dunn, Maria Lesniewski 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "void * ecalloc_impl (size_t number, size_t size, const char * file, int line, const char * func)"
+
+.PP
+This function replaces calloc in code, and causes the program to exit when memory cannot be allocated rather than permit undefined behavior\&. This function replaces calloc in code, and causes the program to exit when memory cannot be allocated rather than permit undefined behavior\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fInumber\fP The number of blocks to allocate in memory 
+.br
+\fIsize\fP The size of each block in bytes 
+.br
+\fIfile\fP The filename of the function calling ecalloc 
+.br
+\fIline\fP The line number ecalloc was called 
+.br
+\fIfunc\fP The function calling ecalloc
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Pointer to a block of memory of the requested size, if it can be allocated
+.RE
+.PP
+
+.SS "void efree_impl (void ** ptr, const char * file, int line, const char * func)"
+This function replaces free in code, and checks if a pointer is NULL before trying to free it\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIptr\fP The location of the pointer to be free'd 
+.br
+\fIfile\fP The filename of the function calling efree 
+.br
+\fIline\fP The line number efree was called 
+.br
+\fIfunc\fP The function calling efree
+.RE
+.PP
+
+.SS "void * emalloc_impl (size_t size, const char * file, int line, const char * func)"
+This function replaces malloc in code, and causes the program to exit when memory cannot be allocated rather than permit undefined behavior 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP The size of each block in bytes 
+.br
+\fIfile\fP The filename of the function calling emalloc 
+.br
+\fIline\fP The line number emalloc was called 
+.br
+\fIfunc\fP The function calling emalloc
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Pointer to a block of memory of the requested size, if it can be allocated
+.RE
+.PP
+
+.SS "void * erealloc_impl (void * old_ptr, size_t size, const char * file, int line, const char * func)"
+This function replaces realloc in code, and causes the program to exit with an error when memory cannoy be allocated rather than permit undefined behavior\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIold_ptr\fP The location of the pointer to be reallocated 
+.br
+\fIsize\fP The size of each block in bytes 
+.br
+\fIfile\fP The filename of the function calling erealloc 
+.br
+\fIline\fP The line number erealloc was called 
+.br
+\fIfunc\fP The function calling erealloc
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Pointer to a block of memory of the requested size, if it can be allocated
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

@@ -1,0 +1,316 @@
+.TH "cgff_fn.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+cgff_fn.h \- Helper functions for the cgff calculation\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinit_gmx_info\fP (\fBtW_gmx_info\fP *info)"
+.br
+.RI "\fBinit_gmx_info()\fP: Initializes flags to conditions so that b_Forces_1 can be set to TRUE as soon as a frame is found with forces while b_Forces_N can be set to FALSE as soon as a frame is found that does not have forces\&. "
+.ti -1c
+.RI "void \fBreset_gmx_info\fP (\fBtW_gmx_info\fP *info)"
+.br
+.RI "\fBreset_gmx_info()\fP: Reset the flags for a new topology\&. "
+.ti -1c
+.RI "int \fBsetup_CG_struct\fP (\fBtW_system\fP *sys, \fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, \fBtW_Bonded_Inter\fP *Bonded_Inter_Types)"
+.br
+.RI "\fBsetup_CG_struct()\fP: Stores the information in top into sys and CG_struct\&. "
+.ti -1c
+.RI "void \fBget_bonds\fP (\fBtW_system\fP *sys, \fBtW_gmx_topology\fP *top, int n_sites, \fBtW_CG_site\fP *CG_struct, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List)"
+.br
+.RI "\fBget_bonds()\fP: Stores information from top into sys and CG_struct\&. "
+.ti -1c
+.RI "void \fBallocate_memory_bond_type_indices\fP (\fBtW_gmx_topology\fP *top, \fBtW_bond_type_indices\fP *bond_type_indices)"
+.br
+.RI "\fBallocate_memory_bond_type_indices()\fP: Allocate memory to hold indices to \fBtW_system\&.Bonded_Inter_Types\fP[i] for each type of interaction found in the GROMACS topology\&. "
+.ti -1c
+.RI "void \fBclear_bond_lists\fP (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List)"
+.br
+.RI "\fBclear_bond_lists()\fP: Deletes previous bond interaction lists and initializes N_instances to 0 for each interaction\&. "
+.ti -1c
+.RI "void \fBclear_site_bond_info\fP (int n_sites, \fBtW_CG_site\fP CG_struct[])"
+.br
+.RI "\fBclear_site_bond_info()\fP: Free lists from previous topology, and initialize nr_bonds and nr_bond_coeffs\&. "
+.ti -1c
+.RI "void \fBcheck_bond_interactions\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List, \fBtW_bond_type_indices\fP *bond_type_indices)"
+.br
+.RI "\fBcheck_bond_interactions()\fP: Store indices to Bond_Type_List[] for each bond interaction found in the GROMACS topology into the arrays in bond_type_indices\&. "
+.ti -1c
+.RI "void \fBallocate_memory_for_Bond_Inter_List\fP (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List)"
+.br
+.RI "\fBallocate_memory_for_Bond_Inter_List()\fP: "
+.ti -1c
+.RI "void \fBallocate_memory_for_sites\fP (int n_sites, \fBtW_CG_site\fP *CG_struct)"
+.br
+.RI "\fBallocate_memory_for_sites()\fP: "
+.ti -1c
+.RI "void \fBcheck_bonds\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, int *i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List)"
+.br
+.RI "\fBcheck_bonds()\fP: Make sure bonds in topology match those in input file\&. "
+.ti -1c
+.RI "void \fBcheck_angles\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, int *i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List)"
+.br
+.ti -1c
+.RI "void \fBcheck_dihedrals\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, int *i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List)"
+.br
+.RI "\fBcheck_dihedrals()\fP: "
+.ti -1c
+.RI "void \fBcheck_pairs\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, int *i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List)"
+.br
+.RI "\fBcheck_pairs()\fP: "
+.ti -1c
+.RI "int \fBdetermine_bond_type\fP (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List, \fBtW_word\fP *site_list)"
+.br
+.RI "\fBdetermine_bond_type()\fP: "
+.ti -1c
+.RI "int \fBdetermine_angle_type\fP (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List, \fBtW_word\fP *site_list)"
+.br
+.RI "\fBdetermine_angle_type()\fP: "
+.ti -1c
+.RI "int \fBdetermine_dihedral_type\fP (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List, \fBtW_word\fP *site_list)"
+.br
+.RI "\fBdetermine_dihedral_type()\fP: "
+.ti -1c
+.RI "int \fBdetermine_pair_type\fP (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List, \fBtW_word\fP *site_list)"
+.br
+.RI "\fBdetermine_pair_type()\fP: "
+.ti -1c
+.RI "void \fBstore_bond_interactions\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List, \fBtW_bond_type_indices\fP bond_type_indices, int n_sites)"
+.br
+.RI "\fBstore_bond_interactions()\fP: "
+.ti -1c
+.RI "void \fBstore_bond_lists\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, int *i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List, int *site_bond_ctr, int *bond_ctr)"
+.br
+.RI "\fBstore_bond_lists()\fP: "
+.ti -1c
+.RI "void \fBstore_angle_lists\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, int *i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List, int *site_bond_ctr, int *bond_ctr)"
+.br
+.RI "\fBstore_angle_lists()\fP: "
+.ti -1c
+.RI "void \fBstore_dihedral_lists\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, int *i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List, int *site_bond_ctr, int *bond_ctr)"
+.br
+.RI "\fBstore_dihedral_lists()\fP: "
+.ti -1c
+.RI "void \fBstore_pair_lists\fP (\fBtW_gmx_topology\fP *top, \fBtW_CG_site\fP *CG_struct, int *i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP *Bond_Type_List, int *site_bond_ctr, int *bond_ctr)"
+.br
+.RI "\fBstore_pair_lists()\fP: "
+.ti -1c
+.RI "void \fBprint_Bond_Types\fP (FILE *fp, \fBtW_system\fP sys)"
+.br
+.RI "\fBprint_Bond_Types()\fP: "
+.ti -1c
+.RI "void \fBdump_tW_system\fP (char *fnm, \fBtW_system\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBdump_tW_CG_struct\fP (char *fnm, \fBtW_CG_site\fP *sites, int n_sites)"
+.br
+.ti -1c
+.RI "void \fBprint_bond_warnings\fP (\fBtW_CG_site\fP *CG_struct_list, int numatoms)"
+.br
+.RI "print_bond_warnings Warns the user if a site in their system is involved in so many bonded interactions that it might cause an overflow error while filling vectors of dimension vec[MAX_NUM_BOND_COEFF] in the calc_grids functions "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Helper functions for the cgff calculation\&. 
+
+
+.PP
+\fBAuthors\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "void allocate_memory_bond_type_indices (\fBtW_gmx_topology\fP * top, \fBtW_bond_type_indices\fP * bond_type_indices)"
+
+.PP
+\fBallocate_memory_bond_type_indices()\fP: Allocate memory to hold indices to \fBtW_system\&.Bonded_Inter_Types\fP[i] for each type of interaction found in the GROMACS topology\&. 
+.PP
+Referenced by \fBget_bonds()\fP\&.
+.SS "void allocate_memory_for_Bond_Inter_List (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List)"
+
+.PP
+\fBallocate_memory_for_Bond_Inter_List()\fP: 
+.PP
+Referenced by \fBget_bonds()\fP\&.
+.SS "void allocate_memory_for_sites (int n_sites, \fBtW_CG_site\fP * CG_struct)"
+
+.PP
+\fBallocate_memory_for_sites()\fP: 
+.PP
+Referenced by \fBget_bonds()\fP\&.
+.SS "void check_angles (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, int * i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List)"
+
+.SS "void check_bond_interactions (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List, \fBtW_bond_type_indices\fP * bond_type_indices)"
+
+.PP
+\fBcheck_bond_interactions()\fP: Store indices to Bond_Type_List[] for each bond interaction found in the GROMACS topology into the arrays in bond_type_indices\&. Keep track of the number of occurances for each bond interaction type: Bond_Type_List\&.N_instances\&. Keep track of the total number of bond interactions for each CG site: CG_struct[]\&.nr_bonds 
+.PP
+Referenced by \fBget_bonds()\fP\&.
+.SS "void check_bonds (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, int * i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List)"
+
+.PP
+\fBcheck_bonds()\fP: Make sure bonds in topology match those in input file\&. 
+.PP
+Referenced by \fBcheck_bond_interactions()\fP\&.
+.SS "void check_dihedrals (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, int * i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List)"
+
+.PP
+\fBcheck_dihedrals()\fP: 
+.PP
+Referenced by \fBcheck_bond_interactions()\fP\&.
+.SS "void check_pairs (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, int * i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List)"
+
+.PP
+\fBcheck_pairs()\fP: 
+.PP
+Referenced by \fBcheck_bond_interactions()\fP\&.
+.SS "void clear_bond_lists (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List)"
+
+.PP
+\fBclear_bond_lists()\fP: Deletes previous bond interaction lists and initializes N_instances to 0 for each interaction\&. 
+.PP
+Referenced by \fBget_bonds()\fP\&.
+.SS "void clear_site_bond_info (int n_sites, \fBtW_CG_site\fP CG_struct[])"
+
+.PP
+\fBclear_site_bond_info()\fP: Free lists from previous topology, and initialize nr_bonds and nr_bond_coeffs\&. 
+.PP
+Referenced by \fBget_bonds()\fP\&.
+.SS "int determine_angle_type (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List, \fBtW_word\fP * site_list)"
+
+.PP
+\fBdetermine_angle_type()\fP: 
+.PP
+Referenced by \fBcheck_angles()\fP\&.
+.SS "int determine_bond_type (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List, \fBtW_word\fP * site_list)"
+
+.PP
+\fBdetermine_bond_type()\fP: 
+.PP
+Referenced by \fBcheck_bonds()\fP\&.
+.SS "int determine_dihedral_type (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List, \fBtW_word\fP * site_list)"
+
+.PP
+\fBdetermine_dihedral_type()\fP: 
+.PP
+Referenced by \fBcheck_dihedrals()\fP\&.
+.SS "int determine_pair_type (int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List, \fBtW_word\fP * site_list)"
+
+.PP
+\fBdetermine_pair_type()\fP: 
+.PP
+Referenced by \fBcheck_pairs()\fP\&.
+.SS "void dump_tW_CG_struct (char * fnm, \fBtW_CG_site\fP * sites, int n_sites)"
+
+.SS "void dump_tW_system (char * fnm, \fBtW_system\fP * sys)"
+
+.SS "void get_bonds (\fBtW_system\fP * sys, \fBtW_gmx_topology\fP * top, int n_sites, \fBtW_CG_site\fP * CG_struct, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List)"
+
+.PP
+\fBget_bonds()\fP: Stores information from top into sys and CG_struct\&. 
+.PP
+Referenced by \fBsetup_CG_struct()\fP\&.
+.SS "void init_gmx_info (\fBtW_gmx_info\fP * info)"
+
+.PP
+\fBinit_gmx_info()\fP: Initializes flags to conditions so that b_Forces_1 can be set to TRUE as soon as a frame is found with forces while b_Forces_N can be set to FALSE as soon as a frame is found that does not have forces\&. This way we can determine wheter or not b must be calculated from dg/dr by checking ( b_Forces1 && b_Forces_N )\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void print_Bond_Types (FILE * fp, \fBtW_system\fP sys)"
+
+.PP
+\fBprint_Bond_Types()\fP: 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void print_bond_warnings (\fBtW_CG_site\fP * CG_struct_list, int numatoms)"
+
+.PP
+print_bond_warnings Warns the user if a site in their system is involved in so many bonded interactions that it might cause an overflow error while filling vectors of dimension vec[MAX_NUM_BOND_COEFF] in the calc_grids functions 
+.PP
+\fBNote\fP
+.RS 4
+I have increased MAX_NUM_BOND_COEFFs default value, but placed this func here in case 
+.PD 0
+.IP "\(bu" 1
+CG_struct_list the list of sites involved in the system 
+.IP "\(bu" 1
+int numatoms The length of CG_structlist 
+.PP
+.RE
+.PP
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void reset_gmx_info (\fBtW_gmx_info\fP * info)"
+
+.PP
+\fBreset_gmx_info()\fP: Reset the flags for a new topology\&. 
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int setup_CG_struct (\fBtW_system\fP * sys, \fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, \fBtW_Bonded_Inter\fP * Bonded_Inter_Types)"
+
+.PP
+\fBsetup_CG_struct()\fP: Stores the information in top into sys and CG_struct\&. 
+.PD 0
+.IP "\(bu" 1
+sys The somewhat initialized structure that will contain all top, ff, and frame info for the system [CG_struct coordinated top filled here] 
+.IP "\(bu" 1
+top The already initialized structure that stores the topology info directly 
+.IP "\(bu" 1
+CG_struct the list of CG sites in the system, info is filled by this func 
+.IP "\(bu" 1
+Bonded_Inter_Types The list of bonded interactions the user requested as already initialized by \fBread_par()\fP 
+.PP
+\fBReturns\fP
+.RS 4
+The number of CG sites in the system 
+.RE
+.PP
+
+.PP
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void store_angle_lists (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, int * i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List, int * site_bond_ctr, int * bond_ctr)"
+
+.PP
+\fBstore_angle_lists()\fP: 
+.PP
+Referenced by \fBstore_bond_interactions()\fP\&.
+.SS "void store_bond_interactions (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List, \fBtW_bond_type_indices\fP bond_type_indices, int n_sites)"
+
+.PP
+\fBstore_bond_interactions()\fP: 
+.PP
+Referenced by \fBget_bonds()\fP\&.
+.SS "void store_bond_lists (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, int * i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List, int * site_bond_ctr, int * bond_ctr)"
+
+.PP
+\fBstore_bond_lists()\fP: 
+.PP
+Referenced by \fBstore_bond_interactions()\fP\&.
+.SS "void store_dihedral_lists (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, int * i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List, int * site_bond_ctr, int * bond_ctr)"
+
+.PP
+\fBstore_dihedral_lists()\fP: 
+.PP
+Referenced by \fBstore_bond_interactions()\fP\&.
+.SS "void store_pair_lists (\fBtW_gmx_topology\fP * top, \fBtW_CG_site\fP * CG_struct, int * i_type, int N_Bond_Int_Types, \fBtW_Bonded_Inter\fP * Bond_Type_List, int * site_bond_ctr, int * bond_ctr)"
+
+.PP
+\fBstore_pair_lists()\fP: 
+.PP
+Referenced by \fBstore_bond_interactions()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

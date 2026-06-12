@@ -1,0 +1,9 @@
+<map id="check_bond_interactions" name="check_bond_interactions">
+<area shape="rect" id="Node000001" title="check_bond_interactions(): Store indices to Bond_Type_List[] for each bond interaction found in the G..." alt="" coords="400,5,566,32"/>
+<area shape="rect" id="Node000002" href="$cgff__fn_8c.html#abb2b8a29a7a7945017e5136b273d7f13" title="get_bonds(): Stores information from top into sys and CG_struct." alt="" coords="271,5,352,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="385,21,353,21,353,16,385,16"/>
+<area shape="rect" id="Node000003" href="$cgff__fn_8c.html#a9e513ad59f589f2c9b4bbac849a6897b" title="setup_CG_struct(): Stores the information in top into sys and CG_struct." alt="" coords="103,5,223,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="255,21,223,21,223,16,255,16"/>
+<area shape="rect" id="Node000004" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="87,21,55,21,55,16,87,16"/>
+</map>

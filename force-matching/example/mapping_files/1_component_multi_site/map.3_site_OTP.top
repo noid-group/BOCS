@@ -1,0 +1,49 @@
+[ moleculetype ]
+; name    n_atoms
+  OTP     32
+
+[ sitetypes ] 3 		  ; This semi colon indicates comments
+; name   mapping_type  n_atoms
+  BL    com           11          ; Note that later we can make these "types" equivalent in the force-field
+  BM    com           10
+  BR    com           11          ; For now we differentiate them because the beads (e.g.final CG cooridant) are distinct even if the molecule is symetric
+;				  ; We will handle interaction symmetry when we define par.txt and cg_OTP.top files. There BR and BL will be the name of atoms, not the type
+[ atomtypes ]
+; number    type    site    mass/weighting
+      1     C         BL         12.01100
+      2     H         BL          1.00800
+      3     C         BL         12.01100
+      4     H         BL          1.00800
+      5     C         BL         12.01100
+      6     H         BL          1.00800
+      7     C         BL         12.01100
+      8     H         BL          1.00800
+      9     C         BL         12.01100
+     10     H         BL          1.00800
+     11     C         BL         12.01100
+     12     C         BM         12.01100
+     13     C         BM         12.01100
+     14     H         BM          1.00800
+     15     C         BM         12.01100
+     16     H         BM          1.00800
+     17     C         BM         12.01100
+     18     H         BM          1.00800
+     19     C         BM         12.01100
+     20     H         BM          1.00800
+     21     C         BM         12.01100
+     22     C         BR         12.01100
+     23     C         BR         12.01100
+     24     H         BR          1.00800
+     25     C         BR         12.01100
+     26     H         BR          1.00800
+     27     C         BR         12.01100
+     28     H         BR          1.00800
+     29     C         BR         12.01100
+     30     H         BR          1.00800
+     31     C         BR         12.01100
+     32     H         BR          1.00800
+
+[ molecules ]
+; name number
+  OTP  800
+

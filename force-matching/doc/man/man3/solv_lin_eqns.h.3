@@ -1,0 +1,364 @@
+.TH "solv_lin_eqns.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+solv_lin_eqns.h
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBsolv_lin_eqns\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "Functions for solving the system with LU decomposition and in general matrix format such that preconditioning can be applied\&. "
+.ti -1c
+.RI "int \fBext_potl_solve_lin_eqns\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBdgesv_\fP (int *N, int *N_rhs, double AT[], int *LDA, int pivot[], double x[], int *N_row, int *info)"
+.br
+.ti -1c
+.RI "void \fBdgesvx_\fP (char *FACT, char *TRANS, int *N, int *N_rhs, double A[], int *LDA, double AF[], int *LDAF, int pivot[], char *EQUED, double R[], double C[], double b[], int *LDB, double phi[], int *LDX, double *RCOND, double FERR[], double BERR[], double work[], int iwork[], int *info)"
+.br
+.ti -1c
+.RI "int \fBsolv_lin_eqns_symm\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "Functions for solving the system with either UU decomposition or Cholesky decomposition with the matrix in packed storage form\&. "
+.ti -1c
+.RI "void \fBdspsv_\fP (char *UPLO, int *N, int *NRHS, double A[], int IPIV[], double B[], int *LDB, int *INFO)"
+.br
+.ti -1c
+.RI "void \fBdspsvx_\fP (char *FACT, char *UPLO, int *N, int *N_rhs, double MT[], double AF[], int pivot[], double b[], int *LDB, double phi[], int *LDX, double *RCOND, double FERR[], double BERR[], double work[], int iwork[], int *info)"
+.br
+.ti -1c
+.RI "void \fBdppsv_\fP (char *UPLO, int *N, int *NRHS, double A[], double B[], int *LDB, int *INFO)"
+.br
+.ti -1c
+.RI "void \fBdppsvx_\fP (char *FACT, char *UPLO, int *N, int *NRHS, double A[], double AF[], char *EQUED, double S[], double B[], int *LDB, double X[], int *LDX, double *RCOND, double FERR[], double BERR[], double work[], int iwork[], int *INFO)"
+.br
+.ti -1c
+.RI "int \fBsolv_lin_eqns_Bayesian\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "Functions for solving the system with using the Bayesian inference method\&. "
+.ti -1c
+.RI "int \fBsolv_lin_eqns_Bayesian_saveparams\fP (FILE *fp_log, \fBtW_system\fP *sys, double *alpha_save, double *beta_save)"
+.br
+.RI "\fBsolv_lin_eqns_Bayesian_saveparams()\fP: same as normal but the regularization parameters are stored "
+.ti -1c
+.RI "int \fBsolv_lin_eqns_constrain_tabdih_Bayesian\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "\fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP: JFR - 12\&.20\&.13: This should be equivalent to \fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP, except the optimization of the regularization parameters happens inside the function\&. "
+.ti -1c
+.RI "void \fBdgetri_\fP (int *N, double A[], int *LDA, int pivot[], double work[], int *lwork, int *INFO)"
+.br
+.ti -1c
+.RI "void \fBdgemm_\fP (char *TRANSA, char *TRANSB, int *M, int *N, int *K, double *ALPHA, double A[], int *LDA, double B[], int *LDB, double *BETA, double C[], int *LDC)"
+.br
+.ti -1c
+.RI "double \fBcalc_Chi2\fP (FILE *fp_log, \fBtW_system\fP *sys, double phi[], double b[])"
+.br
+.RI "\fBcalc_Chi2()\fP: Calc Chi2\&. "
+.ti -1c
+.RI "int \fBsolv_lin_eqns_rescalephi\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "Functions for solving the system with preconditioning by rescaling phi\&. "
+.ti -1c
+.RI "int \fBsolv_lin_eqns_constrain_tabdih_regularize\fP (FILE *fp_log, \fBtW_system\fP *sys, double *alpha, double beta)"
+.br
+.RI "Functions for solving the system with constraints on the dihedral angle\&. "
+.ti -1c
+.RI "int \fBsolv_lin_eqns_constrain_tabdih\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "JFR - 12\&.20\&.13: Below this point are functions that I am not currently using, but I didn't want to commit to deleting them yet\&. "
+.ti -1c
+.RI "int \fBsolv_lin_eqns_constrain_tabdih_Bayesian_params\fP (FILE *fp_log, \fBtW_system\fP *sys, double *alpha, double beta)"
+.br
+.RI "\fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP: JFR - 12\&.20\&.13: I consolidated this function and \fBsolv_lin_eqns_constrain_tabdih()\fP into one function which has the options to regularize and/or constrain\&. "
+.ti -1c
+.RI "int \fBsolv_lin_eqns_constrain_tabdih_2\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "\fBsolv_lin_eqns_constrain_tabdih_2()\fP: 2 => use direct substition algorithm for constraints\&. "
+.ti -1c
+.RI "int \fBsolv_lin_eqns_constrain_tabdih_2_Bayesian_params\fP (FILE *fp_log, \fBtW_system\fP *sys, double *alpha, double beta)"
+.br
+.RI "\fBsolv_lin_eqns_constrain_tabdih_2_Bayesian_params()\fP: same as above, but use the regularization parameters calculated with Bayesian_saveparams() "
+.ti -1c
+.RI "void \fBdgglse_\fP (int *M, int *N, int *P, double A[], int *LDA, double B[], int *LDB, double C[], double D[], double X[], double WORK[], int *LWORK, int *INFO)"
+.br
+.ti -1c
+.RI "int \fBSVD\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "Functions for solving the system with SVD or just calculating the SVD's 
+.br
+ "
+.ti -1c
+.RI "void \fBdgesdd_\fP (char *JOBZ, int *M, int *N, double A[], int *LDA, double S[], double U[], int *LDU, double VT[], int *LDVT, double work[], int *lwork, int iwork[], int *info)"
+.br
+.ti -1c
+.RI "int \fBsolveSVD\fP (FILE *fp_log, \fBtW_system\fP *sys, double rcond, \fBtW_word\fP b_info)"
+.br
+.RI "\fBsolveSVD()\fP: "
+.ti -1c
+.RI "void \fBdgelss_\fP (int *M, int *N, int *NRHS, double A[], int *LDA, double B[], int *LDB, double S[], double *RCOND, int *RANK, double WORK[], int *LWORK, int *INFO)"
+.br
+.ti -1c
+.RI "int \fBsolv_lin_eqns_PT\fP (FILE *fp_log, \fBtW_system\fP *sys)"
+.br
+.RI "Functions for iterative inversion calculation\&. "
+.ti -1c
+.RI "int \fBget_b_soln_PT\fP (FILE *fp_log, \fBtW_system\fP *sys, int order, double phi_struct[])"
+.br
+.RI "\fBget_b_soln_PT()\fP: multiply the obtained forces with the original matrix to obtain the solns, b "
+.ti -1c
+.RI "int \fBPT_eigen\fP (int k, int N, int N_eigen, double **A)"
+.br
+.RI "\fBPT_eigen()\fP: "
+.ti -1c
+.RI "int \fBeigen\fP (FILE *fp_log, \fBtW_system\fP *sys, int flag_Gbar)"
+.br
+.RI "Functions for eigenspectrum analysis\&. "
+.ti -1c
+.RI "void \fBdsytrd_\fP (char *UPLO, int *N, double A[], int *LDA, double D[], double E[], double Tau[], double work[], int *lwork, int *info)"
+.br
+.ti -1c
+.RI "void \fBdorgtr_\fP (char *UPLO, int *N, double A[], int *LDA, double Tau[], double work[], int *lwork, int *info)"
+.br
+.ti -1c
+.RI "void \fBdsteqr_\fP (char *COMPZ, int *N, double D[], double E[], double Z[], int *LDZ, double work[], int *info)"
+.br
+.ti -1c
+.RI "int \fBcalc_Calpha\fP (int N, double f[], double MT[], double D[], double Calpha[])"
+.br
+.RI "Functions for uniqeness analysis\&. "
+.ti -1c
+.RI "int \fBcalc_fn_bn\fP (int N_M, int N_L, double Calpha[], double MT[], double D[], \fBtW_system\fP *sys)"
+.br
+.ti -1c
+.RI "int \fBprint_Mn\fP (int N_M, int L, double D[], double MT[], \fBtW_system\fP *sys)"
+.br
+.RI "\fBprint_Mn()\fP: "
+.ti -1c
+.RI "int \fBcalc_IPR\fP (int N, double MT[])"
+.br
+.ti -1c
+.RI "int \fBPrecondition\fP (int N, double *M, double *b, double *phi, double *norm_col, double *row_max, int flag_restore, int flag_solve, \fBtW_system\fP *sys)"
+.br
+.RI "Preconditioning\&. "
+.ti -1c
+.RI "int \fBRight_PC\fP (int N, double *M, double *b, double *phi, double *norm_col, double *row_max, int flag_restore, int flag_solve)"
+.br
+.ti -1c
+.RI "int \fBLeft_PC\fP (int N, double *M, double *b, double *phi, double *norm_col, double *row_max, int flag_restore, int flag_solve)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "int calc_Calpha (int N, double f[], double MT[], double D[], double Calpha[])"
+
+.PP
+Functions for uniqeness analysis\&. Functions for uniqeness analysis\&. 
+.PP
+Referenced by \fBeigen()\fP\&.
+.SS "double calc_Chi2 (FILE * fp_log, \fBtW_system\fP * sys, double phi[], double b[])"
+
+.PP
+\fBcalc_Chi2()\fP: Calc Chi2\&. 
+.br
+ JFR - added 01\&.29\&.13 
+.PP
+Referenced by \fBsolv_lin_eqns_Bayesian()\fP, \fBsolv_lin_eqns_Bayesian_saveparams()\fP, and \fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP\&.
+.SS "int calc_fn_bn (int N_M, int N_L, double Calpha[], double MT[], double D[], \fBtW_system\fP * sys)"
+
+.PP
+Referenced by \fBeigen()\fP\&.
+.SS "int calc_IPR (int N, double MT[])"
+
+.PP
+Referenced by \fBeigen()\fP\&.
+.SS "void dgelss_ (int * M, int * N, int * NRHS, double A[], int * LDA, double B[], int * LDB, double S[], double * RCOND, int * RANK, double WORK[], int * LWORK, int * INFO)\fR [extern]\fP"
+
+.SS "void dgemm_ (char * TRANSA, char * TRANSB, int * M, int * N, int * K, double * ALPHA, double A[], int * LDA, double B[], int * LDB, double * BETA, double C[], int * LDC)\fR [extern]\fP"
+
+.PP
+Referenced by \fBsolv_lin_eqns_Bayesian()\fP, \fBsolv_lin_eqns_Bayesian_saveparams()\fP, and \fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP\&.
+.SS "void dgesdd_ (char * JOBZ, int * M, int * N, double A[], int * LDA, double S[], double U[], int * LDU, double VT[], int * LDVT, double work[], int * lwork, int iwork[], int * info)\fR [extern]\fP"
+
+.PP
+Referenced by \fBSVD()\fP\&.
+.SS "void dgesv_ (int * N, int * N_rhs, double AT[], int * LDA, int pivot[], double x[], int * N_row, int * info)\fR [extern]\fP"
+
+.PP
+Referenced by \fBsolv_lin_eqns()\fP, \fBsolv_lin_eqns_Bayesian()\fP, \fBsolv_lin_eqns_Bayesian_saveparams()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP, and \fBsolv_lin_eqns_rescalephi()\fP\&.
+.SS "void dgesvx_ (char * FACT, char * TRANS, int * N, int * N_rhs, double A[], int * LDA, double AF[], int * LDAF, int pivot[], char * EQUED, double R[], double C[], double b[], int * LDB, double phi[], int * LDX, double * RCOND, double FERR[], double BERR[], double work[], int iwork[], int * info)\fR [extern]\fP"
+
+.PP
+Referenced by \fBsolv_lin_eqns()\fP\&.
+.SS "void dgetri_ (int * N, double A[], int * LDA, int pivot[], double work[], int * lwork, int * INFO)\fR [extern]\fP"
+
+.PP
+Referenced by \fBsolv_lin_eqns_Bayesian()\fP, \fBsolv_lin_eqns_Bayesian_saveparams()\fP, and \fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP\&.
+.SS "void dgglse_ (int * M, int * N, int * P, double A[], int * LDA, double B[], int * LDB, double C[], double D[], double X[], double WORK[], int * LWORK, int * INFO)\fR [extern]\fP"
+
+.PP
+Referenced by \fBsolv_lin_eqns_constrain_tabdih_2()\fP, \fBsolv_lin_eqns_constrain_tabdih_2_Bayesian_params()\fP, and \fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP\&.
+.SS "void dorgtr_ (char * UPLO, int * N, double A[], int * LDA, double Tau[], double work[], int * lwork, int * info)\fR [extern]\fP"
+
+.PP
+Referenced by \fBeigen()\fP, and \fBPT_eigen()\fP\&.
+.SS "void dppsv_ (char * UPLO, int * N, int * NRHS, double A[], double B[], int * LDB, int * INFO)\fR [extern]\fP"
+
+.PP
+Referenced by \fBsolv_lin_eqns_symm()\fP\&.
+.SS "void dppsvx_ (char * FACT, char * UPLO, int * N, int * NRHS, double A[], double AF[], char * EQUED, double S[], double B[], int * LDB, double X[], int * LDX, double * RCOND, double FERR[], double BERR[], double work[], int iwork[], int * INFO)\fR [extern]\fP"
+
+.PP
+Referenced by \fBsolv_lin_eqns_symm()\fP\&.
+.SS "void dspsv_ (char * UPLO, int * N, int * NRHS, double A[], int IPIV[], double B[], int * LDB, int * INFO)\fR [extern]\fP"
+
+.PP
+Referenced by \fBsolv_lin_eqns_symm()\fP\&.
+.SS "void dspsvx_ (char * FACT, char * UPLO, int * N, int * N_rhs, double MT[], double AF[], int pivot[], double b[], int * LDB, double phi[], int * LDX, double * RCOND, double FERR[], double BERR[], double work[], int iwork[], int * info)\fR [extern]\fP"
+
+.PP
+Referenced by \fBsolv_lin_eqns_symm()\fP\&.
+.SS "void dsteqr_ (char * COMPZ, int * N, double D[], double E[], double Z[], int * LDZ, double work[], int * info)\fR [extern]\fP"
+
+.PP
+Referenced by \fBeigen()\fP, and \fBPT_eigen()\fP\&.
+.SS "void dsytrd_ (char * UPLO, int * N, double A[], int * LDA, double D[], double E[], double Tau[], double work[], int * lwork, int * info)\fR [extern]\fP"
+
+.PP
+Referenced by \fBeigen()\fP, and \fBPT_eigen()\fP\&.
+.SS "int eigen (FILE * fp_log, \fBtW_system\fP * sys, int flag_Gbar)"
+
+.PP
+Functions for eigenspectrum analysis\&. Functions for eigenspectrum analysis\&. 
+.PP
+Referenced by \fBget_phi_struct_and_phi_forces()\fP\&.
+.SS "int ext_potl_solve_lin_eqns (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+Referenced by \fBget_phi_forces()\fP\&.
+.SS "int get_b_soln_PT (FILE * fp_log, \fBtW_system\fP * sys, int order, double phi_struct[])"
+
+.PP
+\fBget_b_soln_PT()\fP: multiply the obtained forces with the original matrix to obtain the solns, b 
+.PP
+Referenced by \fBsolv_lin_eqns_PT()\fP\&.
+.SS "int Left_PC (int N, double * M, double * b, double * phi, double * norm_col, double * row_max, int flag_restore, int flag_solve)"
+
+.PP
+Referenced by \fBPrecondition()\fP\&.
+.SS "int Precondition (int N, double * M, double * b, double * phi, double * norm_col, double * row_max, int flag_restore, int flag_solve, \fBtW_system\fP * sys)"
+
+.PP
+Preconditioning\&. 
+.PP
+Referenced by \fBsolv_lin_eqns()\fP, \fBsolv_lin_eqns_Bayesian()\fP, \fBsolv_lin_eqns_Bayesian_saveparams()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, \fBsolv_lin_eqns_constrain_tabdih_2()\fP, \fBsolv_lin_eqns_constrain_tabdih_2_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP, \fBsolveSVD()\fP, and \fBSVD()\fP\&.
+.SS "int print_Mn (int N_M, int L, double D[], double MT[], \fBtW_system\fP * sys)"
+
+.PP
+\fBprint_Mn()\fP: 
+.PP
+Referenced by \fBeigen()\fP\&.
+.SS "int PT_eigen (int k, int N, int N_eigen, double ** A)"
+
+.PP
+\fBPT_eigen()\fP: 
+.PP
+Referenced by \fBsolv_lin_eqns_PT()\fP\&.
+.SS "int Right_PC (int N, double * M, double * b, double * phi, double * norm_col, double * row_max, int flag_restore, int flag_solve)"
+
+.PP
+Referenced by \fBPrecondition()\fP\&.
+.SS "int solv_lin_eqns (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+Functions for solving the system with LU decomposition and in general matrix format such that preconditioning can be applied\&. Functions for solving the system with LU decomposition and in general matrix format such that preconditioning can be applied\&. 
+.PP
+Referenced by \fBdirect_solve_lin_eqns()\fP\&.
+.SS "int solv_lin_eqns_Bayesian (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+Functions for solving the system with using the Bayesian inference method\&. Functions for solving the system with using the Bayesian inference method\&.
+.PP
+solv_lin_eqns_Bayesian_params() was created from this function to store the optimized parameters for additional calculations\&. Now I see why I separated the Bayes + contraint calculation, this way I only have one function implementating the Bayesian inference method so that future adjustments will be as simple as possible\&. 
+.SS "int solv_lin_eqns_Bayesian_saveparams (FILE * fp_log, \fBtW_system\fP * sys, double * alpha_save, double * beta_save)"
+
+.PP
+\fBsolv_lin_eqns_Bayesian_saveparams()\fP: same as normal but the regularization parameters are stored 
+.PP
+Referenced by \fBdirect_solve_lin_eqns()\fP\&.
+.SS "int solv_lin_eqns_constrain_tabdih (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+JFR - 12\&.20\&.13: Below this point are functions that I am not currently using, but I didn't want to commit to deleting them yet\&. \fBsolv_lin_eqns_constrain_tabdih()\fP: JFR - 12\&.20\&.13: I consolidated this function and solv_lin_eqns_constrain_tabdih_Bayesian_params () into one function which has the options to regularize and/or constrain\&. 
+.SS "int solv_lin_eqns_constrain_tabdih_2 (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+\fBsolv_lin_eqns_constrain_tabdih_2()\fP: 2 => use direct substition algorithm for constraints\&. JFR - 12\&.20\&.13: I found that this does not work well in practice 
+.SS "int solv_lin_eqns_constrain_tabdih_2_Bayesian_params (FILE * fp_log, \fBtW_system\fP * sys, double * alpha, double beta)"
+
+.PP
+\fBsolv_lin_eqns_constrain_tabdih_2_Bayesian_params()\fP: same as above, but use the regularization parameters calculated with Bayesian_saveparams() 
+.SS "int solv_lin_eqns_constrain_tabdih_Bayesian (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+\fBsolv_lin_eqns_constrain_tabdih_Bayesian()\fP: JFR - 12\&.20\&.13: This should be equivalent to \fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP, except the optimization of the regularization parameters happens inside the function\&. I can't remember why I separated the two calculations (for simplicity? or so I could do multiple calculations with the same optimized parameters?)\&. At the moment, I think the separated calculation is conceptually simpler and easier to manipulate so this function is obsolete, at least for now\&. 
+.SS "int solv_lin_eqns_constrain_tabdih_Bayesian_params (FILE * fp_log, \fBtW_system\fP * sys, double * alpha, double beta)"
+
+.PP
+\fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP: JFR - 12\&.20\&.13: I consolidated this function and \fBsolv_lin_eqns_constrain_tabdih()\fP into one function which has the options to regularize and/or constrain\&. 
+.SS "int solv_lin_eqns_constrain_tabdih_regularize (FILE * fp_log, \fBtW_system\fP * sys, double * alpha, double beta)"
+
+.PP
+Functions for solving the system with constraints on the dihedral angle\&. Functions for solving the system with constraints on the dihedral angle\&. 
+.PP
+Referenced by \fBdirect_solve_lin_eqns()\fP\&.
+.SS "int solv_lin_eqns_PT (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+Functions for iterative inversion calculation\&. Functions for iterative inversion calculation\&. 
+.PP
+Referenced by \fBdirect_solve_lin_eqns()\fP\&.
+.SS "int solv_lin_eqns_rescalephi (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+Functions for solving the system with preconditioning by rescaling phi\&. Functions for solving the system with preconditioning by rescaling phi\&.
+.PP
+I have taken it out of the get_phi_X forks for now, but I also need to remove it from the input options\&. 
+.SS "int solv_lin_eqns_symm (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+Functions for solving the system with either UU decomposition or Cholesky decomposition with the matrix in packed storage form\&. Functions for solving the system with either UU decomposition or Cholesky decomposition with the matrix in packed storage form\&. 
+.PP
+Referenced by \fBdirect_solve_lin_eqns()\fP\&.
+.SS "int solveSVD (FILE * fp_log, \fBtW_system\fP * sys, double rcond, \fBtW_word\fP b_info)"
+
+.PP
+\fBsolveSVD()\fP: 
+.SS "int SVD (FILE * fp_log, \fBtW_system\fP * sys)"
+
+.PP
+Functions for solving the system with SVD or just calculating the SVD's 
+.br
+ Functions for solving the system with SVD or just calculating the SVD's 
+.br
+ 
+.PP
+Referenced by \fBget_phi_struct_and_phi_forces()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

@@ -1,0 +1,28 @@
+var calc__ref__potential_8h =
+[
+    [ "calc_ref_Angle_forces", "calc__ref__potential_8h.html#a1c6089fde66d61ef80d61a12e6c02cd6", null ],
+    [ "calc_ref_BondStretch_forces", "calc__ref__potential_8h.html#a3955939e6709c062689b041a16512ab6", null ],
+    [ "calc_ref_Dihedral_forces", "calc__ref__potential_8h.html#a8a106dbcfdcc72c188daa315897819dc", null ],
+    [ "calc_ref_IntraMolecPairs_forces", "calc__ref__potential_8h.html#a60054637049b6655a7577ed4360a8ea6", null ],
+    [ "calc_ref_nb_pair_forces", "calc__ref__potential_8h.html#a8ae41292d9a3977fa5c29e0dbcbb9f8c", null ],
+    [ "copy_2_site_names", "calc__ref__potential_8h.html#ab9e41b84b13c02a89806eb0bdb5264e0", null ],
+    [ "copy_3_site_names", "calc__ref__potential_8h.html#a8141a1371e866788d1bd92b138d7e1c5", null ],
+    [ "copy_4_site_names", "calc__ref__potential_8h.html#a9df7c69c5e25bc0d6a58d62343de7821", null ],
+    [ "get_angle_inter_ptr", "calc__ref__potential_8h.html#aec482419bd6624cbc73bcdafb71d8c77", null ],
+    [ "get_angle_vector_forces", "calc__ref__potential_8h.html#a0d0ceefe8ad8ec63a791281c849c2b61", null ],
+    [ "get_central_pair_vector_forces", "calc__ref__potential_8h.html#a3ccad20aea65378c17769881a2e85f25", null ],
+    [ "get_difference_vector_PBC", "calc__ref__potential_8h.html#abd7d2b3619ea07974f7ab38a25dbd0ba", null ],
+    [ "get_dihedral_inter_ptr", "calc__ref__potential_8h.html#a2970f72b6d14d95a1b513db8dd3a501e", null ],
+    [ "get_dihedral_vector_forces", "calc__ref__potential_8h.html#ab4c23dce64743634c05e9038896333b5", null ],
+    [ "get_inter_ptr", "calc__ref__potential_8h.html#a5ac2499f606ee2745d4427cd50884c95", null ],
+    [ "get_IntraMolecPair_inter_ptr", "calc__ref__potential_8h.html#a01c0cc5a8d9525027030345721be2603", null ],
+    [ "get_linear_interpolation_f", "calc__ref__potential_8h.html#ab93a0f08cba524f3e61a1e04bcebe8f5", null ],
+    [ "get_no_interpolation_f", "calc__ref__potential_8h.html#a5e372043274f5537c02fff4c7cce3289", null ],
+    [ "get_ref_Angle_info", "calc__ref__potential_8h.html#a27bc94b493f15044999850f9c3cbda63", null ],
+    [ "get_ref_Dihedral_info", "calc__ref__potential_8h.html#a4b659623e5b6e82ea077ccd47e9d29f6", null ],
+    [ "get_ref_forces", "calc__ref__potential_8h.html#ae7be9c817dc9816635b89d346f4f2ed4", null ],
+    [ "get_scalar_f_from_table", "calc__ref__potential_8h.html#a415bf569c0f814317f584c37ca17853a", null ],
+    [ "initialize_ref_forces", "calc__ref__potential_8h.html#af80fb686ab8c97edbbd4f96cf248fb2f", null ],
+    [ "print_bref", "calc__ref__potential_8h.html#a30cd0033c9a073b1a1b0e44ddf40bc37", null ],
+    [ "print_CG_ref_f", "calc__ref__potential_8h.html#a05c984ce58b6b7a2989688ed55806b9e", null ]
+];

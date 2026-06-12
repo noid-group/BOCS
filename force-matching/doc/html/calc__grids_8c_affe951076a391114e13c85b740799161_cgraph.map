@@ -1,0 +1,5 @@
+<map id="get_nb_pair_inter_ptr_n" name="get_nb_pair_inter_ptr_n">
+<area shape="rect" id="Node000001" title="get_nb_pair_inter_ptr_n(): Does the same thing as the above function, but instead puts the pointers i..." alt="" coords="5,5,162,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a35eea61aa702da13bb9eb3e4269929fa" title="match_word_n(): Searches through N_words words in word_list to see if the string stored in word is in..." alt="" coords="210,5,316,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,16,194,16,194,21,162,21"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="get_dihedral" name="get_dihedral">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,97,108"/>
+<area shape="rect" id="Node000002" href="$wnoid__math_8c.html#aed00bac3dd87333226ee1d7cb19700af" title="calc_norm(): Returns the norm of an dvec." alt="" coords="162,5,244,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,78,160,37,162,42,81,83"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="309,31,380,57"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="97,84,293,50,294,55,98,89"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8c.html#a32fc7e429fa98aaa76797c630eda7e94" title="cross_product(): Calculates v_cross = v1 x v2." alt="" coords="151,107,254,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="98,100,136,106,135,111,97,105"/>
+<area shape="rect" id="Node000005" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="145,157,261,184"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="78,106,146,143,157,148,155,153,143,148,75,111"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="245,23,294,32,293,38,244,29"/>
+</map>

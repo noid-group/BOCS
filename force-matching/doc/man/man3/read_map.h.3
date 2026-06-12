@@ -1,0 +1,54 @@
+.TH "read_map.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+read_map.h
+.SH SYNOPSIS
+.br
+.PP
+\fR#include 'cgff_types\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBprint_site_mapping\fP (\fBtW_site_map\fP map)"
+.br
+.ti -1c
+.RI "void \fBprint_mapping_N\fP (int N_sites, \fBtW_site_map\fP map[])"
+.br
+.ti -1c
+.RI "\fBtW_site_map\fP * \fBget_CG_map\fP (FILE *map_top, int *N_sites)"
+.br
+.ti -1c
+.RI "\fBtW_site_map\fP * \fBNEW_get_CG_map\fP (FILE *map_top, int *N_sites)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "\fBtW_site_map\fP * get_CG_map (FILE * map_top, int * N_sites)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "\fBtW_site_map\fP * NEW_get_CG_map (FILE * map_top, int * N_sites)"
+
+.SS "void print_mapping_N (int N_sites, \fBtW_site_map\fP map[])"
+
+.SS "void print_site_mapping (\fBtW_site_map\fP map)"
+
+.PP
+Referenced by \fBprint_mapping_N()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

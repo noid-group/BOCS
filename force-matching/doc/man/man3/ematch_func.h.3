@@ -1,0 +1,130 @@
+.TH "ematch_func.h" 3 "Version v5.0.0" "BOCS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ematch_func.h
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <stdlib\&.h>\fP
+.br
+\fR#include <stdio\&.h>\fP
+.br
+\fR#include 'cgff_types\&.h'\fP
+.br
+\fR#include 'gromacs_topology\&.h'\fP
+.br
+\fR#include 'safe_mem\&.h'\fP
+.br
+\fR#include 'io_read\&.h'\fP
+.br
+\fR#include 'LDD\&.h'\fP
+.br
+\fR#include 'ematch_types\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBdgelss_\fP (int *M, int *N, int *NRHS, double A[], int *LDA, double B[], int *LDB, double S[], double *RCOND, int *RANK, double WORK[], int *LWORK, int *INFO)"
+.br
+.ti -1c
+.RI "void \fBtest_stuff\fP ()"
+.br
+.ti -1c
+.RI "void \fBsummarize_esystem\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBsetup_ematch_sys\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBdo_ematch_bonds\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBdo_ematch_angles\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBdo_ematch_dihedrals\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBdo_ematch_pairs\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBsave_A_matrix\fP (double **A, int nrows, int ncols, char *fnm)"
+.br
+.ti -1c
+.RI "void \fBread_A_matrix\fP (double **A, int nrows, int ncols)"
+.br
+.ti -1c
+.RI "void \fBtrim_A\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBget_answer\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBsave_answer\fP (\fBtW_esystem\fP *sys)"
+.br
+.ti -1c
+.RI "void \fBcheck_answer\fP (\fBtW_esystem\fP *sys)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void check_answer (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void dgelss_ (int * M, int * N, int * NRHS, double A[], int * LDA, double B[], int * LDB, double S[], double * RCOND, int * RANK, double WORK[], int * LWORK, int * INFO)\fR [extern]\fP"
+
+.PP
+Referenced by \fBext_potl_solve_lin_eqns()\fP, \fBget_answer()\fP, \fBsolv_lin_eqns()\fP, \fBsolv_lin_eqns_constrain_tabdih()\fP, \fBsolv_lin_eqns_constrain_tabdih_Bayesian_params()\fP, \fBsolv_lin_eqns_constrain_tabdih_regularize()\fP, and \fBsolveSVD()\fP\&.
+.SS "void do_ematch_angles (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void do_ematch_bonds (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void do_ematch_dihedrals (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void do_ematch_pairs (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void get_answer (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void read_A_matrix (double ** A, int nrows, int ncols)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void save_A_matrix (double ** A, int nrows, int ncols, char * fnm)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void save_answer (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void setup_ematch_sys (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void summarize_esystem (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP, and \fBsetup_ematch_sys()\fP\&.
+.SS "void test_stuff ()"
+
+.SS "void trim_A (\fBtW_esystem\fP * sys)"
+
+.PP
+Referenced by \fBmain()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for BOCS from the source code\&.

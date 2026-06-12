@@ -1,0 +1,6 @@
+We have designed this tutorial to be sequential with the first 1-site_methanol tutorial. 
+[Tutorial #2 in the manual]
+Thus, if tutorial #2 was completed, the mapped atomistic trajectory required "cg_methanol.trr" should be in ../../1-site_methanol/mapping/
+
+The supplied files for calculating the Local Densities of your trajectory assume that you are running commands from a place where all files are accessible,
+so you may want to use relative references or move files from the first 1-site_methanol tutorial if not directly found in the corresponding tutorial files

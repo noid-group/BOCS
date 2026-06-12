@@ -1,0 +1,13 @@
+<map id="get_Inter_Type" name="get_Inter_Type">
+<area shape="rect" id="Node000001" title="get_Inter_Type(): Reads and stores the relevant information for a single interaction type listed in t..." alt="" coords="734,5,841,32"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#a60a964bb6417cf2d224fbdbf2791f8c1" title="get_Inter_Type_List(): Reads and stores the information for each interaction type listed in the param..." alt="" coords="551,5,686,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="718,21,686,21,686,16,718,16"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#aeb0185939ad9bf5910f1b058879dfed2" title="read_Inter_Types(): Reads the interaction types listed in the parameter file." alt="" coords="381,5,503,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="535,21,503,21,503,16,535,16"/>
+<area shape="rect" id="Node000004" href="$read__parameters_8c.html#ad59ee67290b65b03bcfa5766b31cd49b" title="get_parameters(): Reads a line from the parameter file passed from read_par()." alt="" coords="222,5,333,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="366,21,334,21,334,16,366,16"/>
+<area shape="rect" id="Node000005" href="$read__parameters_8c.html#a05efae93beb41e2b0d8cbe4581086bd1" title="read_par(): Reads the information from the parameter file and files listed in the param&#45; eter file." alt="" coords="103,5,174,32"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="206,21,174,21,174,16,206,16"/>
+<area shape="rect" id="Node000006" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="87,21,55,21,55,16,87,16"/>
+</map>

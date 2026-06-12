@@ -1,0 +1,35 @@
+<map id="get_Bspline_angle_basis_vector" name="get_Bspline_angle_basis_vector">
+<area shape="rect" id="Node000001" title="get_Bspline_angle_basis_vector(): JFR &#45; 07.23.12" alt="" coords="5,248,171,290"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#a48726d58a1b9dfc1502f9efea032c099" title="calc_Bspline(): JFR &#45; 07.16.12: This is the De Boor iterative method for calculating normalized Bspli..." alt="" coords="238,78,333,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,246,147,182,180,146,217,115,225,110,227,114,220,119,184,150,151,185,105,249"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#ac827b2055c7c1e64a2388bb8b97cf8c9" title="calc_Bspline_deriv: Uses the De Boor iterative method for calculating derivatives of normalized Bspli..." alt="" coords="220,129,350,156"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="111,245,158,206,217,165,228,160,230,165,220,170,161,210,114,249"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#afaa61c6900fdbb1dbb42e0eee0567360" title="get_Angle_info: gets theta/vectors required to figure out dPsi/dR_I for an angle site_I takes place i..." alt="" coords="232,180,339,206"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="145,244,233,210,235,215,147,249"/>
+<area shape="rect" id="Node000009" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="613,180,730,206"/>
+<area shape="poly" id="edge17_Node000001_Node000009" title=" " alt="" coords="171,261,352,245,565,216,603,208,604,213,566,221,353,250,171,266"/>
+<area shape="rect" id="Node000012" href="$calc__grids_8c.html#ad24bd48bf2573a22036e521a3793da91" title="get_g_theta_angle():" alt="" coords="222,281,349,308"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="172,277,206,281,205,287,171,282"/>
+<area shape="rect" id="Node000013" href="$calc__grids_8c.html#ace1ee15830bc3d158e0437f3dea91b65" title="get_grid_index_for_linear_basis():" alt="" coords="222,332,349,374"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="141,288,220,323,218,327,139,293"/>
+<area shape="rect" id="Node000014" href="$calc__grids_8c.html#a4cf0a630770b70f674e4c317c6bd0d5b" title="get_laplacian_theta_angle():" alt="" coords="219,398,352,441"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="112,289,159,335,220,384,226,388,223,392,217,388,156,339,108,293"/>
+<area shape="rect" id="Node000015" href="$wnoid__math_8c.html#af6e6af9e1403c9a1a78c91a688a3f38f" title="vect_sum(): Calculates sum = v1 + v2." alt="" coords="246,465,324,492"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="102,289,146,368,180,412,220,451,234,459,231,464,217,455,176,416,142,371,97,292"/>
+<area shape="rect" id="Node000005" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="778,40,849,66"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="334,177,350,166,361,151,367,136,371,106,376,75,384,61,398,48,443,25,491,10,542,4,592,3,688,15,764,34,762,39,687,20,592,9,542,9,493,16,445,30,402,52,388,64,381,77,376,106,372,138,366,154,354,170,337,181"/>
+<area shape="rect" id="Node000006" href="$calc__grids_8c.html#af9c226fc952c36ac1ca615019b75057d" title="get_atom_position_angle: Determines the position of site_i (i_site) in the angle_triple passed" alt="" coords="400,62,565,89"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="331,177,350,166,365,149,373,133,382,116,398,99,406,94,409,98,402,103,386,119,378,135,370,152,354,170,334,181"/>
+<area shape="rect" id="Node000007" href="$wnoid__math_8c.html#a4ec3dc2dbb208811be33fdc94163836e" title="get_difference_unit_vector(): From x_i and x_j, calculates the differenc vector, the unit difference ..." alt="" coords="418,113,548,156"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="332,176,402,155,403,161,334,182"/>
+<area shape="rect" id="Node000011" href="$calc__grids_8c.html#aa7d8eb252c0ba695df318b75920a2901" title="get_L2_L3_angles():" alt="" coords="420,180,546,206"/>
+<area shape="poly" id="edge11_Node000004_Node000011" title=" " alt="" coords="339,190,404,190,404,196,339,196"/>
+<area shape="rect" id="Node000008" href="$wnoid__math_8c.html#aed00bac3dd87333226ee1d7cb19700af" title="calc_norm(): Returns the norm of an dvec." alt="" coords="631,68,712,94"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="547,113,616,94,617,99,549,118"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="549,152,613,172,611,177,547,157"/>
+<area shape="rect" id="Node000010" href="$wnoid__math_8c.html#a1f483015ac47277c71a1e600b42befd8" title="vect_diff(): Calculates diff = v1 &#45; v2." alt="" coords="636,125,707,152"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="548,133,621,135,620,140,548,138"/>
+<area shape="poly" id="edge8_Node000008_Node000005" title=" " alt="" coords="712,70,762,60,763,66,713,76"/>
+<area shape="poly" id="edge12_Node000011_Node000009" title=" " alt="" coords="546,190,598,190,598,196,546,196"/>
+<area shape="poly" id="edge13_Node000011_Node000010" title=" " alt="" coords="531,176,620,150,622,155,532,182"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="get_ref_inter" name="get_ref_inter">
+<area shape="rect" id="Node000001" title="get_ref_inter(): Reads information for a interaction type in the reference potential." alt="" coords="5,81,99,108"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#afc26ee948fc1451d49561f3b6f1cb06a" title="check_inp_line(): Makes sure that the ending directive is not found were it is not supposed to be." alt="" coords="166,5,273,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,78,146,42,160,35,162,40,148,46,78,83"/>
+<area shape="rect" id="Node000003" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="170,56,268,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="99,85,154,76,155,82,100,90"/>
+<area shape="rect" id="Node000007" href="$read__parameters_8c.html#acf87a17ee43f329e51d536031656ed9a" title="get_ref_potential_info(): Stores information for a interaction in the reference potential." alt="" coords="147,107,292,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="100,99,132,104,131,109,99,104"/>
+<area shape="rect" id="Node000010" href="$io__read_8c.html#a7b47f18d3649b2d4b9383a5aa3ddee38" title="test_end_directive(): Test to make sure the ending directive is found." alt="" coords="156,157,283,184"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="78,106,148,143,162,149,160,154,146,148,75,111"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="358,5,462,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="268,54,342,34,343,39,270,59"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="374,56,445,83"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="269,67,359,67,359,72,269,72"/>
+<area shape="rect" id="Node000005" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="527,5,660,32"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="462,16,512,16,512,21,462,21"/>
+<area shape="rect" id="Node000008" href="$read__parameters_8c.html#aace4788026cd7df4a15ab266550d2096" title="get_ref_potential_ptr(): Stores information read from ref." alt="" coords="340,107,479,133"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="292,117,324,117,324,123,292,123"/>
+<area shape="rect" id="Node000009" href="$io__read_8c.html#ac9003761e07e1a6a43371290e32464e8" title="match_word(): Searches through N_words words in word_list to see if the string stored in word is incl..." alt="" coords="547,107,640,133"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="479,117,532,117,532,123,479,123"/>
+</map>

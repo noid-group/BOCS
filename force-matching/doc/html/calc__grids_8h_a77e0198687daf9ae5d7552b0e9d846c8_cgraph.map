@@ -1,0 +1,66 @@
+<map id="direct_solve_lin_eqns" name="direct_solve_lin_eqns">
+<area shape="rect" id="Node000001" title="direct_solve_lin_eqns(): JFR &#45; 12.20.13: takes care of deciding which matrix inversion routine to use..." alt="" coords="5,335,152,361"/>
+<area shape="rect" id="Node000002" href="$solv__lin__eqns_8c.html#ae0c3296aaafe391d6a7a72864732bbf6" title="solv_lin_eqns():" alt="" coords="230,128,330,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,333,129,266,161,224,198,186,235,160,238,165,201,190,165,228,133,269,90,336"/>
+<area shape="rect" id="Node000010" href="$solv__lin__eqns_8c.html#a56edd5acb004efa86d1e94a408e6c575" title="solv_lin_eqns_Bayesian_saveparams(): same as normal but the regularization parameters are stored" alt="" coords="200,327,361,369"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="152,345,184,345,184,351,152,351"/>
+<area shape="rect" id="Node000014" href="$solv__lin__eqns_8c.html#a59e10f3189c279a59f43034fac5a6880" title="solv_lin_eqns_constrain_tabdih_regularize():" alt="" coords="200,200,360,243"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="100,332,231,249,233,254,103,336"/>
+<area shape="rect" id="Node000015" href="$solv__lin__eqns_8c.html#ab5765fd44518a34db51920557c886d94" title="solv_lin_eqns_PT():" alt="" coords="218,588,342,615"/>
+<area shape="poly" id="edge23_Node000001_Node000015" title=" " alt="" coords="93,360,261,574,257,577,89,364"/>
+<area shape="rect" id="Node000023" href="$solv__lin__eqns_8c.html#a2cc9cebb8cac27553456646c8e1d8b58" title="solv_lin_eqns_symm():" alt="" coords="209,816,352,843"/>
+<area shape="poly" id="edge33_Node000001_Node000023" title=" " alt="" coords="88,361,270,800,265,802,83,363"/>
+<area shape="rect" id="Node000003" href="$ematch__func_8h.html#ae674bcef4c754b3c21967e842298b79d" title=" " alt="" coords="434,107,501,133"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="331,133,419,123,419,128,331,138"/>
+<area shape="rect" id="Node000004" href="$solv__lin__eqns_8h.html#a3a9a99ab0e7872430985cb7583396def" title=" " alt="" coords="436,157,499,184"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="332,147,421,161,420,166,331,152"/>
+<area shape="rect" id="Node000005" href="$solv__lin__eqns_8h.html#af13b7b4ca454eff82064b24eb1779359" title=" " alt="" coords="432,5,503,32"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="298,125,408,48,426,37,429,42,410,53,301,130"/>
+<area shape="rect" id="Node000006" href="$wnoid__math_8c.html#aeabe54d7c475d74f71a949ba78a84247" title="index_Lpacked(): Calculate the index of element aij in an NxN matrix in Lower&#45;packed storage form." alt="" coords="574,360,683,387"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="302,125,346,101,405,78,437,72,469,71,500,77,528,93,548,112,559,132,565,152,566,173,566,219,569,244,577,271,613,345,609,348,572,273,564,245,561,219,561,174,560,153,555,134,544,115,525,97,498,82,469,76,438,77,407,83,349,106,304,130"/>
+<area shape="rect" id="Node000007" href="$solv__lin__eqns_8c.html#a7a73063bcec42462525269d33590da33" title="Preconditioning." alt="" coords="421,208,514,235"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="315,153,422,199,420,204,313,158"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="500,233,528,251,576,299,612,346,607,349,572,303,525,255,497,237"/>
+<area shape="rect" id="Node000008" href="$solv__lin__eqns_8c.html#a6a57f31a57669a0a0d9400d853fa8830" title=" " alt="" coords="594,183,663,209"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="514,211,578,201,579,206,515,217"/>
+<area shape="rect" id="Node000009" href="$solv__lin__eqns_8c.html#a7e04670de0610e981d59e370bdb7aff8" title=" " alt="" coords="589,233,668,260"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="515,226,575,236,574,241,514,231"/>
+<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="298,324,359,253,381,222,391,208,407,194,420,185,423,190,411,198,395,212,385,225,363,256,302,328"/>
+<area shape="poly" id="edge16_Node000010_Node000006" title=" " alt="" coords="302,368,348,411,378,431,410,447,442,456,468,459,494,456,525,447,568,424,603,395,606,399,571,428,527,452,495,461,468,465,441,462,408,452,375,436,345,415,298,372"/>
+<area shape="poly" id="edge17_Node000010_Node000007" title=" " alt="" coords="312,324,432,241,435,246,315,328"/>
+<area shape="rect" id="Node000011" href="$solv__lin__eqns_8c.html#a222b901fe33b22c45588de1a2c1f101d" title="calc_Chi2(): Calc Chi2." alt="" coords="428,360,507,387"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="362,356,413,363,412,369,361,362"/>
+<area shape="rect" id="Node000012" href="$solv__lin__eqns_8h.html#a31eb7665486c3aacaa02dda069baf7e0" title=" " alt="" coords="432,309,503,336"/>
+<area shape="poly" id="edge13_Node000010_Node000012" title=" " alt="" coords="361,334,417,327,417,332,362,340"/>
+<area shape="rect" id="Node000013" href="$solv__lin__eqns_8h.html#aeb3feabd6da64fe4fd13ba7646bcaef4" title=" " alt="" coords="438,411,498,437"/>
+<area shape="poly" id="edge15_Node000010_Node000013" title=" " alt="" coords="336,368,424,404,422,409,334,372"/>
+<area shape="poly" id="edge12_Node000011_Node000006" title=" " alt="" coords="508,371,559,371,559,376,508,376"/>
+<area shape="poly" id="edge19_Node000014_Node000003" title=" " alt="" coords="314,197,408,143,419,137,421,142,410,148,317,202"/>
+<area shape="poly" id="edge20_Node000014_Node000004" title=" " alt="" coords="360,197,421,180,422,186,362,202"/>
+<area shape="poly" id="edge21_Node000014_Node000006" title=" " alt="" coords="362,236,443,260,528,295,568,320,603,348,599,352,565,325,525,300,442,265,360,241"/>
+<area shape="poly" id="edge22_Node000014_Node000007" title=" " alt="" coords="361,219,406,219,406,224,361,224"/>
+<area shape="poly" id="edge26_Node000015_Node000006" title=" " alt="" coords="311,585,409,536,468,502,525,465,567,430,602,396,606,400,570,434,528,469,471,507,412,540,314,590"/>
+<area shape="rect" id="Node000016" href="$solv__lin__eqns_8c.html#a99b495568edcecc75639c0056cd37c79" title="get_b_soln_PT(): multiply the obtained forces with the original matrix to obtain the solns,..." alt="" coords="414,664,522,691"/>
+<area shape="poly" id="edge24_Node000015_Node000016" title=" " alt="" coords="317,613,420,655,418,660,315,618"/>
+<area shape="rect" id="Node000017" href="$io__output_8c.html#a0a4af698eed9c58aa32707fa29d87c07" title="print_sep_forces(): Separate the force vector into different interactions before printing JFR &#45; added..." alt="" coords="409,563,526,589"/>
+<area shape="poly" id="edge27_Node000015_Node000017" title=" " alt="" coords="343,590,393,583,394,589,344,596"/>
+<area shape="rect" id="Node000018" href="$io__output_8c.html#a0600216dd8483dcbb6f3203d71ec0e25" title="print_sep_M(): Separate the metric tensor into different interaction blocks before printing JFR &#45; add..." alt="" coords="422,613,514,640"/>
+<area shape="poly" id="edge28_Node000015_Node000018" title=" " alt="" coords="344,607,406,616,406,621,343,612"/>
+<area shape="rect" id="Node000019" href="$solv__lin__eqns_8c.html#ae64b72d7399490424f264e0c41c466d4" title="PT_eigen():" alt="" coords="430,715,506,741"/>
+<area shape="poly" id="edge29_Node000015_Node000019" title=" " alt="" coords="298,613,346,655,410,700,419,705,416,710,408,705,343,659,295,617"/>
+<area shape="poly" id="edge25_Node000016_Node000006" title=" " alt="" coords="509,661,524,650,548,621,567,589,596,520,613,454,622,402,627,402,618,455,601,521,572,591,552,624,528,654,513,666"/>
+<area shape="rect" id="Node000020" href="$solv__lin__eqns_8h.html#a9f8951e48151c036d03b39a59c30efb8" title=" " alt="" coords="598,664,659,691"/>
+<area shape="poly" id="edge30_Node000019_Node000020" title=" " alt="" coords="506,713,582,689,584,694,507,719"/>
+<area shape="rect" id="Node000021" href="$solv__lin__eqns_8h.html#a51d2b55bdb4f3254ad5572854e7bbb53" title=" " alt="" coords="596,715,661,741"/>
+<area shape="poly" id="edge31_Node000019_Node000021" title=" " alt="" coords="506,725,581,725,581,731,506,731"/>
+<area shape="rect" id="Node000022" href="$solv__lin__eqns_8h.html#aef261319457552cb2423ed6ec50b6246" title=" " alt="" coords="596,765,661,792"/>
+<area shape="poly" id="edge32_Node000019_Node000022" title=" " alt="" coords="507,737,582,761,581,767,506,743"/>
+<area shape="rect" id="Node000024" href="$solv__lin__eqns_8h.html#a649da769b1caaa0bf766de5a73d33125" title=" " alt="" coords="436,816,499,843"/>
+<area shape="poly" id="edge34_Node000023_Node000024" title=" " alt="" coords="353,827,421,827,421,832,353,832"/>
+<area shape="rect" id="Node000025" href="$solv__lin__eqns_8h.html#adaaabb3109a031bbe0743e8890e1abe1" title=" " alt="" coords="432,867,503,893"/>
+<area shape="poly" id="edge35_Node000023_Node000025" title=" " alt="" coords="333,841,418,864,417,869,332,846"/>
+<area shape="rect" id="Node000026" href="$solv__lin__eqns_8h.html#a05071385d9ae69307bb1bcaf2efefdce" title=" " alt="" coords="436,917,499,944"/>
+<area shape="poly" id="edge36_Node000023_Node000026" title=" " alt="" coords="304,841,410,903,423,909,421,914,408,908,301,845"/>
+<area shape="rect" id="Node000027" href="$solv__lin__eqns_8h.html#a397861f2a4a5f455a1df3c31a8a03311" title=" " alt="" coords="432,765,503,792"/>
+<area shape="poly" id="edge37_Node000023_Node000027" title=" " alt="" coords="332,813,417,790,418,795,333,818"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="initialize_ref_potential" name="initialize_ref_potential">
+<area shape="rect" id="Node000001" title="initialize_ref_potential(): Initializes the variables in the ref_potential data structure." alt="" coords="547,5,693,32"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#ad5ab07944494d7bfa6d7122321bb1d98" title="get_ref_potential(): Reads and stores the information for a reference potential." alt="" coords="381,5,499,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="531,21,499,21,499,16,531,16"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#ad59ee67290b65b03bcfa5766b31cd49b" title="get_parameters(): Reads a line from the parameter file passed from read_par()." alt="" coords="222,5,333,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="366,21,334,21,334,16,366,16"/>
+<area shape="rect" id="Node000004" href="$read__parameters_8c.html#a05efae93beb41e2b0d8cbe4581086bd1" title="read_par(): Reads the information from the parameter file and files listed in the param&#45; eter file." alt="" coords="103,5,174,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="206,21,174,21,174,16,206,16"/>
+<area shape="rect" id="Node000005" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="87,21,55,21,55,16,87,16"/>
+</map>

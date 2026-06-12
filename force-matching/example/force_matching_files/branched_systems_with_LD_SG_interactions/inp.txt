@@ -1,0 +1,5 @@
+! comment line
+[Struct_Files]   1
+../../ldcalc/LJ_w_self.btj  1.0
+[End Struct_Files]
+

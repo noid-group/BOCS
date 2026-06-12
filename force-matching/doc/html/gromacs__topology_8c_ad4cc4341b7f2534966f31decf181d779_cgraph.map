@@ -1,0 +1,23 @@
+<map id="init_tW_gmx_trxframe" name="init_tW_gmx_trxframe">
+<area shape="rect" id="Node000001" title="init_tW_gmx_trxframe(): initializes a tW_gmx_trxframe variable" alt="" coords="5,157,155,184"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#ad0ea8640ae6a88755bc45c5a73ca51aa" title="get_box(): copies the box matrix of this frame to box" alt="" coords="232,5,299,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,155,137,105,201,49,218,38,221,42,204,53,140,109,95,159"/>
+<area shape="rect" id="Node000005" href="$gromacs__topology_8c.html#a4011753be3c3912d3435357f0373eba6" title="get_pos_of(): copies the dvec containing the position of the ith atom in the frame to x" alt="" coords="380,56,465,83"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="109,154,202,116,286,93,364,77,365,82,288,98,204,121,111,159"/>
+<area shape="rect" id="Node000006" href="$gromacs__topology_8c.html#aec94d9a29754399a4f9d5ad8cd19fa5a" title="get_vel_of(): copies the dvec containing the velocity of the ith atom in the frame to v" alt="" coords="382,107,463,133"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="142,154,202,143,366,122,366,128,203,148,143,159"/>
+<area shape="rect" id="Node000007" href="$gromacs__topology_8c.html#a400ee90952216283a0c02f2335ba4673" title="print_frame_dump(): dumps trr frame details to the screen for reading" alt="" coords="203,157,328,184"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="155,168,187,168,187,173,155,173"/>
+<area shape="rect" id="Node000008" href="$gromacs__topology_8c.html#a641ac7df0b67e6cec85493f59209d534" title="set_atom_labels(): sets the atom labels of the frame self if they are available in top" alt="" coords="207,208,324,235"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="132,182,200,201,199,206,131,187"/>
+<area shape="rect" id="Node000009" href="$gromacs__topology_8c.html#a7e3813472aef3ea0800c4f8843906f1a" title="set_natoms(): sets the number of atoms in the frame self to natoms, and allocates memory for those ar..." alt="" coords="221,259,310,285"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="103,182,148,212,204,244,215,250,213,255,201,249,146,217,100,187"/>
+<area shape="rect" id="Node000010" href="$gromacs__topology_8c.html#a3c9c8aa7b9515054784ca18744aa3010" title="setup_xdr(): sets up the XDR data structure for reading/writing trr files MRD 92517" alt="" coords="226,309,304,336"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="93,183,138,236,169,267,204,295,213,301,211,305,201,300,166,271,134,240,89,186"/>
+<area shape="rect" id="Node000003" href="$wnoid__math_8c.html#aefbae9c3407885e1bcea60aa230f1167" title="copy_vector(): Copies source into dest." alt="" coords="376,5,468,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="299,16,361,16,361,21,299,21"/>
+<area shape="rect" id="Node000004" href="$wnoid__math_8c.html#abe60d7580b13d8226cb3bd124e760b92" title="copy_vector(): Copies source into dest." alt="" coords="516,56,609,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="462,30,510,48,508,53,461,35"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="465,67,500,67,500,72,465,72"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="461,104,508,86,510,91,462,109"/>
+</map>

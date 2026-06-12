@@ -1,0 +1,51 @@
+<map id="read_etrajectory" name="read_etrajectory">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,248,120,275"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#aad9aa7cf97628a42ece2ecdc21a231c0" title="these next functions are basically wrappers that call the appropriate function to do the requested op..." alt="" coords="168,248,283,275"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,259,152,259,152,264,120,264"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8c.html#aeb390eec48884f706988dadabc7d5ac8" title="read_first_bocs_frame(): reads the first frame of a bocs.traj file." alt="" coords="340,121,490,148"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="235,246,274,202,300,178,330,158,341,152,343,157,332,162,304,183,278,206,239,249"/>
+<area shape="rect" id="Node000010" href="$gromacs__topology_8c.html#a107b7837786c30af084dfb7d240daff8" title="read_first_dump_frame(): Reads the first frame of a dumped file." alt="" coords="338,172,492,199"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="251,245,330,208,348,201,350,206,332,213,253,250"/>
+<area shape="rect" id="Node000012" href="$gromacs__topology_8c.html#a2e99897b22a415f5aa09c9dd5829d49d" title="read_first_gro_frame(): reads the first 3 lines of a .gro file, then rewinds it." alt="" coords="345,223,485,249"/>
+<area shape="poly" id="edge16_Node000002_Node000012" title=" " alt="" coords="283,251,329,245,330,250,284,256"/>
+<area shape="rect" id="Node000013" href="$gromacs__topology_8c.html#a25f55ee6d12172b00bc914460103497c" title="read_first_lammps_frame(): reads the first frame from a lammps custom dump file." alt="" coords="331,375,499,401"/>
+<area shape="poly" id="edge20_Node000002_Node000013" title=" " alt="" coords="239,273,278,316,304,340,332,360,343,366,341,371,330,365,300,344,274,320,235,277"/>
+<area shape="rect" id="Node000017" href="$gromacs__topology_8c.html#aa04f86b9171ba37142a8aaa4403d17a4" title=" " alt="" coords="336,273,494,300"/>
+<area shape="poly" id="edge28_Node000002_Node000017" title=" " alt="" coords="284,266,321,271,321,277,283,272"/>
+<area shape="rect" id="Node000018" href="$gromacs__topology_8c.html#afc94f62c652ec61dd80973b3481d18c5" title=" " alt="" coords="336,324,494,351"/>
+<area shape="poly" id="edge30_Node000002_Node000018" title=" " alt="" coords="253,273,332,309,350,316,348,321,330,314,251,278"/>
+<area shape="rect" id="Node000004" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="775,96,874,123"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="434,119,483,88,514,74,547,63,589,54,624,52,701,63,742,73,780,87,779,92,741,78,700,68,624,57,590,59,548,68,516,79,486,93,437,123"/>
+<area shape="rect" id="Node000007" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="965,8,1035,35"/>
+<area shape="poly" id="edge9_Node000003_Node000007" title=" " alt="" coords="428,119,477,77,510,55,546,39,601,23,657,13,769,4,871,5,950,12,949,17,870,11,769,9,657,18,602,29,548,44,513,60,480,81,432,123"/>
+<area shape="rect" id="Node000008" href="$io__read_8c.html#a5aa8df5077291896b83782e74ab17317" title="open_file(): Opens a file named &quot;file_name&quot; with option &quot;mode.&quot; Returns the pointer to the file." alt="" coords="587,172,661,199"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="474,146,573,170,571,175,473,151"/>
+<area shape="rect" id="Node000009" href="$gromacs__topology_8c.html#a7e3813472aef3ea0800c4f8843906f1a" title="set_natoms(): sets the number of atoms in the frame self to natoms, and allocates memory for those ar..." alt="" coords="579,273,669,300"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="477,146,501,158,517,170,527,181,549,209,600,260,596,264,545,212,523,185,513,174,498,162,474,151"/>
+<area shape="rect" id="Node000005" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="948,96,1052,123"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="874,107,933,107,933,112,874,112"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="852,93,957,40,959,44,854,98"/>
+<area shape="rect" id="Node000006" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="1100,96,1233,123"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1053,107,1085,107,1085,112,1053,112"/>
+<area shape="poly" id="edge11_Node000010_Node000004" title=" " alt="" coords="474,169,498,158,512,145,520,132,530,118,546,107,601,91,658,85,712,87,760,93,760,98,712,92,658,91,602,96,548,112,533,122,525,135,516,149,501,162,477,174"/>
+<area shape="poly" id="edge12_Node000010_Node000008" title=" " alt="" coords="493,183,572,183,572,188,493,188"/>
+<area shape="poly" id="edge15_Node000010_Node000009" title=" " alt="" coords="470,197,500,208,550,235,593,262,590,267,547,239,498,213,468,202"/>
+<area shape="rect" id="Node000011" href="$gromacs__topology_8c.html#a742ed9312d00beeaed81dece725da358" title="read_box_dump_frame(): This function reads the box information from a dumped trr file" alt="" coords="547,121,701,148"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="473,169,551,150,552,155,474,174"/>
+<area shape="poly" id="edge14_Node000011_Node000004" title=" " alt="" coords="701,122,760,115,760,120,702,128"/>
+<area shape="poly" id="edge17_Node000012_Node000004" title=" " alt="" coords="486,238,535,238,589,234,646,225,700,208,729,193,757,173,800,132,804,136,760,177,732,197,702,213,647,230,590,240,535,244,486,244"/>
+<area shape="poly" id="edge18_Node000012_Node000008" title=" " alt="" coords="473,219,571,195,573,200,474,225"/>
+<area shape="poly" id="edge19_Node000012_Node000009" title=" " alt="" coords="474,247,565,270,564,275,473,252"/>
+<area shape="poly" id="edge22_Node000013_Node000004" title=" " alt="" coords="478,371,611,339,669,322,699,310,740,270,772,223,796,176,811,136,816,138,800,178,776,225,744,273,702,314,670,327,613,344,479,377"/>
+<area shape="poly" id="edge26_Node000013_Node000008" title=" " alt="" coords="480,372,498,361,516,337,524,314,531,289,545,260,568,232,593,207,596,211,572,235,550,263,536,291,529,316,521,340,501,365,483,376"/>
+<area shape="poly" id="edge27_Node000013_Node000009" title=" " alt="" coords="473,372,498,360,512,350,522,339,531,328,546,316,568,304,571,309,549,321,535,332,526,343,516,354,501,365,475,376"/>
+<area shape="rect" id="Node000014" href="$gromacs__topology_8c.html#a742ca6a5a9d8ab40fd4b92636c71c406" title="elim_char(): Replaces occurrances of char &quot;elim&quot; with &#39;\0&#39; in word." alt="" coords="585,375,663,401"/>
+<area shape="poly" id="edge21_Node000013_Node000014" title=" " alt="" coords="500,385,570,385,570,391,500,391"/>
+<area shape="rect" id="Node000015" href="$gromacs__topology_8c.html#a581bab4e93beac29679039c89fd62a2a" title="get_word_count_delim(): Gets the number of words separated by chars in delims in a line" alt="" coords="749,451,900,477"/>
+<area shape="poly" id="edge23_Node000013_Node000015" title=" " alt="" coords="435,400,484,433,515,449,548,461,595,471,643,475,733,473,734,478,643,480,594,476,547,466,513,454,481,437,432,404"/>
+<area shape="rect" id="Node000016" href="$gromacs__topology_8c.html#a3f6ef7a52af42aeade6f168e9e4670b5" title="get_words_delim(): supposed to be like python&#39;s string.split()" alt="" coords="564,425,684,452"/>
+<area shape="poly" id="edge24_Node000013_Node000016" title=" " alt="" coords="474,399,552,418,551,424,473,404"/>
+<area shape="poly" id="edge25_Node000016_Node000015" title=" " alt="" coords="684,443,733,450,733,455,684,449"/>
+<area shape="poly" id="edge29_Node000017_Node000009" title=" " alt="" coords="494,284,564,284,564,289,494,289"/>
+<area shape="poly" id="edge31_Node000018_Node000009" title=" " alt="" coords="473,321,564,298,565,304,474,326"/>
+</map>

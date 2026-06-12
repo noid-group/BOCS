@@ -1,0 +1,28 @@
+<map id="calc_centered_diff" name="calc_centered_diff">
+<area shape="rect" id="Node000001" title="calc_centered_diff(): Calculate the centered difference." alt="" coords="762,115,888,141"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#a249691db7f149668222a7ead356d51e3" title="calc_dg_dz(): Calculates the derivative of g and stores it into sm_dg_dz." alt="" coords="597,13,684,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="793,107,756,80,713,54,683,42,686,37,715,50,759,76,796,103"/>
+<area shape="rect" id="Node000007" href="$table__functions_8c.html#a1fad2717248b85abe11709168c7c890a" title=" " alt="" coords="574,64,707,91"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="759,113,691,94,692,89,760,108"/>
+<area shape="rect" id="Node000010" href="$table__functions_8c.html#a09ed75030208d93ade3a8f46ea76361d" title=" " alt="" coords="575,115,706,141"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="747,131,706,131,706,125,747,125"/>
+<area shape="rect" id="Node000011" href="$table__functions_8c.html#a213f8eca9734cc6ac5956417eb404ecd" title=" " alt="" coords="567,165,714,192"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="760,148,692,167,691,162,759,143"/>
+<area shape="rect" id="Node000012" href="$table__functions_8c.html#ab6476fd24d4a94b40d61384d9b5347d8" title=" " alt="" coords="582,216,698,243"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="796,153,759,180,715,206,689,218,687,213,713,202,756,176,793,149"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#ad57745737b5b34d79d978168f4a8ef44" title="calc_b_struct(): Calculate b_struct from g and L." alt="" coords="419,13,519,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="581,29,519,29,519,24,581,24"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#a693f2404f7a2ed6eeb2ec49540a2aa85" title="get_b_struct_and_b_forces(): (1) Allocates memory for sys&#45;&gt;b_forces and sys&#45;&gt;b_struct." alt="" coords="236,5,371,48"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="404,29,372,29,372,24,404,24"/>
+<area shape="rect" id="Node000005" href="$calc__grids_8c.html#a7d1f81fde08821aebf1b645466f849a4" title="get_results(): (1) Calculate and store b_forces and b_struct." alt="" coords="103,13,188,40"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="220,29,188,29,188,24,220,24"/>
+<area shape="rect" id="Node000006" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,13,55,40"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="87,29,55,29,55,24,87,24"/>
+<area shape="rect" id="Node000008" href="$table__functions_8c.html#a3aca3e1f83ad70692c1e9428a4c0791c" title=" " alt="" coords="421,140,517,167"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="583,99,568,105,496,142,493,137,566,100,581,94"/>
+<area shape="rect" id="Node000009" href="$tables_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="279,140,328,167"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="406,156,329,156,329,151,406,151"/>
+<area shape="poly" id="edge10_Node000010_Node000008" title=" " alt="" coords="560,143,517,149,517,144,559,137"/>
+<area shape="poly" id="edge12_Node000011_Node000008" title=" " alt="" coords="551,168,517,163,518,158,552,163"/>
+<area shape="poly" id="edge14_Node000012_Node000008" title=" " alt="" coords="581,213,566,206,493,170,496,165,568,202,583,208"/>
+</map>

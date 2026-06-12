@@ -1,0 +1,102 @@
+<map id="print_output" name="print_output">
+<area shape="rect" id="Node000001" title="print_output(): Print the results." alt="" coords="5,541,95,568"/>
+<area shape="rect" id="Node000002" href="$io__output_8c.html#a838842043e70ff53daa5d6a613783acf" title="open_output_file1(): Opens a file to print general information about the results for the topology lab..." alt="" coords="166,5,289,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="49,541,55,443,70,293,82,215,98,143,117,83,141,42,150,34,154,38,145,46,122,86,103,144,87,216,76,294,61,443,55,541"/>
+<area shape="rect" id="Node000003" href="$io__output_8c.html#aad1b889f9e0d13a158cb7320a74b9487" title="print_Bspline_basis_forces(): JFR &#45; 07.22.12: This function is the same as print_Bspline_basis_output..." alt="" coords="160,123,294,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="50,540,61,466,80,357,106,249,123,206,141,176,146,171,149,174,145,179,127,208,111,250,85,358,66,466,56,541"/>
+<area shape="rect" id="Node000008" href="$io__read_8c.html#a7553f151522b5594937944e18c906b59" title="print_line_stars(): Prints a line of &#39;*&#39;." alt="" coords="369,499,478,525"/>
+<area shape="poly" id="edge40_Node000001_Node000008" title=" " alt="" coords="53,568,54,623,63,701,74,742,91,782,114,818,144,847,187,872,207,878,227,880,247,878,267,872,310,847,344,816,370,779,389,737,403,693,417,607,420,541,426,541,423,608,408,694,394,738,374,781,348,820,314,851,269,877,248,883,227,885,206,883,185,877,141,851,110,821,86,784,69,744,58,702,48,623,48,568"/>
+<area shape="rect" id="Node000009" href="$io__output_8c.html#a4908395a6416248ba5cc26f105415e02" title="print_Bspline_basis_output(): Prints the results for Bspline basis functions." alt="" coords="160,56,294,99"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="50,541,58,455,76,326,103,197,120,145,141,109,146,103,150,107,145,112,125,147,108,198,81,327,63,455,55,541"/>
+<area shape="rect" id="Node000010" href="$io__output_8c.html#a3c343c047ea718270238a924ac8a1c27" title="print_Chi2(): Calc the CG&#45;dependent part of Chi2 and then print the final result." alt="" coords="187,963,268,989"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="55,568,65,646,82,761,109,875,126,919,145,949,158,959,173,966,171,971,155,964,141,952,121,921,104,876,77,762,59,647,50,569"/>
+<area shape="rect" id="Node000017" href="$io__output_8c.html#ab7f135550370fe0786607ca770aadacb" title="print_decomp_Chi2(): Calc the CG&#45;dependent part of Chi2 and then print the final result." alt="" coords="161,912,294,939"/>
+<area shape="poly" id="edge21_Node000001_Node000017" title=" " alt="" coords="54,568,55,626,66,712,77,760,93,807,115,852,145,892,157,902,153,906,141,895,111,855,88,809,72,761,60,713,50,627,48,568"/>
+<area shape="rect" id="Node000018" href="$io__output_8c.html#a814b337cd881062b387e30a13c8e3604" title="print_delta_basis_forces(): JFR &#45; added 04.06.12: This function is the same as print_delta_basis_outp..." alt="" coords="146,592,308,619"/>
+<area shape="poly" id="edge25_Node000001_Node000018" title=" " alt="" coords="96,565,164,585,163,590,94,570"/>
+<area shape="rect" id="Node000019" href="$io__output_8c.html#ac512c4ae0bff0772a34f02b3813b10ec" title="print_delta_basis_output(): Prints the results for delta basis functions." alt="" coords="146,189,308,216"/>
+<area shape="poly" id="edge29_Node000001_Node000019" title=" " alt="" coords="48,541,49,484,60,400,71,353,88,307,111,264,141,226,144,223,148,227,145,230,115,267,93,310,77,355,65,401,55,484,53,541"/>
+<area shape="rect" id="Node000020" href="$io__output_8c.html#a643a96739cb569d689a520fc94d57478" title="print_harmonic_basis_forces(): JFR &#45; added 04.06.12: This function is the same as print_harmonic_basi..." alt="" coords="155,240,300,283"/>
+<area shape="poly" id="edge33_Node000001_Node000020" title=" " alt="" coords="50,540,55,494,70,428,97,357,117,323,141,293,143,290,147,294,145,296,121,326,102,359,75,430,61,495,55,541"/>
+<area shape="rect" id="Node000021" href="$io__output_8c.html#a9b2062295108388bfa2f1b2cc620ca3a" title="print_harmonic_basis_output(): Print the results for a harmonic basis." alt="" coords="155,795,300,837"/>
+<area shape="poly" id="edge37_Node000001_Node000021" title=" " alt="" coords="56,568,63,609,79,666,105,727,123,755,145,781,147,783,143,787,141,784,119,759,100,729,74,667,58,610,50,569"/>
+<area shape="rect" id="Node000022" href="$io__output_8c.html#a082d00e7b69e44097c28d9cd85ccdd86" title="print_linear_basis_forces(): JFR &#45; added 04.06.12: This function is the same as print_linear_basis_ou..." alt="" coords="166,307,288,349"/>
+<area shape="poly" id="edge41_Node000001_Node000022" title=" " alt="" coords="52,540,61,505,78,457,104,405,121,381,141,359,151,351,155,355,144,363,125,384,109,408,83,459,66,506,57,542"/>
+<area shape="rect" id="Node000023" href="$io__output_8c.html#a90a8ef8d3efca3f2c1d7a9d874c1f7ad" title="print_linear_basis_output(): Prints the results for delta basis functions." alt="" coords="166,373,288,416"/>
+<area shape="poly" id="edge45_Node000001_Node000023" title=" " alt="" coords="56,540,88,485,112,454,141,426,151,419,154,423,144,430,116,457,92,488,60,542"/>
+<area shape="rect" id="Node000024" href="$io__output_8c.html#ace3d49e088e8b5f5f53f8c296d3fb187" title="print_power_basis_forces(): JFR &#45; added 04.06.12: This function is the same as print_power_basis_outp..." alt="" coords="143,440,312,467"/>
+<area shape="poly" id="edge49_Node000001_Node000024" title=" " alt="" coords="62,539,96,508,141,476,154,470,156,475,144,481,100,512,66,543"/>
+<area shape="rect" id="Node000025" href="$io__output_8c.html#a1b8b748537183e930ed0d60975f99092" title="print_power_basis_output(): Print results for a power basis." alt="" coords="143,643,312,669"/>
+<area shape="poly" id="edge53_Node000001_Node000025" title=" " alt="" coords="66,566,100,597,144,628,156,634,154,639,141,633,96,602,62,570"/>
+<area shape="rect" id="Node000026" href="$io__output_8c.html#a593586c605a3bdf194417e8a688af83b" title="print_RB_basis_forces(): JFR &#45; added 04.06.12: This function is the same as print_RB_basis_output()." alt="" coords="151,491,304,517"/>
+<area shape="poly" id="edge56_Node000001_Node000026" title=" " alt="" coords="94,539,163,520,164,525,96,545"/>
+<area shape="rect" id="Node000027" href="$io__output_8c.html#a436848deaf41345e4fc0d50fe146865f" title="print_RB_basis_output(): Print results for a RB basis." alt="" coords="151,693,304,720"/>
+<area shape="poly" id="edge60_Node000001_Node000027" title=" " alt="" coords="60,567,91,622,115,653,144,679,152,684,149,688,141,683,111,656,87,625,55,570"/>
+<area shape="rect" id="Node000028" href="$io__output_8c.html#a98fb61708346c184f87ee4b9eb602e08" title="print_TOY_basis_forces(): JFR &#45; added 04.06.12: This function is the same as print_TOY_basis_output()..." alt="" coords="147,541,308,568"/>
+<area shape="poly" id="edge63_Node000001_Node000028" title=" " alt="" coords="95,552,131,552,131,557,95,557"/>
+<area shape="rect" id="Node000029" href="$io__output_8c.html#a67a767c6ddadfc109d551f0ec30903fe" title="print_TOY_basis_output(): Prints resutls for a TOY dihedral basis." alt="" coords="147,744,308,771"/>
+<area shape="poly" id="edge67_Node000001_Node000029" title=" " alt="" coords="57,568,67,601,84,645,109,691,144,730,150,734,146,738,141,734,105,694,79,647,62,603,52,569"/>
+<area shape="rect" id="Node000030" href="$io__output_8c.html#af27d7eacdd80d0d773d227231c057df9" title="was_inter_sampled(): Returns FALSE if the interaction was not present in calculation and TRUE otherwi..." alt="" coords="164,1013,291,1040"/>
+<area shape="poly" id="edge70_Node000001_Node000030" title=" " alt="" coords="55,568,63,655,79,785,91,853,106,915,124,965,145,1000,152,1006,149,1010,141,1003,119,968,101,916,86,854,74,786,57,656,50,569"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#a48726d58a1b9dfc1502f9efea032c099" title="calc_Bspline(): JFR &#45; 07.16.12: This is the De Boor iterative method for calculating normalized Bspli..." alt="" coords="376,67,471,93"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="294,120,365,96,367,101,296,125"/>
+<area shape="rect" id="Node000005" href="$calc__grids_8c.html#ace1ee15830bc3d158e0437f3dea91b65" title="get_grid_index_for_linear_basis():" alt="" coords="360,119,487,161"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="295,140,345,139,345,144,295,145"/>
+<area shape="rect" id="Node000006" href="$io__output_8c.html#af8baa3dd521fb7a960cea02d4624c19e" title="open_output_file2(): Opens files for printing tabulated results." alt="" coords="362,348,485,375"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="297,164,314,175,349,213,378,256,400,298,415,333,410,335,395,300,373,258,345,216,310,179,294,168"/>
+<area shape="rect" id="Node000007" href="$io__output_8c.html#adf047e8e7fe01306cb1c4dec8a77a7dc" title="print_general_inter_output(): Prints general information about a particular interaction." alt="" coords="360,432,487,475"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="297,161,314,176,332,202,342,228,345,253,345,278,345,328,350,356,362,385,388,420,384,423,358,388,345,357,340,329,340,278,340,253,337,229,328,205,310,179,293,165"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="297,161,314,176,338,216,347,256,345,295,339,332,332,370,331,407,339,446,362,485,363,487,359,490,358,488,334,447,326,408,327,369,333,331,340,294,341,256,333,218,310,179,293,165"/>
+<area shape="poly" id="edge9_Node000009_Node000004" title=" " alt="" coords="295,76,361,76,361,82,295,81"/>
+<area shape="poly" id="edge10_Node000009_Node000005" title=" " alt="" coords="296,96,346,113,345,118,294,101"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="296,96,314,109,337,135,357,163,387,225,408,285,420,332,415,333,403,286,383,227,352,166,333,138,310,113,293,100"/>
+<area shape="poly" id="edge12_Node000009_Node000007" title=" " alt="" coords="297,94,314,109,337,145,347,178,350,211,347,243,343,310,348,346,362,385,388,420,383,423,358,388,343,347,337,310,342,243,344,211,342,179,332,147,310,112,293,98"/>
+<area shape="poly" id="edge13_Node000009_Node000008" title=" " alt="" coords="297,94,314,109,331,134,342,159,351,207,348,253,339,299,329,345,326,390,335,437,346,461,362,485,363,487,359,490,358,488,341,463,330,438,321,390,324,344,334,298,343,253,346,207,337,160,326,137,310,112,293,98"/>
+<area shape="rect" id="Node000011" href="$io__read_8c.html#a465f5441ca7fc78824e4e834b46a747f" title="file_exists(): Checks whether the supplied filename can be opened for reading." alt="" coords="384,887,464,913"/>
+<area shape="poly" id="edge15_Node000010_Node000011" title=" " alt="" coords="267,963,311,948,359,923,372,917,374,922,361,928,313,953,269,968"/>
+<area shape="rect" id="Node000012" href="$io__read_8c.html#a4a3e4ddb8114d4baed712296586215a0" title="get_next_line(): Stores the next non&#45;blank (excluding comments) line from fp_in into the variable inp..." alt="" coords="374,937,473,964"/>
+<area shape="poly" id="edge16_Node000010_Node000012" title=" " alt="" coords="268,968,358,956,359,962,268,974"/>
+<area shape="rect" id="Node000016" href="$wnoid__math_8c.html#aeabe54d7c475d74f71a949ba78a84247" title="index_Lpacked(): Calculate the index of element aij in an NxN matrix in Lower&#45;packed storage form." alt="" coords="370,988,478,1015"/>
+<area shape="poly" id="edge20_Node000010_Node000016" title=" " alt="" coords="268,978,354,990,353,995,268,984"/>
+<area shape="rect" id="Node000013" href="$io__read_8c.html#a261afb53f56e356e63856f14b7687f06" title="get_clean_line(): Reads the next line of fp_in and removes commented sections from the line." alt="" coords="535,912,640,939"/>
+<area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="473,940,520,933,521,938,474,946"/>
+<area shape="rect" id="Node000015" href="$gromacs__topology_8c.html#ae9de55773407c692e38abbded83f8356" title="test_line(): Tests to see if a line contains &quot;term&quot; against whether or not it is expected to (&quot;want&quot;)..." alt="" coords="552,963,623,989"/>
+<area shape="poly" id="edge19_Node000012_Node000015" title=" " alt="" coords="474,956,538,966,537,971,473,961"/>
+<area shape="rect" id="Node000014" href="$io__read_8c.html#a6947187481f537d45038c05e1c129bb3" title="remove_comments(): Searches for characters that denote comments (COMMENTFLAG)." alt="" coords="688,912,820,939"/>
+<area shape="poly" id="edge18_Node000013_Node000014" title=" " alt="" coords="640,923,672,923,672,928,640,928"/>
+<area shape="poly" id="edge22_Node000017_Node000011" title=" " alt="" coords="294,914,368,904,369,910,295,919"/>
+<area shape="poly" id="edge23_Node000017_Node000012" title=" " alt="" coords="295,931,360,940,359,945,294,937"/>
+<area shape="poly" id="edge24_Node000017_Node000016" title=" " alt="" coords="281,937,313,948,361,974,374,979,372,984,359,978,311,953,279,942"/>
+<area shape="poly" id="edge26_Node000018_Node000006" title=" " alt="" coords="295,589,310,578,325,559,334,541,338,504,341,464,346,442,358,419,389,383,393,387,362,421,351,444,346,465,344,504,339,542,330,562,314,582,298,594"/>
+<area shape="poly" id="edge27_Node000018_Node000007" title=" " alt="" coords="292,589,310,578,328,556,335,534,341,510,358,485,360,483,364,487,362,488,346,512,340,535,332,559,314,582,295,594"/>
+<area shape="poly" id="edge28_Node000018_Node000008" title=" " alt="" coords="281,589,311,578,353,556,390,532,392,537,355,560,313,582,283,594"/>
+<area shape="poly" id="edge30_Node000019_Node000006" title=" " alt="" coords="291,214,313,226,344,250,370,279,409,333,405,336,366,282,340,254,311,230,289,219"/>
+<area shape="poly" id="edge31_Node000019_Node000007" title=" " alt="" coords="298,214,314,226,330,246,339,265,344,303,347,342,352,363,362,385,389,419,384,423,358,388,347,365,342,343,339,303,334,267,325,249,310,230,295,219"/>
+<area shape="poly" id="edge32_Node000019_Node000008" title=" " alt="" coords="299,214,314,226,336,259,345,292,345,324,340,356,336,388,335,420,342,452,362,485,364,487,360,491,358,488,337,454,330,421,330,388,335,356,339,324,339,293,331,262,310,230,296,219"/>
+<area shape="poly" id="edge34_Node000020_Node000006" title=" " alt="" coords="288,281,313,292,391,337,388,342,311,297,286,286"/>
+<area shape="poly" id="edge35_Node000020_Node000007" title=" " alt="" coords="298,281,314,293,332,315,341,337,349,360,362,385,391,419,387,423,358,388,344,362,336,339,328,318,310,297,295,285"/>
+<area shape="poly" id="edge36_Node000020_Node000008" title=" " alt="" coords="301,281,314,293,331,318,338,343,339,391,339,438,346,461,362,485,364,487,360,491,358,488,341,463,334,438,333,391,333,344,326,320,310,296,297,285"/>
+<area shape="poly" id="edge38_Node000021_Node000007" title=" " alt="" coords="298,792,310,781,332,744,341,707,341,672,336,637,330,601,329,564,337,525,358,485,358,484,363,487,362,488,342,527,334,564,335,600,341,636,346,672,346,708,337,746,314,784,302,796"/>
+<area shape="poly" id="edge39_Node000021_Node000008" title=" " alt="" coords="295,792,310,781,334,753,354,722,385,655,405,591,416,540,421,541,410,593,390,657,359,725,338,756,314,785,299,796"/>
+<area shape="poly" id="edge42_Node000022_Node000006" title=" " alt="" coords="289,336,347,346,346,351,288,341"/>
+<area shape="poly" id="edge43_Node000022_Node000007" title=" " alt="" coords="290,347,313,359,355,388,392,420,388,424,352,393,311,364,288,352"/>
+<area shape="poly" id="edge44_Node000022_Node000008" title=" " alt="" coords="290,343,314,359,327,376,334,392,339,424,343,454,350,469,362,485,365,488,362,492,358,488,345,472,338,456,333,424,329,394,322,379,310,363,287,347"/>
+<area shape="poly" id="edge46_Node000023_Node000006" title=" " alt="" coords="288,382,346,372,347,377,289,387"/>
+<area shape="poly" id="edge47_Node000023_Node000007" title=" " alt="" coords="290,410,346,427,344,432,288,415"/>
+<area shape="poly" id="edge48_Node000023_Node000008" title=" " alt="" coords="290,412,314,426,329,441,338,456,347,470,362,485,368,489,365,493,358,489,343,474,334,459,325,444,310,430,288,417"/>
+<area shape="poly" id="edge50_Node000024_Node000006" title=" " alt="" coords="280,437,311,426,352,404,389,381,392,386,355,409,313,430,282,442"/>
+<area shape="poly" id="edge51_Node000024_Node000007" title=" " alt="" coords="312,451,344,451,344,456,312,456"/>
+<area shape="poly" id="edge52_Node000024_Node000008" title=" " alt="" coords="275,465,363,491,361,496,274,470"/>
+<area shape="poly" id="edge54_Node000025_Node000007" title=" " alt="" coords="294,640,310,629,324,612,331,595,335,560,338,524,345,505,358,485,359,483,363,487,362,488,350,507,344,525,340,561,336,596,328,614,314,633,297,644"/>
+<area shape="poly" id="edge55_Node000025_Node000008" title=" " alt="" coords="287,640,311,628,338,608,363,584,402,537,407,540,367,587,342,612,313,633,289,645"/>
+<area shape="poly" id="edge57_Node000026_Node000006" title=" " alt="" coords="289,488,311,476,326,463,336,450,358,418,393,384,397,387,362,422,340,453,330,467,313,481,291,492"/>
+<area shape="poly" id="edge58_Node000026_Node000007" title=" " alt="" coords="281,487,344,471,346,476,283,493"/>
+<area shape="poly" id="edge59_Node000026_Node000008" title=" " alt="" coords="305,504,354,507,354,512,305,510"/>
+<area shape="poly" id="edge61_Node000027_Node000007" title=" " alt="" coords="295,691,310,679,327,656,335,633,337,610,336,586,335,537,342,512,358,485,359,484,363,488,362,488,347,514,341,538,341,586,342,610,340,634,332,659,314,683,298,695"/>
+<area shape="poly" id="edge62_Node000027_Node000008" title=" " alt="" coords="291,690,310,679,344,647,372,609,409,539,414,541,377,612,348,651,314,683,293,695"/>
+<area shape="poly" id="edge64_Node000028_Node000006" title=" " alt="" coords="293,539,310,527,330,502,337,477,343,450,358,418,391,383,394,387,362,422,348,451,342,478,334,505,314,531,296,543"/>
+<area shape="poly" id="edge65_Node000028_Node000007" title=" " alt="" coords="285,538,311,527,335,507,358,485,364,481,367,485,362,489,338,511,313,532,287,543"/>
+<area shape="poly" id="edge66_Node000028_Node000008" title=" " alt="" coords="292,538,353,525,354,530,293,543"/>
+<area shape="poly" id="edge68_Node000029_Node000007" title=" " alt="" coords="296,741,310,730,330,700,339,671,340,642,337,612,333,582,332,551,340,519,358,485,358,484,363,487,362,488,345,520,338,551,338,582,342,612,345,642,344,672,335,703,314,734,299,746"/>
+<area shape="poly" id="edge69_Node000029_Node000008" title=" " alt="" coords="292,741,310,730,332,709,350,685,380,633,401,582,413,539,418,541,406,583,385,635,355,688,335,713,314,734,295,746"/>
+</map>

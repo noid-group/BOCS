@@ -1,0 +1,157 @@
+<map id="calc_grids2" name="calc_grids2">
+<area shape="rect" id="Node000001" title="calc_grids2(): The fast loops." alt="" coords="5,1379,93,1405"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#af3c7ff04c46615ea34ee8c41fe5c72f6" title="check_Bspline_inter_range(): JFR &#45; 07.22.12: same as linear right now MCL &#45; 03.26...." alt="" coords="156,5,294,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="48,1378,51,1132,62,711,74,491,90,294,111,143,124,91,138,59,142,54,146,58,143,61,129,93,116,144,95,295,79,492,68,711,56,1132,53,1378"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#a9c5a3b6937e85e5ab095336277f0f7ce" title="check_inter_range():" alt="" coords="161,72,288,99"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="48,1378,50,1139,62,734,73,522,89,334,110,189,123,140,138,109,146,101,150,105,143,112,128,142,116,190,94,334,78,523,67,734,56,1139,53,1378"/>
+<area shape="rect" id="Node000004" href="$calc__grids_8c.html#ae0aa55b18b49020cab7007c84d082865" title="check_linear_inter_range(): Changed r_ij &gt; R_max + 0.5*dr to r_ij &gt; R_max" alt="" coords="162,123,288,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="48,1378,53,1152,67,772,79,574,94,396,114,259,125,212,138,183,147,172,151,176,143,185,131,214,119,260,100,397,84,574,72,772,58,1152,53,1378"/>
+<area shape="rect" id="Node000005" href="$wnoid__math_8c.html#abe60d7580b13d8226cb3bd124e760b92" title="copy_vector(): Copies source into dest." alt="" coords="825,641,917,668"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="51,1378,81,1276,142,1107,184,1009,233,909,290,811,355,720,405,659,449,615,500,581,572,552,622,537,663,532,704,537,754,552,783,567,810,586,851,627,848,631,806,590,780,571,752,557,703,542,663,537,623,543,574,557,503,586,452,619,408,663,359,723,295,814,238,912,189,1012,147,1109,86,1278,56,1379"/>
+<area shape="rect" id="Node000006" href="$wnoid__math_8c.html#a4db7f92a7eb0f8130e49c3ef0ba0be8f" title="dot_prod(): Returns the dot product of two dvec&#39;s." alt="" coords="835,1480,906,1507"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="64,1404,97,1436,142,1468,256,1524,349,1555,447,1574,574,1592,665,1607,704,1605,752,1592,780,1578,807,1558,848,1517,851,1521,810,1563,783,1582,754,1597,705,1611,664,1612,573,1597,446,1580,348,1561,254,1529,139,1473,94,1440,61,1408"/>
+<area shape="rect" id="Node000007" href="$calc__grids_8c.html#a05584288f36cea4b4192998d2543b5c6" title="eval_bond_basis_vectors: Evaluates the basis vectors for bonded interactions for site i_site." alt="" coords="141,516,309,543"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="48,1378,57,1216,75,956,88,822,103,703,119,611,129,580,139,560,149,549,153,553,143,563,134,582,125,612,108,703,93,823,81,957,62,1217,54,1378"/>
+<area shape="rect" id="Node000016" href="$wnoid__math_8c.html#a9d3f300c39439fd568e5c7b009cc9d6b" title="scal_times_vect(): Stores results from scalar&#45;vector multiplication into the variable result." alt="" coords="813,808,929,835"/>
+<area shape="poly" id="edge103_Node000001_Node000016" title=" " alt="" coords="66,1376,99,1352,140,1330,183,1316,256,1299,451,1258,644,1212,713,1190,751,1171,767,1153,777,1136,785,1100,788,1060,798,1013,856,848,862,850,803,1014,794,1061,791,1101,782,1138,771,1156,754,1175,715,1195,645,1217,452,1263,257,1305,184,1322,142,1334,102,1357,69,1380"/>
+<area shape="rect" id="Node000024" href="$calc__grids_8c.html#a0716f00ea9ff31cbfb4c329249846597" title="get_grid_index_for_delta_basis():" alt="" coords="807,416,934,459"/>
+<area shape="poly" id="edge94_Node000001_Node000024" title=" " alt="" coords="48,1378,49,1222,59,963,70,823,86,693,108,582,122,538,138,503,182,432,224,376,268,330,315,293,367,263,426,236,572,184,623,168,666,159,708,163,754,184,769,199,785,220,814,278,860,400,855,402,809,280,780,223,765,202,751,189,706,168,666,164,625,173,574,189,428,241,369,267,318,298,272,334,228,379,186,435,143,505,127,540,113,584,91,694,75,824,64,963,54,1222,53,1378"/>
+<area shape="rect" id="Node000050" href="$calc__grids_8c.html#a227921905bf7045ff8544d36616bd8f9" title="eval_bonds_M_b(): This function increments the bond&#45;bond part (intramolec&#45;intramolec) part of the G m..." alt="" coords="165,1708,284,1735"/>
+<area shape="poly" id="edge70_Node000001_Node000050" title=" " alt="" coords="53,1406,55,1459,67,1536,78,1579,94,1621,115,1660,143,1694,153,1702,149,1706,139,1698,111,1663,89,1623,73,1580,61,1538,50,1460,47,1406"/>
+<area shape="rect" id="Node000052" href="$calc__grids_8c.html#a458bc4181fbcdce9445b3f1337fc90e5" title="eval_Bspline_basis_vectors: Weights the contributions from a given pair distance (Psi = R_IJ = X) to ..." alt="" coords="596,81,730,124"/>
+<area shape="poly" id="edge73_Node000001_Node000052" title=" " alt="" coords="48,1378,51,1160,64,794,76,604,91,434,112,305,124,260,139,233,157,224,195,212,312,181,581,118,582,123,314,186,196,217,159,229,143,237,129,262,117,306,97,435,81,604,70,794,57,1160,53,1378"/>
+<area shape="rect" id="Node000053" href="$calc__grids_8c.html#a82979b50e4317e029b1cae33ea34396e" title="eval_delta_basis_vectors():" alt="" coords="357,1404,525,1431"/>
+<area shape="poly" id="edge79_Node000001_Node000053" title=" " alt="" coords="93,1392,342,1408,341,1414,93,1397"/>
+<area shape="rect" id="Node000054" href="$calc__grids_8c.html#ae73b6bd90917294f02834bb05a771240" title="eval_linear_basis_vectors():" alt="" coords="577,1303,749,1329"/>
+<area shape="poly" id="edge81_Node000001_Node000054" title=" " alt="" coords="86,1376,140,1360,252,1341,366,1328,562,1316,562,1321,366,1334,253,1346,141,1365,87,1381"/>
+<area shape="rect" id="Node000055" href="$calc__grids_8c.html#a5ec8b8e6e3cf93e96d8eae1ed37a5e98" title="eval_M_nb_pair_inter():" alt="" coords="153,1607,297,1633"/>
+<area shape="poly" id="edge85_Node000001_Node000055" title=" " alt="" coords="56,1405,65,1441,81,1490,107,1541,123,1565,142,1586,158,1597,155,1602,139,1590,119,1568,102,1544,76,1492,59,1443,50,1407"/>
+<area shape="rect" id="Node000056" href="$calc__grids_8c.html#af09e8ba31ded2085ec090e13cd7c4eb6" title="eval_M_nbPair_bonds():" alt="" coords="150,1657,300,1684"/>
+<area shape="poly" id="edge88_Node000001_Node000056" title=" " alt="" coords="54,1406,59,1451,73,1515,84,1550,99,1584,119,1616,143,1643,146,1647,143,1651,139,1647,114,1619,95,1586,79,1552,68,1516,54,1452,48,1406"/>
+<area shape="rect" id="Node000057" href="$calc__grids_8c.html#a57c9971389e730a75407a69337ba1c25" title="eval_power_basis_vectors():" alt="" coords="575,1353,751,1380"/>
+<area shape="poly" id="edge91_Node000001_Node000057" title=" " alt="" coords="93,1386,141,1383,560,1367,560,1372,141,1388,93,1391"/>
+<area shape="rect" id="Node000058" href="$calc__grids_8c.html#a22aa16541b3fd919f1e155c1cbef467a" title="get_nb_pair_info: For positions x_i and x_j, determine the pair distance and displacement under PBC i..." alt="" coords="383,1492,499,1519"/>
+<area shape="poly" id="edge95_Node000001_Node000058" title=" " alt="" coords="94,1402,378,1485,377,1490,92,1407"/>
+<area shape="rect" id="Node000060" href="$calc__grids_8c.html#aaa99e5c38938d34060adc6c058730382" title="get_nb_pair_inter_ptr: Determines if j_site.name is contained in the partner list passed for site_i (..." alt="" coords="154,1759,296,1785"/>
+<area shape="poly" id="edge100_Node000001_Node000060" title=" " alt="" coords="55,1405,65,1476,83,1578,110,1679,125,1718,143,1745,145,1748,142,1751,139,1748,121,1721,105,1681,78,1580,60,1477,49,1406"/>
+<area shape="rect" id="Node000061" href="$io__read_8c.html#ac9003761e07e1a6a43371290e32464e8" title="match_word(): Searches through N_words words in word_list to see if the string stored in word is incl..." alt="" coords="395,1809,487,1836"/>
+<area shape="poly" id="edge102_Node000001_Node000061" title=" " alt="" coords="54,1405,61,1486,77,1605,89,1666,104,1722,122,1767,143,1795,168,1814,197,1827,228,1835,260,1840,323,1841,379,1834,380,1839,324,1846,259,1845,227,1840,195,1832,166,1818,139,1799,117,1769,99,1723,84,1667,72,1606,56,1487,49,1406"/>
+<area shape="rect" id="Node000062" href="$calc__grids_8c.html#aec32fc1ee64e8d28a890d6738f2795fb" title="setup_box_dimensions(): Stores the box vectors for a cubic box from the diagonal elements of matrix." alt="" coords="148,1860,302,1887"/>
+<area shape="poly" id="edge104_Node000001_Node000062" title=" " alt="" coords="54,1406,62,1493,79,1623,91,1691,106,1753,123,1805,143,1840,154,1850,150,1854,139,1843,118,1807,100,1754,86,1692,74,1624,57,1493,49,1406"/>
+<area shape="rect" id="Node000063" href="$gromacs__topology_8c.html#a83ffcb1d231afb48f1b2824bc88880ef" title="skip_excl():" alt="" coords="187,1911,263,1937"/>
+<area shape="poly" id="edge105_Node000001_Node000063" title=" " alt="" coords="54,1405,59,1502,74,1651,86,1728,101,1799,120,1857,143,1897,156,1908,173,1915,170,1920,153,1912,139,1900,115,1860,96,1800,81,1729,69,1651,54,1503,48,1406"/>
+<area shape="rect" id="Node000008" href="$calc__grids_8c.html#aad463cf44b20bdf0efe4eb27793c990a" title="get_Angle_basis_vectors: Associates the angle that CG_struct[i] is involved in with a corresponding v..." alt="" coords="358,516,525,543"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="309,527,342,527,342,532,309,532"/>
+<area shape="rect" id="Node000028" href="$calc__grids_8c.html#a058ee5dcba0c5649d1a1d5751685fa8c" title="get_BondStretch_basis_vectors: Associates a Bonded interaction instance (index i_inter) with halfG in..." alt="" coords="363,383,519,425"/>
+<area shape="poly" id="edge22_Node000007_Node000028" title=" " alt="" coords="242,513,291,476,356,435,366,430,368,435,358,440,294,480,245,518"/>
+<area shape="rect" id="Node000034" href="$calc__grids_8c.html#ada107de8de2c7e6767cdbe070af6af93" title="get_Dihedral_basis_vectors():" alt="" coords="375,733,507,776"/>
+<area shape="poly" id="edge40_Node000007_Node000034" title=" " alt="" coords="241,541,411,720,407,724,237,545"/>
+<area shape="rect" id="Node000044" href="$calc__grids_8c.html#a97ba35573b889284cd0c89f108d33e5c" title="get_IntraMolec_NB_Pair_basis_vectors():" alt="" coords="360,984,523,1027"/>
+<area shape="poly" id="edge67_Node000007_Node000044" title=" " alt="" coords="235,542,426,969,421,971,230,544"/>
+<area shape="rect" id="Node000049" href="$calc__grids_8c.html#ab58643b715eeac112b49f624659dc585" title="print_debug_eval_bond_basis():" alt="" coords="364,449,518,492"/>
+<area shape="poly" id="edge69_Node000007_Node000049" title=" " alt="" coords="276,513,348,493,350,498,278,518"/>
+<area shape="rect" id="Node000009" href="$calc__grids_8c.html#af536f354b8e2bb65ad61fe15c9dc1566" title="get_Bspline_angle_basis_vector(): JFR &#45; 07.23.12" alt="" coords="580,249,746,292"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="509,513,523,502,541,478,548,454,549,430,547,405,545,380,547,354,554,328,571,302,573,300,577,304,575,306,559,331,552,355,551,380,553,405,555,430,553,455,545,480,527,506,512,518"/>
+<area shape="rect" id="Node000023" href="$calc__grids_8c.html#acffdba3d10c1ba35e2287986ffac37ef" title="get_delta_angle_basis_vector():" alt="" coords="588,449,738,492"/>
+<area shape="poly" id="edge13_Node000008_Node000023" title=" " alt="" coords="494,513,572,492,573,497,495,518"/>
+<area shape="rect" id="Node000025" href="$calc__grids_8c.html#a66db1e8cd418b3da3017fd804a2125f3" title="get_harmonic_angle_basis_vector():" alt="" coords="594,900,732,943"/>
+<area shape="poly" id="edge16_Node000008_Node000025" title=" " alt="" coords="452,542,486,617,528,721,539,770,542,810,550,847,560,866,575,886,583,894,580,898,571,890,555,869,545,849,537,811,534,770,523,722,481,619,447,544"/>
+<area shape="rect" id="Node000026" href="$calc__grids_8c.html#af72e60feac003edae12f29d43e9fce9b" title="get_linear_angle_basis_vector():" alt="" coords="586,1084,740,1127"/>
+<area shape="poly" id="edge18_Node000008_Node000026" title=" " alt="" coords="453,542,489,617,510,668,528,721,538,775,540,823,531,908,529,947,533,986,547,1027,575,1070,577,1072,573,1075,571,1074,542,1029,528,987,524,947,526,907,534,823,533,775,523,722,505,669,484,619,448,544"/>
+<area shape="rect" id="Node000010" href="$calc__grids_8c.html#a48726d58a1b9dfc1502f9efea032c099" title="calc_Bspline(): JFR &#45; 07.16.12: This is the De Boor iterative method for calculating normalized Bspli..." alt="" coords="823,144,918,171"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="731,246,751,235,766,223,775,211,784,198,799,185,814,176,817,180,802,189,788,201,779,214,769,226,754,240,733,251"/>
+<area shape="rect" id="Node000011" href="$calc__grids_8c.html#ac827b2055c7c1e64a2388bb8b97cf8c9" title="calc_Bspline_deriv: Uses the De Boor iterative method for calculating derivatives of normalized Bspli..." alt="" coords="806,199,936,225"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="740,246,806,227,807,233,741,251"/>
+<area shape="rect" id="Node000020" href="$calc__grids_8c.html#ace1ee15830bc3d158e0437f3dea91b65" title="get_grid_index_for_linear_basis():" alt="" coords="989,249,1116,292"/>
+<area shape="poly" id="edge11_Node000009_Node000020" title=" " alt="" coords="746,268,974,268,974,273,746,273"/>
+<area shape="poly" id="edge12_Node000009_Node000016" title=" " alt="" coords="742,291,755,302,771,335,781,379,790,486,793,596,796,643,803,679,828,741,855,793,851,796,823,744,798,681,791,644,788,597,785,487,776,380,766,337,751,306,739,294"/>
+<area shape="poly" id="edge15_Node000023_Node000016" title=" " alt="" coords="695,491,726,519,755,553,773,586,783,615,790,644,803,679,858,793,853,795,798,681,785,645,778,616,768,589,750,556,722,522,692,495"/>
+<area shape="poly" id="edge14_Node000023_Node000024" title=" " alt="" coords="738,456,792,447,792,453,739,461"/>
+<area shape="poly" id="edge17_Node000025_Node000016" title=" " alt="" coords="725,897,751,886,834,840,836,845,754,890,727,902"/>
+<area shape="poly" id="edge21_Node000026_Node000016" title=" " alt="" coords="735,1081,751,1070,774,1045,794,1017,826,956,848,896,861,849,866,850,853,898,831,958,799,1020,778,1048,754,1074,739,1086"/>
+<area shape="rect" id="Node000027" href="$calc__grids_8c.html#ae8375fd538f510ba6aa27438e9620043" title="calc_linear_spline_A():" alt="" coords="801,1025,941,1052"/>
+<area shape="poly" id="edge19_Node000026_Node000027" title=" " alt="" coords="731,1081,811,1055,813,1060,732,1086"/>
+<area shape="poly" id="edge20_Node000027_Node000020" title=" " alt="" coords="875,1024,905,949,938,846,976,690,1007,536,1044,307,1049,308,1012,537,981,691,944,847,910,951,880,1026"/>
+<area shape="rect" id="Node000029" href="$calc__grids_8c.html#a5e48fa18cce6f3464154eebea8d7823c" title="get_BondStretch_info: Calculates and stores data needed to calculated the BondStretch basis vectors." alt="" coords="590,199,736,225"/>
+<area shape="poly" id="edge23_Node000028_Node000029" title=" " alt="" coords="451,381,497,309,531,269,572,235,580,230,583,235,575,240,535,273,501,313,456,384"/>
+<area shape="rect" id="Node000030" href="$calc__grids_8c.html#afb407f46598337e2513be34821cf2d0c" title="get_Bspline_bond_basis_vector():" alt="" coords="582,15,744,57"/>
+<area shape="poly" id="edge24_Node000028_Node000030" title=" " alt="" coords="442,382,453,321,475,237,492,192,513,147,540,105,571,67,574,65,578,69,575,71,544,108,518,150,497,194,480,239,458,322,448,383"/>
+<area shape="rect" id="Node000031" href="$calc__grids_8c.html#a60701d5e90406050fe43494aa2e55608" title="get_delta_bond_basis_vector():" alt="" coords="589,383,737,425"/>
+<area shape="poly" id="edge30_Node000028_Node000031" title=" " alt="" coords="520,401,574,401,574,407,520,407"/>
+<area shape="rect" id="Node000032" href="$calc__grids_8c.html#a6449d110c6f3a41a6669f82cd6adb237" title="get_harmonic_bond_basis_vector():" alt="" coords="577,633,749,676"/>
+<area shape="poly" id="edge33_Node000028_Node000032" title=" " alt="" coords="514,424,527,436,544,460,551,484,552,530,552,575,560,597,575,620,577,622,573,625,571,623,555,599,547,575,546,530,546,484,539,462,523,439,511,428"/>
+<area shape="rect" id="Node000033" href="$calc__grids_8c.html#af124a6f2e52afabe5a7594e248cdb693" title="get_linear_bond_basis_vector: Based on a passed bond length (norm_ij) determine the dPsi/dR_I contrib..." alt="" coords="588,833,738,876"/>
+<area shape="poly" id="edge36_Node000028_Node000033" title=" " alt="" coords="515,424,527,436,544,461,556,487,562,511,565,536,561,583,551,630,542,677,538,723,541,747,548,771,559,795,575,820,578,823,574,826,571,823,554,798,543,773,536,748,533,724,536,676,546,629,556,583,559,536,557,512,551,488,540,464,523,439,511,428"/>
+<area shape="poly" id="edge27_Node000030_Node000005" title=" " alt="" coords="742,56,755,68,772,102,783,149,789,204,792,264,795,381,797,431,803,470,831,556,859,626,854,628,825,558,798,471,792,432,789,381,787,264,784,205,778,150,767,104,751,71,739,60"/>
+<area shape="poly" id="edge25_Node000030_Node000010" title=" " alt="" coords="730,56,754,67,803,99,845,132,841,136,800,103,751,72,728,60"/>
+<area shape="poly" id="edge26_Node000030_Node000011" title=" " alt="" coords="739,56,755,67,767,82,774,97,780,125,785,153,791,167,803,181,812,188,808,193,799,185,787,170,780,155,774,126,769,98,762,85,751,71,736,60"/>
+<area shape="poly" id="edge28_Node000030_Node000020" title=" " alt="" coords="745,35,793,40,844,51,895,68,943,94,977,125,1004,162,1026,200,1041,234,1036,236,1021,202,1000,165,973,128,939,98,893,73,843,56,792,45,744,40"/>
+<area shape="poly" id="edge29_Node000030_Node000016" title=" " alt="" coords="743,56,755,68,769,92,779,121,792,192,797,276,797,366,792,544,794,620,803,679,827,742,855,793,850,796,822,744,798,681,789,621,787,544,791,366,792,276,787,193,774,122,764,94,751,71,739,60"/>
+<area shape="poly" id="edge31_Node000031_Node000005" title=" " alt="" coords="738,424,754,435,795,481,827,533,849,584,864,626,859,628,844,586,822,536,791,484,751,439,735,428"/>
+<area shape="poly" id="edge32_Node000031_Node000024" title=" " alt="" coords="738,413,792,422,791,427,737,418"/>
+<area shape="poly" id="edge34_Node000032_Node000005" title=" " alt="" coords="750,652,809,652,809,657,750,657"/>
+<area shape="poly" id="edge35_Node000032_Node000016" title=" " alt="" coords="734,674,754,686,785,711,813,740,855,793,850,797,809,743,781,715,751,690,731,679"/>
+<area shape="poly" id="edge38_Node000033_Node000005" title=" " alt="" coords="733,831,751,819,785,787,814,750,854,681,859,684,818,753,789,790,754,823,736,835"/>
+<area shape="poly" id="edge39_Node000033_Node000016" title=" " alt="" coords="738,840,797,830,798,836,739,845"/>
+<area shape="poly" id="edge37_Node000033_Node000027" title=" " alt="" coords="735,874,754,886,787,915,816,949,857,1010,853,1013,812,952,783,919,751,890,732,879"/>
+<area shape="rect" id="Node000035" href="$calc__grids_8c.html#ab10b377244fec6cc3f32ace1d2fb7ae1" title="eval_grad_B(): Code adopted from pages 278&#45;283 of Rapaport&#39;s &quot;The Art of MD Sim.&quot; This gives the same..." alt="" coords="616,1252,710,1279"/>
+<area shape="poly" id="edge41_Node000034_Node000035" title=" " alt="" coords="454,776,488,861,528,971,541,1018,549,1056,558,1093,576,1137,608,1193,642,1238,638,1241,604,1196,571,1140,553,1094,543,1057,536,1020,523,973,483,863,449,778"/>
+<area shape="rect" id="Node000037" href="$calc__grids_8c.html#a51d3d79bfe8fbe651e7631d0d5b04c55" title="get_atom_position_dihedral():" alt="" coords="573,967,753,993"/>
+<area shape="poly" id="edge46_Node000034_Node000037" title=" " alt="" coords="453,775,470,814,496,862,531,911,575,953,582,957,579,962,572,957,527,914,492,865,465,816,448,777"/>
+<area shape="rect" id="Node000038" href="$calc__grids_8c.html#a942aacfc097feda9f38887fa09d06003" title="get_Bspline_dihedral_basis_vector(): Range is not checked since the R_min and R_max are assumed to be..." alt="" coords="592,316,734,359"/>
+<area shape="poly" id="edge47_Node000034_Node000038" title=" " alt="" coords="450,732,484,654,523,554,534,501,536,456,543,414,554,392,571,369,578,363,582,366,575,372,558,395,548,415,541,456,539,501,528,555,489,656,455,734"/>
+<area shape="rect" id="Node000040" href="$calc__grids_8c.html#a31bf3e4a6e45b33e70bb4454deccc36f" title="get_delta_dihedral_basis_vector(): Range is not checked since the R_min and R_max are assumed to be &#45;..." alt="" coords="600,567,726,609"/>
+<area shape="poly" id="edge53_Node000034_Node000040" title=" " alt="" coords="457,731,505,676,537,646,572,619,584,612,587,617,575,624,540,650,509,680,461,735"/>
+<area shape="rect" id="Node000041" href="$calc__grids_8c.html#ad10f1cbcb56d9ca2da8f8e0980ef8805" title="get_linear_dihedral_basis_vector(): Range is not checked since the R_min and R_max are assumed to be ..." alt="" coords="598,1017,728,1060"/>
+<area shape="poly" id="edge57_Node000034_Node000041" title=" " alt="" coords="451,776,466,822,491,883,527,947,549,977,575,1003,586,1012,583,1016,572,1007,545,981,523,950,486,886,461,824,446,777"/>
+<area shape="rect" id="Node000042" href="$calc__grids_8c.html#a606728954ee02092f4ffecae28aff175" title="get_RB_dihedral_basis_vector():" alt="" coords="585,767,741,809"/>
+<area shape="poly" id="edge61_Node000034_Node000042" title=" " alt="" coords="508,762,570,771,569,777,507,767"/>
+<area shape="rect" id="Node000043" href="$calc__grids_8c.html#a1881c4d3dd593c0faa6ada064f70937f" title="get_TOY_dihedral_basis_vector():" alt="" coords="581,700,745,743"/>
+<area shape="poly" id="edge64_Node000034_Node000043" title=" " alt="" coords="507,742,566,733,566,739,508,747"/>
+<area shape="poly" id="edge42_Node000035_Node000005" title=" " alt="" coords="675,1250,714,1202,734,1171,750,1138,766,1088,775,1045,778,969,779,891,785,847,798,795,823,732,851,680,856,683,828,735,803,797,791,848,785,892,784,969,780,1046,772,1090,755,1140,738,1174,718,1205,679,1253"/>
+<area shape="poly" id="edge43_Node000035_Node000006" title=" " alt="" coords="711,1269,734,1276,754,1289,774,1309,784,1330,791,1352,803,1377,855,1466,851,1468,798,1380,786,1354,779,1332,770,1312,751,1293,731,1281,709,1274"/>
+<area shape="poly" id="edge44_Node000035_Node000016" title=" " alt="" coords="709,1256,732,1246,751,1231,770,1205,782,1180,787,1156,788,1131,788,1078,791,1047,798,1013,828,922,856,848,861,850,833,924,803,1014,796,1048,793,1078,794,1131,792,1156,787,1182,775,1208,755,1235,734,1251,711,1261"/>
+<area shape="rect" id="Node000017" href="$wnoid__math_8c.html#a1f483015ac47277c71a1e600b42befd8" title="vect_diff(): Calculates diff = v1 &#45; v2." alt="" coords="836,1340,906,1367"/>
+<area shape="poly" id="edge45_Node000035_Node000017" title=" " alt="" coords="711,1274,754,1288,835,1329,833,1334,752,1293,709,1279"/>
+<area shape="poly" id="edge50_Node000038_Node000005" title=" " alt="" coords="736,355,755,369,777,408,807,479,862,626,857,628,802,481,772,410,751,372,733,359"/>
+<area shape="poly" id="edge48_Node000038_Node000010" title=" " alt="" coords="733,315,751,302,762,288,769,274,774,245,780,216,787,200,799,185,808,177,812,181,803,189,791,203,785,217,780,246,774,276,767,291,754,306,736,320"/>
+<area shape="poly" id="edge49_Node000038_Node000011" title=" " alt="" coords="728,313,751,302,801,268,842,234,846,238,804,273,754,306,731,318"/>
+<area shape="poly" id="edge51_Node000038_Node000020" title=" " alt="" coords="734,323,973,281,974,287,734,328"/>
+<area shape="poly" id="edge52_Node000038_Node000016" title=" " alt="" coords="736,353,755,369,781,408,794,445,798,481,797,516,791,591,793,633,803,679,828,741,856,793,851,796,824,744,798,681,788,633,785,591,791,516,793,481,789,447,776,411,751,372,733,357"/>
+<area shape="poly" id="edge54_Node000040_Node000005" title=" " alt="" coords="727,606,813,634,811,639,726,611"/>
+<area shape="poly" id="edge56_Node000040_Node000016" title=" " alt="" coords="728,603,754,619,780,650,809,697,859,793,854,795,804,700,776,654,751,623,725,608"/>
+<area shape="poly" id="edge55_Node000040_Node000024" title=" " alt="" coords="693,564,826,466,829,470,696,568"/>
+<area shape="poly" id="edge59_Node000041_Node000005" title=" " alt="" coords="727,1021,751,1003,769,978,780,954,784,931,786,907,786,856,789,827,798,795,825,733,852,681,856,683,829,735,803,797,795,828,791,857,791,908,790,932,785,956,774,981,755,1007,730,1026"/>
+<area shape="poly" id="edge60_Node000041_Node000016" title=" " alt="" coords="726,1018,751,1003,787,967,817,925,840,883,856,848,861,850,845,885,821,927,791,970,754,1007,729,1023"/>
+<area shape="poly" id="edge58_Node000041_Node000027" title=" " alt="" coords="728,1036,785,1036,785,1041,728,1041"/>
+<area shape="poly" id="edge62_Node000042_Node000005" title=" " alt="" coords="729,764,751,752,803,715,844,677,848,681,806,719,754,757,731,768"/>
+<area shape="poly" id="edge63_Node000042_Node000016" title=" " alt="" coords="742,798,798,807,797,812,741,803"/>
+<area shape="poly" id="edge65_Node000043_Node000005" title=" " alt="" coords="731,697,811,671,813,676,732,702"/>
+<area shape="poly" id="edge66_Node000043_Node000016" title=" " alt="" coords="727,741,754,752,836,798,834,802,751,757,725,746"/>
+<area shape="poly" id="edge68_Node000044_Node000016" title=" " alt="" coords="458,1026,477,1053,504,1084,537,1114,574,1136,624,1156,666,1165,686,1164,706,1160,751,1137,857,849,862,851,755,1140,708,1165,687,1169,666,1170,622,1161,572,1141,533,1118,500,1088,473,1056,453,1029"/>
+<area shape="poly" id="edge71_Node000050_Node000006" title=" " alt="" coords="273,1733,368,1754,427,1762,492,1767,559,1766,626,1758,691,1740,751,1711,775,1693,796,1670,828,1618,849,1565,862,1521,867,1522,854,1567,833,1621,800,1674,779,1697,754,1716,693,1745,627,1763,559,1771,492,1772,427,1768,367,1759,272,1738"/>
+<area shape="rect" id="Node000051" href="$wnoid__math_8c.html#aeabe54d7c475d74f71a949ba78a84247" title="index_Lpacked(): Calculate the index of element aij in an NxN matrix in Lower&#45;packed storage form." alt="" coords="387,1657,495,1684"/>
+<area shape="poly" id="edge72_Node000050_Node000051" title=" " alt="" coords="285,1705,371,1684,373,1689,286,1710"/>
+<area shape="poly" id="edge76_Node000052_Node000006" title=" " alt="" coords="700,122,730,150,755,185,773,236,786,296,794,364,798,439,799,603,792,778,784,954,779,1119,784,1264,791,1326,803,1378,825,1426,851,1467,847,1469,820,1429,798,1380,786,1327,779,1265,774,1119,778,953,787,778,793,603,793,439,789,365,780,297,768,238,750,188,726,153,696,126"/>
+<area shape="poly" id="edge74_Node000052_Node000010" title=" " alt="" coords="731,118,809,138,807,144,729,123"/>
+<area shape="poly" id="edge75_Node000052_Node000011" title=" " alt="" coords="720,122,754,140,778,161,802,180,819,190,816,194,799,185,775,165,751,145,718,127"/>
+<area shape="poly" id="edge77_Node000052_Node000020" title=" " alt="" coords="730,93,779,93,834,97,890,108,942,130,973,151,999,178,1036,234,1032,237,994,182,969,155,940,134,888,113,833,102,779,98,730,99"/>
+<area shape="poly" id="edge78_Node000052_Node000016" title=" " alt="" coords="699,122,730,150,755,185,783,255,795,317,797,374,793,428,787,483,784,541,788,606,803,679,828,742,855,793,850,796,823,744,798,681,783,606,779,541,782,483,788,428,792,374,790,318,777,257,750,188,726,153,695,126"/>
+<area shape="poly" id="edge80_Node000053_Node000006" title=" " alt="" coords="521,1429,820,1482,819,1487,520,1434"/>
+<area shape="poly" id="edge83_Node000054_Node000006" title=" " alt="" coords="732,1328,754,1339,788,1368,817,1402,858,1465,854,1468,813,1405,784,1372,751,1344,729,1332"/>
+<area shape="poly" id="edge84_Node000054_Node000016" title=" " alt="" coords="737,1300,751,1289,775,1256,788,1224,794,1194,793,1163,789,1095,790,1056,798,1013,827,922,855,848,860,850,832,923,803,1014,796,1056,794,1095,799,1162,799,1194,793,1226,780,1258,755,1293,740,1304"/>
+<area shape="poly" id="edge82_Node000054_Node000027" title=" " alt="" coords="733,1300,751,1289,775,1264,796,1236,828,1175,850,1115,862,1067,867,1068,855,1117,833,1177,800,1239,779,1268,754,1293,736,1304"/>
+<area shape="poly" id="edge86_Node000055_Node000006" title=" " alt="" coords="298,1624,561,1641,684,1644,727,1641,752,1636,786,1613,815,1582,838,1549,855,1520,859,1522,843,1552,819,1585,790,1617,754,1641,727,1647,684,1649,560,1646,297,1629"/>
+<area shape="poly" id="edge87_Node000055_Node000051" title=" " alt="" coords="286,1631,373,1652,371,1657,285,1637"/>
+<area shape="poly" id="edge89_Node000056_Node000006" title=" " alt="" coords="278,1682,373,1700,433,1707,496,1710,563,1708,629,1698,692,1679,751,1650,786,1621,815,1586,838,1551,855,1520,860,1522,843,1553,820,1590,790,1625,754,1654,694,1684,630,1703,563,1713,496,1716,432,1713,372,1706,277,1687"/>
+<area shape="poly" id="edge90_Node000056_Node000051" title=" " alt="" coords="300,1668,371,1668,371,1673,300,1673"/>
+<area shape="poly" id="edge92_Node000057_Node000006" title=" " alt="" coords="713,1378,754,1396,805,1431,847,1467,843,1471,802,1436,751,1401,711,1383"/>
+<area shape="poly" id="edge93_Node000057_Node000016" title=" " alt="" coords="737,1351,751,1340,765,1313,775,1276,785,1183,790,1087,798,1013,827,921,855,848,860,850,832,923,803,1014,795,1087,791,1184,781,1277,770,1315,755,1343,740,1355"/>
+<area shape="poly" id="edge99_Node000058_Node000017" title=" " alt="" coords="481,1489,820,1368,822,1373,482,1494"/>
+<area shape="rect" id="Node000015" href="$wnoid__math_8c.html#aed00bac3dd87333226ee1d7cb19700af" title="calc_norm(): Returns the norm of an dvec." alt="" coords="622,1556,704,1583"/>
+<area shape="poly" id="edge96_Node000058_Node000015" title=" " alt="" coords="490,1517,574,1541,608,1551,607,1556,573,1547,488,1522"/>
+<area shape="rect" id="Node000059" href="$calc__grids_8c.html#aeeb6c57ca5eb497c365f392fce1798e5" title="det_min_image: detemines image of prtcl at R closest to the particle at Origin." alt="" coords="608,1505,718,1532"/>
+<area shape="poly" id="edge98_Node000058_Node000059" title=" " alt="" coords="500,1506,593,1512,593,1517,499,1511"/>
+<area shape="poly" id="edge97_Node000015_Node000006" title=" " alt="" coords="703,1557,752,1541,826,1511,828,1516,754,1547,705,1562"/>
+<area shape="poly" id="edge101_Node000060_Node000061" title=" " alt="" coords="286,1783,380,1806,379,1811,285,1789"/>
+</map>

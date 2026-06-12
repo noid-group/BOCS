@@ -1,0 +1,5 @@
+<map id="write_bocs_top" name="write_bocs_top">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,115,32"/>
+<area shape="rect" id="Node000002" href="$io__read_8c.html#a5aa8df5077291896b83782e74ab17317" title="open_file(): Opens a file named &quot;file_name&quot; with option &quot;mode.&quot; Returns the pointer to the file." alt="" coords="163,5,236,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,16,147,16,147,21,115,21"/>
+</map>

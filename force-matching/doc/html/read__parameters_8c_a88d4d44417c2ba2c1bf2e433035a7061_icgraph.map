@@ -1,0 +1,9 @@
+<map id="read_external_potential_inter" name="read_external_potential_inter">
+<area shape="rect" id="Node000001" title="read_external_potential_inter(): reads the [External_Potential] Directive" alt="" coords="381,5,537,48"/>
+<area shape="rect" id="Node000002" href="$read__parameters_8c.html#ad59ee67290b65b03bcfa5766b31cd49b" title="get_parameters(): Reads a line from the parameter file passed from read_par()." alt="" coords="222,13,333,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="366,29,334,29,334,24,366,24"/>
+<area shape="rect" id="Node000003" href="$read__parameters_8c.html#a05efae93beb41e2b0d8cbe4581086bd1" title="read_par(): Reads the information from the parameter file and files listed in the param&#45; eter file." alt="" coords="103,13,174,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="206,29,174,29,174,24,206,24"/>
+<area shape="rect" id="Node000004" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,13,55,40"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="87,29,55,29,55,24,87,24"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="get_phi_struct" name="get_phi_struct">
+<area shape="rect" id="Node000001" title="get_phi_struct(): Calculates the coefficients using b_struct." alt="" coords="415,13,519,40"/>
+<area shape="rect" id="Node000002" href="$calc__grids_8c.html#a9668198003b2ac7edf32c26546d86bfb" title="get_phi_struct_and_phi_forces(): Calculates the coefficients using b_forces if forces were available ..." alt="" coords="236,5,367,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="400,29,368,29,368,24,400,24"/>
+<area shape="rect" id="Node000003" href="$calc__grids_8c.html#a7d1f81fde08821aebf1b645466f849a4" title="get_results(): (1) Calculate and store b_forces and b_struct." alt="" coords="103,13,188,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="221,29,189,29,189,24,221,24"/>
+<area shape="rect" id="Node000004" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,13,55,40"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="87,29,55,29,55,24,87,24"/>
+</map>

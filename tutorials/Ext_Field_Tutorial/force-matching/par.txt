@@ -1,0 +1,41 @@
+[Mode] GROMACS
+
+[Temperature]  270.0
+
+[Structures]    1
+inp.txt
+[End Structures]
+
+[Site_Types]    3
+A
+B
+C
+[End Site_Types]
+
+[Inter_Types]  3
+!inter_name  inter_type        basis       dr         R_min      R_max   spline_order    n_smooth | Extra args (LD/SG/External fields)
+! e.g. extra args for external field                                    |(build_field bzPBC)
+ fieldA     External         Bspline     0.01       0.001      3.50  4 0       1       1
+ fieldB     External         Bspline     0.01       0.001      3.50  4 0       1       1
+ fieldC     External         Bspline     0.01       0.001      3.50  4 0       1       1
+[End Inter_Types]
+
+[External_Potential] 3
+fieldA A
+fieldB B
+fieldC C
+[End External_Potential]
+
+
+[Calculation_Mode]
+FULL
+[End Calculation_Mode]
+
+
+[TRIM]
+0.000000001
+[End TRIM]
+
+[ TPR ] 1
+1200.btp
+[ End TPR]

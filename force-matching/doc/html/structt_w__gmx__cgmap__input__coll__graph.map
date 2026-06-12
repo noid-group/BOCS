@@ -1,0 +1,9 @@
+<map id="tW_gmx_cgmap_input" name="tW_gmx_cgmap_input">
+<area shape="rect" id="Node000001" title=" " alt="" coords="112,96,263,123"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8h.html#structt_w__file__struct" title=" " alt="" coords="5,5,108,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,39,170,93,167,98,86,43"/>
+<area shape="rect" id="Node000003" href="$gromacs__topology_8h.html#structt_w__time__struct" title=" " alt="" coords="132,5,242,32"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="190,48,190,95,184,95,184,48"/>
+<area shape="rect" id="Node000004" href="$gromacs__topology_8h.html#structt_w__f_type__struct" title=" " alt="" coords="266,5,383,32"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="293,43,208,98,205,93,291,39"/>
+</map>

@@ -1,6 +1,6 @@
 /**
 @file read_parameters.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski
 @brief Functions related to reading in settings for the cgff calculation
 */
 
@@ -15,6 +15,8 @@
 #include "read_parameters.h"
 #include "io_read.h"
 #include "safe_mem.h"
+#include "gromacs_topology.h"
+#include "LDD.h"
 
 /*****************************************************************************************
 read_par(): Reads the information from the parameter file and files listed in the param-
@@ -34,17 +36,17 @@ int read_par(tW_files * files, tW_system * sys,
 	exit(EXIT_FAILURE);
     }
 
-    initialize_sys(sys);
-    initialize_files(files);
-    initialize_par_flags(&flags);
+    initialize_sys(sys); // Presets default solver options 
+    initialize_files(files); 
+    initialize_par_flags(&flags); //sets defaults on whether we need to look for certain types
 
     do {
 	if (get_next_line(files->fp_par, inp_line) == -1) {
 	    break;
-	}
+	} // break our infinite loop at the end of the file
 
 	get_parameters(files->fp_par, inp_line, sys, files, ref_potential,
-		       &flags);
+		       &flags); // Reads headers from par.txt and sends error when formatting is wrong
 
     } while (1);
 
@@ -52,7 +54,7 @@ int read_par(tW_files * files, tW_system * sys,
 	sys->MT_var.flag_Mcnt = FALSE;
     }
 
-    check_input(*files, *sys, flags, *ref_potential);
+    check_input(*files, sys, flags, *ref_potential);
 
     return 0;
 }
@@ -223,6 +225,78 @@ tW_word *get_structures(tW_files * files, int *N_struct)
     return file_list;
 }
 
+/*****************************************************************************************
+get_Type_Ext_List(): Reads the external interaction from the parameter file. Returns
+a pointer to the data structure Inter_Ext_Type_List which contains the information read
+from the parameter file.
+*****************************************************************************************/
+tW_type_inter_external *get_Type_Ext_List(FILE *fp_par, tW_line inp_line, tW_system sys,
+                                          int N_Inter_Ext_types, tW_word keyword)
+{
+  int i_inter;
+  tW_type_inter_external *Inter_Ext_Type_List;
+
+  Inter_Ext_Type_List = (tW_type_inter_external *) emalloc(N_Inter_Ext_types *
+                                                         sizeof(tW_type_inter_external));
+
+  for (i_inter = 0; i_inter < N_Inter_Ext_types; ++i_inter)
+  {
+    get_next_line(fp_par, inp_line);
+
+    check_inp_line("par.txt",keyword,inp_line);
+
+    read_Type_Inter_Ext(inp_line, &(Inter_Ext_Type_List[i_inter]), sys);
+  }
+  get_next_line(fp_par, inp_line);
+
+  test_end_directive(inp_line, keyword, "par.txt");
+
+  return Inter_Ext_Type_List;
+}
+
+/*****************************************************************************************
+read_Type_Inter_Ext(): Finds the interaction type stored in sys and copies that information
+for a given site type. Execution is stopped if the interaction name found for site listed
+in parameter file is not an external interaction (in sys) or the interaction name is not
+found in the interaction types listed in sys.
+*****************************************************************************************/
+int read_Type_Inter_Ext(tW_line inp_line, tW_type_inter_external *inter, tW_system sys)
+{
+  int i;
+  int flag = FALSE;
+
+  sscanf(inp_line, "%s %s", inter->inter_name, inter->name1);
+
+  for (i = 0; i < sys.N_Inter_Types; ++i)
+  {
+    if (strcmp(inter->inter_name, sys.Inter_Types[i].inter_name) == 0)
+    {
+      strcpy(inter->basis, sys.Inter_Types[i].basis);
+      inter->N_inter = 0;
+      inter->N_pts = sys.Inter_Types[i].N_pts;
+      inter->N_coeff = sys.Inter_Types[i].N_coeff;
+      inter->i_basis = sys.Inter_Types[i].i_basis;
+      inter->i_0 = sys.Inter_Types[i].i_0;
+      inter->dr = sys.Inter_Types[i].dr;
+      inter->R_0 = sys.Inter_Types[i].R_min;
+      inter->R_max = sys.Inter_Types[i].R_max;
+      inter->n_smooth = sys.Inter_Types[i].n_smooth;
+      inter->kspline = sys.Inter_Types[i].kspline;
+      inter->solveExt = sys.Inter_Types[i].solveExt;
+      inter->extPBC = sys.Inter_Types[i].extPBC;
+      flag = TRUE;
+    }
+  }
+
+  if (flag == FALSE)
+  {
+    printf("\nERROR: Interaction Type \"%s\" not found.\n Check par.txt.",
+                                                               inter->inter_name);
+    exit(EXIT_FAILURE);                                        
+  }
+  return 0;
+}
+
 
 /*****************************************************************************************
 get_Type_Inter2_List(): Reads the pair interaction from the parameter file. Returns
@@ -273,6 +347,7 @@ int read_Type_Inter2(tW_line inp_line, tW_type_inter2 * inter,
     for (i = 0; i < sys.N_Inter_Types; i++) {
 	if (strcmp(inter->inter_name, sys.Inter_Types[i].inter_name) == 0) {
 	    strcpy(inter->basis, sys.Inter_Types[i].basis);
+            strcpy(inter->inter_type, sys.Inter_Types[i].inter_type);
 	    inter->N_inter = 0;
 	    inter->N_pts = sys.Inter_Types[i].N_pts;
 	    inter->N_coeff = sys.Inter_Types[i].N_coeff;
@@ -286,15 +361,21 @@ int read_Type_Inter2(tW_line inp_line, tW_type_inter2 * inter,
 	    inter->powers = sys.Inter_Types[i].powers;
 	    inter->kspline = sys.Inter_Types[i].kspline;	/* JFR - 07.22.12: Bspline order */
 
+            inter->LD_W = sys.Inter_Types[i].LD_W; // MRD 06.17.2020
+            inter->LDGradient = sys.Inter_Types[i].LDGradient;
+
 	    flag = TRUE;
 
-	    if (strcmp(sys.Inter_Types[i].inter_type, NB_PAIR) != 0) {
-		printf
-		    ("\nERROR: %s is not of type %s.\n  Check par.txt.\n",
-		     inter->inter_name, NB_PAIR);
+            if (strcmp(sys.Inter_Types[i].inter_type, NB_PAIR) == 0) { ++(sys.N_Inter2_Types_pair); }
+            else if ((strcmp(sys.Inter_Types[i].inter_type, NB_LOCAL_DENSITY) == 0) ||
+                     (strcmp(sys.Inter_Types[i].inter_type, NB_LD_GRADIENT) == 0)) { ++(sys.N_Inter2_Types_LD); }
+	    else {
+		fprintf
+		    (stderr,"\nERROR: %s is not of type %s, %s, or %s.\n  Check par.txt.\n",
+		     inter->inter_name, NB_PAIR, NB_LOCAL_DENSITY, NB_LD_GRADIENT);
 		exit(EXIT_FAILURE);
 	    }
-
+//WALDO
 	    break;
 	}
     }
@@ -324,6 +405,16 @@ int setup_tables(tW_system * sys)
 	N_coeff_tmp += sys->Inter_Types[i].N_coeff;
     }
     sys->N_coeff = N_coeff_tmp;
+    /* If the user asks for a number of coeffs N and (N^2 + N)/2 > MAX_INT 
+     * we will get undefined overflow behavior and segfault allocating M, so lets check for it here*/
+    if (sys->N_coeff > 46340)
+    {
+      fprintf(stderr, "ERROR: Number of knotpoints requested for forcematching is too large\n");
+      fprintf(stderr, "User requested %d knot points, current max accomodated is 46,340\n", sys->N_coeff);
+      fprintf(stderr, "If possible try requesting coarser knot points or smaller sampling windows in par.txt\n");
+      fprintf(stderr, "ERROR: %s %d\n", __FILE__, __LINE__);
+      exit(1);
+    }
     sys->N_pack = (N_coeff_tmp * N_coeff_tmp + N_coeff_tmp) / 2;
 
     /* Allocate memory for master/system wide grids. */
@@ -337,7 +428,7 @@ int setup_tables(tW_system * sys)
     sys->M2 = (double *) ecalloc(sys->N_pack, sizeof(double));
 
     if (sys->MT_var.flag_Mcnt == TRUE) {
-	sys->M_cnt = (double *) ecalloc(sys->N_pack, sizeof(double));
+	sys->M_cnt = (double *) ecalloc(sys->N_pack, sizeof(double)); // options for normalizing the metric tensor or not via the count of data appended
     } else {
 	sys->M_cnt = NULL;
     }
@@ -391,6 +482,20 @@ int setup_tables(tW_system * sys)
 	sys->Inter2_Type_List[i].ptr_L = &(sys->L[i_start]);
     }
 
+    /* MRD 06.17.2020 */
+    // Setup pointers to master grid for external types
+    for (i = 0; i < sys->N_Inter_Ext_types; ++i)
+    {
+      i_start = get_interaction_i_0(sys->Inter_Ext_Type_List[i].inter_name, sys);
+      sys->Inter_Ext_Type_List[i].i_0 = i_start;
+      sys->Inter_Ext_Type_List[i].ptr_b = &(sys->b[i_start]);
+      sys->Inter_Ext_Type_List[i].ptr_b_ref = &(sys->b_ref[i_start]);
+      sys->Inter_Ext_Type_List[i].ptr_g = &(sys->g[i_start]);
+      sys->Inter_Ext_Type_List[i].ptr_g_cnt = &(sys->g_cnt[i_start]);
+      sys->Inter_Ext_Type_List[i].ptr_L = &(sys->L[i_start]);
+    }
+
+
     for (i = 0; i < sys->N_Bond_Int_Types; i++) {
 	i_start =
 	    get_interaction_i_0(sys->Bonded_Inter_Types[i].inter_name,
@@ -430,11 +535,6 @@ void summarize_input(tW_files files, tW_system sys,
 	    fprintf(fp_log, "  (undeclared).");
 	}
     }
-
-    /* MRD 03.04.2019 */
-    if (sys.SKIP_TRIPLE_LOOP) { fprintf(fp_log,"  Evaluating the G matrix WITHOUT the triple loop\n"); }
-    else { fprintf(fp_log,"  Evaluating the G matrix the old way (using the triple loop)\n"); }
-
     fprintf(fp_log, "\n\n");
     print_line_stars(fp_log);
 
@@ -466,6 +566,10 @@ void summarize_input(tW_files files, tW_system sys,
     print_line_stars(fp_log);
 
     summarize_input_pair_inter(fp_log, sys);
+    print_line_stars(fp_log);
+
+    /* MRD 06.17.2020 */
+    summarize_input_external_potential_inter(fp_log, sys);
     print_line_stars(fp_log);
 
     summarize_input_bond_inter(fp_log, sys, B_BOND_STRETCH, 2, files.mode);
@@ -1154,11 +1258,48 @@ void summarize_input_pair_inter(FILE * fp_log, tW_system sys)
 	if (tmp_Inter2->i_basis == BSPLINE_BASIS_INDEX) {
 	    fprintf(fp_log, "    kspline: %d\n", tmp_Inter2->kspline);
 	}			/* JFR - 07.22.12: Bspline order */
+
+        if ((strcmp(tmp_Inter2->inter_type,NB_LOCAL_DENSITY) == 0) ||
+            ((strcmp(tmp_Inter2->inter_type,NB_LD_GRADIENT)) == 0))
+        {
+          fprintf(fp_log,"    wtype: %s    r0: %g    rC: %g\n",
+                        get_indicator_type(tmp_Inter2->LD_W),
+                        tmp_Inter2->LD_W->r0, tmp_Inter2->LD_W->rC);
+        }
+
     }
 
     fprintf(fp_log, "\n");
 }
 
+/*****************************************************************************************
+ * summarize_input_local_external_potential_inter(): Clone of above for ext potl inter
+ * *****************************************************************************************/
+void summarize_input_external_potential_inter(FILE *fp_log, tW_system sys)
+{
+  int i, j;
+  tW_type_inter_external *tmp_IntExt;
+
+  /* List external potential interactions. */
+  fprintf(fp_log,"  N_External_Potential: %d",sys.N_Inter_Ext_types);
+  for (i = 0; i < sys.N_Inter_Ext_types; ++i)
+  {
+    fprintf(fp_log,"\n    External_Potential: %d\n",i+1);
+    tmp_IntExt = &(sys.Inter_Ext_Type_List[i]);
+    fprintf(fp_log,"    Inter_Name: %s  ",tmp_IntExt->inter_name);
+    fprintf(fp_log,"    Site: %s\n",tmp_IntExt->name1);
+    fprintf(fp_log,"    Basis: %s",tmp_IntExt->basis);
+    fprintf(fp_log,"    i_basis: %d    i_0: %d \n",tmp_IntExt->i_basis, tmp_IntExt->i_0);
+    fprintf(fp_log,"    N_pts: %d \t N_coeff: %d \n",tmp_IntExt->N_pts, tmp_IntExt->N_coeff);
+    fprintf(fp_log,"    solveExt: %s \n",(tmp_IntExt->solveExt ? "TRUE" : "FALSE"));
+    if (tmp_IntExt->i_basis == BSPLINE_BASIS_INDEX)
+    {
+      fprintf(fp_log,"    kspline: %d \n",tmp_IntExt->kspline);
+    }
+    fprintf(fp_log,"    n_smooth: %d \n",tmp_IntExt->n_smooth);
+  }
+  fprintf(fp_log,"\n");
+}
 
 /*****************************************************************************************
 setup_sys_copy(): Copies the information from sys_orig to sys_copy.
@@ -1188,6 +1329,10 @@ void setup_sys_copy(tW_system sys_orig, tW_system * sys_copy, int overwrite_arra
 
     /* Allocates memory and copies information for all nb pair interactions. */
     copy_Inter2_Types(sys_orig, sys_copy);
+
+    /* MRD 06.17.2020 */
+    /* Allocates memory and copies information for all external interactions. */
+    copy_Inter_Ext_Types(sys_orig, sys_copy);
 
     /* Allocates memory and copies information for all bond interactions. */
     copy_Bonded_Inter_Types(sys_orig, sys_copy);
@@ -1255,9 +1400,12 @@ void setup_sys_copy(tW_system sys_orig, tW_system * sys_copy, int overwrite_arra
     /* JFR - 06.27.12: Chi2 */
     sys_copy->Chi2 = sys_orig.Chi2;
 
-    /* MRD 03.04.2019 */
-    sys_copy->SKIP_TRIPLE_LOOP = sys_orig.SKIP_TRIPLE_LOOP;
+    /* MRD 03.04.2019 06.17.2020 */
+    sys_copy->USE_OLD_ALGORITHM = sys_orig.USE_OLD_ALGORITHM;
     sys_copy->M_M2_proc = sys_orig.M_M2_proc;
+
+    /* MCL 03.10.26 */
+    sys_copy->bGradient = sys_orig.bGradient;
 }
 
 /*****************************************************************************************
@@ -1850,6 +1998,13 @@ void copy_Inter_Types(tW_system sys_orig, tW_system * sys_copy)
 	inter_ptr->powers = sys_orig.Inter_Types[i].powers;
 
 	inter_ptr->kspline = sys_orig.Inter_Types[i].kspline;	/* JFR - 07.22.12: copy Bspline order */
+        inter_ptr->user_R_min = sys_orig.Inter_Types[i].user_R_min; /* MCL 05.08.25: copy og par settings from before padding */
+        inter_ptr->user_R_max = sys_orig.Inter_Types[i].user_R_max; /* MCL 05.08.25: copy og par settings from before padding */
+	
+        /* MRD 06.17.2020 */
+        inter_ptr->LD_W = sys_orig.Inter_Types[i].LD_W;
+        inter_ptr->solveExt = sys_orig.Inter_Types[i].solveExt;
+        inter_ptr->extPBC = sys_orig.Inter_Types[i].extPBC;
     }
 }
 
@@ -1876,6 +2031,7 @@ void copy_Inter2_Types(tW_system sys_orig, tW_system * sys_copy)
 	strcpy(inter_ptr->inter_name, sys_orig.Inter2_Type_List[i].inter_name);
 	strcpy(inter_ptr->name1, sys_orig.Inter2_Type_List[i].name1);
 	strcpy(inter_ptr->name2, sys_orig.Inter2_Type_List[i].name2);
+        strcpy(inter_ptr->inter_type, sys_orig.Inter2_Type_List[i].inter_type); // MRD 06.17.2020
 
 	inter_ptr->N_inter = 0;
 	inter_ptr->N_coeff = sys_orig.Inter2_Type_List[i].N_coeff;
@@ -1898,8 +2054,61 @@ void copy_Inter2_Types(tW_system sys_orig, tW_system * sys_copy)
 	inter_ptr->powers = sys_orig.Inter2_Type_List[i].powers;
 
 	inter_ptr->kspline = sys_orig.Inter2_Type_List[i].kspline;	/* JFR - 07.22.12: Bspline order */
+
+        inter_ptr->LD_W = sys_orig.Inter2_Type_List[i].LD_W; /* MRD 06.17.20 Local Density */
     }
+
+    /* MRD 06.17.20 Local Density */
+    sys_copy->N_Inter2_Types_pair = sys_orig.N_Inter2_Types_pair;
+    sys_copy->N_Inter2_Types_LD = sys_orig.N_Inter2_Types_LD;
+
 }
+
+/*****************************************************************************************
+ * copy_Inter_Ext_Types(): Copies information from sys_orig to sys_copy for all external
+ * potential interactions.
+ * *****************************************************************************************/
+void copy_Inter_Ext_Types(tW_system sys_orig, tW_system *sys_copy)
+{
+    int i;
+    int N_Inter_Ext_Types = sys_orig.N_Inter_Ext_types;
+    int i_0;
+    tW_type_inter_external *inter_ptr;
+
+    sys_copy->N_Inter_Ext_types = N_Inter_Ext_Types;
+
+    sys_copy->Inter_Ext_Type_List = (tW_type_inter_external *) emalloc(N_Inter_Ext_Types * sizeof(tW_type_inter_external));
+
+    /* Copy information for each interaction. */
+    for (i = 0; i < N_Inter_Ext_Types; i++)
+    {
+        inter_ptr = &(sys_copy->Inter_Ext_Type_List[i]);
+
+        strcpy(inter_ptr->inter_name, sys_orig.Inter_Ext_Type_List[i].inter_name);
+        strcpy(inter_ptr->name1, sys_orig.Inter_Ext_Type_List[i].name1);
+
+        inter_ptr->N_inter = 0;
+        inter_ptr->N_coeff = sys_orig.Inter_Ext_Type_List[i].N_coeff;
+        inter_ptr->i_basis = sys_orig.Inter_Ext_Type_List[i].i_basis;
+        inter_ptr->i_0 = sys_orig.Inter_Ext_Type_List[i].i_0;
+        inter_ptr->dr = sys_orig.Inter_Ext_Type_List[i].dr; // WALDO I don't know if these will have been assigned yet!
+        inter_ptr->R_0 = sys_orig.Inter_Ext_Type_List[i].R_0;
+        inter_ptr->R_max = sys_orig.Inter_Ext_Type_List[i].R_max;
+        inter_ptr->n_smooth = sys_orig.Inter_Ext_Type_List[i].n_smooth;
+        inter_ptr->N_pts = sys_orig.Inter_Ext_Type_List[i].N_pts;
+
+        i_0 = sys_orig.Inter_Ext_Type_List[i].i_0;
+        inter_ptr->ptr_b = &(sys_copy->b[i_0]);
+        inter_ptr->ptr_b_ref = &(sys_copy->b_ref[i_0]);
+        inter_ptr->ptr_g = &(sys_copy->g[i_0]);
+        inter_ptr->ptr_g_cnt = &(sys_copy->g_cnt[i_0]);
+        inter_ptr->ptr_L = &(sys_copy->L[i_0]);
+
+        inter_ptr->kspline = sys_orig.Inter_Ext_Type_List[i].kspline;      /* JFR - 07.22.12: Bspline order */
+    }
+
+}
+
 
 
 /*****************************************************************************************
@@ -2106,6 +2315,15 @@ void initialize_sys(tW_system * sys)
     sys->Inter_Types = NULL;
     sys->N_Inter2_Types = 0;
     sys->Inter2_Type_List = NULL;
+/* MRD 06.17.2020 */
+    sys->N_Inter2_Types_pair = 0;
+    sys->N_Inter2_Types_LD = 0;
+    sys->n_atomtypes = 0;
+    sys->n_particles = 0;
+    sys->LD_type_names = NULL;
+    sys->N_Inter_Ext_types = 0;
+    sys->Inter_Ext_Type_List = NULL;
+
     sys->N_Bond_Int_Types = 0;
     sys->Bonded_Inter_Types = NULL;
     sys->N_coeff = 0;
@@ -2134,22 +2352,22 @@ void initialize_sys(tW_system * sys)
     sys->M2_wt = NULL;
 
     /* MRD 03.04.2019 */
-    sys->SKIP_TRIPLE_LOOP = FALSE;
+    sys->USE_OLD_ALGORITHM = FALSE; // Preset to skip triple loop unless otherwise directed
     sys->half_matrix = NULL;
     sys->bm_half_mat = NULL;
     sys->M_M2_proc = FALSE;
 
     sys->flag_ref_potential = FALSE;
 
-    /*JFR - 08.10.11 - PT variables */
-    sys->PT_var.flag_PT = FALSE;
+    /*JFR - 08.10.11 - PT variables */ // Matrix Perturbation Theory Variables
+    sys->PT_var.flag_PT = FALSE; //default to not using this way of solving for the G matrix
     sys->PT_var.N_PT = 0;
     sys->PT_var.dPT = 1;
     sys->PT_var.flag_MMOTF_SEP = FALSE;
     sys->PT_var.flag_eigen = FALSE;
     sys->PT_var.N_eigen = 0;
 
-    /*JFR - 08.10.11 - Eigen variables */
+    /*JFR - 08.10.11 - Eigen variables */ //These are flags for whether or not to eigen decompose the matrix/print it
     sys->Eigen_var.flag_Eigen = FALSE;
     sys->Eigen_var.N_Eigen = 0;
     sys->Eigen_var.flag_printn = FALSE;
@@ -2160,34 +2378,34 @@ void initialize_sys(tW_system * sys)
 
     /*JFR - 04.06.12 - SVD variables */
     sys->SVD_var.flag_SVD = FALSE;
-    sys->SVD_var.rcond = FLOAT_EPS;
+    sys->SVD_var.rcond = FLOAT_EPS; // ML This is the cutoff for which singular values are low enough to consider zero, by default we go for those below singular precision
     sys->SVD_var.flag_printSV = FALSE;
     sys->SVD_var.flag_printevecs = FALSE;
     sys->SVD_var.flag_solve = TRUE;
 
-    /*JFR - 04.06.12 - TPR variables */
+    /*JFR - 04.06.12 - TPR variables */ //ML In modern BOCS these are .btp variables
     sys->TPR_var.flag_TPR = FALSE;
     sys->TPR_var.N_TPR = 0;
     sys->TPR_var.TPR_files = NULL;
 
-    /*JFR - 06.27.12 - TPR variables */
+    /*JFR - 06.27.12 - TPR variables */ //ML These are alternate files for exclusions
     sys->TPR_EXCL_var.flag_TPR_excl = FALSE;
     strcpy(sys->TPR_EXCL_var.TPR_excl, " ");
 
-    /*JFR - 04.06.12 - MT variables */
+    /*JFR - 04.06.12 - MT variables */ //ML wheter or not to pring the Metric Tensor
     sys->MT_var.flag_MT = FALSE;
     sys->MT_var.flag_print = FALSE;
     sys->MT_var.flag_norm = FALSE;
     sys->MT_var.flag_Mcnt = FALSE;
 
-    /*JFR - 04.06.12 - MFD variables */
+    /*JFR - 04.06.12 - MFD variables */ //Whether or not to decompose b into contributions from seperate interactions
     sys->MFD_var.flag_MFD = FALSE;
 
     /*JFR - 04.06.12 - CalcMODE variables */
-    sys->CalcMODE_var.flag_CalcMODE = FALSE;
-    sys->CalcMODE_var.CalcMODE = IFULL;
+    sys->CalcMODE_var.flag_CalcMODE = FALSE; // Whether or not read [CalcMODE] in par.txt
+    sys->CalcMODE_var.CalcMODE = IFULL; // Default [CalcMODE] behavior
 
-    /*JFR - 04.06.12 - PC variables */
+    /*JFR - 04.06.12 - PC variables */ //Preconditionining variables @see Precondition()
     sys->PC_var.flag_PC = FALSE;
     strcpy(sys->PC_var.RPC, "colnorm");
     strcpy(sys->PC_var.LPC, "rowmax");
@@ -2210,14 +2428,14 @@ void initialize_sys(tW_system * sys)
     sys->wt_norm = 0.00;
 
 
-    /*JFR - 04.16.12 - ERR variables */
+    /*JFR - 04.16.12 - ERR variables */ 
     sys->ERR_var.flag_ERR = FALSE;
     sys->ERR_var.FACT = 'N';
 
     /* JFR - 06.27.12: Chi2 */
     sys->Chi2 = 0.00;
 
-    /* JFR - 07.16.12 - REF variables */
+    /* JFR - 07.16.12 - REF variables */ //Whether or not to use ref forces / if we found them
     sys->REF_var.flag_REF = FALSE;
     sys->REF_var.flag_calcbref = FALSE;
     sys->REF_var.flag_readbref = FALSE;
@@ -2226,7 +2444,7 @@ void initialize_sys(tW_system * sys)
     sys->REF_var.N_fnm = 0;
     sys->REF_var.reftrr_fnm = NULL;
 
-    /*JFR - 01.29.13 - TRIM variables */
+    /*JFR - 01.29.13 - TRIM variables */ //Defaults for Matrix trimming @see get_results() get_phi_forces() 
     sys->TRIM_var.flag_TRIM = FALSE;
     sys->TRIM_var.FE = 0.001;
 
@@ -2234,7 +2452,7 @@ void initialize_sys(tW_system * sys)
     sys->CHISQD_var.flag_CHISQD = FALSE;
     strcpy(sys->CHISQD_var.force_fnm, "");
 
-    /* JFR - 12.03.13 - REG variables */
+    /* JFR - 12.03.13 - REG variables */ // Whether or not to use Bayesian inference to regularize calc
     sys->REG_var.flag_REG = FALSE;
     strcpy(sys->REG_var.type, "");
     sys->REG_var.Nmax = 100;
@@ -2242,23 +2460,26 @@ void initialize_sys(tW_system * sys)
     sys->REG_var.tau_beta = 0.01;
     sys->REG_var.Nframes = 0;
 
-    /* JFR - 01.31.13 - RESCALE variables */
+    /* JFR - 01.31.13 - RESCALE variables */ //Flags for rescaling according to precondition scheme
     sys->RESCALE_var.flag_RESCALE = FALSE;
     sys->RESCALE_var.Nmax = 100;
     sys->RESCALE_var.tau_phi = 0.01;
 
-    /* JFR - 01.31.13 - CONSTRAIN variables */
+    /* JFR - 01.31.13 - CONSTRAIN variables */ 
     sys->CONSTRAIN_var.flag_CONSTRAIN = FALSE;
     sys->CONSTRAIN_var.Nmax = 100;
     sys->CONSTRAIN_var.tau_dih = 0.01;
     sys->CONSTRAIN_var.lambda = 0.01;
     sys->CONSTRAIN_var.dlambda = 0.01;
 
-    /* JFR - 12.03.13 - ITER variables */
+    /* JFR - 12.03.13 - ITER variables */ // Variables for the iterative gYBG functionality
     sys->ITER_var.flag_ITER = FALSE;
     sys->ITER_var.flag_AAM2 = FALSE;
     strcpy(sys->ITER_var.AAM2_fnm, " ");
     sys->ITER_var.flag_bsolnerr = FALSE;
+
+    /*MCL - 03.10.26 - check for SG */
+    sys->bGradient = 0; // Assume no until checked for
 
 }
 
@@ -2546,19 +2767,21 @@ JFR - 07.22.12
 int get_Bspline_basis_param(tW_line inp_line, double *dr, double *R_0,
 			    double *R_max, int *N_pts, int *kspline,
 			    int *N_coeff, int *n_smooth,
-			    tW_word inter_type)
+			    tW_word inter_type, double *user_R_0, double *user_R_max)
 {
     int test_sscanf;
     tW_word inter_name;
 
     test_sscanf = sscanf(inp_line, " %s %*s Bspline %lf %lf %lf %d %d",
-			 inter_name, dr, R_0, R_max, kspline, n_smooth);
+			 inter_name, dr, user_R_0, user_R_max, kspline, n_smooth);
 
     if (test_sscanf != 6) {
 	printf("\nERROR: Did not read %s correctly.\n  Check par.txt.\n",
 	       inter_name);
 	exit(EXIT_FAILURE);
     }
+    *R_0 = *user_R_0;
+    *R_max = *user_R_max;  // MCL - 05.08.25, for now these hold the user vales, we'll pad these in NB below.
 
     /* Perform calculations in radians. Results will be converted to degrees. */
     if ((strcmp(inter_type, B_ANGLE) == 0)
@@ -2573,17 +2796,21 @@ int get_Bspline_basis_param(tW_line inp_line, double *dr, double *R_0,
     *R_max = *R_0 + (*N_coeff - 1) * (*dr);
 
     /* MRD 02.05.2019 added extra padding for Bspline NB */
-    if (strcmp(inter_type,NB_PAIR) == 0)
+    /* MCL 05.05.2025 extended padding to ALL NBs */
+    if (
+        (strcmp(inter_type,NB_PAIR) == 0) ||
+        (strcmp(inter_type,NB_LOCAL_DENSITY) == 0) ||
+        (strcmp(inter_type,NB_LD_GRADIENT) == 0)
+       )
     {
 	(*N_pts) += (*kspline);
         (*N_coeff) += (*kspline);
         (*R_max) += ((*dr) * (double)(*kspline));
-        if ((*R_0) > 0.0)
-        {
-            (*R_0) -= ((*dr) * (double)(*kspline));
-	    (*N_coeff) += (*kspline);
-	    (*N_pts) += (*kspline);
-        }
+
+    	/*MCL 05.05.2025 Removed R_0 > 0 condition, We always want left padding too for our knots*/
+        (*R_0) -= ((*dr) * (double)(*kspline));
+	(*N_coeff) += (*kspline);
+	(*N_pts) += (*kspline);
     }
 
     /* For dihedral types, make sure that R_0 and R_max are -180 and 180. */
@@ -2604,8 +2831,153 @@ int get_Bspline_basis_param(tW_line inp_line, double *dr, double *R_0,
     return BSPLINE_BASIS_INDEX;
 }
 
+/* MRD 06.18.2020 */
 /*****************************************************************************************
-get_no_inter_types(): Returns the number of interactions listed after a directive in-
+ * get_local_density_extra_params(): gets wtype, r0, and rC from the line in [Inter_Types]
+ * *****************************************************************************************/
+void get_local_density_extra_params(tW_line inp_line, tW_Inter_Types * Inter_Type)
+{
+  tW_word ts1, ts2, ts3, w_type_s;
+  int w_type_i, test_sscanf;
+  float td1, td2, td3, td4, td5, r0, rC;
+  Inter_Type->LD_W = init_indicator_function();
+
+  switch (Inter_Type->i_basis)
+  {
+    case (BSPLINE_BASIS_INDEX): /* There's an extra double to throw away (spline order)*/
+      test_sscanf = sscanf(inp_line," %s %s %s %f %f %f %f %f %s %f %f ",
+                                      &ts1, &ts2, &ts3, &td1, &td2, &td3, &td4, &td5,
+                                      &w_type_s, &r0, &rC);
+      if (test_sscanf != 11)
+      {
+        fprintf(stderr,"ERROR: with basis type Bspline and Inter_Type Local_Density, I expected 11 items in line\n%s",inp_line);
+        fprintf(stderr,"\t 1: inter_name: %s\n",ts1);
+        fprintf(stderr,"\t 2: inter_type: %s\n",ts2);
+        fprintf(stderr,"\t 3:      basis: %s\n",ts3);
+        fprintf(stderr,"\t 4:       drho: %g\n",td1);
+        fprintf(stderr,"\t 5:    rho_min: %g\n",td2);
+        fprintf(stderr,"\t 6:    rho_max: %g\n",td3);
+        fprintf(stderr,"\t 7: spline_ord: %g\n",td4);
+        fprintf(stderr,"\t 8:   n_smooth: %g\n",td5);
+        fprintf(stderr,"\t 9:      wtype: %s\n",w_type_s);
+        fprintf(stderr,"\t10:         r0: %g\n",r0);
+        fprintf(stderr,"\t11:         rC: %g\n",rC);
+        fprintf(stderr,"\tHowever, ttest_sscanf = %d \n",test_sscanf);
+        exit(EXIT_FAILURE);
+      }
+    break;
+    case (DELTA_BASIS_INDEX):
+    case (LINEAR_BASIS_INDEX): /* No spline order */
+      test_sscanf = sscanf(inp_line," %s %s %s %g %g %g %g %s %g %g ",
+                                      &ts1, &ts2, &ts3, &td1, &td2, &td3, &td4,
+                                      &w_type_s, &r0, &rC);
+      if (test_sscanf != 10)
+      {
+        fprintf(stderr,"ERROR: with basis type delta/linear and Inter_Type Local_Density, I expected 10 items in line\n%s",inp_line);
+        fprintf(stderr,"\t 1: inter_name: %s\n",ts1);
+        fprintf(stderr,"\t 2: inter_type: %s\n",ts2);
+        fprintf(stderr,"\t 3:      basis: %s\n",ts3);
+        fprintf(stderr,"\t 4:       drho: %g\n",td1);
+        fprintf(stderr,"\t 5:    rho_min: %g\n",td2);
+        fprintf(stderr,"\t 6:    rho_max: %g\n",td3);
+        fprintf(stderr,"\t 7:   n_smooth: %g\n",td4);
+        fprintf(stderr,"\t 8:      wtype: %s\n",w_type_s);
+        fprintf(stderr,"\t 9:         r0: %g\n",r0);
+        fprintf(stderr,"\t10:         rC: %g\n",rC);
+        fprintf(stderr,"\tHowever, ttest_sscanf = %d \n",test_sscanf);
+        exit(EXIT_FAILURE);
+      }
+    break;
+    default:
+
+    break;
+  }
+
+  pop_indicator(Inter_Type->LD_W, w_type_s, (double)r0, (double)rC);
+
+}
+
+
+/*****************************************************************************************
+get_external_potl_extra_params(): Gets the extra arguments for the external interaction type
+*****************************************************************************************/
+void get_external_potl_extra_params(tW_line inp_line, tW_Inter_Types * Inter_Types) 
+{
+  tW_word ts1, ts2, ts3;
+  int w_type_i, test_sscanf, solve_ext, zPBC;
+  float td1, td2, td3, td4, td5;
+
+  switch (Inter_Types->i_basis)
+  {
+    case (BSPLINE_BASIS_INDEX): /* There's an extra double to throw away (spline order)*/
+      test_sscanf = sscanf(inp_line," %s %s %s %f %f %f %f %f %d %d ",
+                                      &ts1, &ts2, &ts3, &td1, &td2, &td3, &td4, &td5,
+                                      &solve_ext, &zPBC);
+      if (test_sscanf != 10)
+      {
+        fprintf(stderr,"ERROR: with basis type Bspline and Inter_Type External, I expected 10 items in line\n%s",inp_line);
+        fprintf(stderr,"\t 1: inter_name: %s\n",ts1);
+        fprintf(stderr,"\t 2: inter_type: %s\n",ts2);
+        fprintf(stderr,"\t 3:      basis: %s\n",ts3);
+        fprintf(stderr,"\t 4:         dz: %g\n",td1);
+        fprintf(stderr,"\t 5:      z_min: %g\n",td2);
+        fprintf(stderr,"\t 6:      z_max: %g\n",td3);
+        fprintf(stderr,"\t 7: spline_ord: %g\n",td4);
+        fprintf(stderr,"\t 8:   n_smooth: %g\n",td5);
+        fprintf(stderr,"\t 9:  solve_ext: %d\n",solve_ext);
+        fprintf(stderr,"\t10:       zPBC: %d\n",zPBC);
+        fprintf(stderr,"\tHowever, test_sscanf = %d \n",test_sscanf);
+        exit(EXIT_FAILURE);
+      }
+    break;
+    case (DELTA_BASIS_INDEX):
+    case (LINEAR_BASIS_INDEX): /* No spline order */
+      test_sscanf = sscanf(inp_line," %s %s %s %g %g %g %g %d %d ",
+                                      &ts1, &ts2, &ts3, &td1, &td2, &td3, &td4,
+                                      &solve_ext, &zPBC);
+      if (test_sscanf != 9)
+      {
+        fprintf(stderr,"ERROR: with basis type delta/linear and Inter_Type External, I expected 9 items in line\n%s",inp_line);
+        fprintf(stderr,"\t 1: inter_name: %s\n",ts1);
+        fprintf(stderr,"\t 2: inter_type: %s\n",ts2);
+        fprintf(stderr,"\t 3:      basis: %s\n",ts3);
+        fprintf(stderr,"\t 4:         dz: %g\n",td1);
+        fprintf(stderr,"\t 5:      z_min: %g\n",td2);
+        fprintf(stderr,"\t 6:      z_max: %g\n",td3);
+        fprintf(stderr,"\t 7:   n_smooth: %g\n",td4);
+        fprintf(stderr,"\t 8:  solve_ext: %d\n",solve_ext);
+        fprintf(stderr,"\t 9:       zPBC: %d\n",zPBC);
+        fprintf(stderr,"\tHowever, test_sscanf = %d \n",test_sscanf);
+        exit(EXIT_FAILURE);
+      }
+    break;
+    default:
+
+    break;
+  }
+
+  if ((solve_ext == 0) || (solve_ext == 1)) { Inter_Types->solveExt = solve_ext; }
+  else
+  {
+    fprintf(stderr,"ERROR: Solve_Ext parameter must be 1 (true) or 0 (false).\n");
+    fprintf(stderr,"You provided: %d \n",solve_ext);
+    exit(EXIT_FAILURE);
+  }
+
+  if ((zPBC == 1) || (zPBC == 0)) { Inter_Types->extPBC = zPBC; }
+  else
+  {
+    fprintf(stderr,"ERROR: zPBC parameter must be 1 (true) or 0 (false).\n");
+    fprintf(stderr,"You provided: %d \n",zPBC);
+    exit(EXIT_FAILURE);
+  }
+
+}
+
+
+
+/*****************************************************************************************
+get_no_inter_type(s): Returns the number of interactions listed after a directive in-
 dicated by keyword. Stops execution if the number is not found. 
 *****************************************************************************************/
 int get_no_inter_types(tW_word keyword, tW_line inp_line)
@@ -2682,7 +3054,7 @@ void get_bond_basis_parameters(tW_word inter_name,
 /*****************************************************************************************
 check_input(): Makes sure that the input read from the parameter file is consistent.
 *****************************************************************************************/
-void check_input(tW_files files, tW_system sys, Par_Flags flags,
+void check_input(tW_files files, tW_system * sys, Par_Flags flags,
 		 tW_ref_potential ref_potential)
 {
     /* Were structures found? */
@@ -2716,24 +3088,44 @@ void check_input(tW_files files, tW_system sys, Par_Flags flags,
 	exit(EXIT_FAILURE);
     }
 
-    check_struct_files(files);
+    check_struct_files(files); // Checks inp.txt [struct] files for duplicates
 
-    check_site_types(sys);
+    check_site_types(*sys); // Checks site types for duplicates
 
-    check_Inter_Types(sys);
+    check_Inter_Types(*sys); // Checks intertype names for duplicates
 
-    check_Type_Inter2(sys);
+    check_Type_Inter2(*sys);
 
-    check_Bonded_Inter_Types(sys, B_BOND_STRETCH, 2, files.mode);
+    check_Bonded_Inter_Types(*sys, B_BOND_STRETCH, 2, files.mode);
 
-    check_Bonded_Inter_Types(sys, B_ANGLE, 3, files.mode);
+    check_Bonded_Inter_Types(*sys, B_ANGLE, 3, files.mode);
 
-    check_Bonded_Inter_Types(sys, B_DIHEDRAL, 4, files.mode);
+    check_Bonded_Inter_Types(*sys, B_DIHEDRAL, 4, files.mode);
 
-    check_Bonded_Inter_Types(sys, B_NB_PAIR_BOND, 2, files.mode);
+    check_Bonded_Inter_Types(*sys, B_NB_PAIR_BOND, 2, files.mode);
 
-    if (sys.flag_ref_potential == TRUE) {
-	check_ref_input(ref_potential, sys);
+    if (sys->flag_ref_potential == TRUE) {
+	check_ref_input(ref_potential, *sys);
+    }
+
+ /* MRD 06.18.2020
+ * LD and Extl interactions are only supported with new algorithm 
+ */ 
+    if (((sys->N_Inter2_Types_LD > 0) || (sys->N_Inter_Ext_types > 0))
+        && (sys->USE_OLD_ALGORITHM))
+    {
+      fprintf(stderr,"ERROR: Local Density and External interactions are only available with the new algorithm\n");
+      fprintf(stderr,"\tPlease eliminate the [%s] directive from your par.txt file\n",KEY_OLD_ALGORITHM);
+      exit(1);
+    }
+
+    /* MCL 03.10.26 
+     * No g-YBG of square gradients (warn/set flag) 
+     */
+    if (check_if_interaction_requested(*sys, NB_LD_GRADIENT))
+    {
+      fprintf(stderr, "Warning: SG interactions are not currently parameterizable via the g-YGB framework, accordingly only force based solutions will be calculated\n");
+      sys->bGradient = 1;
     }
 }
 
@@ -2853,13 +3245,17 @@ void check_Type_Inter2(tW_system sys)
 
     /* Make sure interactions aren't listed twice. */
     for (i = 0; i < sys.N_Inter2_Types - 1; i++) {
+      if (strcmp(sys.Inter2_Type_List[i].inter_type,NB_PAIR) == 0) {
 	for (j = i + 1; j < sys.N_Inter2_Types; j++) {
+          if (strcmp(sys.Inter2_Type_List[j].inter_type,NB_PAIR) == 0) {
 	    strcpy(list1[0], sys.Inter2_Type_List[i].name1);
 	    strcpy(list1[1], sys.Inter2_Type_List[i].name2);
 	    strcpy(list2[0], sys.Inter2_Type_List[j].name1);
 	    strcpy(list2[1], sys.Inter2_Type_List[j].name2);
 	    check_inter_sites(list1, list2, 2, "Pair_Interactions");
+          }
 	}
+      }
     }
 }
 
@@ -4459,6 +4855,26 @@ int read_site_types(int b_SiteTypes, tW_line inp_line, tW_system * sys,
     return TRUE;
 }
 
+/*****************************************************************************************
+read_external_potential_inter(): reads the [External_Potential] Directive
+*****************************************************************************************/
+int read_external_potential_inter(int b_EP, tW_line inp_line, tW_system *sys, FILE *fp_par)
+{
+  if (b_EP == TRUE)
+  {
+    fprintf(stderr,"\nERROR: Reading External_Potential twice.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  sys->N_Inter_Ext_types = get_no_inter_types(NB_EXT_POTL, inp_line);
+
+  sys->Inter_Ext_Type_List = get_Type_Ext_List(fp_par, inp_line, *sys,
+                                                    sys->N_Inter_Ext_types, NB_EXT_POTL);
+
+
+}
+
+
 
 /*****************************************************************************************
 read_nb_pair_inter(): Reads in the non-bonded intermolecular pair interactions. Returns
@@ -4947,6 +5363,14 @@ void get_parameters(FILE * fp_par, tW_line inp_line, tW_system * sys,
 	flags->b_Pairs =
 	    read_nb_pair_inter(flags->b_Pairs, inp_line, sys, fp_par);
     }
+    
+    /* [External_Potential] */ // MRD 01.10.2019
+    else if (strstr(inp_line, NB_EXT_POTL) != NULL) {
+      flags->b_Ext_Potl = read_external_potential_inter(flags->b_Ext_Potl,
+                                        inp_line, sys, fp_par);
+    }
+
+
 
     /* [BondStretch] */
     else if (strstr(inp_line, B_BOND_STRETCH) != NULL) {
@@ -5115,9 +5539,9 @@ void get_parameters(FILE * fp_par, tW_line inp_line, tW_system * sys,
 	flags->b_mode = read_mode(flags->b_mode, inp_line, files);
     }
 
-    /* [Skip_Triple_Loop] */
-    else if (strstr(inp_line, KEY_SKIPTL) != NULL) {
-        sys->SKIP_TRIPLE_LOOP = TRUE;
+    /* [Use_Old_Algorithm] */
+    else if (strstr(inp_line, KEY_OLD_ALGORITHM) != NULL) {
+        sys->USE_OLD_ALGORITHM = TRUE; 
     }
     /* Stop execution if line is not understood. */
     else {
@@ -5248,7 +5672,9 @@ void get_Inter_Type(tW_line inp_line, tW_Inter_Types * Inter_Types)
 				    &(Inter_Types->kspline),
 				    &(Inter_Types->N_coeff),
 				    &(Inter_Types->n_smooth),
-				    Inter_Types->inter_type);
+				    Inter_Types->inter_type, 
+				    &(Inter_Types->user_R_min),
+				    &(Inter_Types->user_R_max)); // MCL 05.08.25 Added so we can keep track of basis padding easier
     }
 
     /* Harmonic basis. */
@@ -5283,6 +5709,28 @@ void get_Inter_Type(tW_line inp_line, tW_Inter_Types * Inter_Types)
 	exit(EXIT_FAILURE);
     }
 
+    /* MRD 06.18.20 */
+    if (strcmp(Inter_Types->inter_type,NB_LOCAL_DENSITY) == 0)
+    {
+      get_local_density_extra_params(inp_line, Inter_Types);
+    }
+    if (strcmp(Inter_Types->inter_type,NB_LD_GRADIENT) == 0)
+    {
+      get_local_density_extra_params(inp_line, Inter_Types);
+      Inter_Types->LDGradient = TRUE;
+      if (( Inter_Types->i_basis != LINEAR_BASIS_INDEX ) &&
+          ( Inter_Types->i_basis != BSPLINE_BASIS_INDEX ))
+      {
+        fprintf(stderr,"ERROR: LD_Gradient interactions MUST use basis type linear or Bspline!\n");
+        exit(EXIT_FAILURE);
+      }
+    }
+    if (strcmp(Inter_Types->inter_type,EXT_POTL_NAME) == 0)
+    {
+      get_external_potl_extra_params(inp_line, Inter_Types);
+    }
+
+
 }
 
 
@@ -5305,6 +5753,8 @@ void initialize_Inter_Types(int N_Inter_Types,
 	Inter_Types[i].i_0 = -1;
 	Inter_Types[i].N_powers = 0;
 	Inter_Types[i].kspline = 0;	/* JFR - 07.22.12: Bspline order */
+	Inter_Types[i].user_R_min = 0.0; /*MCL - 05.08.25 user domain for pad/trim tracking*/
+	Inter_Types[i].user_R_max = 0.0; 
 	Inter_Types[i].powers = NULL;
 	Inter_Types[i].ptr_x = NULL;
 	Inter_Types[i].ptr_g = NULL;
@@ -5317,6 +5767,11 @@ void initialize_Inter_Types(int N_Inter_Types,
 	Inter_Types[i].ptr_phi = NULL;
 	Inter_Types[i].ptr_phi_forces = NULL;
 	Inter_Types[i].ptr_phi_struct = NULL;
+        Inter_Types[i].LD_W = NULL; // MRD 06.18.2020
+        Inter_Types[i].solveExt = TRUE; // MRD 06.18.2020
+        Inter_Types[i].LDGradient = FALSE; // MRD 06.18.2020
+	Inter_Types[i].user_R_min = 0.0; // MCL 05.08.2025
+	Inter_Types[i].user_R_max = 0.0; // MCL 05.08.2025
     }
 }
 
@@ -5363,6 +5818,9 @@ void summarize_Inter_Types(FILE * fp_log, tW_system sys)
 	if (tmp_Inter->i_basis == BSPLINE_BASIS_INDEX) {
 	    fprintf(fp_log, "    kspline: %d\n", tmp_Inter->kspline);
 	}			/* JFR - 07.22.12: Bspline order */
+	if (tmp_Inter->i_basis == BSPLINE_BASIS_INDEX) {
+	    fprintf(fp_log, "    usR_min: %f     usR_max:     %f\n", tmp_Inter->user_R_min, tmp_Inter->user_R_max);
+	} // MCL added 05.2025 when working on padding spline coeffs for user domain
     }
 
     fprintf(fp_log, "\n");
@@ -5472,6 +5930,7 @@ void initialize_par_flags(Par_Flags * flags)
     flags->b_Temperature = FALSE;
     flags->b_Inter_Types = FALSE;
     flags->b_Pairs = FALSE;
+    flags->b_Ext_Potl = FALSE; // MRD 06.18.2020
     flags->b_Bonds = FALSE;
     flags->b_Angles = FALSE;
     flags->b_Dihedrals = FALSE;
@@ -5488,6 +5947,7 @@ void initialize_ref_flags(Ref_Flags * flags)
 {
     flags->b_Forces = FALSE;
     flags->b_Pairs = FALSE;
+    flags->b_Ext_Potl = FALSE; // MRD 06.18.2020
     flags->b_Bonds = FALSE;
     flags->b_Angles = FALSE;
     flags->b_Dihedrals = FALSE;
@@ -5792,4 +6252,21 @@ void estimate_memory_usage(tW_files files, tW_system * sys)
     mem = mem / 134217728.0;
     fprintf(files.fp_log, "Parallel -> %Lf GB \n", mem);
 
+}
+
+/*************************************************************************************************
+check_if_interaction_requested():
+Searches the stored information about the cgff systems for a particular interaction type
+@see cgff_types.h (There are constants associated with each inter_name)
+@arg sys The cgff linear equations system being built with par.txt
+@arg inter_name the pre-defined char array for the intertype
+@return 0 if not found, 1 if found
+*************************************************************************************************/
+int check_if_interaction_requested(tW_system sys, tW_word inter_name)
+{
+  for (int i = 0; i < sys.N_Inter_Types; i++)
+  {
+   if (strcmp(sys.Inter_Types[i].inter_type, inter_name) == 0){return 1; }
+  }
+  return 0;
 }

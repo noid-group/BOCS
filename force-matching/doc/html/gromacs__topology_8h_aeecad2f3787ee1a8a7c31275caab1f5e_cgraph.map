@@ -1,0 +1,5 @@
+<map id="write_lammps_data" name="write_lammps_data">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,140,32"/>
+<area shape="rect" id="Node000002" href="$gromacs__topology_8c.html#a8fb5f1aebc19c6b64d28477a0fdcf73e" title="dump_molecule_info(): Prints some basic info for each molecule type from the tW_molecule struct." alt="" coords="188,5,328,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,16,172,16,172,21,140,21"/>
+</map>

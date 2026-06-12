@@ -1,0 +1,7 @@
+<map id="open_output_file1" name="open_output_file1">
+<area shape="rect" id="Node000001" title="open_output_file1(): Opens a file to print general information about the results for the topology lab..." alt="" coords="240,5,363,32"/>
+<area shape="rect" id="Node000002" href="$io__output_8c.html#aaf03153665ceaee1b8cb5fab8b1c1acb" title="print_output(): Print the results." alt="" coords="103,5,192,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,21,192,21,192,16,225,16"/>
+<area shape="rect" id="Node000003" href="$cgff_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title=" " alt="" coords="5,5,55,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="88,21,55,21,55,16,88,16"/>
+</map>
