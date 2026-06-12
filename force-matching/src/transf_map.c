@@ -1,6 +1,6 @@
 /**
 @file transf_map.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
 @brief Functions related to mapping to a cg representation
 */
 

@@ -1,6 +1,6 @@
 /**
 @file read_parameters.h 
-@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski
 */
 
 #ifndef READ_PARAM
@@ -12,7 +12,6 @@ extern "C"
 #endif
 
 #include "cgff_types.h"
-
 
 /* Names for reading input */
 #define KEY_TEMP         "Temperature"
@@ -44,7 +43,7 @@ extern "C"
 #define KEY_RESCALE      "Rescale_Forces"	//JFR - 01.31.13
 #define KEY_CONSTRAIN    "Constrain_Dih"	//JFR - 01.31.13
 #define KEY_ITER         "Iterative_gYBG"	//JFR - 12.03.13
-#define KEY_SKIPTL       "Skip_Triple_Loop"     //MRD - 03.04.19
+#define KEY_OLD_ALGORITHM "Use_Old_Algorithm" // MRD 06.17.20
 
 /* File name for summarizing input. */
 #define SUM_INPUT_FNAME  "summarize_input.txt"
@@ -60,6 +59,7 @@ typedef struct {
     int b_Temperature;
     int b_Inter_Types;
     int b_Pairs;
+    int b_Ext_Potl; // MRD 06.17.2020
     int b_Bonds;
     int b_Angles;
     int b_Dihedrals;
@@ -71,6 +71,8 @@ typedef struct {
 typedef struct {
     int b_Forces;
     int b_Pairs;
+    int b_LD_Gradient; // MRD 06.17.2020
+    int b_Ext_Potl; // MRD 06.17.2020
     int b_Bonds;
     int b_Angles;
     int b_Dihedrals;
@@ -146,7 +148,10 @@ int get_linear_basis_param(tW_line inp_line, double *dr, double *R_0,
 int get_Bspline_basis_param(tW_line inp_line, double *dr, double *R_0,
 			    double *R_max, int *N_pts, int *kspline,
 			    int *N_coeff, int *n_smooth,
-			    tW_word inter_type);
+			    tW_word inter_type, double *user_R_0, double *user_R_max);
+
+/* MRD 06.17.2020 */
+void get_local_density_extra_params(tW_line inp_line, tW_Inter_Types * Inter_Type);
 
 int get_power_basis_param(tW_line inp_line, tW_Inter_Types * inter);
 
@@ -159,6 +164,17 @@ int read_Type_Inter2(tW_line inp_line, tW_type_inter2 * inter,
 
 int read_nb_pair_inter(int b_Pairs, tW_line inp_line, tW_system * sys,
 		       FILE * fp_par);
+
+/* MRD 06.17.2020 */
+int read_Type_Inter_Ext(tW_line inp_line, tW_type_inter_external *inter, tW_system sys);
+
+tW_type_inter_external *get_Type_Ext_List(FILE *fp_par, tW_line inp_line, tW_system sys,
+                                          int N_Inter_Ext_types, tW_word keyword);
+
+void get_ext_potl_param(tW_line inp_line, tW_Inter_Types * Inter_Types);
+
+int read_external_potential_inter(int b_EP, tW_line inp_line, tW_system *sys, FILE *fp_par);
+
 
 int read_BOND_stretch_inter(int b_Bonds, tW_line inp_line, tW_system * sys,
 			    FILE * fp_par);
@@ -303,7 +319,7 @@ int read_nrexcl(int b_nrexcl, tW_line inp_line, tW_system * sys);
 
 int read_mode(int b_mode, tW_line inp_line, tW_files * files);
 
-void check_input(tW_files files, tW_system sys, Par_Flags flags,
+void check_input(tW_files files, tW_system* sys, Par_Flags flags,
 		 tW_ref_potential ref_potential);
 
 
@@ -330,6 +346,8 @@ void check_ref_input(tW_ref_potential ref_potential, tW_system sys);
 void check_sites_ref_potential(int N_interactions, tW_ref_inter * inter,
 			       tW_system sys);
 
+int check_if_interaction_requested(tW_system sys, tW_word inter_name);
+
 int read_REF_forces(int b_Forces, tW_line inp_line,
 		    tW_ref_potential * ref_potential, FILE * fp);
 
@@ -351,6 +369,12 @@ int read_REF_IntraMolecPair_inter(int b_IntraMolecPair, int b_Forces,
 void summarize_Inter_Types(FILE * fp_log, tW_system sys);
 
 void summarize_input_pair_inter(FILE * fp, tW_system sys);
+
+/* MRD 06.17.2020 */
+void summarize_input_local_density_inter(FILE * fp_log, tW_system sys);
+
+/* MRD 06.17.2020 */
+void summarize_input_external_potential_inter(FILE *fp_log, tW_system sys);
 
 void summarize_input_bond_inter(FILE * fp, tW_system sys,
 				tW_word inter_name, int N_Int_Sites,
@@ -417,6 +441,9 @@ void copy_Inter_Types(tW_system sys_orig, tW_system * sys_copy);
 void copy_Inter2_Types(tW_system sys_orig, tW_system * sys_copy);
 
 void copy_Bonded_Inter_Types(tW_system sys_orig, tW_system * sys_copy);
+
+/* MRD 06.17.2020 */
+void copy_Inter_Ext_Types(tW_system sys_org, tW_system *sys_copy);
 
 void copy_PT(tW_system sys_orig, tW_system * sys_copy);	//JFR - added 09.27.11
 

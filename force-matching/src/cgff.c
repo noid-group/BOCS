@@ -1,6 +1,6 @@
 /**
 @file cgff.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski
 @brief MPI driver for the cgff calculation 
 */
 
@@ -58,9 +58,12 @@ int main (int argc, char *argv[])
   bool bGromacs = FALSE;        /* Logical variable re using GROMACS      */
   bool bF = FALSE;                /* Logical variable re presence of forces */
 
-  tW_gmx_trxframe *fr, *fr_ref;
+  //tW_gmx_trxframe *fr, *fr_ref;
   //fr = init_tW_gmx_trxframe();
   //fr_ref = init_tW_gmx_trxframe();
+
+  /* MRD 06.18.2020 */
+  tW_gmx_trxframe **allfr, **allfr_ref, *fr, *fr_ref;
 
   tW_gmx_topology *top;
   top = init_tW_gmx_topology();
@@ -115,6 +118,20 @@ if (local_rank == 0) { copyright(); }
   /* Write input summary to log file. */
   summarize_input (files, sys, ref_potential);
 
+  /* MRD 06.18.2020
+   * In general using multiple structure files with external basis vectors
+   * seems like a bad idea, unless you're sure the external field is the
+   * same across trajectories. If someone wants to do that, make them
+   * eliminate this check from the code */
+  if ((sys.N_Inter_Ext_types > 0) && (files.N_struct > 1))
+  {
+    fprintf(stderr,"WARNING: Use of external basis vectors with multiple structure files is highly discouraged!\n");
+    fprintf(stderr,"Accordingly, we have disabled this possibility. If you're sure you know that you want to,\n");
+    fprintf(stderr,"and know what you are doing, eliminate this check in cgff.c and recompile.\n");
+    exit(EXIT_FAILURE);
+  }
+
+
   /* JFR - 08.02.12: Turn on reference flag in the case that you are passing in a reference trr file */
   if (sys.REF_var.flag_reftrr == TRUE)
   {
@@ -131,29 +148,36 @@ if (local_rank == 0) { copyright(); }
   if (strcmp (files.mode, GMX_MODE) == 0)
   {
     /* Initialize flags for GROMACS. */
-    init_gmx_info (&info);
+    init_gmx_info (&info); //sets all info except b_Forces_N
     if (sys.REF_var.flag_reftrr == TRUE)
     {
       init_gmx_info (&info_ref);
     }
 
+    allfr = (tW_gmx_trxframe **) ecalloc(files.N_struct, sizeof(tW_gmx_trxframe *)); //Pointer to a list of frames [may have multi traj]
+    allfr_ref = (tW_gmx_trxframe **) ecalloc(files.N_struct, sizeof(tW_gmx_trxframe *));
+
       /* Loop through CG structures. */
     for (i = 0; i < files.N_struct; i++)
     {
       /* JFR - 07.16.12: For more efficient I/O (e.g., for large trajectories), let each processor deal with a seperate file */
-      if ((sys.REF_var.flag_splitfiles == TRUE) && (i % np != local_rank)) { continue; }
+      if ((sys.REF_var.flag_splitfiles == TRUE) && (i % np != local_rank)) { continue; } // processors don't touch frames that don't belong to them
 
       /* Get the ith topology information. */
       /* JFR - added 04.06.12:  Pass variables to over-write default TPR filenames */
-      if (sys.TPR_var.flag_TPR == TRUE) { strcpy (tpr_filename, sys.TPR_var.TPR_files[i]); }
-      else // MRD 11.06.2017
+      if (sys.TPR_var.flag_TPR == TRUE) { strcpy (tpr_filename, sys.TPR_var.TPR_files[i]); } // If we found it, great
+      else // MRD 11.06.2017                                                                   // If not, guess that .trr.btp is the top name
       { 
         strcpy(tpr_filename,files.structures[i]); // Put trr filename in topology filename
         char *file_ext = strstr(tpr_filename,".trr"); // Find the file extension
         if (file_ext == NULL) // Check to make sure file extension found
         {
-          fprintf(stderr,"ERROR: Did not find file extension \".trr\" in trajectory filename: %s\n",files.structures[i]);
-          return 1;
+          file_ext = strstr(tpr_filename,".btj"); // MRD 06.18.2020
+          if (file_ext == NULL)
+          {
+            fprintf(stderr,"ERROR: Did not find file extension \".trr\" nor \".btj\" in trajectory filename: %s\n",files.structures[i]);
+            return 1;
+          }
         }
         strcpy(file_ext,".btp"); // Replace .trr extension with .btp
       }        
@@ -176,6 +200,16 @@ if (local_rank == 0) { copyright(); }
       {
         /* Setup the CG structure. */
         N_sites = setup_CG_struct (&sys, top, CG_struct, sys.Bonded_Inter_Types);
+        if (local_rank == 0) { print_bond_warnings(CG_struct, N_sites); } //MCL 05.16.2024 Added to mitigate unknown segfaults on complex molecules
+	sys.n_particles = N_sites; // MRD 06.18.2020
+
+        /* MRD 06.18.2020 */
+        if (N_sites != top->contents->atoms.nr)
+        {
+                    fprintf(stderr,"ERROR: topology says there are %d atoms, but trajectory says there are %d atoms\n",
+                          top->contents->atoms.nr, N_sites);
+          return 1;
+        }
 
         if (DEBUG_setup_CG_struct)
         {
@@ -188,9 +222,14 @@ if (local_rank == 0) { copyright(); }
         {                /* JFR - added 04.06.12: If in SECOND_HALF MODE, skip the trr loop */
           /* Open trr file for current topology. */
           //open_trr_file (files.structures[i], oenv, &status, &info, &fr);        // 4.5.3
-          fr = init_tW_gmx_trxframe();
-          fr_ref = init_tW_gmx_trxframe();
-                      
+//          fr = init_tW_gmx_trxframe();
+//          fr_ref = init_tW_gmx_trxframe();
+  
+          allfr[i] = init_tW_gmx_trxframe();
+          fr = allfr[i];
+          allfr_ref[i] = init_tW_gmx_trxframe();
+          fr_ref = allfr_ref[i];
+                    
           // read_first_trxframe(fr, files.structures[i]); MRD 11.09.17
           if (read_first_frame(fr, files.structures[i]) == -1)
           {
@@ -234,6 +273,11 @@ if (local_rank == 0) { copyright(); }
 
           /* Copy trr information to CG_struct. */
           bF = copy_trr_2_CGstruct (fr, CG_struct);
+	  if (!bF && local_rank == 0) 
+	  {
+	   fprintf(stderr, "Warning: Trajectory passed to cgff does not have force info. Accordingly only the g-YBG solution will be output\n");
+	   fprintf(stderr, "If this behavior was unexpected and your trajectory was made whole with gromacs, please check that the -pbc whole AND -force flags were used\n");
+	  }
           update_info_trr(&info, fr);
                       
           if (sys.REF_var.flag_reftrr == TRUE)
@@ -242,14 +286,15 @@ if (local_rank == 0) { copyright(); }
           }
 
           /* Allocate memory if skipping triple loop */
-          if (sys.SKIP_TRIPLE_LOOP)
+          /* MRD 06.18.2020 This is now default. */
+          if (! sys.USE_OLD_ALGORITHM)
           {
             sys.linear_half_matrix = (dvec *) ecalloc( N_sites * sys.N_coeff, sizeof(dvec) );
             sys.half_matrix = (dvec **) ecalloc(N_sites, sizeof(dvec *));
             sys.bm_half_mat = (bitMask *) ecalloc(GET_N_SPOTS(N_sites * sys.N_coeff), sizeof(bitMask));
             for (j = 0; j < N_sites; ++j)
             {
-              sys.half_matrix[i] = &(sys.linear_half_matrix[j * sys.N_coeff]);
+              sys.half_matrix[j] = &(sys.linear_half_matrix[j * sys.N_coeff]);
             }
           }
 
@@ -286,8 +331,13 @@ if (local_rank == 0) { copyright(); }
               {
                 get_ref_forces (files.fp_log, N_sites, CG_struct, info, top, ref_potential);
               }
-              if (sys.SKIP_TRIPLE_LOOP) { calc_grids3(files.fp_log, info, N_sites, CG_struct, &sys); }
-              else { calc_grids2 (files.fp_log, info, N_sites, CG_struct, &sys); }
+              if (sys.USE_OLD_ALGORITHM) 
+              {
+                calc_grids2 (files.fp_log, info, N_sites, CG_struct, &sys); 
+                fprintf(stderr,"Using old algorithm. \n");  
+              }
+              else 
+              { calc_grids3(fr->counter, files.fp_log, info, N_sites, CG_struct, &sys); }
             }
 
             if (sys.REF_var.flag_reftrr == TRUE)
@@ -295,7 +345,9 @@ if (local_rank == 0) { copyright(); }
               read_trr_2_CGstruct_ref (&info_ref, fr_ref, CG_struct);
             }
           } while (read_trr_2_CGstruct (&info, fr, CG_struct));        // 4.5.3
-          fprintf (files.fp_log, "Read %d frames for %s.\n\n", n_frames, files.structures[i]);
+          fprintf (files.fp_log, "Read %d frames for %s.\n\n", n_frames, files.structures[i]); //WALDO
+
+            fprintf(stderr,"rank: %d n_frames_local: %d  n_frames_total: %d\n",local_rank,n_frames_local,n_frames);
 
           /* NJD - Here, we copy back the G_wt etc., to G etc.,
              while normalizing by the weight for this processor/
@@ -326,6 +378,8 @@ if (local_rank == 0) { copyright(); }
 
           /* Evaluate w_local. */
           w_local = ((double) n_frames_local) / ((double) n_frames);
+
+fprintf(stderr,"rank: %d  w_local: %g \n",local_rank,w_local);
 
           /* Weight the sums from each local proc */
           weight_local_top (&sys, w_local, N_coeff);
@@ -407,7 +461,7 @@ if (local_rank == 0) { copyright(); }
               if (local_rank == 0)
               {
                 get_top_tag (files.structures[i], tag);
-                if (sys.SKIP_TRIPLE_LOOP) { process_G_matrix(&sys); }
+                if (! sys.USE_OLD_ALGORITHM) { process_G_matrix(&sys); }
                 get_results (files.fp_log, &sys, info.b_Forces_N, tag); 
                 print_output (info.b_Forces_N, sys, tag);
 
@@ -428,7 +482,7 @@ if (local_rank == 0) { copyright(); }
           efree(fr);
           efree(fr_ref);    
           /* Free memory if skipping triple loop */
-          if (sys.SKIP_TRIPLE_LOOP)
+          if (! sys.USE_OLD_ALGORITHM)
           {
             efree(sys.half_matrix);
             efree(sys.linear_half_matrix);
@@ -450,6 +504,8 @@ if (local_rank == 0) { copyright(); }
       {
         reset_gmx_info (&info_ref);        /*close_trj(status_ref); */
       }
+
+//      efree(CG_struct); // MRD 06.18.202
     }                        /* End the loop over topologies. */
   }                                /* End GROMACS LOOP. */
   else
@@ -471,7 +527,7 @@ if (local_rank == 0) { copyright(); }
       }
       else
       {
-        if (sys_global.SKIP_TRIPLE_LOOP) { process_G_matrix(&sys_global); }
+        if (! sys_global.USE_OLD_ALGORITHM) { process_G_matrix(&sys_global); }
       }
       if (sys_global.MT_var.flag_print == TRUE)
       {

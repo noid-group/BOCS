@@ -1,6 +1,6 @@
 /**
 @file io_read.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
 @brief Functions related to cgff and cgmap input 
 */
 
@@ -132,7 +132,8 @@ FILE *open_file(const tW_word file_name, char mode)
 	}
     }
 
-    printf("\nERROR: Cannont open %s for mode '%c'.\n", file_name, mode);
+    printf("\nERROR: Can not open %s for mode '%c'.\n", file_name, mode);
+    printf("%s::%d::%s()\n",__FILE__, __LINE__, __func__);
     exit(EXIT_FAILURE);
 
 }
@@ -338,6 +339,50 @@ int match_word(int N_words, tW_word word, tW_word * word_list)
     return -1;
 }
 
+/* MRD 06.18.2020 */
+/*****************************************************************************************
+ * match_word_1(): Searches through N_words words in word_list to see if the string stored
+ * in word is included in the list. Returns the index to word_list if there's a match
+ * or returns -1 if there is no match. Use when you know there's only 1 occurrence of word
+ * in word_list. MRD 09.17.18
+ * *****************************************************************************************/
+int match_word_1(int N_words, tW_word word, tW_word * word_list)
+{
+    int i, b_COMP;
+
+    for (i = 0; i < N_words; i++) {
+        b_COMP = strcmp(word, word_list[i]);
+
+        if (b_COMP == 0) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+/*****************************************************************************************
+ * match_word_n(): Searches through N_words words in word_list to see if the string stored
+ * in word is included in the list. Returns the indices to word_list if there's a match.
+ * Use when it's possible there are multiple occurrences of word in word_list. MRD 09.17.18
+ * *****************************************************************************************/
+int match_word_n(int N_words, tW_word word, tW_word * word_list, int *idx_list)
+{
+    int i, b_COMP, idx = 0;
+    for (i = 0; i < N_words; i++)
+    {
+        b_COMP = strcmp(word, word_list[i]);
+        if (b_COMP == 0)
+        {
+            idx_list[idx] = i;
+            ++idx;
+        }
+    }
+    return idx;
+}
+
+
+
+
 /******************************
  *  Gromacs-esque command line argument parsing
  *  *****************************/
@@ -389,24 +434,32 @@ void init_arg_def(t_pargs *param, const char * flag, int type, const char *desc,
   strcpy(param->value,init_val);
   param->bMandatory = FALSE;
 }
-
+/*********************************************************************************
+ * get_command_line_args
+ * Takes list of arguments we expect [stored in t_pargs] and checks how many the user actually passed
+ * @arg argc length of input from user
+ * @arg list of user input strings [len(argc)]
+ * @arg n_args number of strings expected
+ * @arg params the list of strings we expect
+ * @return number of arguments the user passed
+ */
 int get_command_line_args(int argc, char * argv[], int n_args, t_pargs *params)
 {
   int i, j;
   int n_arg_found = 0;
-  for (i = 0; i < argc; ++i)
+  for (i = 0; i < argc; ++i) // For each arg the user passed
   {
-    for (j = 0; j < n_args; ++j)
+    for (j = 0; j < n_args; ++j) // Check all the args we wanted 
     {
-      if (strcmp(argv[i],params[j].flag) == 0)
+      if (strcmp(argv[i],params[j].flag) == 0) // If a flag matches what we expect
       {
-        ++n_arg_found;
-        if (params[j].bSet)
+        ++n_arg_found; // Hooray, increment the number of arguments found
+        if (params[j].bSet) // But check that it wasnt already found
         { /* Duplicate arg error */
           fprintf(stderr,"ERROR: you provided flag %s twice!\n",params[j].flag);
           exit(3);
         }
-        params[j].bSet = TRUE;
+        params[j].bSet = TRUE; //Note that the arg was found
         if (params[j].type != etBOOL)
         {
           if (i + 1 == argc)
@@ -425,7 +478,10 @@ int get_command_line_args(int argc, char * argv[], int n_args, t_pargs *params)
   }
   return n_arg_found;
 }
-
+/***********************************************************
+ * print_arg_table
+ * Prints a list of arguments we expected to see withing t_pargs and their current values
+ */
 bool print_arg_table(int n_args, t_pargs *params, bool HELP)
 {
   int i;
@@ -437,7 +493,13 @@ bool print_arg_table(int n_args, t_pargs *params, bool HELP)
   fprintf(stdout,"%6s  %6s  %20s  %s\n","-h","bool",(HELP ? "True" : "False"),"Display this table and quit");
   return HELP;
 }
-
+/**************************************************************
+ * check_mand_args
+ * Checks the status of the parameter list passed (params) to assure all required args are set
+ * Kills the program if something is missing
+ * @arg params The list of parameters expected / set up at the begining of the driver
+ * @arg nPars The length of the params list
+ */ 
 void check_mand_args(t_pargs *params, int nPars)
 {
   int i = 0;
@@ -456,7 +518,16 @@ void check_mand_args(t_pargs *params, int nPars)
     exit(EXIT_FAILURE);
   }
 }
-
+/*********************************************************************************
+ * build_filename
+ * This function takes a filename passed by the user and checks if it has an extension we recognize
+ * If its a top file and they didnt put an extension we append .btp
+ * If its a traj file and theyu didnt put an extension we append def_end passed
+ * @arg ipt_name The string passed as a filename
+ * @arg ft An index corresponding to a filetype and the corresponding append name failsafe
+ * @arg fnm A string to store the altered filename
+ * @arg def_end A default extension to pin on trajectories
+ **/
 void build_filename(tW_word fnm, tW_word ipt_name, int ft, const char *def_end)
 {
   char *p;

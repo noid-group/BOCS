@@ -1,6 +1,6 @@
 /**
 @file solv_lin_eqns.h 
-@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@author Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
 */
 
 #ifndef SOLV_LIN
@@ -16,6 +16,9 @@ extern "C"
 *************************************************************************************************************************************************************************************************/
 
 int solv_lin_eqns(FILE * fp_log, tW_system * sys);
+
+/* MRD 06.18.2020 */
+int ext_potl_solve_lin_eqns(FILE * fp_log, tW_system * sys);
 
 /* Solve with LU decomposition */
 extern void dgesv_(int *N, int *N_rhs, double AT[], int *LDA, int pivot[],

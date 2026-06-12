@@ -13,6 +13,7 @@ add_executable( cgmap   cgmap.c
 add_executable( cgff    cgff.c
 			cgff_fn.c
  			calc_grids.c
+                        LDD.c
 			gromacs_topology.c
 			io_read.c
 			read_parameters.c
@@ -26,16 +27,53 @@ add_executable( cgff    cgff.c
 
 add_executable( tables  tables.c
 			safe_mem.c
+                        LDD.c
+                        gromacs_topology.c
 			table_functions.c
 			read_parameters.c
 			wnoid_math.c
 			io_read.c )
 
 add_executable( translator	translator.c
+                                LDD.c
 				gromacs_topology.c 
 				io_read.c
 				wnoid_math.c
 				safe_mem.c )
+
+add_executable( ldcalc          LDD_calc.c
+                                safe_mem.c
+                                wnoid_math.c
+                                io_read.c
+                                gromacs_topology.c
+                                LDD.c )
+
+add_executable (LDPDF make_LDPDF.c
+                       safe_mem.c
+                       wnoid_math.c
+                       io_read.c
+                       gromacs_topology.c
+                       LDD.c  )
+
+
+IF(ENABLE_DEBUG_BUILD)
+	# Then we'll enable these flags
+	target_compile_definitions(cgmap PRIVATE DEBUG_BUILD=1)
+	target_compile_definitions(cgff PRIVATE DEBUG_BUILD=1)
+	target_compile_definitions(tables PRIVATE DEBUG_BUILD=1)
+	target_compile_definitions(translator PRIVATE DEBUG_BUILD=1)
+        target_compile_definitions(ldcalc PRIVATE DEBUG_BUILD=1)
+	target_compile_definitions(LDPDF PRIVATE DEBUG_BUILD=1)
+ELSE()
+	# Then we'll turn them off
+	target_compile_definitions(cgmap PRIVATE DEBUG_BUILD=0)
+	target_compile_definitions(cgff PRIVATE DEBUG_BUILD=0)
+        target_compile_definitions(tables PRIVATE DEBUG_BUILD=0)
+        target_compile_definitions(translator PRIVATE DEBUG_BUILD=0)
+        target_compile_definitions(ldcalc PRIVATE DEBUG_BUILD=0)
+        target_compile_definitions(LDPDF PRIVATE DEBUG_BUILD=0)
+ENDIF()
+
 
 target_link_libraries( tables ${TLIBS} )
 
@@ -44,3 +82,7 @@ target_link_libraries( cgmap ${TLIBS} )
 target_link_libraries( cgff  ${MLIBS} )
 
 target_link_libraries( translator ${TLIBS} )
+
+target_link_libraries( ldcalc ${MLIBS} )
+
+target_link_libraries( LDPDF ${TLIBS} )

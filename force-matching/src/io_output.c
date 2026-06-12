@@ -1,6 +1,6 @@
 /**
 @file io_output.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser, Maria Lesniewski
 @brief Functions related to writing cgff output
 */
 
@@ -213,16 +213,18 @@ void print_delta_basis_output(FILE * fp, int forces, tW_system sys,
   print_general_inter_output(fp, tag, inter, i);
 
   /* Open files for writing output. */
-  fp_g = open_output_file2("g",
-              inter->inter_type, inter->inter_name, tag);
   fp_g_cnt = open_output_file2("g_cnt",
                inter->inter_type, inter->inter_name,
                tag);
+  if (!sys.bGradient) { // MCL do not attempt to access gYGB with SG terms
+  fp_g = open_output_file2("g",inter->inter_type, inter->inter_name, tag);
+
   fp_L =
      open_output_file2("L", inter->inter_type, inter->inter_name, tag);
   fp_b_struct =
      open_output_file2("b_struct", inter->inter_type, inter->inter_name,
              tag);
+  }
   if (forces) {
      fp_b_forces = open_output_file2("b_forces",
                    inter->inter_type,
@@ -240,14 +242,14 @@ void print_delta_basis_output(FILE * fp, int forces, tW_system sys,
 
   /* Print results. */
   for (j = 0; j < inter->N_pts; j++) {
-     fprintf(fp_g, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
-        inter->ptr_g[j] / dx);
      fprintf(fp_g_cnt, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
         inter->ptr_g_cnt[j] / dx);
-     fprintf(fp_L, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
-        inter->ptr_L[j] / dx);
-     fprintf(fp_b_struct, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
-        inter->ptr_b_struct[j] / dx);
+     
+     if (!sys.bGradient) { // MCL 03.10.26 - stop gybg for gradient
+	     fprintf(fp_g, "%10.5lf  %15.5lf \n", inter->ptr_x[j], inter->ptr_g[j] / dx);
+	     fprintf(fp_L, "%10.5lf  %15.5lf \n", inter->ptr_x[j],inter->ptr_L[j] / dx);
+	     fprintf(fp_b_struct, "%10.5lf  %15.5lf \n", inter->ptr_x[j], inter->ptr_b_struct[j] / dx);
+     }
      if (forces) {
        fprintf(fp_b_forces, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
           inter->ptr_b_forces[j] / dx);
@@ -258,14 +260,13 @@ void print_delta_basis_output(FILE * fp, int forces, tW_system sys,
   if ((strcmp(B_DIHEDRAL, inter->inter_type) == 0) &&
      (fabs(inter->ptr_x[0] + 180.0) < FLOAT_EPS)
      ) {
-     fprintf(fp_g, "%10.5lf  %15.5lf \n", 180.0,
-        inter->ptr_g[0] / dx);
      fprintf(fp_g_cnt, "%10.5lf  %15.5lf \n", 180.0,
         inter->ptr_g_cnt[0] / dx);
-     fprintf(fp_L, "%10.5lf  %15.5lf \n", 180.0,
-        inter->ptr_L[0] / dx);
-     fprintf(fp_b_struct, "%10.5lf  %15.5lf \n", 180.0,
-        inter->ptr_b_struct[0] / dx);
+     if (!sys.bGradient){ // MCL 03.10.26 - stop gybg for gradient
+	     fprintf(fp_g, "%10.5lf  %15.5lf \n", 180.0, inter->ptr_g[0] / dx);
+	     fprintf(fp_L, "%10.5lf  %15.5lf \n", 180.0,inter->ptr_L[0] / dx);
+	     fprintf(fp_b_struct, "%10.5lf  %15.5lf \n", 180.0, inter->ptr_b_struct[0] / dx);
+     }
      if (forces) {
        fprintf(fp_b_forces, "%10.5lf  %15.5lf \n", 180.0,
           inter->ptr_b_forces[0] / dx);
@@ -273,10 +274,13 @@ void print_delta_basis_output(FILE * fp, int forces, tW_system sys,
   }
 
   /* Close files for writing output. */
-  fclose(fp_g);
   fclose(fp_g_cnt);
-  fclose(fp_L);
-  fclose(fp_b_struct);
+  if (!sys.bGradient)
+  {
+	   fclose(fp_g);
+	  fclose(fp_L);
+	  fclose(fp_b_struct);
+  }
   if (forces) {
      fclose(fp_b_forces);
   }
@@ -299,9 +303,11 @@ void print_delta_basis_forces(FILE * fp, int forces, tW_system sys,
   print_general_inter_output(fp, tag, inter, i);
 
   /* Open files for writing output. */
+    if (!sys.bGradient) { // MCL 03.10.26 - do not attempt to access gYGB with SG terms
   fp_f_struct = open_output_file2("f_struct",
                 inter->inter_type, inter->inter_name,
                 tag);
+    }
 
   if (forces) {
      fp_f_forces = open_output_file2("f_forces",
@@ -317,7 +323,9 @@ void print_delta_basis_forces(FILE * fp, int forces, tW_system sys,
        if (sys.CalcMODE_var.CalcMODE != IFULL) {     /* JFR - prevent this from being done twice */
         inter->ptr_x[j] *= 180.0 / M_PI;
        }
+       if (!sys.bGradient) { // MCL 03.10.26 - do not attempt to access gYGB with SG terms
        inter->ptr_phi_struct[j] *= M_PI / 180.0;
+       }
        if (forces) {
         inter->ptr_phi_forces[j] *= M_PI / 180.0;
        }
@@ -326,10 +334,12 @@ void print_delta_basis_forces(FILE * fp, int forces, tW_system sys,
 
 /* Print results. */
   for (j = 0; j < inter->N_pts; j++) {
-     fprintf(fp_f_struct, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
+     if (!sys.bGradient) { // MCL 03.10.26 - do not attempt to access gYGB with SG terms
+     fprintf(fp_f_struct, "%10.5lf  %15.15lf \n", inter->ptr_x[j],
         inter->ptr_phi_struct[j]);
+     }
      if (forces) {
-       fprintf(fp_f_forces, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
+       fprintf(fp_f_forces, "%10.5lf  %15.15lf \n", inter->ptr_x[j],
           inter->ptr_phi_forces[j]);
      }
   }
@@ -338,16 +348,18 @@ void print_delta_basis_forces(FILE * fp, int forces, tW_system sys,
   if ((strcmp(B_DIHEDRAL, inter->inter_type) == 0) &&
      (fabs(inter->ptr_x[0] + 180.0) < FLOAT_EPS)
      ) {
-     fprintf(fp_f_struct, "%10.5lf  %15.5lf \n", 180.0,
-        inter->ptr_phi_struct[0]);
+     if (!sys.bGradient) { // MCL 03.10.26 - do not attempt to access gYGB with SG terms
+     fprintf(fp_f_struct, "%10.5lf  %15.15lf \n", 180.0,
+        inter->ptr_phi_struct[0]);}
      if (forces) {
-       fprintf(fp_f_forces, "%10.5lf  %15.5lf \n", 180.0,
+       fprintf(fp_f_forces, "%10.5lf  %15.15lf \n", 180.0,
           inter->ptr_phi_forces[0]);
      }
   }
 
   /* Close files for writing output. */
-  fclose(fp_f_struct);
+  if (!sys.bGradient) { // MCL 03.10.26 - do not attempt to access gYGB with SG terms
+  fclose(fp_f_struct);}
   if (forces) {
      fclose(fp_f_forces);
   }
@@ -371,16 +383,18 @@ void print_linear_basis_output(FILE * fp, int forces, tW_system sys,
   print_general_inter_output(fp, tag, inter, i);
 
   /* Open files for writing output. */
-  fp_g = open_output_file2("g",
-              inter->inter_type, inter->inter_name, tag);
   fp_g_cnt = open_output_file2("g_cnt",
                inter->inter_type, inter->inter_name,
                tag);
+  if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
   fp_L =
      open_output_file2("L", inter->inter_type, inter->inter_name, tag);
   fp_b_struct =
      open_output_file2("b_struct", inter->inter_type, inter->inter_name,
              tag);
+   fp_g = open_output_file2("g",
+              inter->inter_type, inter->inter_name, tag);
+  }
   if (forces) {
      fp_b_forces = open_output_file2("b_forces",
                    inter->inter_type,
@@ -398,14 +412,17 @@ void print_linear_basis_output(FILE * fp, int forces, tW_system sys,
 
   /* Print results. */
   for (j = 0; j < inter->N_pts; j++) {
+     if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+
      fprintf(fp_g, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
         inter->ptr_g[j] / dx);
-     fprintf(fp_g_cnt, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
-        inter->ptr_g_cnt[j] / dx);
      fprintf(fp_L, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
         inter->ptr_L[j] / dx);
      fprintf(fp_b_struct, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
         inter->ptr_b_struct[j] / dx);
+     }
+     fprintf(fp_g_cnt, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
+        inter->ptr_g_cnt[j] / dx);
      if (forces) {
        fprintf(fp_b_forces, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
           inter->ptr_b_forces[j] / dx);
@@ -416,14 +433,16 @@ void print_linear_basis_output(FILE * fp, int forces, tW_system sys,
   if ((strcmp(B_DIHEDRAL, inter->inter_type) == 0) &&
      (fabs(inter->ptr_x[0] + 180.0) < FLOAT_EPS)
      ) {
+    if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
      fprintf(fp_g, "%10.5lf  %15.5lf \n", 180.0,
         inter->ptr_g[0] / dx);
-     fprintf(fp_g_cnt, "%10.5lf  %15.5lf \n", 180.0,
-        inter->ptr_g_cnt[0] / dx);
      fprintf(fp_L, "%10.5lf  %15.5lf \n", 180.0,
         inter->ptr_L[0] / dx);
      fprintf(fp_b_struct, "%10.5lf  %15.5lf \n", 180.0,
         inter->ptr_b_struct[0] / dx);
+    }
+     fprintf(fp_g_cnt, "%10.5lf  %15.5lf \n", 180.0,
+        inter->ptr_g_cnt[0] / dx);
      if (forces) {
        fprintf(fp_b_forces, "%10.5lf  %15.5lf \n", 180.0,
           inter->ptr_b_forces[0] / dx);
@@ -431,10 +450,12 @@ void print_linear_basis_output(FILE * fp, int forces, tW_system sys,
   }
 
   /* Close files for writing output. */
-  fclose(fp_g);
-  fclose(fp_g_cnt);
-  fclose(fp_L);
+  if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+	  fclose(fp_g);
+	    fclose(fp_L);
   fclose(fp_b_struct);
+  }
+  fclose(fp_g_cnt);
   if (forces) {
      fclose(fp_b_forces);
   }
@@ -459,9 +480,10 @@ void print_linear_basis_forces(FILE * fp, int forces, tW_system sys,
   print_general_inter_output(fp, tag, inter, i);
 
   /* Open files for writing output. */
+  if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
   fp_f_struct = open_output_file2("f_struct",
                 inter->inter_type, inter->inter_name,
-                tag);
+                tag);}
   if (forces) {
      fp_f_forces = open_output_file2("f_forces",
                    inter->inter_type,
@@ -485,10 +507,11 @@ void print_linear_basis_forces(FILE * fp, int forces, tW_system sys,
 
   /* Print results. */
   for (j = 0; j < inter->N_pts; j++) {
-     fprintf(fp_f_struct, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
-        inter->ptr_phi_struct[j]);
+     if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+     fprintf(fp_f_struct, "%10.5lf  %15.15lf \n", inter->ptr_x[j],
+        inter->ptr_phi_struct[j]);}
      if (forces) {
-       fprintf(fp_f_forces, "%10.5lf  %15.5lf \n", inter->ptr_x[j],
+       fprintf(fp_f_forces, "%10.5lf  %15.15lf \n", inter->ptr_x[j],
           inter->ptr_phi_forces[j]);
      }
   }
@@ -497,16 +520,18 @@ void print_linear_basis_forces(FILE * fp, int forces, tW_system sys,
   if ((strcmp(B_DIHEDRAL, inter->inter_type) == 0) &&
      (fabs(inter->ptr_x[0] + 180.0) < FLOAT_EPS)
      ) {
-     fprintf(fp_f_struct, "%10.5lf  %15.5lf \n", 180.0,
-        inter->ptr_phi_struct[0]);
+     if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+     fprintf(fp_f_struct, "%10.5lf  %15.15lf \n", 180.0,
+        inter->ptr_phi_struct[0]);}
      if (forces) {
-       fprintf(fp_f_forces, "%10.5lf  %15.5lf \n", 180.0,
+       fprintf(fp_f_forces, "%10.5lf  %15.15lf \n", 180.0,
           inter->ptr_phi_forces[0]);
      }
   }
 
   /* Close files for writing output. */
-  fclose(fp_f_struct);
+  if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+  fclose(fp_f_struct);}
   if (forces) {
      fclose(fp_f_forces);
   }
@@ -540,17 +565,28 @@ void print_Bspline_basis_output(FILE * fp, int forces, tW_system sys,
   print_general_inter_output(fp, tag, inter, m);
 
   /* Open files for writing output. */
+  
+  if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
   fp_g_coeff = open_output_file2("g_coeff",
                  inter->inter_type, inter->inter_name,
                  tag);
-  fp_g_cnt_coeff =
-     open_output_file2("g_cnt_coeff", inter->inter_type,
-             inter->inter_name, tag);
   fp_L_coeff =
      open_output_file2("L_coeff", inter->inter_type, inter->inter_name,
              tag);
   fp_b_struct_coeff =
      open_output_file2("b_struct_coeff", inter->inter_type,
+             inter->inter_name, tag);
+  fp_g = open_output_file2("g",
+              inter->inter_type, inter->inter_name, tag);
+  fp_L =
+     open_output_file2("L", inter->inter_type, inter->inter_name, tag);
+  fp_b_struct =
+     open_output_file2("b_struct", inter->inter_type, inter->inter_name,
+             tag);
+  }
+  
+  fp_g_cnt_coeff =
+     open_output_file2("g_cnt_coeff", inter->inter_type,
              inter->inter_name, tag);
   if (forces) {
      fp_b_forces_coeff = open_output_file2("b_forces_coeff",
@@ -558,16 +594,9 @@ void print_Bspline_basis_output(FILE * fp, int forces, tW_system sys,
                      inter->inter_name, tag);
   }
 
-  fp_g = open_output_file2("g",
-              inter->inter_type, inter->inter_name, tag);
   fp_g_cnt = open_output_file2("g_cnt",
                inter->inter_type, inter->inter_name,
                tag);
-  fp_L =
-     open_output_file2("L", inter->inter_type, inter->inter_name, tag);
-  fp_b_struct =
-     open_output_file2("b_struct", inter->inter_type, inter->inter_name,
-             tag);
   if (forces) {
      fp_b_forces = open_output_file2("b_forces",
                    inter->inter_type,
@@ -582,15 +611,16 @@ void print_Bspline_basis_output(FILE * fp, int forces, tW_system sys,
        || (strcmp(B_DIHEDRAL, inter->inter_type) == 0)) {
        ptr_x *= 180.0 / M_PI;
      }
-
+       if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
      fprintf(fp_g_coeff, "%10.5lf  %15.5lf \n", ptr_x,
         inter->ptr_g[j] / dx);
-     fprintf(fp_g_cnt_coeff, "%10.5lf  %15.5lf \n", ptr_x,
-        inter->ptr_g_cnt[j] / dx);
      fprintf(fp_L_coeff, "%10.5lf  %15.5lf \n", ptr_x,
         inter->ptr_L[j] / dx);
      fprintf(fp_b_struct_coeff, "%10.5lf  %15.5lf \n", ptr_x,
         inter->ptr_b_struct[j] / dx);
+       }
+     fprintf(fp_g_cnt_coeff, "%10.5lf  %15.5lf \n", ptr_x,
+        inter->ptr_g_cnt[j] / dx);
      if (forces) {
        fprintf(fp_b_forces_coeff, "%10.5lf  %15.5lf \n", ptr_x,
           inter->ptr_b_forces[j] / dx);
@@ -600,14 +630,16 @@ void print_Bspline_basis_output(FILE * fp, int forces, tW_system sys,
   /* Add the 180 grid point. Periodicity. */
   if ((strcmp(B_DIHEDRAL, inter->inter_type) == 0)
      && (fabs(inter->ptr_x[0] + 180.0) < FLOAT_EPS)) {
+     if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
      fprintf(fp_g_coeff, "%10.5lf  %15.5lf \n", 180.0,
         inter->ptr_g[0] / dx);
-     fprintf(fp_g_cnt_coeff, "%10.5lf  %15.5lf \n", 180.0,
-        inter->ptr_g_cnt[0] / dx);
      fprintf(fp_L_coeff, "%10.5lf  %15.5lf \n", 180.0,
         inter->ptr_L[0] / dx);
      fprintf(fp_b_struct_coeff, "%10.5lf  %15.5lf \n", 180.0,
-        inter->ptr_b_struct[0] / dx);
+        inter->ptr_b_struct[0] / dx);     
+     }
+     fprintf(fp_g_cnt_coeff, "%10.5lf  %15.5lf \n", 180.0,
+        inter->ptr_g_cnt[0] / dx);
      if (forces) {
        fprintf(fp_b_forces_coeff, "%10.5lf  %15.5lf \n", 180.0,
           inter->ptr_b_forces[0] / dx);
@@ -651,10 +683,12 @@ void print_Bspline_basis_output(FILE * fp, int forces, tW_system sys,
         B = Nik[k - 1 - i];
 
         if ((grid >= 0) && (grid < inter->N_pts)) {
-          g += B * inter->ptr_g[grid];
           g_cnt += B * inter->ptr_g_cnt[grid];
+	  if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+          g += B * inter->ptr_g[grid];
           L += B * inter->ptr_L[grid];
           b_struct += B * inter->ptr_b_struct[grid];
+	  }
           if (forces) {
            b_forces += B * inter->ptr_b_forces[grid];
           }
@@ -665,11 +699,13 @@ void print_Bspline_basis_output(FILE * fp, int forces, tW_system sys,
         || (strcmp(B_DIHEDRAL, inter->inter_type) == 0)) {
         R *= 180.0 / M_PI;
        }
-       fprintf(fp_g, "%10.5lf  %15.5lf \n", R, g / dx);
        fprintf(fp_g_cnt, "%10.5lf  %15.5lf \n", R, g_cnt / dx);
+       if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+       fprintf(fp_g, "%10.5lf  %15.5lf \n", R, g / dx);
        fprintf(fp_L, "%10.5lf  %15.5lf \n", R, L / dx);
        fprintf(fp_b_struct, "%10.5lf  %15.5lf \n", R,
           b_struct / dx);
+       }
        if (forces) {
         fprintf(fp_b_forces, "%10.5lf  %15.5lf \n", R,
            b_forces / dx);
@@ -679,17 +715,19 @@ void print_Bspline_basis_output(FILE * fp, int forces, tW_system sys,
   }
 
   /* Close files for writing output. */
-  fclose(fp_g_coeff);
   fclose(fp_g_cnt_coeff);
+  if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+  fclose(fp_g_coeff);
   fclose(fp_L_coeff);
   fclose(fp_b_struct_coeff);
+  fclose(fp_g);
+  fclose(fp_L);
+  fclose(fp_b_struct);
+  }
   if (forces) {
      fclose(fp_b_forces_coeff);
   }
-  fclose(fp_g);
   fclose(fp_g_cnt);
-  fclose(fp_L);
-  fclose(fp_b_struct);
   if (forces) {
      fclose(fp_b_forces);
   }
@@ -705,6 +743,8 @@ print_Bspline_basis_output().  I just separated the printing of the forces for t
 Calculation Modes.
 For the Bspline, we'll print out the calculated coefficients, but also need to print a
 finer tabulated version of the actual force to use in calculations.
+MCL 05.08.25 - I've also made it so that this output only prints f_forces where the interpolation 
+               from the Bspline is okay based on what we solved for
 *****************************************************************************************/
 void print_Bspline_basis_forces(FILE * fp, int forces, tW_system sys,
               tW_word tag, tW_Inter_Types * inter, int m)
@@ -725,12 +765,14 @@ void print_Bspline_basis_forces(FILE * fp, int forces, tW_system sys,
   print_general_inter_output(fp, tag, inter, m);
 
   /* Open files for writing output. */
+  if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+
   fp_f_struct = open_output_file2("f_struct",
                 inter->inter_type, inter->inter_name,
                 tag);
   fp_f_struct_coeff =
      open_output_file2("f_struct_coeff", inter->inter_type,
-             inter->inter_name, tag);
+             inter->inter_name, tag); }
   if (forces) {
      fp_f_forces = open_output_file2("f_forces",
                    inter->inter_type,
@@ -743,35 +785,59 @@ void print_Bspline_basis_forces(FILE * fp, int forces, tW_system sys,
   /* Print results. */
 
   /* print the coefficients calculated */
-  for (j = 0; j < inter->N_pts; j++) {
+  for (j = 0; j < inter->N_pts; j++) 
+  {
      ptr_x = inter->ptr_x[j];
      /* Account for angle and dihedral forces in degrees. */
      if ((strcmp(B_ANGLE, inter->inter_type) == 0)
-       || (strcmp(B_DIHEDRAL, inter->inter_type) == 0)) {
+       || (strcmp(B_DIHEDRAL, inter->inter_type) == 0)) 
+     {
        ptr_x *= 180.0 / M_PI;
-     }
+    // MCL 04.29.25 Bracket error, moving this one  -->}
+     if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
 
-     fprintf(fp_f_struct_coeff, "%10.5lf  %15.5lf \n", ptr_x,
-        inter->ptr_phi_struct[j] * (M_PI / 180.0));
-     if (forces) {
-       fprintf(fp_f_forces_coeff, "%10.5lf  %15.5lf \n", ptr_x,
-          inter->ptr_phi_forces[j] * (M_PI / 180.0));
-     }
+       fprintf(fp_f_struct_coeff, "%10.5lf  %15.15lf \n", ptr_x,
+               inter->ptr_phi_struct[j] * (M_PI / 180.0));}
+       if (forces) 
+       {
+          fprintf(fp_f_forces_coeff, "%10.5lf  %15.15lf \n", ptr_x,
+                  inter->ptr_phi_forces[j] * (M_PI / 180.0));
+       }
+     } //<-- To here. Also fixed spacing to make easier to see MCL 04.29.25
+    else // MCL 04.29.25 Added this so that we still get output in non angle case
+    {
+
+           if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+	    fprintf(fp_f_struct_coeff, "%10.5lf  %15.15lf \n", ptr_x, inter->ptr_phi_struct[j]);}
+      if (forces)
+      {
+      fprintf(fp_f_forces_coeff, "%10.5lf  %15.15lf \n", ptr_x,inter->ptr_phi_forces[j]);
+      }
+    }
   }
 
   /* Add the 180 grid point. Periodicity. */
   if ((strcmp(B_DIHEDRAL, inter->inter_type) == 0)
      && (fabs(inter->ptr_x[0] * (180.0 / M_PI) + 180.0) < FLOAT_EPS)) {
-     fprintf(fp_f_struct_coeff, "%10.5lf  %15.5lf \n", 180.0,
-        inter->ptr_phi_struct[0] * (M_PI / 180.0));
+	       if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+
+     fprintf(fp_f_struct_coeff, "%10.5lf  %15.15lf \n", 180.0,
+        inter->ptr_phi_struct[0] * (M_PI / 180.0));}
      if (forces) {
-       fprintf(fp_f_forces_coeff, "%10.5lf  %15.5lf \n", 180.0,
+       fprintf(fp_f_forces_coeff, "%10.5lf  %15.15lf \n", 180.0,
           inter->ptr_phi_forces[0] * (M_PI / 180.0));
      }
   }
 
   /* print the forces tabulated on a finer grid than the calculation */
+  /* MCL 05.08.25 - Since the point of this is to give the user the force function on the domain they 
+   * asked for, and solving for all coeffs needed for that domain introduces a padding,
+   * I'm adding an "if" to make sure we only print the force function in the region users asked*/
   for (j = 0; j < inter->N_pts; j++) {
+     if (
+          (inter->ptr_x[j] < inter->user_R_min - FLOAT_EPS) ||
+	  (inter->ptr_x[j] + FLOAT_EPS >= inter->user_R_max)
+	) { continue; }
 
      index =
        get_grid_index_for_linear_basis(inter->ptr_x[j] + FLOAT_EPS,
@@ -806,7 +872,8 @@ void print_Bspline_basis_forces(FILE * fp, int forces, tW_system sys,
         B = Nik[k - 1 - i];
 
         if ((grid >= 0) && ((grid) < inter->N_pts)) {
-          f_struct += B * inter->ptr_phi_struct[grid];
+          if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+          f_struct += B * inter->ptr_phi_struct[grid];}
           if (forces) {
            f_forces += B * inter->ptr_phi_forces[grid];
           }
@@ -821,9 +888,10 @@ void print_Bspline_basis_forces(FILE * fp, int forces, tW_system sys,
           f_forces *= M_PI / 180.0;
         }
        }
-       fprintf(fp_f_struct, "%10.5lf  %15.5lf \n", R, f_struct);
+       if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+       fprintf(fp_f_struct, "%10.5lf  %15.15lf \n", R, f_struct);}
        if (forces) {
-        fprintf(fp_f_forces, "%10.5lf  %15.5lf \n", R, f_forces);
+        fprintf(fp_f_forces, "%10.5lf  %15.15lf \n", R, f_forces);
        }
 
        if (strcmp(B_DIHEDRAL, inter->inter_type) == 0) {
@@ -841,17 +909,19 @@ void print_Bspline_basis_forces(FILE * fp, int forces, tW_system sys,
   /* Add the 180 grid point. Periodicity. */
   if ((strcmp(B_DIHEDRAL, inter->inter_type) == 0)
      && (fabs(inter->ptr_x[0] * (180.0 / M_PI) + 180.0) < FLOAT_EPS)) {
-     fprintf(fp_f_struct, "%10.5lf  %15.5lf \n", 180.0,
-        grid180_struct);
+     if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+     fprintf(fp_f_struct, "%10.5lf  %15.15lf \n", 180.0,
+        grid180_struct);}
      if (forces) {
-       fprintf(fp_f_forces, "%10.5lf  %15.5lf \n", 180.0,
+       fprintf(fp_f_forces, "%10.5lf  %15.15lf \n", 180.0,
           grid180_forces);
      }
   }
 
   /* Close files for writing output. */
+     if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
   fclose(fp_f_struct);
-  fclose(fp_f_struct_coeff);
+  fclose(fp_f_struct_coeff);}
   if (forces) {
      fclose(fp_f_forces);
      fclose(fp_f_forces_coeff);
@@ -874,17 +944,21 @@ void print_harmonic_basis_output(FILE * fp, int forces, tW_system sys,
      fprintf(fp, "    b[0]_forces: %lf\n", inter->ptr_b_forces[0]);
      fprintf(fp, "    b[1]_forces: %lf\n", inter->ptr_b_forces[1]);
   }
+  if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+
   fprintf(fp, "    b[0]_struct: %lf\n", inter->ptr_b_struct[0]);
   fprintf(fp, "    b[1]_struct: %lf\n", inter->ptr_b_struct[1]);
 
   fprintf(fp, "         g[0]: %f\n", inter->ptr_g[0]);
   fprintf(fp, "         g[1]: %f\n", inter->ptr_g[1]);
 
-  fprintf(fp, "       g_cnt[0]: %f\n", inter->ptr_g_cnt[0]);
-  fprintf(fp, "       g_cnt[1]: %f\n", inter->ptr_g_cnt[1]);
 
   fprintf(fp, "         L[0]: %f\n", inter->ptr_L[0]);
   fprintf(fp, "         L[1]: %f\n", inter->ptr_L[1]);
+  }
+  
+  fprintf(fp, "       g_cnt[0]: %f\n", inter->ptr_g_cnt[0]);
+  fprintf(fp, "       g_cnt[1]: %f\n", inter->ptr_g_cnt[1]);
 
   fprintf(fp, "\n");
   print_line_stars(fp);
@@ -914,6 +988,7 @@ void print_harmonic_basis_forces(FILE * fp, int forces, tW_system sys,
      fprintf(fp, "       k_forces: %lf \n", k);
      fprintf(fp, "      r0_forces: %lf \n", r0);
   }
+  if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
 
   k = inter->ptr_phi_struct[0];
   r0 = inter->ptr_phi_struct[1] / k;
@@ -922,7 +997,7 @@ void print_harmonic_basis_forces(FILE * fp, int forces, tW_system sys,
   }
   fprintf(fp, "       k_struct: %lf \n", k);
   fprintf(fp, "      r0_struct: %lf \n", r0);
-
+  }
   fprintf(fp, "\n");
   print_line_stars(fp);
 
@@ -932,10 +1007,10 @@ void print_harmonic_basis_forces(FILE * fp, int forces, tW_system sys,
   double R_max;
   double R_min;
   double dr;
-  double k_forces = inter->ptr_phi_forces[0];
-  double r0_forces = inter->ptr_phi_forces[1];
+  double k_forces = inter->ptr_phi_forces[0]; 
+  double r0_forces = inter->ptr_phi_forces[1] / k_forces; // MCL 03.27.26
   double k_struct = inter->ptr_phi_struct[0];
-  double r0_struct = inter->ptr_phi_struct[1];
+  double r0_struct = inter->ptr_phi_struct[1]/ k_struct; // MCL 03.27.26 (fixing printer)
   double pi = M_PI;
   double conv = pi / 180.00;
 
@@ -960,9 +1035,11 @@ void print_harmonic_basis_forces(FILE * fp, int forces, tW_system sys,
   r = R_min;
 
   /* Open files for writing output. */
+    if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+
   fp_f_struct = open_output_file2("f_struct",
                 inter->inter_type, inter->inter_name,
-                tag);
+                tag);}
   if (forces) {
      fp_f_forces = open_output_file2("f_forces",
                    inter->inter_type,
@@ -973,15 +1050,17 @@ void print_harmonic_basis_forces(FILE * fp, int forces, tW_system sys,
   for (j = 0; j < N + 1; j++) {
      F_struct = (-1.0) * (k_struct) * (r - r0_struct);
      F_forces = (-1.0) * (k_forces) * (r - r0_forces);
-     fprintf(fp_f_struct, "%10.5lf  %15.5lf \n", r, F_struct);
+     fprintf(fp_f_struct, "%10.5lf  %15.15lf \n", r, F_struct);
      if (forces) {
-       fprintf(fp_f_forces, "%10.5lf  %15.5lf \n", r, F_forces);
+       fprintf(fp_f_forces, "%10.5lf  %15.15lf \n", r, F_forces);
      }
      r += dr;
   }
 
-  fclose(fp_f_forces);
-  fclose(fp_f_struct);
+  if (forces) {
+  fclose(fp_f_forces);}
+  if (!sys.bGradient){ // MCL 03.10.26 stop gYBG output for Grad ffs
+  fclose(fp_f_struct);}
 
 }
 
@@ -1109,9 +1188,9 @@ void print_RB_basis_forces(FILE * fp, int forces, tW_system sys,
                        (double) k) * sin(psi *
                                conv));
      }
-     fprintf(fp_f_struct, "%10.5lf  %15.5lf \n", psi, F_struct);
+     fprintf(fp_f_struct, "%10.5lf  %15.15lf \n", psi, F_struct);
      if (forces) {
-       fprintf(fp_f_forces, "%10.5lf  %15.5lf \n", psi, F_forces);
+       fprintf(fp_f_forces, "%10.5lf  %15.15lf \n", psi, F_forces);
      }
      psi += dr;
   }
@@ -1223,9 +1302,9 @@ void print_TOY_basis_forces(FILE * fp, int forces, tW_system sys,
        (conv) * (AB_forces * sin(psi * conv) +
           C_forces * sin(3 * psi * conv) +
           D_forces * sin(psi * conv + pi / 4));
-     fprintf(fp_f_struct, "%10.5lf  %15.5lf \n", psi, F_struct);
+     fprintf(fp_f_struct, "%10.5lf  %15.15lf \n", psi, F_struct);
      if (forces) {
-       fprintf(fp_f_forces, "%10.5lf  %15.5lf \n", psi, F_forces);
+       fprintf(fp_f_forces, "%10.5lf  %15.15lf \n", psi, F_forces);
      }
      psi += dr;
   }
@@ -1376,9 +1455,9 @@ void print_power_basis_forces(FILE * fp, int forces, tW_system sys,
                             inter->
                             powers[j]);
      }
-     fprintf(fp_f_struct, "%10.5lf  %15.5lf \n", r, F_struct);
+     fprintf(fp_f_struct, "%10.5lf  %15.15lf \n", r, F_struct);
      if (forces) {
-       fprintf(fp_f_forces, "%10.5lf  %15.5lf \n", r, F_forces);
+       fprintf(fp_f_forces, "%10.5lf  %15.15lf \n", r, F_forces);
      }
      r += dr;
   }

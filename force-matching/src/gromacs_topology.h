@@ -8,10 +8,14 @@ extern "C"
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "rpc/xdr.h"
+#include <tirpc/rpc/xdr.h>
 
 #include "cgff_types.h"
 #include "wnoid_math.h"
+#include "LDD.h"
+
+/* Forward declaration of tW_indicator_function */
+typedef struct tW_indicator_function tW_indicator_function;
 
 /* ~ GROMACS #definitions ~ */
 
@@ -63,6 +67,7 @@ enum { epbcXYZ, epbcNONE, epbcXY, epbcSCREW, epbcNR };
 #define BOND_DIV 3
 #define ANGLE_DIV 4
 #define DIH_DIV 5
+#define BIGDIH_DIV 6
 #define IMNB_DIV 3
 
 // structs relocated from gmx-interface.h
@@ -306,60 +311,75 @@ typedef tW_real tW_tensor[DIM][DIM];
 typedef int tW_ivec[DIM];
 typedef int tW_imatrix[DIM][DIM];
 
+/**
+ * \struct tW_molblock
+ * This is a block of topology information regarding a molecule/how many of it
+ * Usually the no. molblocks = no. moltypes, but MDL relaxed this req on Joe's request 01.17.2020
+ */
+typedef struct tW_molblock{
+  int moltype;          /*!< molecule type index*/
+  tW_word molname;	/*!< molecule name */
+  int n_mols;		/*!< number molecule instances in top*/
+} tW_molblock;
 
-/*
-  This structure has a bunch of topology information for each molecule
-  I use this as an intermediate when reading dumped topology files or .btp (bocstop) files.
-  I read the file in, populate the stuff in this molecule struct, and once the file is done,
-  I populate the stuff in tW_t_topology.
-  I don't directly populate tW_t_topology because it has information for EACH molecule, whereas
-  the topology files only store information for each molecule TYPE.
-  Once i have that information for each molecule TYPE, I loop over the number of those molecules present
-  to populate EACH molecule in tW_t_topology
+/**
+ * \struct tW_molecule
+ * This has detailed top info for a molecule
+ * Its used as an intermediate data structure to hold top info from .btp and dumped top files
+ * Information is read from those files to this structure before being copied to tW_t_topology
+ * This is intermediate is because tW_t_top has info for EACH molecule, but top files store info for each mol TYPE
+ * Once info from each TYPE is obtained, we loop over the number molecules present to populate tW_t_top
+ * @see tW_t_topology tW_gmx_topology pop_contents()
 */
 typedef struct tW_molecule{
-  tW_word molname; 	// name of this molecule
+  tW_word molname; 	/*!< name of this molecule*/
 
-  int n_apm; 		// number of atoms per molecule
-  int *type_ids; 	// array of atom types (dim n_apm)
-  double *m;		// array of atomic masses (dim n_apm)
-  double *q;		// array of atomic charges (dim n_apm)
-  tW_word *atom_names;	// array of atomic names (dim n_apm)
-  tW_word *atom_types;  // array of atomic types (dim n_apm)
-  tW_word *atom_Btypes; // array of atomic typesB (dim n_apm)
-  int *residx; 		// array of residue index to which atom belongs (dim n_apm)
+  int n_apm; 		/*!< number of atoms per molecule*/
+  int *type_ids; 	/*!< array of atom types (dim n_apm)*/
+  double *m;		/*!< array of atomic masses (dim n_apm)*/
+  double *q;		/*!< array of atomic charges (dim n_apm)*/
+  tW_word *atom_names;	/*!< array of atomic names (dim n_apm)*/
+  tW_word *atom_types;  /*!< array of atomic types (dim n_apm)*/
+  tW_word *atom_Btypes; /*!< array of atomic typesB (dim n_apm)*/
+  int *residx; 		/*!< array of residue index to which atom belongs (dim n_apm)*/
 
-  int n_mols; 		// number of molecules
+  int n_mols; 		/*!< number of molecules*/
 
-  int n_res; 		// number of "residues" in this molecule
-  tW_word *resname;	// array of residue names (dim nres)
+  int n_res; 		/*!< number of "residues" in this molecule*/
+  tW_word *resname;	/*!< array of residue names (dim nres)*/
 
-  int n_cg; 		// number of charge groups
-  int *cg_start; 	// array of charge group starting indices (dim n_cg)
-  int *cg_end;		// array of charge group ending indices (dim n_cg)
+  int n_cg; 		/*!< number of charge groups*/
+  int *cg_start; 	/*!< array of charge group starting indices (dim n_cg)*/
+  int *cg_end;		/*!< array of charge group ending indices (dim n_cg)*/
 
-  int n_excls; 		// number of excl's
-  int n_exclsa; 	// number of excla's
-  int *n_epa;		// array of number of excls for each atom (dim n_apm)
-  int **excls;		// array of lists of excls for each atom (dim n_apm x n_epa) - NOT NEC. RECTANGULAR
+  int n_excls; 		/*!< number of excl's [no of lists to track, usually same as n_atoms]*/
+  int n_exclsa; 	/*!< number of excla's [Number of total entries in **exlcs because its jagged] */
+  int *n_epa;		/*!< array of number of excls for each atom (dim n_apm) [each element i is the length of the list in excls[i]*/
+  int **excls;		/*!< array of lists of excls for each atom (dim n_apm x n_epa) - NOT NEC. RECTANGULAR */
 
-  int bond_nr;		// the value given in Bond: nr: X
-  int n_bonds;		// number of bonds
-  int *bond_types;	// types of bonds (dim n_bonds)
+  int bond_nr;		/*!< the value given in Bond: nr: X*/
+  int n_bonds;		/*!< number of bonds */
+  int *bond_types;	/*!< types of bonds (dim n_bonds)*/
   int *bond_type_top_cat;
-  int **bond_ij;	// array of atoms i and j for bonds (dim n_bonds x 2)
+  int **bond_ij;	/*!< array of atoms i and j for bonds (dim n_bonds x 2)*/
 
-  int angle_nr;		// the value given in Angle: nr: X
-  int n_angles;		// number of angles
-  int *angle_types;	// types of angles (dim n_angles)
+  int angle_nr;		/*!< the value given in Angle: nr: X*/
+  int n_angles;		/*!< number of angles*/
+  int *angle_types;	/*!< types of angles (dim n_angles)*/
   int *angle_type_top_cat;
-  int **angle_ijk;	// array of atoms i j and k for angles (dim n_angles x 3)
+  int **angle_ijk;	/*!< array of atoms i j and k for angles (dim n_angles x 3)*/
   
   int dih_nr;
   int n_dihs;
   int *dih_types;
   int *dih_type_top_cat;
   int **dih_ijkl;
+
+  int bigdih_nr; // MRD 01.24.2020 /*!< This has to do with options for the CHARM ff*/
+  int n_bigdihs;
+  int *bigdih_types;
+  int *bigdih_type_top_cat;
+  int **bigdih_ijklm;
 
   int imnb_nr;
   int n_imnbs;
@@ -522,15 +542,15 @@ typedef union tW_t_iparams
 
 typedef struct
 {
-    tW_real *cmap; /* Has length 4*grid_spacing*grid_spacing, */
-    /* there are 4 entries for each cmap type (V,dVdx,dVdy,d2dVdxdy) */
+    tW_real *cmap; /*!< Has length 4*grid_spacing*grid_spacing, */
+    /*!< there are 4 entries for each cmap type (V,dVdx,dVdy,d2dVdxdy) */
 } tW_gmx_cmapdata_t;
 
 typedef struct tW_gmx_cmap_t
 {
-    int             ngrid;        /* Number of allocated cmap (cmapdata_t ) grids */
-    int             grid_spacing; /* Grid spacing */
-    tW_gmx_cmapdata_t *cmapdata;     /* Pointer to grid with actual, pre-interpolated data */
+    int             ngrid;        /*!< Number of allocated cmap (cmapdata_t ) grids */
+    int             grid_spacing; /*!< Grid spacing */
+    tW_gmx_cmapdata_t *cmapdata;     /*!< Pointer to grid with actual, pre-interpolated data */
 } tW_gmx_cmap_t;
 
 typedef int tW_atom_id;
@@ -547,10 +567,10 @@ typedef struct tW_t_ilist
 
 typedef struct tW_t_idef
 {
-    int         ntypes;			// how many elements are in functype and iparams
-    int         atnr;			// number of atom types
-    tW_t_functype *functype;		// dim ntypes. defines type of function to use for every force type. 
-					// Note two bonds with different parameters are different force types
+    int         ntypes;			/*!< how many elements are in functype and iparams*/
+    int         atnr;			/*!< number of distinct nonbonded atom types*/
+    tW_t_functype *functype;		/*!< dim ntypes. defines type of function to use for every force type. */
+					/*!< Note two bonds with different parameters are different force types*/
     tW_t_iparams  *iparams;
     tW_real        fudgeQQ;
     tW_gmx_cmap_t  cmap_grid;
@@ -564,7 +584,8 @@ typedef struct tW_t_idef
     int         il_thread_division_nalloc;
 } tW_t_idef;
 
-/*
+/**
+ * \struct tW_t_idef
  * The struct t_idef defines all the interactions for the complete
  * simulation. The structure is setup in such a way that the multinode
  * version of the program  can use it as easy as the single node version.
@@ -610,87 +631,87 @@ typedef struct tW_t_idef
 
 typedef struct tW_t_atom
 {
-    tW_real           m, q;        /* Mass and charge                      */
-    tW_real           mB, qB;      /* Mass and charge for Free Energy calc */
-    unsigned short type;        /* Atom type                            */
-    unsigned short typeB;       /* Atom type for Free Energy calc       */
-    int            ptype;       /* Particle type                        */
-    int            resind;      /* Index into resinfo (in t_atoms)      */
-    int            atomnumber;  /* Atomic Number or NOTSET              */
-    char           elem[4];     /* Element name                         */
+    tW_real           m, q;        /*!< Mass and charge                      */
+    tW_real           mB, qB;      /*!< Mass and charge for Free Energy calc */
+    unsigned short type;        /*!< Atom type                            */
+    unsigned short typeB;       /*!< Atom type for Free Energy calc       */
+    int            ptype;       /*!< Particle type                        */
+    int            resind;      /*!< Index into resinfo (in t_atoms)      */
+    int            atomnumber;  /*!< Atomic Number or NOTSET              */
+    char           elem[4];     /*!< Element name                         */
 } tW_t_atom;
 
 typedef struct tW_t_resinfo
 {
-    char          **name;       /* Pointer to the residue name          */
-    int             nr;         /* Residue number                       */
-    unsigned char   ic;         /* Code for insertion of residues       */
-    int             chainnum;   /* Iincremented at TER or new chain id  */
-    char            chainid;    /* Chain identifier written/read to pdb */
-    char          **rtp;        /* rtp building block name (optional)   */
+    char          **name;       /*!< Pointer to the residue name          */
+    int             nr;         /*!< Residue number                       */
+    unsigned char   ic;         /*!< Code for insertion of residues       */
+    int             chainnum;   /*!< Iincremented at TER or new chain id  */
+    char            chainid;    /*!< Chain identifier written/read to pdb */
+    char          **rtp;        /*!< rtp building block name (optional)   */
 } tW_t_resinfo;
 
 typedef struct tW_t_pdbinfo
 {
-    int      type;              /* PDB record name                      */
-    int      atomnr;            /* PDB atom number                      */
-    char     altloc;            /* Alternate location indicator         */
-    char     atomnm[6];         /* True atom name including leading spaces */
-    tW_real     occup;             /* Occupancy                            */
-    tW_real     bfac;              /* B-factor                             */
-    tW_gmx_bool bAnisotropic;      /* (an)isotropic switch                 */
-    int      uij[6];            /* Anisotropic B-factor                 */
+    int      type;              /*!< PDB record name                      */
+    int      atomnr;            /*!< PDB atom number                      */
+    char     altloc;            /*!< Alternate location indicator         */
+    char     atomnm[6];         /*!< True atom name including leading spaces */
+    tW_real     occup;             /*!< Occupancy                            */
+    tW_real     bfac;              /*!< B-factor                             */
+    tW_gmx_bool bAnisotropic;      /*!< (an)isotropic switch                 */
+    int      uij[6];            /*!< Anisotropic B-factor                 */
 } tW_t_pdbinfo;
 
 
 typedef struct tW_t_atoms
 {
-    int            nr;          /* Nr of atoms                          */
-    tW_t_atom        *atom;        /* Array of atoms (dim: nr)             */
-                                /* The following entries will not       */
-                                /* always be used (nres==0)             */
-    char          ***atomname;  /* Array of pointers to atom name       */
-                                /* use: (*(atomname[i]))                */
-    char          ***atomtype;  /* Array of pointers to atom types      */
-                                /* use: (*(atomtype[i]))                */
-    char          ***atomtypeB; /* Array of pointers to B atom types    */
-                                /* use: (*(atomtypeB[i]))               */
-    int              nres;      /* The number of resinfo entries        */
-    tW_t_resinfo       *resinfo;   /* Array of residue names and numbers   */
-    tW_t_pdbinfo       *pdbinfo;   /* PDB Information, such as aniso. Bfac */
+    int            nr;          /*!< Nr of atoms                          */
+    tW_t_atom        *atom;        /*!< Array of atoms (dim: nr)             */
+                                /*!< The following entries will not       */
+                                /*!< always be used (nres==0)             */
+    char          ***atomname;  /*!< Array of pointers to atom name       */
+                                /*!< use: (*(atomname[i]))                */
+    char          ***atomtype;  /*!< Array of pointers to atom types      */
+                                /*!< use: (*(atomtype[i]))                */
+    char          ***atomtypeB; /*!< Array of pointers to B atom types    */
+                                /*!< use: (*(atomtypeB[i]))               */
+    int              nres;      /*!< The number of resinfo entries        */
+    tW_t_resinfo       *resinfo;   /*!< Array of residue names and numbers   */
+    tW_t_pdbinfo       *pdbinfo;   /*!< PDB Information, such as aniso. Bfac */
 } tW_t_atoms;
 
 typedef struct tW_t_atomtypes
 {
-    int           nr;           /* number of atomtypes                          */
-    tW_real         *radius;       /* GBSA radius for each atomtype                */
-    tW_real         *vol;          /* GBSA efective volume for each atomtype       */
-    tW_real         *surftens;     /* implicit solvent surftens for each atomtype  */
-    tW_real         *gb_radius;    /* GB radius for each atom type                 */
-    tW_real         *S_hct;        /* Overlap factors for HCT/OBC GB models        */
-    int          *atomnumber;   /* Atomic number, used for QM/MM                */
+    int           nr;           /*!< number of atomtypes                          */
+    tW_real         *radius;       /*!< GBSA radius for each atomtype                */
+    tW_real         *vol;          /*!< GBSA efective volume for each atomtype       */
+    tW_real         *surftens;     /*!< implicit solvent surftens for each atomtype  */
+    tW_real         *gb_radius;    /*!< GB radius for each atom type                 */
+    tW_real         *S_hct;        /*!< Overlap factors for HCT/OBC GB models        */
+    int          *atomnumber;   /*!< Atomic number, used for QM/MM                */
 } tW_t_atomtypes;
 
 typedef struct tW_t_block
 {
-    int      nr;           /* The number of blocks          */
-    tW_atom_id *index;        /* Array of indices (dim: nr+1)  */
-    int      nalloc_index; /* The allocation size for index */
+    int      nr;           /*!< The number of blocks          */
+    tW_atom_id *index;        /*!< Array of indices (dim: nr+1)  */
+    int      nalloc_index; /*!< The allocation size for index */
 } tW_t_block;
 
 typedef struct tW_t_blocka
 {
-    int      nr;    /* The number of blocks              */
-    tW_atom_id *index; /* Array of indices in a (dim: nr+1) */
-    int      nra;   /* The number of atoms               */
-    tW_atom_id *a;     /* Array of atom numbers in each group  */
+    int      nr;    /*!< The number of blocks              */
+    tW_atom_id *index; /*!< Array of indices in a (dim: nr+1) */
+    int      nra;   /*!< The number of atoms               */
+    tW_atom_id *a;     /*!< Array of atom numbers in each group  */
     /* (dim: nra)                           */
     /* Block i (0<=i<nr) runs from          */
     /* index[i] to index[i+1]-1. There will */
     /* allways be an extra entry in index   */
     /* to terminate the table               */
-    int nalloc_index;           /* The allocation size for index        */
-    int nalloc_a;               /* The allocation size for a            */
+    int nalloc_index;           /*!< The allocation size for index        */
+    int nalloc_a;               /*!< The allocation size for a            */
 } tW_t_blocka;
 
 typedef struct tW_t_symbuf
@@ -708,15 +729,15 @@ typedef struct tW_t_symtab
 
 typedef struct tW_t_topology
 {
-    tW_word            name;                        /* Name of the topology                 */
-    tW_t_idef          idef;                        /* The interaction function definition  */
-    tW_t_atoms         atoms;                       /* The atoms                            */
-    tW_t_atomtypes     atomtypes;                   /* Atomtype properties                  */
-    tW_t_block         cgs;                         /* The charge groups                    */
-    tW_t_block         mols;                        /* The molecules                        */
-    tW_gmx_bool        bIntermolecularInteractions; /* Inter.mol. int. ?   */
-    tW_t_blocka        excls;                       /* The exclusions                       */
-    tW_t_symtab        symtab;                      /* The symbol table                     */
+    tW_word            name;                        /*!< Name of the topology                 */
+    tW_t_idef          idef;                        /*!< The interaction function definition  */
+    tW_t_atoms         atoms;                       /*!< The atoms                            */
+    tW_t_atomtypes     atomtypes;                   /*!< Atomtype properties                  */
+    tW_t_block         cgs;                         /*!< The charge groups                    */
+    tW_t_block         mols;                        /*!< The molecules                        */
+    tW_gmx_bool        bIntermolecularInteractions; /*!< Inter.mol. int. ?   */
+    tW_t_blocka        excls;                       /*!< The exclusions                       */
+    tW_t_symtab        symtab;                      /*!< The symbol table                     */
 
 //    tW_molecule       *molecules;
 //    tW_word	      *force_names;
@@ -738,50 +759,80 @@ typedef struct tW_t_topology
 
 typedef struct tW_t_trxframe
 {
-    int      flags;            /* flags for read_first/next_frame  */
-    int      not_ok;           /* integrity flags                  */
-    tW_gmx_bool bDouble;          /* Double precision?                */
-    int      natoms;           /* number of atoms (atoms, x, v, f) */
-    tW_real     t0;               /* time of the first frame, needed  *
+    int      flags;            /*!< flags for read_first/next_frame  */
+    int      not_ok;           /*!< integrity flags                  */
+    tW_gmx_bool bDouble;          /*!< Double precision?                */
+    int      natoms;           /*!< number of atoms (atoms, x, v, f) */
+    tW_real     t0;               /*!< time of the first frame, needed  *
                                 * for skipping frames with -dt     */
-    tW_real     tf;               /* internal frame time - DO NOT CHANGE */
-    tW_real     tpf;              /* time of the previous frame, not  */
-                               /* the read, but real file frames   */
-    tW_real     tppf;             /* time of two frames ago           */
-                               /* tpf and tppf are needed to       */
-                               /* correct rounding errors for -e   */
+    tW_real     tf;               /*!< internal frame time - DO NOT CHANGE */
+    tW_real     tpf;              /*!< time of the previous frame, not  */
+                               /*!< the read, but real file frames   */
+    tW_real     tppf;             /*!< time of two frames ago           */
+                               /*!< tpf and tppf are needed to       */
+                               /*!< correct rounding errors for -e   */
     tW_gmx_bool        bTitle;
-    char     *title;     /* title of the frame            */
+    char     *title;     /*!< title of the frame            */
     tW_gmx_bool        bStep;
-    int             step;      /* MD step number                   */
+    int             step;      /*!< MD step number                   */
     tW_gmx_bool        bTime;
-    tW_real            time;      /* time of the frame                */
+    tW_real            time;      /*!< time of the frame                */
     tW_gmx_bool        bLambda;
-    tW_gmx_bool        bFepState; /* does it contain fep_state?       */
-    tW_real            lambda;    /* free energy perturbation lambda  */
-    int             fep_state; /* which fep state are we in? */
+    tW_gmx_bool        bFepState; /*!< does it contain fep_state?       */
+    tW_real            lambda;    /*!< free energy perturbation lambda  */
+    int             fep_state; /*!< which fep state are we in? */
     tW_gmx_bool        bAtoms;
-    tW_t_atoms *atoms;     /* atoms struct (natoms)            */
+    tW_t_atoms *atoms;     /*!< atoms struct (natoms)            */
     tW_gmx_bool        bPrec;
-    tW_real            prec;      /* precision of x, fraction of 1 nm */
+    tW_real            prec;      /*!< precision of x, fraction of 1 nm */
     tW_gmx_bool        bX;
-    tW_rvec           *x;         /* coordinates (natoms)             */
+    tW_rvec           *x;         /*!< coordinates (natoms)             */
     tW_gmx_bool        bV;
-    tW_rvec           *v;         /* velocities (natoms)              */
+    tW_rvec           *v;         /*!< velocities (natoms)              */
     tW_gmx_bool        bF;
-    tW_rvec           *f;         /* forces (natoms)                  */
+    tW_rvec           *f;         /*!< forces (natoms)                  */
     tW_gmx_bool        bBox;
-    tW_matrix          box;       /* the 3 box vectors                */
+    tW_matrix          box;       /*!< the 3 box vectors                */
     tW_gmx_bool        bPBC;
-    int             ePBC;      /* the type of pbc                  */
+    int             ePBC;      /*!< the type of pbc                  */
 //    tW_t_gmxvmdplugin* vmdplugin; // This is causing errors. We don't use it. I got rid of it.
 } tW_t_trxframe;
 
-//more from gmx-interface.h
+/**
+ * \struct tW_index_file
+ * MRD Index files
+ * Brief guide to using this.
+ * 
+ * If you want to provide an index file, then call read_index_file(fnm, top);
+ * After doing that, I recommend calling generate_generic_index_file(top, bOld);
+ * this will look through the topology file and generate index groups for
+ * System, every molecule type, and every atom type given in the topology file
+ *
+ * If you need the user to provide index group selections, call
+ * print_index_names_and_atom_counts(tW_index_file *idx);
+ * and then loop over a prompt and a scan call to read them
+ * (look at the rdf or density profile programs for examples)
+ *
+ * for 0 <= i < n_groups, 
+ * group_names[i] will contain the name of the ith group. 
+ * n_at_per_group[i] will contain the number of atoms in the ith group.
+ * atoms_in_group[i] is an array with n_at_per_group[i] elements.
+ *   for 0 <= j < n_at_per_group[i], atoms_in_group[i][j] contains the jth
+ *   atom index in group i
+ *
+ */                   
 
-// This is the modified wrapper for dealing with the t_topology data structure.
-// All these function pointers likely aren't necesary now that we don't have to 
-// deal with multiple versions of GROMACS. However, I kept using them anyways
+typedef struct tW_index_file
+{
+  int n_groups;
+  tW_word *group_names; /*!< dim n_groups*/
+  int *n_at_per_group; /*!< dim n_groups*/
+  int **atoms_in_group; /*!< dim n_groups x n_at_per_group[i]*/
+} tW_index_file;
+
+ 
+
+
 
 /****************************************************************************************/
 /*                   Structures and functions for t_topology interface                  */
@@ -791,115 +842,38 @@ typedef struct tW_gmx_topology {
 
         tW_t_topology *contents; 
 	int eFileType;
+        tW_word filename;
 
+        int n_molblocks, n_molecule_types;
         tW_molecule       *molecules;
+	tW_molblock       *molblocks;
         tW_word           *force_names;
-/*
 
-When you dump a tpr file, the start of the topology section (the section we use) is:
-
-topology:
-   name="MIX"
-   #atoms               = 804
-   molblock (0):
-      moltype              = 0 "BUT"
-      #molecules           = 134
-      #atoms_mol           = 2
-      #posres_xA           = 0
-      #posres_xB           = 0
-   molblock (1):
-      moltype              = 1 "DEC"
-      #molecules           = 134
-      #atoms_mol           = 4
-      #posres_xA           = 0
-      #posres_xB           = 0
-   ffparams:
-      atnr=2
-
-This atnr value is deceptive. A topology file for a mixed system of CG butane and CG decane begins:
-
-[ defaults ]
-; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ
-  1             1               no               1.0     1.0
-
-[ atomtypes ]
-;name       mass        charge   ptype       c6           c12
- CT         29.06200    0.000     A           0            1
- CM         42.08100    0.000     A           0            1
-
-[ bondtypes ]
-;  i     j    func    b0   kb
-   CT    CT    1       0    1
-   CT    CM    1       0    1
-   CM    CM    1       0    1
-
-[ angletypes ]
-;  i    j    k     func   a0    cth
-  CT   CM   CM     1      0     1
-
-[ nonbond_params ]
-  ; i      j     func          c6           c12
-    CT     CT     1             0           1
-    CM     CM     1             0           1
-    CT     CM     1             0           1
-
-And then goes on to define the molecule types, where both CT and CM are used.
-
-One would EXPECT atnr to be 2. One would be WRONG. atnr = 1 in the dumped tpr file.
-
-The only way I have found to fix this is by including an extra section at the end of the beginning of the top file.
-
-[ defaults ]
-; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ
-  1             1               no               1.0     1.0
-
-[ atomtypes ]
-;name       mass        charge   ptype       c6           c12
- CT         29.06200    0.000     A           0            1
- CM         42.08100    0.000     A           0            1
-
-[ bondtypes ]
-;  i     j    func    b0   kb
-   CT    CT    1       0    1
-   CT    CM    1       0    1
-   CM    CM    1       0    1
-
-[ angletypes ]
-;  i    j    k     func   a0    cth
-  CT   CM   CM     1      0     1
-
-[ nonbond_params ]
-  ; i      j     func          c6           c12
-    CT     CT     1             0           1
-    CM     CM     1             0           1
-    CT     CM     1             0           1
-
-[ implicit_genborn_params ]
-; atype    radius volume surftens gb_radius S_hct
-  CT       0.3    1      1        0.29      0.6
-  CM       0.4    1      1        0.38      0.5
-
-including the implicit_genborn_params, atnr becomes 2 in the dumped tpr file!
-
-I have absolutely NO idea what the genborn params are actually used for. But setting them is necessary
-if you want to use the atnr value from the dumped tpr file as the number of atom types. otherwise, you'll have
-to loop over the atoms in each molecule and see if you've found a new type name.
-
-SO, that is what I do to populate the following two variables.
-
-*/
         tW_word		  *atom_type_names;
 	int		  n_atomtypes;
         bool b_tpr;
 
         int *int_map; // For writing LAMMPS files.
 
+        /* Local Density Stuff */
+        double **hi_LDs, **lo_LDs;
+        bool **bLocalDens;
+        tW_indicator_function ***indicators;
+
+        tW_index_file *idx_file;
+
         int (*get_natoms)(struct tW_gmx_topology*);
         char *(*get_name)(struct tW_gmx_topology*);
 
         int (*get_nbonds)(struct tW_gmx_topology*);
+        int (*get_bond_count)(struct tW_gmx_topology*);
+        int (*get_n_bond_types)(struct tW_gmx_topology*);
         int (*get_nangles)(struct tW_gmx_topology*);
+        int (*get_angle_count)(struct tW_gmx_topology*);
+        int (*get_n_angle_types)(struct tW_gmx_topology*);
         int (*get_ndihs)(struct tW_gmx_topology*);
+        int (*get_dihedral_count)(struct tW_gmx_topology*);
+        int (*get_n_dihedral_types)(struct tW_gmx_topology*);
         int (*get_npairs)(struct tW_gmx_topology*);
     
         int *(*get_bond_list)(struct tW_gmx_topology*);
@@ -938,6 +912,7 @@ tW_gmx_topology* init_tW_gmx_topology();
 bool get_top(tW_word coord_fnm, tW_gmx_topology *top, bool TPR_flag, tW_word tpr_filename);
 int print_tpr_file(FILE * fp_log, tW_gmx_topology *top);
 void get_site_info(tW_CG_site *CG_struct, tW_system *sys,  tW_gmx_topology *top);
+bool skip_excl(int nr_excl, int *excl_list, int j);
 
 
 // Analogously, these are for dealing with the t_trxframe data structure
@@ -970,10 +945,23 @@ typedef struct tW_gmx_trxframe {
         enum xdr_op xdrmode;
         XDR *xdr;
         bool bDouble;
+        long frame_size, file_size;
+        int n_frames;
+
 
 /* LAMMPS stuff... */
         int *xids, *vids, *fids;
         int atid_id, attype_id, molid_id;
+
+/* Local Density Stuff */
+        int *ld_id; // This ties in with LAMMPS stuff as well...
+        int *ldg_id; // This ties in with LAMMPS stuff as well...
+        double *linear_lds;
+        double **local_densities; // DIM natoms x ntypes
+        int n_atomtypes;
+        bool bLDs, bLD_Grads;
+        dvec *linear_ldgs;
+        dvec **local_density_gradients; 
 
         void (*setup_xdr)(struct tW_gmx_trxframe*, const char *, bool);
 
@@ -1020,8 +1008,6 @@ void copyright();
 void test_line(tW_line inp_line, const char * term, tW_gmx_bool want, const char * errmsg);
 void elim_char(tW_word word, char elim);
 
-// These semi break up the reading in of topology files
-void get_moltype_info(FILE *fp, tW_molecule * mol, tW_line * ret_inp_line);
 void dump_molecule_info(tW_gmx_topology *top);
 
 tW_gmx_bool read_box_dump_frame(FILE *fp, tW_matrix box);
@@ -1031,12 +1017,38 @@ void get_prop(FILE *fp, tW_gmx_bool present, tW_rvec *p, char test_prop, int nat
 
 void check_count(int iarg, int argc, char * opt);
 
-/* Functions for reading and writing various file types */
+/* Functions for reading and writing various TOPOLOGY file types */
 
 bool read_tpr_dump(tW_word fnm, tW_gmx_topology *top);
 
+/* MCL functions for compartmentalizing the old long tpr_dump reader*/
+bool find_line_in_file(FILE* fp, const char* target, char* ret_line);
+bool dprocess_sysname_natoms(FILE* fp, tW_gmx_topology* top, tW_line* lin_buf);
+bool dprocess_nmolblocks(FILE* fp, tW_gmx_topology* top, tW_line* lin_buf);
+bool dget_moltypes_in_molblocks(FILE* fp, tW_gmx_topology* top, tW_line* lin_buf);
+bool dget_top_ff_info(FILE* fp, tW_gmx_topology* top, tW_line* lin_buf);
+bool dfind_all_molinfo(FILE *fp, tW_molecule * mol, int nmol, tW_line * lin_buf);
+bool dparse_atom_per_molecule_info(FILE* fp, tW_molecule* moli, tW_line* lin_buf);
+bool dparse_residue_per_molecule_info(FILE* fp, tW_molecule* moli, tW_line* lin_buf);
+bool dparse_charge_groups_per_molecule(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid);
+bool dparse_atomic_exclusions_per_molecule(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid);
+
+/* MCL functions for compartmentalizing the old long get_moltype_info in the dumped tpr reading */
+bool dparse_bonded_int_lists_per_molecule(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypidx);
+int dfill_bonds_from_gmx_bondtype_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid);
+int dfill_angles_from_gmx_angletype_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid);
+int dfill_dihedrals_from_gmx_dihedraltype_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid);
+int dfill_bigdihedrals_from_gmx_bigdihedraltype_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid);
+int dfill_14nb_from_gmx_IMNB_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid);
+int dproc_other_headers(FILE* fp, tW_molecule* moli, tW_line* lin_buf, int moltypeid);
+
+
+
+
 bool read_bocs_top(tW_word fnm, tW_gmx_topology * top);
 void write_bocs_top(tW_word fnm, tW_gmx_topology * top);
+
+/* Functions for reading and writing various TRAJECTORY file types */
 
 /* Ever since I got the read/write trr functionality working, 
  * using dumped trajectories is very discouraged. */
@@ -1044,11 +1056,13 @@ int read_first_dump_frame(tW_gmx_trxframe *frame, const char *trx_fnm);
 bool read_next_dump_frame(tW_gmx_trxframe *frame);
 void write_dump_frame(tW_gmx_trxframe *fr);
 
+/* Read/Write btj (Bocs TraJectory) files */
 int read_first_bocs_frame(tW_gmx_trxframe *frame, const char *trx_fnm);
 bool read_next_bocs_frame(tW_gmx_trxframe *fr);
 bool new_read_next_bocs_frame(tW_gmx_trxframe *fr);
 void write_bocs_frame(tW_gmx_trxframe * fr);
 
+/* Read/Write gro files */
 int read_first_gro_frame(tW_gmx_trxframe *frame, const char *trx_fnm);
 bool read_next_gro_frame(tW_gmx_trxframe *fr);
 void write_gro_frame(tW_gmx_trxframe *fr);
@@ -1060,13 +1074,11 @@ void write_delta_frame(tW_gmx_trxframe *fr, FILE *fpbox, FILE *fpx, FILE *fpv, F
 
 /* Read/Write trj files */
 
-// in gromacs, this was GROMACS_MAGIC. I have absolutely no idea what the point of
-// it is, but as it's the first thing written in EVERY trr frame, we have to use it
-
-#define BOCS_MAGIC 1993
+#define GROMACS_MAGIC 1993
 
 enum {eioINT, eioFLOAT, eioDOUBLE, eioREAL, eioRVEC, eioNRVEC, eioSTRING};
 
+/* Read/Write trj files */
 static bool tW_do_binwrite(FILE *fp, const void *item, int nitem, int eio);
 static bool tW_do_write_trjheader(tW_gmx_trxframe *fr);
 static bool tW_do_write_trjstuff(tW_gmx_trxframe *fr);
@@ -1118,7 +1130,8 @@ Force		kcal/(mol Ang)		kJ/(mol nm)		41.84
 #define X_LMP2GRO 0.1
 #define V_LMP2GRO 100.0
 #define F_LMP2GRO 41.84
-
+#define LD_LMP2GRO 1000.0
+#define LDG_LMP2GRO (LD_LMP2GRO/X_LMP2GRO)
 int read_first_lammps_frame(tW_gmx_trxframe *fr, const char *trx_fnm);
 bool read_next_lammps_frame(tW_gmx_trxframe *fr);
 
@@ -1140,6 +1153,18 @@ bool read_topology(tW_gmx_topology *top, const char *fnm);
 
 int get_type(const char *a_type, tW_gmx_topology *top);
 void do_PBC(tW_gmx_trxframe *fr);
+
+/* Local Density Functions */
+void pop_LD_vector(tW_line inp_line, double *lds, int ntypes);
+void populate_LD_Gradients(tW_line inp_line, dvec *ldgs, int ntypes);
+void copy_xvf(tW_gmx_trxframe *source, tW_gmx_trxframe *dest, bool bX, bool bV, bool bF);
+void copy_lds(tW_gmx_trxframe *source, tW_gmx_trxframe *dest);
+void copy_ldgs(tW_gmx_trxframe *source, tW_gmx_trxframe *dest);
+
+/* index file functions */
+void read_index_file(tW_word fnm, tW_gmx_topology *top);
+void generate_generic_index_file(tW_gmx_topology *top, bool bOld);
+void print_index_names_and_atom_counts(tW_index_file *idx);
 
 #ifdef __cplusplus
 }

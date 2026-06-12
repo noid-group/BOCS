@@ -1,6 +1,6 @@
 /**
 @file solv_lin_eqns.c 
-@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn
+@authors Will Noid, Wayne Mullinax, Joseph Rudzinski, Nicholas Dunn, Michael DeLyser
 @brief Functions related to solving sets of linear equations with lapack libraries
 */
 
@@ -181,6 +181,125 @@ int solv_lin_eqns(FILE * fp_log, tW_system * sys)
 
     return info;
 }
+
+/* MRD 06.18.2020 */
+/*
+ *  *int ext_potl_solve_lin_eqns(FILE * fp_log, tW_system * sys)
+ *   */
+int ext_potl_solve_lin_eqns(FILE * fp_log, tW_system * sys)
+{
+    fprintf(fp_log, "In ext_potl_solve_lin_eqns.\n");
+    int i, j;
+    int index;
+    /* system variables */
+    double *b = sys->b;
+    double *phi = sys->phi;
+    double *M = sys->M;
+    /* variables for standard matrix inversion */
+    int N = sys->N_coeff;       // no. of lin. eqns.   A is N_row x N_col matrix w/ N=N_row
+    int N_rhs = 1;              // no. of {x_i,b_i} pairs  s.t. A x_i = b_i        
+    int N_rows = N;
+    int N_cols = N;
+    int LDA = N;
+    int LDB = N;
+    int LDX = N;
+    int pivot[N];               // pivot indices for permutation matrix
+    int info = 0;                       // reports on success of the calculation
+    double *MT;                 // copy of the matrix, since it will be overwritten.  memory-wise this shouldn't exceed what the calculation already used earlier
+    char FACT = sys->ERR_var.FACT;
+    char EQUED;
+    /* variables for preconditioning */
+    double row_max[N], norm_col[N];
+    /* variables for the timing things */
+    time_t start, end;
+    double diff;
+    double *S = (double *) ecalloc(N, sizeof(double));
+
+    int Ext_i0;
+
+    int inv_flag = 0;
+    if (sys->ERR_var.flag_ERR == TRUE) {
+        inv_flag = 1;
+    }
+
+    for (i = 0; i < sys->N_Inter_Types; ++i) // External interactions should be at the end of the list or else this doesn't work...
+    {
+        fprintf(stderr,"i: %d  Inter_Types.inter_name: %s  Inter_Types.i_0: %d \n",i,sys->Inter_Types[i].inter_name,sys->Inter_Types[i].i_0);
+        if (strcmp(sys->Inter_Types[i].inter_type,EXT_POTL_NAME) == 0)
+        {
+            if (! sys->Inter_Types[i].solveExt)
+            {
+                Ext_i0 = sys->Inter_Types[i].i_0; // this should be equal to the number of columns....
+                fprintf(fp_log,"Ext_i0: %d \n",Ext_i0);
+                break;
+            }
+        }
+    }
+    N_cols = Ext_i0;
+
+    MT = (double *) ecalloc(N_rows * N_cols, sizeof(double));
+    if (MT == NULL) {
+        printf("STOP. MT ecalloc failed. N: %d\n", N);
+        exit(0);
+    }
+
+fprintf(stderr,"N_cols: %d  N_rows: %d \n",N_cols,N_rows);
+
+    int MT_idx = 0;
+    for (i = 0; i < N_cols; i++) {
+        for (j = 0; j < N_rows; j++) {
+            index = index_Lpacked(i, j, N);
+            MT[MT_idx] = M[index];
+            ++MT_idx;
+        }
+    }
+
+    for (i = 0; i < N; i++) {
+        /* Copy b -> x which will be overwritten with soln. */
+        phi[i] = b[i];
+    }
+
+    int N2 = N;
+    int N3 = N;
+    int rank;
+    int lwork = 10 * N;
+    double work[lwork];
+    double rcond = sys->SVD_var.rcond;
+
+    if (S == NULL)
+    {
+        printf("STOP. S ecalloc failed. N: %d\n", N);
+        exit(0);
+    }
+   /* Solve the overdetermined system using Singular Value Decomposition, 
+ *      * setting all singular values under rcond * max_singular_value to zero  */
+    fprintf(fp_log, " Inverting the matrix using Singular Value Decomposition in default solver \n");
+    time(&start);
+    dgelss_(&N_rows, &N_cols, &N_rhs, MT, &LDA, phi, &N3, S, &rcond, &rank, work, &lwork, &info);
+    time(&end);
+    diff = difftime(end, start);
+    if (info != 0) {
+        fprintf(fp_log, "WARNING: info = %d after dgelss_().  The inverse condition number may be less than machine precision \n", info);
+        fprintf(stderr, "WARNING: info = %d after dgelss_().  The inverse condition number may be less than machine precision \n", info);
+    }
+    fprintf(fp_log, " dgelss_() took %lf seconds or %lf minutes or %lf hours \n", diff, diff / (60.0), diff / (3600.00));
+    FILE *fpsp = fopen("save.phi.epsle.dat","w");
+    for (i = 0; i < N; ++i)
+    {
+      fprintf(fpsp,"%d %g \n",i,phi[i]);
+    }
+    fclose(fpsp);
+    fprintf(fp_log, " Rank(G) = %d \n", rank);
+    fprintf(fp_log, "\n");
+
+    free(S);
+    free(MT);
+
+    return info;
+
+}
+
+
 
 /*****************************************************************************************
 solv_lin_eqns_symm(): 
